@@ -65,12 +65,21 @@ def cmd_quality(args) -> int:
     m = manifests.load_manifest(args.experiment)
     semantics = "fidelity" if (
         args.experiment == "F2" and m["steps"] == 40) else "distance"
-    baseline = args.baseline
+    baseline = args.baseline or _latest_run("B0")
+    experiment = (str(manifests.lab_env.RESULTS_ROOT / "raw" / f"{args.date}-{args.experiment}")
+                  if args.date else _latest_run(args.experiment))
+    if not (manifests.lab_env.RESULTS_ROOT / "raw").is_dir():
+        raise SystemExit(
+            "no evidence/results/raw/ image set in this checkout: raw generation\n"
+            "PNGs stay on the measurement host (hashes are in the records).\n"
+            "- The SHIPPED campaign's quality evidence is the precomputed grids\n"
+            "  and crops under evidence/quality/<experiment>/.\n"
+            "- To compute new gates, run the experiment first\n"
+            "  (python -m lab run --experiment <ID>) so raw images exist.")
     r = subprocess.run([
         sys.executable, "-I", str(manifests.lab_env.LAB_DIR / "quality_gate.py"),
         "--baseline", baseline,
-        "--experiment", str(manifests.lab_env.RESULTS_ROOT / "raw" / f"{args.date}-{args.experiment}"
-        if args.date else _latest_run(args.experiment)),
+        "--experiment", experiment,
         "--experiment-name", args.experiment,
         "--semantics", semantics,
         "--baseline-desc", args.baseline_desc or "B0 frozen baseline",
