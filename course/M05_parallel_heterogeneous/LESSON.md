@@ -1,4 +1,6 @@
-# M5 — Parallel & Heterogeneous Computing (on ONE GPU)
+# M5.0 — PyTorch CPU Text Encoding & Pipelining (on ONE GPU)
+
+**Next:** [M5.1 — CPU Text Encoder accelerated by OpenVINO](M5_1_OPENVINO_CPU_TE.md) treats this PyTorch CPU implementation as the baseline. Prior Zen5/Zen4 research is linked there; **same-stack W7900 OpenVINO measurements are NOT_RUN**.
 
 **Problem.** Marketing parallelism is easy: "just move work to the CPU and
 overlap!" Engineering parallelism is measured. This module takes the two

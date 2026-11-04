@@ -27,7 +27,8 @@ fully-evidenced measurement campaign)*
 | 2 | [Profiling: where the time actually goes](M02_profiling/) | Profiling | GEMM 61.3% / attention 32.4% of GPU-busy 97.8% |
 | 3 | [Less computation](M03_less_computation/) | Less compute | Turbo 8-step: 4.55× — and why it isn't 5× |
 | 4 | [Faster computation](M04_faster_computation/) | Faster compute | ck attention 1.22×; INT8 1.08× + −6.7 GB VRAM |
-| 5 | [Parallel & heterogeneous computing](M05_parallel_heterogeneous/) | Parallel | proven overlap, 14× throughput LOSS (negative result) |
+| 5.0 | [PyTorch CPU text encoding baseline](M05_parallel_heterogeneous/LESSON.md) | Parallel baseline | measured 14× throughput LOSS (negative result) |
+| 5.1 | [OpenVINO CPU text encoder](M05_parallel_heterogeneous/M5_1_OPENVINO_CPU_TE.md) | Research extension | prior Zen5/Zen4 results available; same-stack W7900 A/B **NOT_RUN** |
 | 6 | [Combined optimization & the quality gate](M06_combined_quality/) | Combined + quality | BEST 9.02 s = 6.12×; human verdict pending |
 | 7 | [Student challenge](M07_student_challenge/) | Open source | 6 graded tasks with acceptance criteria |
 
