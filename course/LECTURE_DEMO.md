@@ -1,12 +1,37 @@
-# LECTURE DEMO — Making Generative AI Faster (Linux W7900 Lab)
+# LECTURE — Making Generative AI Faster (Linux W7900 Lab)
 
 **Course:** graduate-level enterprise AI engineering, Sun Yat-sen University
-**Date:** 2026-11-19 · **Theme:** *Making Generative AI Faster: Less
-Computation, Faster Computation, and Parallel Computing*
+**Date & time:** **2026-11-19, 16:30–18:10 (exactly 100 minutes)**
+**Theme:** *Making Generative AI Faster: Less Computation, Faster
+Computation, and Parallel Computing*
 **Hardware story:** one AMD Radeon PRO W7900 (gfx1100, 48 GB), Linux ROCm
 7.2.1, torch 2.9.1+rocm — every number below was measured on this GPU
 2026-11-03 and resolves to a committed run record (see
-[CLAIM_EVIDENCE_MATRIX.md](../docs/CLAIM_EVIDENCE_MATRIX.md)).
+[CLAIM_EVIDENCE_MATRIX.md](../docs/CLAIM_EVIDENCE_MATRIX.md)). The same
+methodology was re-validated 2026-11-04 on a live Radeon Cloud instance
+(B0 warm 55.10 s, BEST smoke 9.023 s — matching the frozen medians).
+
+**Prerequisite (announced one week ahead):** students must have arranged
+their Radeon Cloud access BEFORE the lecture — application approved,
+instance startable, and the repo cloned into `/workspace`. In-lecture
+setup debugging is explicitly out of scope; students without an instance
+follow the evidence-reading track of the worksheet.
+
+---
+
+## Timed agenda (100 minutes)
+
+| Clock | Minutes | Segment |
+|---|---|---|
+| 16:30–16:40 | 10 | Slide 1 + Q1 (interactive): the problem, how students run generative models today |
+| 16:40–16:52 | 12 | Slide 2: profile before optimizing (two layers, Amdahl as a planning tool) |
+| 16:52–17:07 | 15 | Slide 3 + Q2 (interactive): less computation — and why not 5× |
+| 17:07–17:22 | 15 | Slide 4: faster computation — attention & INT8, theory vs measurement |
+| 17:22–17:40 | 18 | **Teacher demonstration** (live, bounded — see below) |
+| 17:40–17:50 | 10 | Slide 5 + Q4 (interactive): parallel & heterogeneous — the 14× lesson |
+| 17:50–17:58 | 8 | Slides 6–7: combined optimization, tradeoffs, the binding quality gate |
+| 17:58–18:08 | 10 | **Student exercise** (bounded, runs during wrap-up — see below) |
+| 18:08–18:10 | 2 | Slide 8: open-source challenge + homework assignment |
 
 ---
 
@@ -14,11 +39,13 @@ Computation, Faster Computation, and Parallel Computing*
 
 **How long does one 1024×1024 image take, unoptimized?**
 
-> **55.2 seconds** (warm, median of 9; the spread is 0.3%)
+> **55.2 seconds** (warm, median; B0 pools two independent 9-run
+> sessions — 55.24 / 55.21 — spread 0.3%)
 > — B0 frozen baseline: Qwen-Image-2.1 BF16, 40 steps, euler/simple, CFG 1.
 
 Breakdown (measured): DiT denoise **53.9 s (97.6%)** · VAE decode 0.9 s ·
-text encode 0.56 s (fresh prompt) · everything else 0.4 s.
+text encode 0.56 s (fresh prompt) · everything else 0.4 s *(derived by
+subtraction)*.
 
 Talking point: before any optimization, know where the 55 seconds live —
 almost entirely inside the diffusion transformer.
@@ -59,15 +86,18 @@ Two independent levers, A/B against the 40-step baseline:
 
 - **Attention backend (F1):** Comfy Kitchen (ck) attention vs pytorch SDPA →
   step 1.345 → 1.077 s, **45.1 s = 1.22×**. Cross-check with slide 2:
-  attention was 32% of busy time; measured saving 10.7 s ≈ attention cost
-  17.2 → ~6.5 s. Theory bound 1.46× — measured 1.22×.
+  attention was 32% of busy time (measured, trace); the DiT saved 10.7 s
+  (measured, node timing) ⇒ attention cost ≈ 17.2 → ~6.5 s *(derived
+  estimate — no trace of the ck path exists; consistent, not observed)*.
+  Theory bound 1.46× — measured 1.22×.
 - **INT8 DiT (F2):** weights 14.2 → 7.3 GB, runtime VRAM 37.7 → 31.0 GB,
-  quality near-lossless (LPIPS 0.005–0.031) — but only **1.08×** faster at
-  1024². Theoretical peak throughput ≠ measured end-to-end: dequantize-on-use
-  keeps most GEMMs bf16-bound.
+  quality near-lossless (LPIPS fidelity 0.005–0.031) — but only **1.08×**
+  faster at 1024². Theoretical peak throughput ≠ measured end-to-end:
+  dequantize-on-use keeps most GEMMs bf16-bound.
 
 Talking point: hardware-usage percentages are not latencies; only the paired
-measurement counts.
+measurement counts. And always say which numbers are measured and which are
+derived.
 
 ## Slide 5 — Parallel computing (one GPU + one CPU)
 
@@ -116,25 +146,81 @@ re-measure.
 
 ## Slide 8 — Open-source challenge
 
-Everything above is reproducible on a single Radeon GPU:
-`doctor → baseline → profile → run --experiment L1|F1|F2|BEST → report`.
-Six concrete student tasks (attention kernel deep-dive, INT8 GEMM analysis,
-memory scheduling, CPU–GPU break-even derivation, auto charts, quality
-tooling) with acceptance criteria: [OPEN_ISSUES.md](M07_student_challenge/CHALLENGES.md).
+Everything above is reproducible on a free Radeon Cloud GPU:
+`bash scripts/cloud/start.sh → doctor → baseline → profile → run
+--experiment L1|F1|F2|BEST → report`. Six concrete student tasks (quickstart
+hardening, evidence navigation, quality regression tests, attention kernel
+deep-dive, INT8 GEMM analysis, single-GPU batching) with acceptance
+criteria: [CHALLENGES.md](M07_student_challenge/CHALLENGES.md) and the
+Fork→PR tutorial: [CONTRIBUTING_TUTORIAL.md](../docs/CONTRIBUTING_TUTORIAL.md).
 Bring a paired measurement, not a speedup story.
 
 ---
 
-## Interactive classroom Q&A (answers backed by this lab's data)
+## Teacher demonstration (17:22–17:40, 18 minutes, bounded)
 
-**Q1 — Which operation consumes the most inference time, and how do we know?**
-The DiT denoise: 53.9 of 55.2 s (97.6%) at the pipeline layer; inside it,
-GEMM kernels take 61.3% of GPU-busy and attention 32.4% at the kernel layer.
-We know from two independent instruments: websocket per-node/per-step timing
-on the live server, and a rocprofv3 trace of the server process capturing
-exactly 40.0 steps (95,600 kernel dispatches). Speaker note: stress that both
-layers agreed before any optimization was attempted — that's what makes the
-later attributions trustworthy.
+Runs on the lecturer's pre-provisioned cloud instance. Prepare the night
+before: `bash scripts/cloud/start.sh --all-models` completed (models cached,
+doctor PASS) so the demo spends GPU minutes, not download time.
+
+1. **(3 min)** `python -m lab doctor --cloud` — fail-closed preflight, read
+   the PASS lines aloud; explain what each protects against.
+2. **(5 min)** `python -m lab run --experiment B0 --smoke --only-prompt
+   p1-zh-scene` — one bounded baseline generation; open the record JSON and
+   point at `total_s`, `steady_step_median_s`, `attention_evidence`,
+   `image_sha256`. Announce the recorded time (W7900-class: ~55 s).
+3. **(5 min)** `python -m lab run --experiment BEST --smoke --only-prompt
+   p1-zh-scene` — the same prompt, turbo-int8; the contrast lands by itself
+   (~9–12 s). Show the two PNGs side by side.
+4. **(5 min)** `python -m lab report --scope student` — the two rows
+   aggregate live; compare with the frozen reference table on slide 6 and
+   with the classmates' numbers appearing in the shared sheet.
+
+**Fallback (no live hardware):** every figure has a committed evidence file
+(CLAIM_EVIDENCE_MATRIX) — present the grids
+(`evidence/quality/BEST/quality_grid.png`), the kernel-class table from
+`rocprof-dit/analysis.json`, and the H2 timeline JSON. Do not invent charts:
+this lab's discipline is that every pixel on a slide traces to a run record.
+
+## Student exercise (17:58–18:08, 10 minutes, bounded runtime)
+
+On each student's own cloud instance (arranged before the lecture; the
+evidence-reading variant is provided for those without one):
+
+```bash
+cd /workspace/qwen-image-inference-tuning-course
+.venv-lab/bin/python -m lab run --experiment BEST --smoke --date lecture-$(date +%H%M)
+```
+
+While it runs (~2–3 min), students answer on the worksheet:
+1. From YOUR record: `total_s`, `steady_step_median_s`, and the number of
+   steps in `step_times_s`. Why 8?
+2. Compare your `total_s` with the slide-6 BEST row (9.02 s). Same
+   ballpark? If not, list two plausible causes BEFORE blaming the GPU model
+   (hint: cold vs warm; which one did you get?).
+3. One sentence: why is your number a valid measurement even if it differs
+   from 9.02 s?
+
+Worksheet acceptance: the three answers + the record path committed to the
+student's own fork under `runs/` (homework: finish M01's formal session and
+attach the SUMMARY row to the course sheet).
+
+---
+
+## Interactive classroom Q&A (the four required questions; answers backed
+by this lab's data)
+
+**Q1 — How do students usually run generative models? (and where does the
+time actually go?)**
+Free-form collection first (web UIs, one image at a time, latest
+checkpoint…), then the measured answer: the DiT denoise is 53.9 of 55.2 s
+(97.6%) at the pipeline layer; inside it, GEMM kernels take 61.3% of
+GPU-busy and attention 32.4% at the kernel layer. We know from two
+independent instruments: websocket per-node/per-step timing on the live
+server, and a rocprofv3 trace of the server process capturing exactly 40.0
+steps (95,600 kernel dispatches). Speaker note: stress that both layers
+agreed before any optimization was attempted — that's what makes the later
+attributions trustworthy.
 
 **Q2 — If steps go 40 → 8, should generation automatically become 5× faster?**
 No: measured 4.55×. The 32 removed steps were 97.6% of the workload, but the
@@ -144,29 +230,33 @@ Also per-step cost is unchanged (1.337 vs 1.345 s) — proof the gain is purely
 "less computation", not hidden execution changes. Speaker note: ask students
 to compute the ceiling live before revealing the measurement.
 
-**Q3 — Why might an attention optimization help the baseline but barely move
-an already-optimized pipeline?**
-Measured here: ck attention gives bf16-40-step a 1.25× DiT speedup (attention
-was 32.4% of busy), but on turbo-int8 it adds exactly nothing (LF2 = LF3 to
-the millisecond). Two reasons: (1) the int8 path already routes attention
-through the faster implementation, and (2) after cutting steps 5×, the same
-0.3 s attention saving is a much smaller fraction of a 9 s total. Lesson:
-re-profile after every big change; hotspots migrate. Speaker note: this is
-also why we never multiply independent ratios — the levers interact.
+**Q3 — Why do independent optimization gains not multiply? (why might an
+attention optimization help the baseline but barely move an
+already-optimized pipeline?)**
+Measured here: ck attention gives bf16-40-step a 1.25× DiT speedup
+(attention was 32.4% of busy), but on turbo-int8 it adds exactly nothing
+(LF2 = LF3 to the millisecond). Two reasons: (1) the int8 path already
+routes attention through the faster implementation, and (2) after cutting
+steps 5×, the same 0.3 s attention saving is a much smaller fraction of a
+9 s total. Lesson: re-profile after every big change; hotspots migrate —
+and never multiply independent ratios, the levers interact. Speaker note:
+tie back to slide 6's 4.55 × 1.08 × 1.25 ≈ 6.14 "prediction" vs 6.12
+measured — the closeness is coincidence, the composition is the lesson.
 
 **Q4 — With only one GPU, how can CPU–GPU scheduling improve multiple
-requests?**
+requests? (and why can real overlap still reduce throughput?)**
 Honest answer from our measurements: on this host it can't — but we proved
-why with numbers. True overlap exists (50.4 s of concurrent CPU-TE + GPU-denoise),
-yet the CPU's 8B text encoder is 152–391× slower than the GPU's, and its
-128-thread matmuls contend with kernel-launch threads, slowing the GPU 1.5×.
-Net: 4.69 → 0.33 img/min. The break-even is computable: pipelining wins only
-when CPU-encode time < per-request GPU time (here: never, 160 s vs 12 s).
-Where CPU–GPU scheduling DOES pay on one GPU: overlapping *cheap* host work
-(png save, queueing) — which ComfyUI already does — or batching multiple
-images into one denoise (untested; open challenge). Speaker note: negative
-results with timestamps are first-class science; invite students to find the
-batching experiment in OPEN_ISSUES.
+why with numbers. True overlap exists (50.4 s of concurrent CPU-TE +
+GPU-denoise, proven by timestamps), yet the CPU's 8B text encoder is
+152–391× slower than the GPU's, and its 128-thread matmuls contend with
+kernel-launch threads, slowing the GPU 1.5×. Net: 4.69 → 0.33 img/min. The
+break-even is computable: pipelining wins only when CPU-encode time <
+per-request GPU time (here: never, 160 s vs 12 s). Where CPU–GPU scheduling
+DOES pay on one GPU: overlapping *cheap* host work (png save, queueing) —
+which ComfyUI already does — or batching multiple images into one denoise
+(untested; open challenge). Speaker note: negative results with timestamps
+are first-class science; invite students to find the batching experiment in
+the M7 challenges.
 
 ---
 

@@ -6,10 +6,11 @@ fully-evidenced measurement campaign)*
 
 - **Audience:** graduate students / engineers who can write Python and have
   used PyTorch; no prior AMD/ROCm experience required.
-- **Format:** 7 modules ≈ 8 course hours + a 90-minute lecture demo + lab work.
-- **Hardware for labs:** any single AMD Radeon gfx1100-class GPU (the case
-  study used a Radeon PRO W7900 48 GB; methodology transfers, absolute
-  numbers will differ). A CPU-only mode exists for modules 0–1 exercises.
+- **Format:** 7 modules ≈ 8 course hours + a 100-minute lecture (2026-11-19
+  16:30–18:10) + lab work.
+- **Hardware for labs:** a free Radeon Cloud GPU instance (single GPU,
+  PyTorch-ROCm image) provisioned via `bash scripts/cloud/start.sh` — see
+  [the quickstart](../docs/RADEON_CLOUD_QUICKSTART.md).
 - **Language:** English-first, 中文支持 (slide notes and verdict terms are bilingual).
 
 ## The one-line story
@@ -22,7 +23,7 @@ fully-evidenced measurement campaign)*
 | # | Module | Methodology stage | Key measured fact (from the case study) |
 |---|---|---|---|
 | 0 | [Setup & the discipline](M00_setup_and_discipline/) | — | doctor fail-closed; evidence-before-claims |
-| 1 | [Measure first: the frozen baseline](M01_baseline/) | Baseline | 55.21 s warm, 1.345 s/step (n=9, spread 0.3%) |
+| 1 | [Measure first: the frozen baseline](M01_baseline/) | Baseline | 55.21 s warm, 1.345 s/step (18 runs across two 9-run sessions, spread 0.3%) |
 | 2 | [Profiling: where the time actually goes](M02_profiling/) | Profiling | GEMM 61.3% / attention 32.4% of GPU-busy 97.8% |
 | 3 | [Less computation](M03_less_computation/) | Less compute | Turbo 8-step: 4.55× — and why it isn't 5× |
 | 4 | [Faster computation](M04_faster_computation/) | Faster compute | ck attention 1.22×; INT8 1.08× + −6.7 GB VRAM |
@@ -30,8 +31,9 @@ fully-evidenced measurement campaign)*
 | 6 | [Combined optimization & the quality gate](M06_combined_quality/) | Combined + quality | BEST 9.02 s = 6.12×; human verdict pending |
 | 7 | [Student challenge](M07_student_challenge/) | Open source | 6 graded tasks with acceptance criteria |
 
-Plus: [LECTURE_DEMO.md](LECTURE_DEMO.md) — the 90-minute classroom package
-(8 slides + 4 interactive Q&As, all backed by the case-study data).
+Plus: [LECTURE_DEMO.md](LECTURE_DEMO.md) — the 100-minute classroom package
+(8 slides + 4 interactive Q&As + bounded teacher demo and student exercise,
+all backed by the case-study data).
 
 ## Grading rubric (suggested)
 

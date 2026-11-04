@@ -1,0 +1,29 @@
+{
+  "generated_at": "2026-11-04T03:53:45+00:00",
+  "scope": "student",
+  "n_records": 16,
+  "per_experiment": [
+    {
+      "experiment": "B0",
+      "category": "baseline",
+      "n_measure": 9,
+      "n_fresh": 3,
+      "warm_total_median_s": 55.099,
+      "warm_ksampler_median_s": 53.712,
+      "warm_vae_median_s": 0.898,
+      "warm_step_median_s": 1.34,
+      "fresh_total_median_s": 56.108,
+      "fresh_text_encode_median_s": 0.572,
+      "cold_total_s": 95.583,
+      "cold_server_boot_s": 6.12,
+      "vram_peak_mb": 33139.4,
+      "vram_device_peak_mb": 37709.0,
+      "gpu_util_pct_p50": 100.0,
+      "attention_backend": "pytorch-sdpa-default",
+      "run_ids": [
+        "acceptance-b0-B0"
+      ],
+      "quality_status": "REFERENCE"
+    }
+  ]
+}
