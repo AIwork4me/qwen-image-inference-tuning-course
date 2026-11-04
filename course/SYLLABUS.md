@@ -31,6 +31,9 @@ fully-evidenced measurement campaign)*
 | 6 | [Combined optimization & the quality gate](M06_combined_quality/) | Combined + quality | BEST 9.02 s = 6.12×; human verdict pending |
 | 7 | [Student challenge](M07_student_challenge/) | Open source | 6 graded tasks with acceptance criteria |
 
+Lab workflow (smoke vs formal, with GPU budgets):
+[docs/CLASSROOM_WORKFLOWS.md](../docs/CLASSROOM_WORKFLOWS.md)
+
 Plus: [LECTURE_DEMO.md](LECTURE_DEMO.md) — the 100-minute classroom package
 (8 slides + 4 interactive Q&As + bounded teacher demo and student exercise,
 all backed by the case-study data).
