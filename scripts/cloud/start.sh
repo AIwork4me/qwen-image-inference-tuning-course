@@ -295,7 +295,7 @@ cat <<EOF
      Classroom smoke variants cost 1-3 minutes (--smoke).
   3. Your measurements live in runs/ and never touch the frozen evidence
      under evidence/ — aggregate yours with:
-       python -m lab report --scope student
+       python -m lab report --scope student --write
   4. GPU time is a metered resource: stop or destroy the instance when you
      are not using it. runs/ persists together with /workspace.
 EOF

@@ -4,7 +4,15 @@
 an M7 challenge task. The owner decides whether/when to publish them;
 nothing here has been posted to GitHub.*
 
+*Issue triage for the first contribution wave: **3 beginner issues**
+(good-first-issue, CPU-only, fully specified acceptance) and **2
+research-level issues** (GPU required, open-ended analysis). Issue 6
+(single-GPU batching) stays parked as an advanced stretch task — it needs
+owner agreement on a new experiment id before it becomes an issue.*
+
 ---
+
+# Beginner issues (3)
 
 ## Issue 1 — Title: `help wanted: harden scripts/cloud/start.sh on non-audited cloud images`
 
@@ -19,7 +27,7 @@ may hit unhandled paths.
 
 **Task:** run the script on your instance; when a step fails or degrades,
 improve detection/reporting (never silent fallbacks). PRs follow
-[docs/CONTRIBUTING_TUTORIAL.md](../CONTRIBUTING_TUTORIAL.md).
+[docs/CONTRIBUTING_TUTORIAL.md](CONTRIBUTING_TUTORIAL.md).
 
 **Done means:** the failure mode prints an actionable message; re-run
 succeeds or reports the exact blocker; before/after output + instance
@@ -54,14 +62,17 @@ unit tests. Regression risk grows as students extend the tooling.
 (SystemExit), crop geometry, per-prompt medians never pooled, and the
 fidelity/distance mapping for every shipped manifest.
 
-## Issue 4 — Title: `research: why does ck attention add exactly nothing on the int8-turbo path?`
+# Research-level issues (2)
+
+## Issue 4 — Title: `research: why does ck attention show no measurable benefit on the int8-turbo path?`
 
 **Labels:** `help wanted`, `research`, `gpu`
 **Challenge:** M7 Task 4 (★★☆)
 
 Measured facts: ck attention gives bf16-40-step a 1.25× DiT speedup, but
-LF2 (turbo+int8+default attn) = LF3 (turbo+int8+ck) = 9.02 s to the
-millisecond. No kernel-level explanation exists yet.
+on turbo-int8 the medians are LF2 9.023 s vs LF3 9.022 s (n=9 each,
+fully overlapping distributions — no measurable benefit at this sample
+size). No kernel-level explanation exists yet.
 
 **Task:** bounded rocprofv3 windows on bf16 vs int8 runs; table of
 attention kernel invocations (name/grid/duration) explaining the tie;
@@ -80,6 +91,8 @@ per-shape kernel selection.
 
 **Task:** per-shape GEMM time bucketing from bounded traces of F2/LF2;
 quantified split of int8 path time between dequant kernels and GEMMs.
+
+# Parked (advanced stretch — not part of the first wave)
 
 ## Issue 6 — Title: `experiment: single-GPU batching (batch_size > 1) vs sequential BEST throughput`
 

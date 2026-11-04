@@ -88,7 +88,8 @@ fail-closed 体检 → 生成一张有界的冒烟图并打印路径与下一课
 —— 在小显存卡上这是"能跑与不能跑"的差别）。硬件利用率不等于延迟：
 只有配对的端到端测量才算数，而且独立收益永远不能相乘
 （4.55 × 1.08 × 1.25 会"预测"出 6.14×；实测 6.12× —— 而 ck 在
-int8-turbo 路径上的贡献*恰好为零*：LF2 = LF3 精确到毫秒）。
+int8-turbo 路径上无可测收益：LF2 与 LF3 中位数 9.023 vs 9.022 s，
+各 n=9，分布完全重叠）。
 
 **③ 并行与异构计算（Parallel & Heterogeneous Computing）** —— 单 GPU
 + 单 CPU 做不到的事。我们实测了那个诱人的想法（CPU 文本编码与 GPU
@@ -121,7 +122,10 @@ bash scripts/cloud/start.sh --all-models   # 分阶段环境准备（也可稍�
 .venv-lab/bin/python -m lab profile        # 流水线 + rocprofv3 内核剖析
 .venv-lab/bin/python -m lab run --experiment L1 [--smoke]   # F1 F2 LF1-3 BEST H1 H2
 .venv-lab/bin/python -m lab quality --experiment F2
-.venv-lab/bin/python -m lab report [--scope reference|student|all]
+.venv-lab/bin/python -m lab report [--scope reference|student|all] [--write]
+#   （默认只读；--kind smoke|all 过滤学生 smoke 运行；--write 才写出
+#    SUMMARY+图表 —— reference scope 此时改写冻结证据文件，属于刻意的
+#    维护动作）
 ```
 
 **GPU 时间是计量付费的学生资源。** 课堂练习使用有界的 `--smoke` 变体
@@ -136,7 +140,8 @@ bash scripts/cloud/start.sh --all-models   # 分阶段环境准备（也可稍�
 - `evidence/results/` —— 全部运行记录（计时、显存、注意力路径日志证据、
   图像哈希）、环境快照、剖析结果、SUMMARY 与图表。官方测量活动固定在
   [`lab/reference_runs.json`](lab/reference_runs.json)；新测量落在 `runs/`
-  （代码级隔离，用 `report --scope student` 单独汇总）。
+  （代码级隔离，用 `report --scope student --write` 单独汇总；
+  smoke 运行默认不计入正式中位数）。
 - `evidence/quality/` —— 成对网格 + 原生分辨率文字裁切（供人工终审）；
   `evidence/samples/` —— B0 与 BEST 的实测图像。
 - [docs/CLAIM_EVIDENCE_MATRIX.md](docs/CLAIM_EVIDENCE_MATRIX.md) ——

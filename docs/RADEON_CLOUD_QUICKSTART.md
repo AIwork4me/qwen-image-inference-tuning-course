@@ -1,8 +1,12 @@
 # Radeon Cloud Quickstart — from zero to your first image
 
 **Target reader:** a student who just got a Radeon Cloud instance approved.
-Total time on the audited instance: **~10–20 minutes** (dominated by the
-25.5 GB staged model download; re-runs are minutes).
+Total time on the audited instance: **~10–20 minutes** — dominated by the
+25.5 GB staged model download, which measured ~0.4 GB/s aggregate on the
+audited cloud network (hf-mirror, 16-way ranged). **Your network will
+vary**: at a typical 20–40 MB/s the same download takes 11–22 minutes...
+at 2 MB/s it is ~3.5 hours — start it early and let the resumable
+downloader work. Re-runs are minutes (everything verifies and skips).
 
 > Before you start: apply for free Radeon Cloud GPU compute time
 > (platform: <https://developer.amd.com.cn/radeon>, docs:

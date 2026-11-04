@@ -67,10 +67,21 @@ Two tooling lessons baked into the lab code (both cost a failed run):
   measured at Layer A instead. **Know what your profiler did not capture.**
 
 **Explain.** Lesson one: the DiT is everything. Optimizing VAE decode from
-0.9 s to 0.0 s improves end-to-end by 1.6%. The GPU is busy 97.8% of the
-time — this is a *compute* problem, not a scheduling problem; no amount of
-clever CPU–GPU overlap rescues an idle-less GPU (M5 proves the converse
-the hard way).
+0.9 s to 0.0 s improves end-to-end by 1.6%.
+
+What 97.8% GPU-busy does — and does not — establish. A high busy
+percentage rules out *idle time*: there are no large scheduling gaps, no
+"GPU waiting for the host" rescue. It does **not** by itself establish
+that the workload is *compute-bound*: a GPU can be 100% busy executing
+memory-bandwidth-stalled kernels. Distinguishing compute-bound from
+memory-bound needs another instrument (e.g. FLOP utilization vs hardware
+peak, or roofline analysis) — which we did not run. What we CAN say from
+the two layers together: the time is concentrated in GEMM + attention
+kernels (93.7% of busy time) with almost no copies or syncs, and the
+per-step times are stable — so the practical conclusion stands (no
+scheduling/transfer rescue exists; the levers are less/faster kernel
+work), while the compute-vs-bandwidth question remains open. State
+exactly as much as the instrument shows.
 
 Amdahl as a planning tool (not a result — a bound is a *prediction*, only
 the measurement is a *result*):
@@ -87,7 +98,8 @@ Charts generated from the data (never hand-edited):
 [`evidence/results/chart_warm_latency.png`](../../evidence/results/chart_warm_latency.png)
 ·
 [`evidence/results/chart_waterfall.png`](../../evidence/results/chart_waterfall.png)
-— rebuildable with `python -m lab report` (they must match SUMMARY.json
+— rebuildable with `python -m lab report --write` (read-only by default;
+they must match SUMMARY.json
 byte-for-byte in the numbers they display; a disagreeing chart is a bug).
 
 **Think (answer keys in `<details>`).**

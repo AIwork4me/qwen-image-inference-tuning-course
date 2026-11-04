@@ -46,7 +46,7 @@ distance) — the tool refuses to guess.
 | B0 | bf16 40-step | 55.21 s | 1.00× | 37.7 GB | reference | — |
 | L1 | turbo 8-step | 12.13 s | 4.55× | 37.7 GB | distance 0.19–0.30 | pending human |
 | L1O | turbo, official σ | 12.07 s | 4.57× | 37.7 GB | distance 0.23–0.34 | pending human |
-| F1 | ck attention | 45.09 s | 1.22× | 37.7 GB | distance 0.004–0.065 | pending human |
+| F1 | ck attention | 45.09 s | 1.22× | 37.7 GB | **fidelity** 0.004–0.065 vs B0 (backend-swap numerics; tolerance 0.10) | pending human |
 | F2 | INT8 40-step | 51.09 s | 1.08× | 31.0 GB | **fidelity 0.005–0.031** | near-lossless band |
 | LF1/2/3 | combinations | 10.03/9.02/9.02 s | ≤6.12× | 31–37.7 GB | distance | pending human |
 | **BEST** | turbo int8 + default attn | **9.02 s** | **6.12×** | 31.0 GB | distance 0.19–0.30 | **PENDING_HUMAN_REVIEW** |
@@ -59,9 +59,16 @@ median to the millisecond.
 
 **Explain.** LPIPS semantics — the course's most-quoted foot-gun:
 
-- **Fidelity** (same model, same seed, numerics changed): LPIPS measures
-  *damage*. F2's 0.005–0.031 sits in the near-lossless band (noise floor
-  0.0000).
+- **Fidelity** (same model, same schedule, numerics changed —
+  quantization F2, attention backend F1): LPIPS measures *damage*. F2's
+  0.005–0.031 sits in the near-lossless band (noise floor 0.0000); F1's
+  0.004–0.065 is the backend swap's numerical footprint. Fidelity gates
+  carry a review tolerance (0.10) that TRIAGES human attention — it never
+  auto-passes.
+  *Protocol history:* the shipped `evidence/quality/F1/quality.md` was
+  generated before F1 was correctly classified and carries the older
+  "distance" boilerplate; the manifest now declares fidelity and the
+  numbers were always fidelity numbers.
 - **Distance** (different schedule/model): LPIPS measures *difference*.
   Turbo's 0.19–0.30 does **not** mean "30% worse" — a visually excellent
   turbo image still distances from its 40-step sibling.

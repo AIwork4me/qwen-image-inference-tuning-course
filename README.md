@@ -92,8 +92,9 @@ Attention backends (ck: 1.22×) and INT8 quantization (1.08× at 1024²,
 but −6.7 GB VRAM — the difference between fitting and not fitting on
 smaller cards). Hardware-usage percentages are not latencies: only paired
 end-to-end measurement counts, and independent gains never multiply
-(4.55 × 1.08 × 1.25 would "predict" 6.14×; measured 6.12× — and ck adds
-*exactly zero* on the int8-turbo path: LF2 = LF3 to the millisecond).
+(4.55 × 1.08 × 1.25 would "predict" 6.14×; measured 6.12× — and ck shows
+no measurable benefit on the int8-turbo path: LF2 vs LF3 medians 9.023 vs
+9.022 s, n=9 each, distributions fully overlapping).
 
 **③ Parallel & Heterogeneous Computing** — when one GPU + one CPU can't.
 We measured the seductive idea (CPU text-encoding overlapped with GPU
@@ -127,7 +128,10 @@ bash scripts/cloud/start.sh --all-models   # staged setup (or add models later)
 .venv-lab/bin/python -m lab profile        # pipeline + rocprofv3 kernel profiling
 .venv-lab/bin/python -m lab run --experiment L1 [--smoke]   # F1 F2 LF1-3 BEST H1 H2
 .venv-lab/bin/python -m lab quality --experiment F2
-.venv-lab/bin/python -m lab report [--scope reference|student|all]
+.venv-lab/bin/python -m lab report [--scope reference|student|all] [--write]
+#   (read-only by default; --kind smoke|all filters student smoke runs;
+#    --write regenerates SUMMARY+charts — the reference scope then rewrites
+#    the frozen evidence files, a deliberate maintenance action)
 ```
 
 **GPU time is a metered student resource.** Classroom work uses bounded
@@ -144,7 +148,8 @@ never modify the frozen reference evidence under `evidence/`.
   evidence, image hashes), env snapshots, profiling analyses, SUMMARY +
   charts. The official campaign is pinned in
   [`lab/reference_runs.json`](lab/reference_runs.json); new runs land in
-  `runs/` (isolated by code, aggregated with `report --scope student`).
+  `runs/` (isolated by code, aggregated with `report --scope student
+  --write`; smoke runs are excluded from your formal medians by default).
 - `evidence/quality/` — paired grids + native-resolution typography crops
   for the human verdict; `evidence/samples/` — B0 & BEST measured images.
 - [docs/CLAIM_EVIDENCE_MATRIX.md](docs/CLAIM_EVIDENCE_MATRIX.md) — claims,

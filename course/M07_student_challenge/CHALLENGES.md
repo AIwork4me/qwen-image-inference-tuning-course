@@ -15,9 +15,15 @@ so you don't re-propose them).
 3. A run record (schema-valid, with attention evidence) or it didn't
    happen.
 4. Negative results are welcome — with measurements.
-5. Hardware: any single Radeon works for most tasks (cloud `doctor
-   --cloud` accepts non-W7900 cards with a WARN); absolute numbers will
-   differ from the reference, methodology must not.
+5. Hardware, tiered honestly by measured VRAM peaks: the bf16 40-step
+   experiments (B0, F1) peak at ~37.7 GB and need a gfx1100-class 48 GB
+   card (W7900/W7900D); the int8/turbo experiments (F2, LF1–LF3, BEST)
+   peak at ~31 GB and need ≥ ~33 GB. Smaller Radeons (24 GB class) can
+   run the course's evidence-reading exercises and may run reduced
+   resolutions/smoke variants, but the committed experiment matrix is NOT
+   claimed to fit — cloud `doctor --cloud` accepts non-W7900 cards with a
+   WARN, and your numbers are an independent measurement, never pooled
+   with the reference.
 6. Workflow: Fork → Edit → Test → PR — follow
    [docs/CONTRIBUTING_TUTORIAL.md](../../docs/CONTRIBUTING_TUTORIAL.md).
    CPU tests must pass (`python -m pytest tests/ -v`) before you push.
@@ -89,8 +95,9 @@ int8-turbo? (★★☆ intermediate, needs GPU)
 
 **Background:** P2 measured attention at 32.4% of GPU busy (`attn_fwd`,
 mean 13.8 ms, n=1248/gen) and ck attention making the bf16 pipeline
-1.25× faster on DiT — but adding *exactly nothing* on the int8 turbo path
-(LF2 = LF3 = 9.02 s). Nobody has yet explained why at the kernel level.
+1.25× faster on DiT — but showing no measurable benefit on the int8 turbo
+path (LF2 vs LF3: 9.023 vs 9.022 s medians, n=9 each, fully overlapping
+distributions). Nobody has yet explained why at the kernel level.
 
 **Reproduce:** `python -m lab profile --date attn-deep`, then compare
 `rocprof-dit/analysis.json` across a bf16 run and an int8 run (manifests

@@ -79,9 +79,16 @@ cold (seed+1M) -> warmup (seed+2M) -> 3x measured (frozen seeds) -> fresh-prompt
 |---|---|
 | Warm total (median, 18 runs across two independent sessions) | **55.21 s** (sessions: 55.24 / 55.21) |
 | Steady step time | 1.345 s (spread 1.336–1.367) |
-| Fresh-prompt total | 56.10 s (TE adds 0.31–0.60 s) |
+| Fresh-prompt total | 56.10 s |
+| — of which text encode (measured on the fresh arm) | 0.56 s median (per-run range 0.31–0.60 s) |
+| — of which residual (queue/scheduling variance, not TE) | ~0.34 s |
 | Full cold start | 74.2 s (server boot 7.0 s separate) |
 | Peak VRAM (device, sampled) | 37.7 GB |
+
+Read the fresh decomposition precisely: **fresh − warm = 0.90 s**, of which
+the *measured* TE contribution is 0.56 s (median) — the remaining ~0.34 s
+is run-to-run scheduling variance, not text encoding. Saying "fresh adds
+the TE cost" alone under-explains the delta by a third.
 
 Two full sessions were run — not because one was doubted, but because
 **reproducibility is a measured property, not an assumption**. Your
@@ -95,7 +102,7 @@ Where your records land: `runs/<tag>-B0/*.json` (records) and
 the records). Aggregate YOUR numbers:
 
 ```bash
-.venv-lab/bin/python -m lab report --scope student
+.venv-lab/bin/python -m lab report --scope student --write
 ```
 
 which writes `runs/SUMMARY.md` — the frozen campaign's SUMMARY under

@@ -66,12 +66,27 @@ Combinations — measured, never multiplied:
 | LF2 turbo int8 | **9.02 s** | **6.12×** |
 | LF3 turbo int8+ck | **9.02 s** | **6.12×** |
 
-**Explain.** F1 cross-check with M2: attention was 32.4% of busy ≈ 17.2 s
-(measured, trace); the DiT saved 10.7 s ⇒ attention now ≈ 6.5 s (**derived
-by subtraction** — no trace of the ck path was taken; the estimate is
-consistent, not observed). The Amdahl ceiling was 1.46×; measured 1.22×.
-**The backend actually in use is proven from server logs** ("Using Comfy
-Kitchen attention"), recorded per run — flags alone are not evidence.
+**Explain.** F1 cross-check with M2, with every number labeled by how it
+was obtained:
+
+| Quantity | Value | How obtained |
+|---|---|---|
+| Attention time in B0 | 17.23 s | **measured** — kernel trace, reference host (`rocprof-dit/analysis.json`) |
+| DiT time saved by ck | 10.7 s | **measured** — paired A/B node timing (B0 vs F1) |
+| Attention time under ck | ≈ 6.5 s | **estimated** — derived by subtraction (17.2 − 10.7); no trace of the ck path exists, so this is a consistent inference, not an observation |
+
+The Amdahl ceiling was 1.46×; measured 1.22×. **The backend actually in
+use is proven from server logs** ("Using Comfy Kitchen attention"),
+recorded per run — flags alone are not evidence.
+
+Quality note (protocol): F1 changes only the attention *kernel* — same
+model, same schedule, same seeds — so its output comparison against B0 is
+a **fidelity** check (numerical damage of the backend swap), declared in
+the manifest with reference B0 and a review tolerance of 0.10. The
+shipped `evidence/quality/F1/quality.md` predates this protocol fix and
+carries the older "distance" boilerplate — the numbers themselves
+(LPIPS 0.004–0.065) are fidelity numbers; the label was wrong, the
+measurement was not.
 
 F2: INT8 here is a **memory optimization first**. "Theoretical 2× int8
 throughput" did not materialize at 1024² — the dequantize-on-use path
@@ -81,17 +96,25 @@ same memory saving was the *only* reason 2048² fit at all.
 
 The combination table is the course's flagship: the "product of parts"
 (4.55 × 1.08 × 1.25 ≈ 6.1×) happens to land near the measured 6.12× — but
-the *composition* is different: **ck adds exactly nothing on the int8
-turbo pipeline** (LF2 = LF3 to the millisecond). After int8, the
-attention path already runs the fast kernels; after the step cut, the
-remaining attention time is too small to matter. Levers interact —
-re-measure every combination, and re-profile: the bottleneck migrates.
+the *composition* is different: **ck shows no measurable benefit on the
+int8 turbo pipeline** — LF2 median 9.023 s vs LF3 9.022 s (n=9 each), a
+1 ms difference with fully overlapping per-run distributions (both span
+9.019–9.28 s). Correctly stated: *at this sample size the ck effect on
+turbo-int8 is indistinguishable from zero*; we did not measure a
+mechanistic "exactly zero". After int8, the attention path already runs
+the fast kernels; after the step cut, the remaining attention time is too
+small to matter. Levers interact — re-measure every combination, and
+re-profile: the bottleneck migrates.
 
-The rejected experiment: torch.compile was **NOT_RUN — rejected with
-evidence**: elementwise+norm is 6.0% of busy and GPU is 97.8% busy, so the
-ceiling is < 0.4 s end-to-end, against real compile cost +
-shape-specialization risk. Saying "no" with a number is an optimization
-decision too.
+The rejected experiment: torch.compile is **NOT_RUN**. Expected ROI, as an
+*unverified engineering hypothesis*: the kernel composition puts
+elementwise+norm at ~6% of GPU-busy (≈ 3.2 s of the 53.1 s busy window),
+and compile fusion could plausibly recover some fraction of that — likely
+well under 1 s end-to-end, against real compile warm-up cost,
+shape-specialization risk, and numerics churn. Even the theoretical
+extreme (all elementwise+norm time gone) caps at ≈ 1.06×. This is a
+reasoned rejection at the decision matrix, not a measured result — say
+which one it is.
 
 **Think (answer keys in `<details>`).**
 

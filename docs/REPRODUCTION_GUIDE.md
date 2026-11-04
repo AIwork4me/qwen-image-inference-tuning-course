@@ -123,8 +123,11 @@ the binding gate — prepare grids, don't fabricate judgments.
 ## 6. Report
 
 ```bash
-.venv-lab/bin/python -m lab report                    # frozen reference scope (default)
-.venv-lab/bin/python -m lab report --scope student    # your runs/ only
+.venv-lab/bin/python -m lab report                    # frozen reference scope (default, READ-ONLY)
+.venv-lab/bin/python -m lab report --scope student --write    # your runs/ only (runs/SUMMARY.*)
+.venv-lab/bin/python -m lab report --scope student --kind smoke --write   # bounded smoke runs only
+.venv-lab/bin/python -m lab report --scope all --write  # reference + student, side by side, never pooled
+.venv-lab/bin/python -m lab report --write              # regenerate the frozen evidence SUMMARY (maintenance)
 ```
 
 The reference scope aggregates ONLY the run dirs listed in

@@ -64,9 +64,13 @@ Kernel layer (rocprofv3, bounded 90 s window, one full generation):
 | elementwise + norm | 6.0% |
 | copies / syncs | ≈ 0 (197 tiny H2D, 1 sync) |
 
-Talking point: the GPU is busy 97.8% of the time — this is a *compute*
-problem, not a scheduling problem. Amdahl: even infinite-speed attention
-caps us at ~1.46×; cutting steps is the big lever.
+Talking point: the GPU is busy 97.8% of the time — there is no idle time,
+so no scheduling/transfer rescue exists (M5 proves the converse the hard
+way). Note what busy does NOT prove: 97.8% busy does not by itself
+establish compute-bound (vs memory-bound) — that would need FLOP
+utilization or roofline data; what we can say is the time concentrates in
+GEMM + attention kernels with almost no copies/syncs. Amdahl: even
+infinite-speed attention caps us at ~1.46×; cutting steps is the big lever.
 
 ## Slide 3 — Less computation
 
@@ -234,8 +238,9 @@ to compute the ceiling live before revealing the measurement.
 attention optimization help the baseline but barely move an
 already-optimized pipeline?)**
 Measured here: ck attention gives bf16-40-step a 1.25× DiT speedup
-(attention was 32.4% of busy), but on turbo-int8 it adds exactly nothing
-(LF2 = LF3 to the millisecond). Two reasons: (1) the int8 path already
+(attention was 32.4% of busy), but on turbo-int8 it shows no measurable
+benefit (LF2 vs LF3: 9.023 vs 9.022 s medians, n=9 each —
+indistinguishable at this sample size). Two reasons: (1) the int8 path already
 routes attention through the faster implementation, and (2) after cutting
 steps 5×, the same 0.3 s attention saving is a much smaller fraction of a
 9 s total. Lesson: re-profile after every big change; hotspots migrate —
