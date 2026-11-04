@@ -1,22 +1,47 @@
 # M5 — Parallel & Heterogeneous Computing (on ONE GPU)
 
-**Goal:** learn what single-GPU parallelism can and cannot do — with two
-measured negative results and one proof of genuine overlap.
+**Problem.** Marketing parallelism is easy: "just move work to the CPU and
+overlap!" Engineering parallelism is measured. This module takes the two
+seductive ideas for a single-GPU image service — offload the text encoder
+to the CPU, pipeline CPU work under GPU denoising — and measures both to
+the point of proof, one yielding a 14× *loss* with the most instructive
+evidence in the course.
 
-## Lesson
+**Concepts (beginner glossary).**
 
-### The mental model
+| Term | Plain meaning |
+|---|---|
+| **heterogeneous computing** | using different processor types (GPU + CPU) for different parts of one workload |
+| **text encoder (TE)** | the 8B-parameter Qwen3-VL model that turns your prompt into conditioning tensors (~17.5 GB in bf16) |
+| **pipelining** | starting stage *i+1*'s work while stage *i* still runs (here: encode request *n+1* on CPU while the GPU denoises request *n*) |
+| **overlap** | time during which two processors genuinely execute concurrently — *provable only with timestamps*, not utilization graphs |
+| **throughput vs latency** | images per minute vs seconds per image — different metrics, different winners |
+| **contention** | two processors sharing one host fight for memory bandwidth and OS threads — parallelism has a price |
+| **negative result** | a measurement showing an approach does NOT work — first-class science when the evidence is complete |
 
-Diffusion sampling is inherently sequential (step *k+1* needs step *k*'s
-output). What CAN move: the text encoder (a separate model) to another
-processor, and request-level pipelining (encode request *i+1* while the GPU
-denoises request *i*). This is **not** multi-GPU tensor parallelism —
-one W7900, always.
+**Run (budget warning — read first).**
 
-### H1: move the 8B text encoder to the CPU?
+The H1/H2 experiments are **slow CPU-bound sessions (~15 min each)** and
+are **taught from the committed physical evidence by default** — the
+committed records below are complete (timings, agreement stats, overlap
+timestamps) and re-running them buys no new information on the same
+hardware class. They remain available as opt-in research tasks after
+budgeting:
 
-ComfyUI natively supports `CLIPLoader device=cpu`, and the lab runs the
-identical graph via `comfy.sd.load_clip`:
+```bash
+# opt-in research reruns (~15 min GPU each; H1 spends most of it on the CPU)
+.venv-lab/bin/python -m lab run --experiment H1
+.venv-lab/bin/python -m lab run --experiment H2
+```
+
+Committed evidence:
+`evidence/results/p5-H1-H1-cpu-te/` + `p5-H1-r2-H1-cpu-te/` (probe with
+reproducibility arm) and `evidence/results/p5-H2-H2-pipeline/H2_RESULTS.json`.
+
+**Observe (reference campaign — the shipped evidence).**
+
+H1 — move the 8B text encoder to the CPU? (identical graph via
+`comfy.sd.load_clip`):
 
 | | GPU | CPU |
 |---|---|---|
@@ -24,16 +49,8 @@ identical graph via `comfy.sd.load_clip`:
 | VRAM allocated | 16.8 GB | **0** |
 | Conditioning agreement | — | cosine ≥ 0.999999, max\|Δ\| ≤ 0.0074 |
 
-Correctness: **pass** (numerically equivalent conditioning). Latency:
-**152–391× slower**. The 8B encoder is GEMM-bound — exactly the workload
-GPUs are built for. CPU TE is a VRAM trade (−16.8 GB), never a speed play
-on this class of host.
-
-### H2: overlap CPU TE with GPU denoising?
-
-4 requests, turbo 8-step. Arm A: sequential (GPU TE → gen, one at a time).
-Arm B: a CPU worker encodes the *next* request while the GPU denoises the
-current one (conditioning injected through a small custom node).
+H2 — overlap CPU TE with GPU denoising? (4 requests, turbo 8-step; arm B
+injects CPU-precomputed conditioning through a lab-owned custom node):
 
 | | A sequential | B pipelined |
 |---|---|---|
@@ -42,35 +59,69 @@ current one (conditioning injected through a small custom node).
 | Proven overlap | — | **50.4 s** (timestamps) |
 | GPU gen under CPU load | 12–13 s | **19.1 s** |
 
-Three separate lessons in one table:
+**Explain.** H1: correctness **passes** (numerically equivalent
+conditioning) while latency **fails** (152–391× slower). The 8B encoder
+is GEMM-bound — exactly the workload GPUs are built for. CPU TE is a VRAM
+trade (−16.8 GB), never a speed play on this class of host.
 
-1. **The overlap is real** — 50.4 s of concurrent CPU+GPU execution, proven
-   by per-request timestamps, not inferred from utilization graphs.
+H2 packs three separate lessons into one table:
+
+1. **The overlap is real** — 50.4 s of concurrent CPU+GPU execution,
+   proven by per-request timestamps, not inferred from utilization
+   graphs. (Why timestamps: utilization can be 100% while a pipeline
+   still loses — the numbers below are the proof.)
 2. **It still loses 14×** — the CPU side of the pipeline costs 160–221 s
-   per request; Amdahl applies to pipelines too (the slowest stage gates).
+   per request; Amdahl applies to pipelines too (the slowest stage gates
+   the whole thing).
 3. **Parallelism has a price** — the 128-thread CPU matmuls starve the
-   server's kernel-launch threads; the *GPU* gens slowed 1.5×. Two
-   processors sharing one host contend.
+   server's kernel-launch threads; the *GPU* generations slowed 1.5×
+   (12–13 s → 19.1 s). Two processors sharing one host contend.
 
 **Throughput ≠ latency**: neither design changes a single image's 9–12 s.
 "Parallel makes it faster" needs a noun — faster *what*?
 
-### What would actually help (untested = open challenge)
+What would actually help (untested = open challenge): sequential fast
+generations (BEST ≈ 6.6 img/min with fresh prompts) is the measured
+frontier. The one untested direction: **batching** multiple images into a
+single denoise (batch_size > 1) — see the M7 challenges.
 
-Sequential fast generations (BEST ≈ 6.6 img/min with fresh prompts) is the
-measured frontier. The one untested direction: **batching** multiple images
-into a single denoise (batch_size > 1) — see M7 challenge #1.
+**Think (answer keys in `<details>`).**
 
-## Exercise
+1. From `H2_RESULTS.json`, derive the break-even CPU-encode time *t\**
+   below which pipelining wins. How far is the reference host from *t\**?
+   <details><summary>answer</summary>In steady state, arm B's cycle time
+   is max(GPU gen, CPU encode) + handoff; A's is TE_gpu + gen ≈ 12.8 s.
+   Pipelining wins when max(gen, t_cpu) < 12.8 s ⇒ t\* ≈ 12 s (given
+   gen ≈ 12 s unperturbed — and note contention *raises* gen). The
+   reference host's CPU encode is 160–221 s: 13–18× too slow, before
+   even counting contention.</details>
+2. On a 4× faster CPU (or an int8 CPU TE), would B win? What else would
+   you have to re-measure before claiming it?
+   <details><summary>answer</summary>At t_cpu ≈ 40–55 s, still above
+   t\*; at ≈ 8× you approach break-even. But contention must be
+   re-measured (thread starvation scales with CPU load), and the
+   *quality* path of CPU-produced conditioning must re-pass the
+   agreement check. The claim needs a fresh paired A/B — never an
+   extrapolation.</details>
+3. Explain why "GPU util was 100% during the overlap" is not evidence the
+   pipeline helped.
+   <details><summary>answer</summary>Utilization says the GPU was busy —
+   not that the *total* shrank. In arm B the GPU was busy *slower*
+   (gens 19.1 s vs 12–13 s) while the CPU crawled at its own pace:
+   100% busy and 14× worse. Throughput is measured in images/minute
+   end-to-end, and the timestamps prove where the time went.</details>
+4. Which single number in the H1 table would you cite to kill the
+   "just offload the TE" proposal — and which caveat must accompany it?
+   <details><summary>answer</summary>136.8–207.1 s vs 0.35–1.17 s
+   (152–391× slower). Caveat: it *frees 16.8 GB of VRAM* — on a
+   memory-constrained card that trade can still be right, at a latency
+   cost stated up front.</details>
 
-1. `python -m lab run --experiment H1` (~15 min) — read `H1_RESULTS.json`:
-   quote the GPU/CPU encode times and the cosine agreement.
-2. `python -m lab run --experiment H2` (~15 min) — from `H2_RESULTS.json`,
-   compute the break-even CPU-encode time *t\** below which pipelining wins
-   (derive it from A's per-request time). How far is this host from *t\**?
-3. Discussion: on a 4× faster CPU (or an int8 CPU TE), would B win? What
-   else would you have to re-measure before claiming it?
-4. Explain to a colleague why "GPU util was 100% during the overlap" is not
-   evidence the pipeline helped.
-
-**Acceptance:** the break-even derivation + the H2 numbers that support it.
+**Acceptance.**
+- [ ] The break-even derivation written out with the H2 numbers cited
+- [ ] The three lessons of the H2 table restated in your own words
+- [ ] One paragraph on why a negative result with timestamps is worth
+      more than an optimistic guess — referencing where the overlap
+      evidence lives (`H2_RESULTS.json` → `B_pipelined.overlap_s_total`)
+- [ ] (Opt-in, budgeted) your own H1/H2 rerun records in `runs/`,
+      compared against the shipped ones

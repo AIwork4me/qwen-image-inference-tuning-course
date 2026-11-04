@@ -1,118 +1,155 @@
 # M7 — Student Challenge: Radeon AI Inference Speed Challenge
 
-Student-friendly contribution tasks for the Linux W7900 lab. Difficulty is
-honest: none of these is a `good first issue` unless marked so — GPU
-performance work needs the discipline this repo enforces (baseline →
-profile → one variable → evidence). Every task below ships with reproduction
-commands, expected outputs, acceptance criteria and evidence requirements.
+**Problem.** You have finished the course — now contribute something real
+to an open-source project. The tasks below are genuine gaps in THIS
+repository: each one is independently testable, ships acceptance criteria
+and evidence requirements, and none is already implemented (features that
+exist — report charts, the quality CLI — are listed under "already done"
+so you don't re-propose them).
 
 **Ground rules for all tasks**
 
-1. Reproduce the frozen B0 baseline first (`python -m lab
-   baseline`); your change is only meaningful against it.
+1. Reproduce the frozen B0 baseline first (`python -m lab baseline`);
+   your change is only meaningful against it.
 2. One variable per experiment; never multiply independent speedups.
-3. A run record (schema-valid, with attention evidence) or it didn't happen.
+3. A run record (schema-valid, with attention evidence) or it didn't
+   happen.
 4. Negative results are welcome — with measurements.
-5. Hardware: any single Radeon gfx1100 GPU works for most tasks; absolute
-   numbers will differ from the W7900, methodology must not.
+5. Hardware: any single Radeon works for most tasks (cloud `doctor
+   --cloud` accepts non-W7900 cards with a WARN); absolute numbers will
+   differ from the reference, methodology must not.
+6. Workflow: Fork → Edit → Test → PR — follow
+   [docs/CONTRIBUTING_TUTORIAL.md](../../docs/CONTRIBUTING_TUTORIAL.md).
+   CPU tests must pass (`python -m pytest tests/ -v`) before you push.
+
+**Already implemented (do NOT re-propose as new features):**
+SUMMARY charts from `report` (bar + waterfall, M2 links them), the
+`python -m lab quality` CLI with manifest-driven semantics, scoped
+reporting (`--scope reference|student|all`), runs/ evidence isolation,
+cloud staged doctor. Improvements to these are fine as tasks 1–3 below.
 
 ---
 
-## 1. Attention kernel profiling deep-dive (difficulty: ★★☆ intermediate)
+## Task 1 — Quickstart & diagnostics hardening (★☆☆ good-first-issue)
 
-**Background:** P2 measured attention at 32.4% of GPU busy (`attn_fwd`, mean
-13.8 ms, n=1248/gen) and ck attention making the bf16 pipeline 1.25× faster
-on DiT — but adding nothing on the int8 turbo path (LF2=LF3). Nobody has yet
-explained *why* at the kernel level (kernel names? shapes? occupancy?).
+**Gap:** `scripts/cloud/start.sh` was validated on ONE audited instance
+(W7900, ROCm 7.2.1, proxy set). Other cloud images (different ROCm
+releases, no proxy, other Radeon SKUs, smaller `/workspace`) may hit
+unhandled paths.
 
-**Reproduce:** `python -m lab profile --date attn-deep`
-then compare `rocprof-dit/analysis.json` across a bf16 run and an int8 run
-(manifests F2/LF2, add `-P` windows per REPRODUCTION_GUIDE §3).
+**Do:** run the script on your instance; when a step fails or degrades,
+fix the script (or `lab/doctor.py`) to detect and report your case
+clearly — never to hide it.
+
+**Expected evidence:** before/after script output on your hardware + the
+instance facts (GPU arch, VRAM, ROCm, free disk) in the PR description.
+
+**Acceptance:** the failure mode is detected with an actionable message
+(no silent fallbacks); re-running the script after the fix succeeds or
+reports the exact blocker; `bash -n` clean; no secrets in logs.
+
+## Task 2 — Evidence navigation: SUMMARY linking & diffing (★☆☆–★★☆)
+
+**Gap:** reading evidence today means opening JSON files by hand. The
+SUMMARY tables (reference + student) could link each row to its run dirs,
+records, and quality grids — and a `report --diff` could compare student
+vs reference medians per experiment with spread and n.
+
+**Do:** extend `lab/report.py` (markdown only — charts already exist) to
+emit relative links per row, and add a read-only diff view.
+
+**Expected evidence:** regenerated SUMMARY.md (reference scope must stay
+numerically identical — this is a formatting change only) + a student
+SUMMARY diffed against the reference.
+
+**Acceptance:** CPU-only tests assert (a) reference numbers unchanged
+byte-wise in the table cells, (b) every link target exists, (c) the diff
+lists only experiments present in both scopes with n and Δ.
+
+## Task 3 — Quality tool regression tests (★☆☆ careful-semantics)
+
+**Gap:** `lab/quality_gate.py` (grids, crops, LPIPS table, verdict
+checkboxes) has unit tests for the CLI wrapper but NOT for its pure
+functions: `collect_measured` filename parsing, `make_paired_grid` /
+`make_native_crops` geometry, `lpips_table` stats, and the
+manifest-semantics mapping.
+
+**Do:** add CPU-only pytest coverage with tiny synthetic PNGs (Pillow) —
+no GPU, no lpips model needed (mock `_lpips_pair_impl`).
+
+**Expected evidence:** the new test file passing on the CPU CI runner.
+
+**Acceptance:** tests cover at least: an odd/even file set, a mismatched
+pair set (empty intersection → SystemExit), crop coordinates vs canvas
+size, per-prompt medians never pooled across prompts, and
+`quality_semantics` fidelity/distance mapping from every manifest.
+
+## Task 4 — Kernel profiling investigation: why does ck add nothing on
+int8-turbo? (★★☆ intermediate, needs GPU)
+
+**Background:** P2 measured attention at 32.4% of GPU busy (`attn_fwd`,
+mean 13.8 ms, n=1248/gen) and ck attention making the bf16 pipeline
+1.25× faster on DiT — but adding *exactly nothing* on the int8 turbo path
+(LF2 = LF3 = 9.02 s). Nobody has yet explained why at the kernel level.
+
+**Reproduce:** `python -m lab profile --date attn-deep`, then compare
+`rocprof-dit/analysis.json` across a bf16 run and an int8 run (manifests
+F2/LF2, bounded `-P` windows per REPRODUCTION_GUIDE §3).
 
 **Expected output:** a table of attention kernel invocations (name, grid,
-VGPRs, duration) for bf16-DiT vs int8-DiT, explaining the LF2=LF3 result.
+duration) for bf16-DiT vs int8-DiT, explaining the LF2=LF3 result.
 
-**Acceptance:** the explanation cites kernel rows from committed traces, not
-conjecture; a 1-paragraph recommendation (is there headroom left?).
+**Acceptance:** the explanation cites kernel rows from committed traces,
+not conjecture; a 1-paragraph recommendation (is there headroom left?).
 
-**Evidence:** trace CSVs (>10 MB — do not commit; commit the analysis JSON +
-markdown).
+**Evidence:** trace CSVs are large — do not commit them; commit the
+analysis JSON + a markdown writeup under `docs/research/`.
 
-## 2. INT8 kernel analysis: why only 1.08× at 40 steps but 1.35× on turbo? (★★☆)
+## Task 5 — INT8 kernel analysis: why only 1.08× at 40 steps but 1.35× on
+turbo? (★★☆, needs GPU)
 
 **Background:** F2 (int8, 40 steps) step time 1.220 s vs B0 1.345 s; LF2
-(turbo int8) 0.916 s vs L1 1.337 s. Same quantization format, very different
-relative gains. Hypothesis space: GEMM shape-dependent dequant overhead,
-L2 residency of the half-size weights, kernel selection per shape.
+(turbo int8) 0.916 s vs L1 1.337 s. Same quantization format, very
+different relative gains. Hypothesis space: GEMM shape-dependent dequant
+overhead, L2 residency of the half-size weights, kernel selection per
+shape.
 
-**Reproduce:** profile F2 and LF2 with bounded rocprofv3 windows; bucket GEMM
-kernels by shape (M,N,K from grid dims is derivable); compare bf16 vs int8
-GEMM total time per step.
+**Reproduce:** profile F2 and LF2 with bounded rocprofv3 windows; bucket
+GEMM kernels by shape (M,N,K derivable from grid dims); compare bf16 vs
+int8 GEMM total time per step.
 
-**Acceptance:** per-shape GEMM time table + a quantified statement of where
-the int8 path spends its time (dequant kernels vs GEMM).
+**Acceptance:** per-shape GEMM time table + a quantified statement of
+where the int8 path spends its time (dequant kernels vs GEMM).
 
-## 3. Better memory scheduling (★★★ advanced)
+## Task 6 — Single-GPU batching & throughput experiments (★★★ advanced,
+needs GPU)
 
-**Background:** B0 peak device VRAM 37.7 GB on a 48 GB card; LF2 31.0 GB.
-The W7900 has headroom the server doesn't use (models fully resident).
-ComfyUI flags: `--highvram`, `--disable-smart-memory`, `--reserve-vram`.
-Windows measurements showed `--highvram` REGRESSING 0.2–0.3×; Linux untested.
+**Background:** every measurement in the course is batch_size=1. The one
+untested throughput direction on one GPU: batch multiple images into a
+single denoise (better GPU utilization per step) vs sequential BEST
+requests (measured frontier: ~6.6 img/min fresh-prompt).
 
-**Reproduce:** `python -m lab run --experiment B0 --date <tag>`
-with `server_flags` overridden in a **new manifest** (never edit B0's) —
-e.g. copy `B0.json` to your own lab branch with `"server_flags":
-["--disable-smart-memory"]`.
+**Do:** add a `BATCH1` manifest + workflow variant (EmptyLatentImage
+batch_size=N; prompts duplicated) — a NEW experiment id, never editing
+existing manifests; measure warm latency per image and images/min vs
+sequential BEST at N ∈ {2, 4}.
 
-**Acceptance:** paired warm medians (9 runs) + VRAM peaks + LPIPS fidelity
-(bit-identical expected for pure VRAM levers — noise floor 0.0000).
+**Acceptance:** paired per-image latency + throughput table (N=1 vs N=2
+vs N=4), VRAM peaks, and an honest quality note (batching changes the
+batch-norm-free DiT math? verify numerics are per-row independent before
+claiming quality parity).
 
-## 4. CPU–GPU pipeline overlap on a beefier CPU (★★☆)
+**Evidence:** run records under `runs/` (never `evidence/`).
 
-**Background:** H2 proved 50.4 s of genuine overlap but CPU TE cost 160–221
-s/prompt (EPYC 9334, bf16). A modern desktop Zen 5 / Xeon or an int8 CPU TE
-might change the calculus — or not.
+## Task 7 — 2048² exploration (BLOCKED until the owner records the 1024²
+quality verdict)
 
-**Reproduce:** `python -m lab run --experiment H2` on your host;
-compare your CPU TE encode times with `p5-H1-r2-H1-cpu-te/h1_probe.json`.
-
-**Acceptance:** H1 probe + H2 A/B on your hardware; conclusion states the
-break-even CPU-encode speed at which pipelining wins (there is a closed-form
-from the H2 numbers — derive it).
-
-## 5. Automatic benchmark reports (★☆☆ good-first-issue)
-
-**Background:** `python -m lab report` writes SUMMARY.md/json.
-A chart per experiment (matplotlib, already a dep) committed next to the
-summary would make PRs self-evident.
-
-**Reproduce:** run any experiment + `report`; extend
-`lab/report.py` with a `charts()` step (bar: warm median per
-experiment with n= labels; waterfall: B0→L1→LF2 stages).
-
-**Acceptance:** charts generated from SUMMARY.json only (never hand-edited
-numbers); CPU-only unit test asserting chart files regenerate byte-stably.
-
-## 6. Image quality assessment tooling (★☆☆ good-first-issue, careful semantics)
-
-**Background:** quality gates are per-experiment manual invocations today; a
-`python -m lab quality --experiment LF2` wrapper that runs
-`lab/quality_gate.py` with the right semantics (fidelity for F2, distance
-for turbo family) would remove a foot-gun.
-
-**Acceptance:** semantics table lives in ONE place (manifest field), wrapper
-refuses to guess, CPU tests pin the mapping. No quality verdicts are ever
-auto-generated.
-
-## 7. 2048² exploration (blocked until the owner records the 1024² quality verdict)
-
-The mission gates 2048² behind stable 1024² + quality approval. On the W7900's
-48 GB the bf16 VAE decode that OOM'd 24 GB cards may fit — but do not run
-this until gate P6's human verdict lands.
+The mission gates 2048² behind stable 1024² + quality approval. On a
+48 GB card the bf16 VAE decode that OOM'd 24 GB cards may fit — but do
+not run this until the human verdict lands.
 
 ---
 
-**Submission:** PRs to `main` (or a course
-branch the owner names), conventional commits, CPU tests green
-(`pytest tests/ -v`), GPU evidence attached as run-record directories.
-Owners of the repo review all quality verdicts personally.
+**Submission:** PRs to `main`, conventional commits, CPU tests green
+(`pytest tests/ -v`), GPU evidence attached as run-record directories
+under `runs/`. Owners of the repo review all quality verdicts personally.
