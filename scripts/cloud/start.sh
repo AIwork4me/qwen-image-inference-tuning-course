@@ -179,10 +179,10 @@ if sys_site == venv_site.resolve():
 (venv_site / "system_rocm_torch.pth").write_text(str(sys_site) + "\n")
 print(f"  bridged system site-packages: {sys_site}")
 PYEOF
-  if ! PIP_PROGRESS_BAR=off .venv-lab/bin/pip install -q -r ComfyUI/requirements.txt -r requirements-dev.txt 2>/tmp/pip_first.log; then
+  if ! PIP_PROGRESS_BAR=off .venv-lab/bin/pip install -q -r ComfyUI/requirements.txt -r requirements-dev.txt -r requirements-quality.txt 2>/tmp/pip_first.log; then
     WARN "pip failed on the configured index — retrying with the official PyPI"
     PIP_PROGRESS_BAR=off .venv-lab/bin/pip install -q --index-url https://pypi.org/simple/ \
-      -r ComfyUI/requirements.txt -r requirements-dev.txt 2>/tmp/pip_retry.log \
+      -r ComfyUI/requirements.txt -r requirements-dev.txt -r requirements-quality.txt 2>/tmp/pip_retry.log \
       || { tail -5 /tmp/pip_retry.log; die "pip install failed on both indexes"; }
   fi
   .venv-lab/bin/python -c "import torch; assert torch.version.hip and torch.cuda.is_available()" \

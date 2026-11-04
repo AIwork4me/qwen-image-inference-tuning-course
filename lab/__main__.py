@@ -114,6 +114,18 @@ def cmd_quality(args) -> int:
             "  and crops under evidence/quality/<experiment>/.\n"
             "- To compute new gates, run the experiment first\n"
             "  (python -m lab run --experiment <ID>) so raw images exist.")
+    # LPIPS needs the lpips package (requirements-quality.txt); without it
+    # we still produce the paired grids — the human-verdict evidence — and
+    # say so loudly. Never silently pretend the metric ran.
+    try:
+        import lpips  # noqa: F401
+    except ImportError:
+        print("WARNING: lpips not installed (pip install -r "
+              "requirements-quality.txt) — generating grids only, "
+              "LPIPS table SKIPPED")
+        skip_lpips = ["--skip-lpips"]
+    else:
+        skip_lpips = []
     r = subprocess.run([
         sys.executable, "-I", str(manifests.lab_env.LAB_DIR / "quality_gate.py"),
         "--baseline", baseline,
@@ -121,6 +133,7 @@ def cmd_quality(args) -> int:
         "--experiment-name", args.experiment,
         "--semantics", semantics,
         "--baseline-desc", args.baseline_desc or "B0 frozen baseline",
+        *skip_lpips,
         # student gates land under runs/quality/ — the shipped
         # evidence/quality/<exp>/ grids of the frozen campaign are never
         # overwritten by new measurements

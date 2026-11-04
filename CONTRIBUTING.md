@@ -6,7 +6,9 @@ reproducible practice. The bar is evidence, not eloquence.
 ## Ground rules
 
 1. **Reproduce the baseline before proposing changes**
-   (`python -m lab doctor` then `python -m lab baseline`).
+   (`.venv-lab/bin/python -m lab doctor` then
+   `.venv-lab/bin/python -m lab baseline`; setup via
+   `bash scripts/cloud/start.sh`).
 2. **One variable per experiment**; never multiply independent speedups;
    combinations are measured end-to-end.
 3. **A run record or it didn't happen**: schema-valid JSON, attention-path
@@ -37,4 +39,5 @@ GPU kernel work is never marked "good first issue".
 
 ## Reporting bugs in the lab
 
-Attach `python -m lab doctor` output and the relevant record JSON.
+Attach `python -m lab doctor` output (runs/doctor.json) and the relevant
+record JSON under runs/.
