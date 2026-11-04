@@ -6,7 +6,7 @@ Computation, Faster Computation, and Parallel Computing*
 **Hardware story:** one AMD Radeon PRO W7900 (gfx1100, 48 GB), Linux ROCm
 7.2.1, torch 2.9.1+rocm — every number below was measured on this GPU
 2026-11-03 and resolves to a committed run record (see
-[CLAIM_EVIDENCE_MATRIX.md](CLAIM_EVIDENCE_MATRIX.md)).
+[CLAIM_EVIDENCE_MATRIX.md](../docs/CLAIM_EVIDENCE_MATRIX.md)).
 
 ---
 
@@ -120,7 +120,7 @@ Everything above is reproducible on a single Radeon GPU:
 `doctor → baseline → profile → run --experiment L1|F1|F2|BEST → report`.
 Six concrete student tasks (attention kernel deep-dive, INT8 GEMM analysis,
 memory scheduling, CPU–GPU break-even derivation, auto charts, quality
-tooling) with acceptance criteria: [OPEN_ISSUES.md](OPEN_ISSUES.md).
+tooling) with acceptance criteria: [OPEN_ISSUES.md](M07_student_challenge/CHALLENGES.md).
 Bring a paired measurement, not a speedup story.
 
 ---
