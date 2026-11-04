@@ -14,6 +14,7 @@ evidence/**/cond-*.pt*
 # evidence; raw PNGs and profiler CSVs stay local (too large, hashes are in
 # the records)
 runs/raw/
-runs/**/rocprof-*/
+runs/**/rocprof-*/**/*.csv
+runs/**/rocprof-*/**/*.dat
 runs/**/cond-*.pt*
 runs/**/_*.py
