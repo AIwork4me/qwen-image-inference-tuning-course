@@ -1,0 +1,13 @@
+{
+  "n_warm": 18,
+  "T_total_warm_s": 55.206,
+  "T_dit_denoise_s": 53.877,
+  "T_vae_decode_s": 0.895,
+  "T_text_encoder_cached_s": 0.0,
+  "T_text_encoder_fresh_s": 0.555,
+  "T_other_warm_s": 0.434,
+  "T_total_fresh_s": 56.105,
+  "T_total_cold_s": 74.171,
+  "step_median_s": 1.345,
+  "note": "T_other = T_total - T_dit - T_vae - T_te (queue+save+client); warm runs have TE cached (node-cache hit), fresh runs pay TE"
+}

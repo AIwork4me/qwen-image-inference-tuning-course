@@ -1,0 +1,9 @@
+{
+ "gpu": {
+  "error": "AttributeError(\"'list' object has no attribute 'shape'\")"
+ },
+ "cpu": {
+  "error": "AttributeError(\"'list' object has no attribute 'shape'\")"
+ },
+ "agreement_gpu_vs_cpu": {}
+}

@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "qwen-image-rocm benchmark result",
+  "type": "object",
+  "required": [
+    "experiment",
+    "phase",
+    "framework",
+    "precision",
+    "width",
+    "height",
+    "steps",
+    "seed",
+    "prompt_id",
+    "protocol_version",
+    "runs",
+    "vram_peak_mb",
+    "env_ref",
+    "created_at"
+  ],
+  "properties": {
+    "experiment": { "type": "string" },
+    "phase": { "type": "integer" },
+    "framework": { "type": "string" },
+    "precision": { "type": "string" },
+    "width": { "type": "integer" },
+    "height": { "type": "integer" },
+    "steps": { "type": "integer" },
+    "seed": { "type": "integer" },
+    "prompt_id": { "type": "string" },
+    "protocol_version": { "type": "string" },
+    "runs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "kind",
+          "total_s",
+          "text_encode_s",
+          "denoise_s",
+          "vae_decode_s",
+          "step_times_s"
+        ],
+        "properties": {
+          "kind": { "enum": ["cold", "warm", "fresh"] },
+          "total_s": { "type": "number" },
+          "text_encode_s": { "type": ["number", "null"] },
+          "denoise_s": { "type": "number" },
+          "vae_decode_s": { "type": ["number", "null"] },
+          "step_times_s": { "type": "array", "items": { "type": "number" } }
+        }
+      }
+    },
+    "vram_peak_mb": { "type": "number" },
+    "env_ref": { "type": "string" },
+    "created_at": { "type": "string" },
+    "run_kind": { "enum": ["cold", "warmup", "measure", "fresh_prompt"] },
+    "attention_backend": { "type": "string" },
+    "cfg": { "type": "number" },
+    "unet": { "type": "string" },
+    "clip": { "type": "string" },
+    "vae": { "type": "string" },
+    "weight_dtype": { "type": "string" },
+    "tiled_vae": { "type": "boolean" },
+    "ksampler_s": { "type": "number" },
+    "vram_residency_mb": { "type": ["number", "null"] },
+    "session_id": { "type": "string" },
+    "restart_idx": { "type": "integer" },
+    "monitor_error": { "type": "string" }
+  }
+}

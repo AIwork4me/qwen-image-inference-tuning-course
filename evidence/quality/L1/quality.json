@@ -1,0 +1,24 @@
+{
+  "experiment_name": "L1",
+  "semantics": "distance",
+  "baseline_dir": "bench/results/linux-w7900/raw/p1-baseline-r2-B0",
+  "baseline_experiment": null,
+  "baseline_desc": "B0 Linux W7900 frozen baseline (bf16 DiT, 40 steps, euler/simple, cfg 1, pytorch SDPA attention)",
+  "median": {
+    "p1-zh-scene": 0.2984274625778198,
+    "p2-en-scene": 0.1865110844373703,
+    "p3-poster-text": 0.2123795598745346
+  },
+  "max": {
+    "p1-zh-scene": 0.34384000301361084,
+    "p2-en-scene": 0.20313741266727448,
+    "p3-poster-text": 0.2675577700138092
+  },
+  "n_pairs": {
+    "p1-zh-scene": 3,
+    "p2-en-scene": 3,
+    "p3-poster-text": 3
+  },
+  "noise_floor": 0.0,
+  "monitor": "lpips(alex, v0.1)"
+}

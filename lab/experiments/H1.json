@@ -1,0 +1,20 @@
+{
+  "id": "H1",
+  "category": "heterogeneous",
+  "description": "CPU text-encoding feasibility probe (see bench/linux_w7900/pipeline.py run_h1; executes outside the standard runner).",
+  "framework": "comfyui",
+  "precision": "bf16",
+  "resolution": 1024,
+  "steps": 8,
+  "cfg": 1.0,
+  "sampler": "euler",
+  "scheduler": "simple",
+  "unet": "qwen_image_2.1_turbo_bf16.safetensors",
+  "clip": "qwen3vl_8b_bf16.safetensors",
+  "vae": "qwen_image_2.1_vae_bf16.safetensors",
+  "weight_dtype": "default",
+  "tiled_vae": false,
+  "attention_backend": "n/a-cpu-probe",
+  "measured": 0,
+  "enabled": false
+}

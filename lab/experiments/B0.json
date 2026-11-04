@@ -1,0 +1,20 @@
+{
+  "id": "B0",
+  "category": "baseline",
+  "description": "Frozen Linux W7900 baseline: Qwen-Image-2.1 BF16, 40 steps, euler/simple, cfg 1.0, normal functional Linux ComfyUI attention (pytorch SDPA via aotriton probe). Fresh-prompt arm on to expose real TE cost.",
+  "framework": "comfyui",
+  "precision": "bf16",
+  "resolution": 1024,
+  "steps": 40,
+  "cfg": 1.0,
+  "sampler": "euler",
+  "scheduler": "simple",
+  "unet": "qwen_image_2.1_bf16.safetensors",
+  "clip": "qwen3vl_8b_bf16.safetensors",
+  "vae": "qwen_image_2.1_vae_bf16.safetensors",
+  "weight_dtype": "default",
+  "tiled_vae": false,
+  "attention_backend": "pytorch-sdpa-default",
+  "measured": 3,
+  "fresh_prompt_arm": true
+}

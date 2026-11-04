@@ -1,0 +1,98 @@
+{
+  "experiment": "LF2",
+  "phase": 6,
+  "framework": "comfyui",
+  "precision": "int8-convrot",
+  "width": 1024,
+  "height": 1024,
+  "steps": 8,
+  "seed": 2000042,
+  "prompt_id": "p3-poster-text",
+  "protocol_version": "linux-lab-v1 (protocol v1.3 timing semantics)",
+  "runs": [
+    {
+      "kind": "warm",
+      "total_s": 10.025,
+      "text_encode_s": 0.66,
+      "denoise_s": 9.233,
+      "vae_decode_s": 0.884,
+      "step_times_s": [
+        0.09,
+        0.95,
+        1.016,
+        0.931,
+        0.915,
+        0.915,
+        0.914,
+        0.914
+      ]
+    }
+  ],
+  "vram_peak_mb": 25444.9,
+  "env_ref": "snapshot-20261103-143700.json",
+  "created_at": "2026-11-03T14:39:08+00:00",
+  "run_kind": "warmup",
+  "attention_backend": "pytorch-sdpa-default",
+  "execution_time_s": 9.233,
+  "sampler": "euler",
+  "scheduler": "simple",
+  "cfg": 1.0,
+  "ksampler_s": 7.525,
+  "node_timings_s": {
+    "CLIPTextEncode#pos_41e54f37": 0.66,
+    "KSampler#ks_c606ad18": 7.525,
+    "VAEDecode#dec_7dc44606": 0.884,
+    "SaveImage#save_8fe2326d": 0.407
+  },
+  "cached_nodes": [
+    "UNETLoader#unet_af260ac0",
+    "CLIPLoader#clip_9241e318",
+    "VAELoader#vae_effd2294",
+    "CLIPTextEncode#neg_6e274876",
+    "EmptyLatentImage#latent_8a91bb9b"
+  ],
+  "vram_residency_mb": 24960.4,
+  "unet": "qwen_image_2.1_turbo_int8_convrot.safetensors",
+  "clip": "qwen3vl_8b_bf16.safetensors",
+  "vae": "qwen_image_2.1_vae_bf16.safetensors",
+  "weight_dtype": "default",
+  "tiled_vae": false,
+  "session_id": "p34-LF2-LF2",
+  "restart_idx": 0,
+  "lab": "linux-w7900",
+  "run_id": "p34-LF2-LF2",
+  "category": "combined",
+  "steady_step_median_s": 0.915,
+  "server_boot_s": null,
+  "attention_evidence": {
+    "Using pytorch attention": [
+      "\u001b[32m[INFO]\u001b[0m Using pytorch attention"
+    ],
+    "Using .* attention": [
+      "\u001b[32m[INFO]\u001b[0m Using split attention in VAE",
+      "/workspace/qwen-image-rocm/phase2-comfyui/ComfyUI/comfy/ops.py:105: UserWarning: Using AOTriton backend for Efficient Attention forward... (Triggered internally at /app/pytorch/aten/src/ATen/native/transformers/hip/attention.hip:1452.)"
+    ],
+    "attention": [
+      "/workspace/qwen-image-rocm/phase2-comfyui/ComfyUI/comfy/ops.py:105: UserWarning: Using AOTriton backend for Efficient Attention forward... (Triggered internally at /app/pytorch/aten/src/ATen/native/transformers/hip/attention.hip:1452.)",
+      "  return torch.nn.functional.scaled_dot_product_attention(q, k, v, *args, **kwargs)"
+    ],
+    "Set: torch\\.backends\\.cudnn": [
+      "\u001b[32m[INFO]\u001b[0m Set: torch.backends.cudnn.enabled = False for better AMD performance."
+    ],
+    "AMD arch": [
+      "\u001b[32m[INFO]\u001b[0m AMD arch: gfx1100"
+    ],
+    "ROCm version": [
+      "\u001b[32m[INFO]\u001b[0m ROCm version: (7, 2)"
+    ]
+  },
+  "vram_device_peak_mb": 30924.8,
+  "gpu_util_pct_p50": 99.5,
+  "gpu_util_pct_max": 100.0,
+  "host_mem": {
+    "host_mem_available_mib": 398.0,
+    "host_swap_used_mib": 0.0
+  },
+  "image_sha256": "ebd12f9a0277a043dee26a35f4d454e0f4522fc0104f396594944024389935a1",
+  "image_path": "bench/results/linux-w7900/raw/p34-LF2-LF2/p3-poster-text-2000042-warmup.png"
+}

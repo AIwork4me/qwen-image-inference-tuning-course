@@ -1,0 +1,132 @@
+{
+  "experiment": "F1",
+  "phase": 4,
+  "framework": "comfyui",
+  "precision": "bf16",
+  "width": 1024,
+  "height": 1024,
+  "steps": 40,
+  "seed": 1000042,
+  "prompt_id": "p1-zh-scene",
+  "protocol_version": "linux-lab-v1 (protocol v1.3 timing semantics)",
+  "runs": [
+    {
+      "kind": "cold",
+      "total_s": 84.577,
+      "text_encode_s": 1.402,
+      "denoise_s": 84.059,
+      "vae_decode_s": 1.141,
+      "step_times_s": [
+        2.577,
+        1.063,
+        1.066,
+        1.07,
+        1.052,
+        1.049,
+        1.051,
+        1.062,
+        1.05,
+        1.052,
+        1.047,
+        1.052,
+        1.053,
+        1.057,
+        1.058,
+        1.059,
+        1.055,
+        1.059,
+        1.061,
+        1.064,
+        1.061,
+        1.063,
+        1.062,
+        1.062,
+        1.063,
+        1.069,
+        1.063,
+        1.063,
+        1.286,
+        1.287,
+        1.064,
+        1.068,
+        1.064,
+        1.065,
+        1.065,
+        1.066,
+        1.069,
+        1.068,
+        1.068,
+        1.065
+      ]
+    }
+  ],
+  "vram_peak_mb": 33147.0,
+  "env_ref": "snapshot-20261103-141042.json",
+  "created_at": "2026-11-03T14:12:15+00:00",
+  "run_kind": "cold",
+  "attention_backend": "ck",
+  "execution_time_s": 84.059,
+  "sampler": "euler",
+  "scheduler": "simple",
+  "cfg": 1.0,
+  "ksampler_s": 45.442,
+  "node_timings_s": {
+    "VAELoader#vae_43b0cad4": 1.61,
+    "EmptyLatentImage#latent_0171ec23": 0.002,
+    "CLIPLoader#clip_0ba77301": 16.197,
+    "CLIPTextEncode#neg_a3ab0a61": 0.838,
+    "CLIPTextEncode#pos_e5c939c1": 0.564,
+    "UNETLoader#unet_a1b24d1a": 17.68,
+    "KSampler#ks_f1c14f4f": 45.442,
+    "VAEDecode#dec_c41f5814": 1.141,
+    "SaveImage#save_90265e0c": 0.528
+  },
+  "cached_nodes": [],
+  "vram_residency_mb": 31595.7,
+  "unet": "qwen_image_2.1_bf16.safetensors",
+  "clip": "qwen3vl_8b_bf16.safetensors",
+  "vae": "qwen_image_2.1_vae_bf16.safetensors",
+  "weight_dtype": "default",
+  "tiled_vae": false,
+  "session_id": "p34-F1-F1",
+  "restart_idx": 0,
+  "lab": "linux-w7900",
+  "run_id": "p34-F1-F1",
+  "category": "faster-computation",
+  "steady_step_median_s": 1.063,
+  "server_boot_s": 7.04,
+  "attention_evidence": {
+    "Using pytorch attention": [
+      "\u001b[32m[INFO]\u001b[0m Using pytorch attention"
+    ],
+    "Using Comfy Kitchen attention": [
+      "\u001b[32m[INFO]\u001b[0m Using Comfy Kitchen attention"
+    ],
+    "Using .* attention": [
+      "\u001b[32m[INFO]\u001b[0m Using split attention in VAE",
+      "/workspace/qwen-image-rocm/phase2-comfyui/ComfyUI/comfy/ops.py:105: UserWarning: Using AOTriton backend for Efficient Attention forward... (Triggered internally at /app/pytorch/aten/src/ATen/native/transformers/hip/attention.hip:1452.)"
+    ],
+    "attention": [
+      "/workspace/qwen-image-rocm/phase2-comfyui/ComfyUI/comfy/ops.py:105: UserWarning: Using AOTriton backend for Efficient Attention forward... (Triggered internally at /app/pytorch/aten/src/ATen/native/transformers/hip/attention.hip:1452.)",
+      "  return torch.nn.functional.scaled_dot_product_attention(q, k, v, *args, **kwargs)"
+    ],
+    "Set: torch\\.backends\\.cudnn": [
+      "\u001b[32m[INFO]\u001b[0m Set: torch.backends.cudnn.enabled = False for better AMD performance."
+    ],
+    "AMD arch": [
+      "\u001b[32m[INFO]\u001b[0m AMD arch: gfx1100"
+    ],
+    "ROCm version": [
+      "\u001b[32m[INFO]\u001b[0m ROCm version: (7, 2)"
+    ]
+  },
+  "vram_device_peak_mb": 34481.7,
+  "gpu_util_pct_p50": 83.0,
+  "gpu_util_pct_max": 100.0,
+  "host_mem": {
+    "host_mem_available_mib": 385.9,
+    "host_swap_used_mib": 0.0
+  },
+  "image_sha256": "f94d6a85b9b0c992864983c6e215a71e3e54d8219b989e9986770843af062130",
+  "image_path": "bench/results/linux-w7900/raw/p34-F1-F1/p1-zh-scene-1000042-cold.png"
+}

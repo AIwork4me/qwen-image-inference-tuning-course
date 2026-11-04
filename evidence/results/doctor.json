@@ -1,0 +1,41 @@
+{
+  "verdict": "PASS",
+  "checks": [
+    {
+      "check": "gpu_gfx1100_single",
+      "status": "PASS",
+      "detail": "AMD Radeon Graphics / gfx1100 / 49136MB"
+    },
+    {
+      "check": "torch_rocm",
+      "status": "PASS",
+      "detail": "torch 2.9.1+gitff65f5b hip 7.2.53211-e1a6bc5663"
+    },
+    {
+      "check": "comfyui_pinned",
+      "status": "PASS",
+      "detail": "v0.43.0 @ b5a432157de6"
+    },
+    {
+      "check": "weights_integrity",
+      "status": "PASS",
+      "detail": "sha256 vs pinned digests (bench/quickstart_config.py)"
+    },
+    {
+      "check": "server_module",
+      "status": "PASS",
+      "detail": "importable"
+    },
+    {
+      "check": "flash_sdpa_probe",
+      "status": "PASS",
+      "detail": "flash attention launches + syncs on gfx1100"
+    },
+    {
+      "check": "rocprofv3",
+      "status": "PASS",
+      "detail": "version: 1.1.0\n        git_revision: e1a6bc5663304b9c586b3254b8920f2981057804\n        library_arch: x86_64-linux-gnu\n         system_name: Linux\n    system_processor: x86_64\n      system_version: 6.8."
+    }
+  ],
+  "snapshot": "snapshot-20261103-154755.json"
+}

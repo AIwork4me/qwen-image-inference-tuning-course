@@ -1,0 +1,9 @@
+/opt/venv/lib/python3.12/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+/workspace/qwen-image-rocm/phase2-comfyui/ComfyUI/comfy/ops.py:105: UserWarning: Using AOTriton backend for Efficient Attention forward... (Triggered internally at /app/pytorch/aten/src/ATen/native/transformers/hip/attention.hip:1452.)
+  return torch.nn.functional.scaled_dot_product_attention(q, k, v, *args, **kwargs)
+Exception ignored in: <function ModelPatcher.__del__ at 0x709429ddd300>
+Traceback (most recent call last):
+  File "/workspace/qwen-image-rocm/phase2-comfyui/ComfyUI/comfy/model_patcher.py", line 1784, in __del__
+  File "/workspace/qwen-image-rocm/phase2-comfyui/ComfyUI/comfy/model_patcher.py", line 1323, in detach
+AttributeError: 'NoneType' object has no attribute 'ON_DETACH'

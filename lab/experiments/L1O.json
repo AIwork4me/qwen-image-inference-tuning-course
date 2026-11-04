@@ -1,0 +1,22 @@
+{
+  "id": "L1O",
+  "category": "less-computation",
+  "description": "Official Turbo protocol variant: ManualSigmas schedule from the Comfy-Org Qwen-Image-2.1 Turbo template (1.0, 0.978453, 0.95418, 0.926626, 0.89508, 0.845148, 0.704534, 0.414568, 0), euler, CFG 1, turbo BF16 DiT. Isolates the schedule variable vs L1 (euler/simple/8).",
+  "framework": "comfyui",
+  "precision": "bf16",
+  "resolution": 1024,
+  "steps": 8,
+  "cfg": 1.0,
+  "sampler": "euler",
+  "scheduler": "manual_sigmas",
+  "sigmas": "1.0, 0.978453, 0.95418, 0.926626, 0.89508, 0.845148, 0.704534, 0.414568, 0",
+  "unet": "qwen_image_2.1_turbo_bf16.safetensors",
+  "clip": "qwen3vl_8b_bf16.safetensors",
+  "vae": "qwen_image_2.1_vae_bf16.safetensors",
+  "weight_dtype": "default",
+  "tiled_vae": false,
+  "attention_backend": "pytorch-sdpa-default",
+  "measured": 3,
+  "fresh_prompt_arm": false,
+  "scheduler_note": "official Comfy-Org Turbo template schedule (9 sigma values = 8 steps)"
+}

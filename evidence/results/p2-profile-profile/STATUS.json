@@ -1,0 +1,9 @@
+{
+  "statuses": {
+    "pipeline": "PASS",
+    "kernel-dit": "FAIL (no kernel_trace.csv)",
+    "kernel-te": "FAIL (no kernel_trace.csv)"
+  },
+  "output": "/workspace/qwen-image-rocm/bench/results/linux-w7900/p2-profile-profile",
+  "verdict": "PARTIAL"
+}

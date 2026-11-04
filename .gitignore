@@ -1,0 +1,12 @@
+# environment & artifacts never committed
+weights/
+ComfyUI/
+.venv-lab/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+# raw generation outputs stay on the measurement host
+# (hashes + analyses are committed under evidence/)
+evidence/results/raw/
+evidence/**/cond-*.pt*

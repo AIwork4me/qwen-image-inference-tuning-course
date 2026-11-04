@@ -1,0 +1,21 @@
+{
+  "id": "L1",
+  "category": "less-computation",
+  "description": "Turbo distilled DiT, 8 steps, euler/simple, cfg 1.0 (historical repo protocol; the official Turbo template's ManualSigmas schedule is tracked separately in the report, not silently substituted). BF16 weights; TE/VAE unchanged.",
+  "framework": "comfyui",
+  "precision": "bf16",
+  "resolution": 1024,
+  "steps": 8,
+  "cfg": 1.0,
+  "sampler": "euler",
+  "scheduler": "simple",
+  "unet": "qwen_image_2.1_turbo_bf16.safetensors",
+  "clip": "qwen3vl_8b_bf16.safetensors",
+  "vae": "qwen_image_2.1_vae_bf16.safetensors",
+  "weight_dtype": "default",
+  "tiled_vae": false,
+  "attention_backend": "pytorch-sdpa-default",
+  "measured": 3,
+  "fresh_prompt_arm": true,
+  "scheduler_note": "historical turbo protocol (simple scheduler); official template uses 8-step ManualSigmas"
+}

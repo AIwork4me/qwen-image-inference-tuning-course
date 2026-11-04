@@ -1,0 +1,19 @@
+{
+  "id": "F2",
+  "category": "faster-computation",
+  "description": "INT8 ConvRot DiT (14.2->7.26GB weights), 40 steps, TE/VAE BF16 unchanged. Memory-efficiency and kernel-efficiency both measured; no speedup assumed.",
+  "framework": "comfyui",
+  "precision": "int8-convrot",
+  "resolution": 1024,
+  "steps": 40,
+  "cfg": 1.0,
+  "sampler": "euler",
+  "scheduler": "simple",
+  "unet": "qwen_image_2.1_int8_convrot.safetensors",
+  "clip": "qwen3vl_8b_bf16.safetensors",
+  "vae": "qwen_image_2.1_vae_bf16.safetensors",
+  "weight_dtype": "default",
+  "tiled_vae": false,
+  "attention_backend": "pytorch-sdpa-default",
+  "measured": 3
+}

@@ -1,0 +1,20 @@
+{
+  "id": "BEST",
+  "category": "final",
+  "description": "Best quality-candidate configuration measured on the Linux W7900 lab: Turbo 8-step INT8 ConvRot DiT + default pytorch SDPA attention (LF2 config, 9.02s warm = 6.1x vs B0). Selected as BEST candidate for stack simplicity (no attention flags) with equal measured speed to LF3; final quality verdict remains PENDING_HUMAN_REVIEW on the frozen grids.",
+  "framework": "comfyui",
+  "precision": "int8-convrot",
+  "resolution": 1024,
+  "steps": 8,
+  "cfg": 1.0,
+  "sampler": "euler",
+  "scheduler": "simple",
+  "unet": "qwen_image_2.1_turbo_int8_convrot.safetensors",
+  "clip": "qwen3vl_8b_bf16.safetensors",
+  "vae": "qwen_image_2.1_vae_bf16.safetensors",
+  "weight_dtype": "default",
+  "tiled_vae": false,
+  "attention_backend": "pytorch-sdpa-default",
+  "measured": 3,
+  "fresh_prompt_arm": true
+}

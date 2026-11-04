@@ -1,0 +1,21 @@
+{
+  "protocol_version": "v1",
+  "seeds": [42, 1337, 20261030],
+  "prompts": [
+    {
+      "id": "p1-zh-scene",
+      "prompt": "夕阳下的江南水乡小镇，石桥横跨河道，乌篷船缓缓驶过，白墙黛瓦的民居倒映在金色的河面上，远处炊烟袅袅，超高清摄影质感",
+      "negative_prompt": ""
+    },
+    {
+      "id": "p2-en-scene",
+      "prompt": "A lone hiker standing on a mountain ridge at dawn, a sea of clouds below, first light hitting the peaks, ultra-detailed landscape photography",
+      "negative_prompt": ""
+    },
+    {
+      "id": "p3-poster-text",
+      "prompt": "电影海报设计，主标题文字「星际远航」，副标题文字「2026年10月30日 全球上映」，画面是深空中的巨型飞船与绚丽星云，标题文字清晰锐利、排版居中",
+      "negative_prompt": ""
+    }
+  ]
+}

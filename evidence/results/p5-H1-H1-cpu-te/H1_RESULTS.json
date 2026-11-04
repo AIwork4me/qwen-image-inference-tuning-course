@@ -1,0 +1,27 @@
+{
+  "experiment": "H1",
+  "date": "p5-H1",
+  "probe": {
+    "gpu": {
+      "error": "AttributeError(\"'list' object has no attribute 'shape'\")"
+    },
+    "cpu": {
+      "error": "AttributeError(\"'list' object has no attribute 'shape'\")"
+    },
+    "agreement_gpu_vs_cpu": {}
+  },
+  "integrated": {
+    "clip_gpu": {
+      "total_s": 35.123,
+      "text_encode_s": 0,
+      "vram_peak_mb": 0.0,
+      "vram_residency_mb": null
+    },
+    "clip_cpu": {
+      "total_s": 272.82,
+      "text_encode_s": 0,
+      "vram_peak_mb": 0.0,
+      "vram_residency_mb": null
+    }
+  }
+}

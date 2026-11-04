@@ -1,0 +1,101 @@
+{
+  "experiment": "LF1",
+  "phase": 6,
+  "framework": "comfyui",
+  "precision": "bf16",
+  "width": 1024,
+  "height": 1024,
+  "steps": 8,
+  "seed": 2000042,
+  "prompt_id": "p2-en-scene",
+  "protocol_version": "linux-lab-v1 (protocol v1.3 timing semantics)",
+  "runs": [
+    {
+      "kind": "warm",
+      "total_s": 30.114,
+      "text_encode_s": 0.352,
+      "denoise_s": 29.342,
+      "vae_decode_s": 0.929,
+      "step_times_s": [
+        0.433,
+        1.065,
+        1.051,
+        1.062,
+        1.054,
+        1.076,
+        1.051,
+        1.058
+      ]
+    }
+  ],
+  "vram_peak_mb": 32524.4,
+  "env_ref": "snapshot-20261103-143320.json",
+  "created_at": "2026-11-03T14:35:35+00:00",
+  "run_kind": "warmup",
+  "attention_backend": "ck",
+  "execution_time_s": 29.342,
+  "sampler": "euler",
+  "scheduler": "simple",
+  "cfg": 1.0,
+  "ksampler_s": 8.904,
+  "node_timings_s": {
+    "CLIPLoader#clip_16ee0246": 18.964,
+    "CLIPTextEncode#pos_c8230576": 0.352,
+    "KSampler#ks_3c383f76": 8.904,
+    "VAEDecode#dec_27feb2d6": 0.929,
+    "SaveImage#save_99cd76f9": 0.163
+  },
+  "cached_nodes": [
+    "UNETLoader#unet_571fce57",
+    "VAELoader#vae_d752645c",
+    "CLIPTextEncode#neg_4d590d6b",
+    "EmptyLatentImage#latent_3bb929fc"
+  ],
+  "vram_residency_mb": 31601.7,
+  "unet": "qwen_image_2.1_turbo_bf16.safetensors",
+  "clip": "qwen3vl_8b_bf16.safetensors",
+  "vae": "qwen_image_2.1_vae_bf16.safetensors",
+  "weight_dtype": "default",
+  "tiled_vae": false,
+  "session_id": "p34-LF1-LF1",
+  "restart_idx": 0,
+  "lab": "linux-w7900",
+  "run_id": "p34-LF1-LF1",
+  "category": "combined",
+  "steady_step_median_s": 1.058,
+  "server_boot_s": null,
+  "attention_evidence": {
+    "Using pytorch attention": [
+      "\u001b[32m[INFO]\u001b[0m Using pytorch attention"
+    ],
+    "Using Comfy Kitchen attention": [
+      "\u001b[32m[INFO]\u001b[0m Using Comfy Kitchen attention"
+    ],
+    "Using .* attention": [
+      "\u001b[32m[INFO]\u001b[0m Using split attention in VAE",
+      "/workspace/qwen-image-rocm/phase2-comfyui/ComfyUI/comfy/ops.py:105: UserWarning: Using AOTriton backend for Efficient Attention forward... (Triggered internally at /app/pytorch/aten/src/ATen/native/transformers/hip/attention.hip:1452.)"
+    ],
+    "attention": [
+      "/workspace/qwen-image-rocm/phase2-comfyui/ComfyUI/comfy/ops.py:105: UserWarning: Using AOTriton backend for Efficient Attention forward... (Triggered internally at /app/pytorch/aten/src/ATen/native/transformers/hip/attention.hip:1452.)",
+      "  return torch.nn.functional.scaled_dot_product_attention(q, k, v, *args, **kwargs)"
+    ],
+    "Set: torch\\.backends\\.cudnn": [
+      "\u001b[32m[INFO]\u001b[0m Set: torch.backends.cudnn.enabled = False for better AMD performance."
+    ],
+    "AMD arch": [
+      "\u001b[32m[INFO]\u001b[0m AMD arch: gfx1100"
+    ],
+    "ROCm version": [
+      "\u001b[32m[INFO]\u001b[0m ROCm version: (7, 2)"
+    ]
+  },
+  "vram_device_peak_mb": 37522.9,
+  "gpu_util_pct_p50": 6.0,
+  "gpu_util_pct_max": 100.0,
+  "host_mem": {
+    "host_mem_available_mib": 401.3,
+    "host_swap_used_mib": 0.0
+  },
+  "image_sha256": "f3b39cafc9a9e1db1d9c5708ab9cbff7f324bc0837b9e1714895a77a8335a18b",
+  "image_path": "bench/results/linux-w7900/raw/p34-LF1-LF1/p2-en-scene-2000042-warmup.png"
+}

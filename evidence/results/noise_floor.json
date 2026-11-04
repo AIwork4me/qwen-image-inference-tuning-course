@@ -1,0 +1,15 @@
+{
+ "per_pair": {
+  "p1-zh-scene-r0": 0.0,
+  "p1-zh-scene-r1": 0.0,
+  "p1-zh-scene-r2": 0.0,
+  "p2-en-scene-r0": 0.0,
+  "p2-en-scene-r1": 0.0,
+  "p2-en-scene-r2": 0.0,
+  "p3-poster-text-r0": 0.0,
+  "p3-poster-text-r1": 0.0,
+  "p3-poster-text-r2": 0.0
+ },
+ "median": 0.0,
+ "max": 0.0
+}

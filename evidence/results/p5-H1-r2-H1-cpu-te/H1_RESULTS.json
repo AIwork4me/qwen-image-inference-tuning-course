@@ -1,0 +1,108 @@
+{
+  "experiment": "H1",
+  "date": "p5-H1-r2",
+  "probe": {
+    "gpu": {
+      "load_s": 21.51,
+      "encode": {
+        "p1-zh-scene": {
+          "tokenize_s": 0.0038,
+          "encode_s": 1.165,
+          "shape": [
+            1,
+            52,
+            4096
+          ],
+          "dtype": "torch.float32"
+        },
+        "p2-en-scene": {
+          "tokenize_s": 0.0563,
+          "encode_s": 0.346,
+          "shape": [
+            1,
+            37,
+            4096
+          ],
+          "dtype": "torch.float32"
+        },
+        "p3-poster-text": {
+          "tokenize_s": 0.0026,
+          "encode_s": 0.611,
+          "shape": [
+            1,
+            64,
+            4096
+          ],
+          "dtype": "torch.float32"
+        }
+      },
+      "vram_allocated_mb": 16811.1
+    },
+    "cpu": {
+      "load_s": 17.89,
+      "encode": {
+        "p1-zh-scene": {
+          "tokenize_s": 0.003,
+          "encode_s": 177.838,
+          "shape": [
+            1,
+            52,
+            4096
+          ],
+          "dtype": "torch.float32"
+        },
+        "p2-en-scene": {
+          "tokenize_s": 0.0018,
+          "encode_s": 136.845,
+          "shape": [
+            1,
+            37,
+            4096
+          ],
+          "dtype": "torch.float32"
+        },
+        "p3-poster-text": {
+          "tokenize_s": 0.0032,
+          "encode_s": 207.05,
+          "shape": [
+            1,
+            64,
+            4096
+          ],
+          "dtype": "torch.float32"
+        }
+      }
+    },
+    "agreement_gpu_vs_cpu": {
+      "p1-zh-scene": {
+        "max_abs_diff": 0.0067,
+        "mean_abs_diff": 4.2e-05,
+        "cosine": 1.000003
+      },
+      "p2-en-scene": {
+        "max_abs_diff": 0.00641,
+        "mean_abs_diff": 4.8e-05,
+        "cosine": 1.000001
+      },
+      "p3-poster-text": {
+        "max_abs_diff": 0.0074,
+        "mean_abs_diff": 4.2e-05,
+        "cosine": 1.000003
+      }
+    }
+  },
+  "integrated": {
+    "clip_gpu": {
+      "total_s": 47.138,
+      "text_encode_s": 0,
+      "vram_peak_mb": 0.0,
+      "vram_residency_mb": null
+    },
+    "clip_cpu": {
+      "total_s": 261.415,
+      "text_encode_s": 0,
+      "vram_peak_mb": 0.0,
+      "vram_residency_mb": null
+    }
+  }
+}

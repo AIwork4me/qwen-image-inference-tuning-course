@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  cpu-test-gate:
+    # CPU-only gate: unit tests + manifest/schema/evidence validation on a
+    # GitHub-hosted runner WITHOUT any GPU. Passing this gate is NOT a GPU
+    # inference verification — hardware validation happens on the student's
+    # or the lab's physical Radeon GPU (docs/REPRODUCTION_GUIDE.md).
+    name: CPU test gate (no GPU claims)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Gate scope notice
+        run: |
+          echo "CPU-only test gate: pytest + schema/manifest/evidence validation."
+          echo "No GPU is present on this runner; no GPU inference is run or claimed here."
+      - name: Install deps
+        run: pip install -r requirements-dev.txt
+      - name: Run tests
+        run: python -m pytest tests/ -v

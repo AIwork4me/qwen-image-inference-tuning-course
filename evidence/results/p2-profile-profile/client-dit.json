@@ -1,0 +1,28 @@
+{
+ "events": [
+  {
+   "tag": "cold",
+   "seed": 1000042,
+   "steps": 40,
+   "wall_s": 75.083,
+   "t_monotonic_start": 10991504.1511269,
+   "t_monotonic_end": 10991579.234285835
+  },
+  {
+   "tag": "warmup",
+   "seed": 2000042,
+   "steps": 40,
+   "wall_s": 55.296,
+   "t_monotonic_start": 10991579.234338276,
+   "t_monotonic_end": 10991634.53013475
+  },
+  {
+   "tag": "traced-warm",
+   "seed": 42,
+   "steps": 40,
+   "wall_s": 56.211,
+   "t_monotonic_start": 10991726.151234638,
+   "t_monotonic_end": 10991782.361754812
+  }
+ ]
+}
