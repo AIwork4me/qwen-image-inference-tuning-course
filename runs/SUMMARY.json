@@ -1,0 +1,117 @@
+{
+  "generated_at": "2026-11-04T04:49:14+00:00",
+  "scope": "student",
+  "n_records": 74,
+  "per_experiment": [
+    {
+      "experiment": "B0",
+      "category": "baseline",
+      "n_measure": 9,
+      "n_fresh": 3,
+      "warm_total_median_s": 55.099,
+      "warm_ksampler_median_s": 53.712,
+      "warm_vae_median_s": 0.898,
+      "warm_step_median_s": 1.34,
+      "fresh_total_median_s": 56.108,
+      "fresh_text_encode_median_s": 0.572,
+      "cold_total_s": 95.583,
+      "cold_server_boot_s": 6.12,
+      "vram_peak_mb": 33139.4,
+      "vram_device_peak_mb": 37709.0,
+      "gpu_util_pct_p50": 100.0,
+      "attention_backend": "pytorch-sdpa-default",
+      "run_ids": [
+        "acceptance-b0-B0"
+      ],
+      "quality_status": "REFERENCE"
+    },
+    {
+      "experiment": "BEST",
+      "category": "final",
+      "n_measure": 9,
+      "n_fresh": 3,
+      "warm_total_median_s": 9.024,
+      "warm_ksampler_median_s": 7.441,
+      "warm_vae_median_s": 0.896,
+      "warm_step_median_s": 0.922,
+      "fresh_total_median_s": 10.026,
+      "fresh_text_encode_median_s": 0.557,
+      "cold_total_s": 25.576,
+      "cold_server_boot_s": 6.03,
+      "vram_peak_mb": 26514.1,
+      "vram_device_peak_mb": 31026.8,
+      "gpu_util_pct_p50": 100.0,
+      "attention_backend": "pytorch-sdpa-default",
+      "run_ids": [
+        "acceptance-BEST-BEST"
+      ],
+      "quality_status": "RECORDED_OR_PENDING_HUMAN_REVIEW"
+    },
+    {
+      "experiment": "F1",
+      "category": "faster-computation",
+      "n_measure": 9,
+      "n_fresh": 0,
+      "warm_total_median_s": 43.375,
+      "warm_ksampler_median_s": 41.968,
+      "warm_vae_median_s": 0.897,
+      "warm_step_median_s": 1.049,
+      "fresh_total_median_s": null,
+      "fresh_text_encode_median_s": null,
+      "cold_total_s": 80.211,
+      "cold_server_boot_s": 6.12,
+      "vram_peak_mb": 32821.3,
+      "vram_device_peak_mb": 37710.5,
+      "gpu_util_pct_p50": 100.0,
+      "attention_backend": "ck",
+      "run_ids": [
+        "acceptance-F1-F1"
+      ],
+      "quality_status": "RECORDED_OR_PENDING_HUMAN_REVIEW"
+    },
+    {
+      "experiment": "F2",
+      "category": "faster-computation",
+      "n_measure": 9,
+      "n_fresh": 0,
+      "warm_total_median_s": 50.285,
+      "warm_ksampler_median_s": 48.964,
+      "warm_vae_median_s": 0.887,
+      "warm_step_median_s": 1.222,
+      "fresh_total_median_s": null,
+      "fresh_text_encode_median_s": null,
+      "cold_total_s": 72.149,
+      "cold_server_boot_s": 6.12,
+      "vram_peak_mb": 26025.3,
+      "vram_device_peak_mb": 30925.0,
+      "gpu_util_pct_p50": 100.0,
+      "attention_backend": "pytorch-sdpa-default",
+      "run_ids": [
+        "acceptance-F2-F2"
+      ],
+      "quality_status": "RECORDED_OR_PENDING_HUMAN_REVIEW"
+    },
+    {
+      "experiment": "L1",
+      "category": "less-computation",
+      "n_measure": 9,
+      "n_fresh": 3,
+      "warm_total_median_s": 12.119,
+      "warm_ksampler_median_s": 10.776,
+      "warm_vae_median_s": 0.897,
+      "warm_step_median_s": 1.338,
+      "fresh_total_median_s": 13.03,
+      "fresh_text_encode_median_s": 0.548,
+      "cold_total_s": 49.765,
+      "cold_server_boot_s": 6.19,
+      "vram_peak_mb": 32852.8,
+      "vram_device_peak_mb": 37708.5,
+      "gpu_util_pct_p50": 100.0,
+      "attention_backend": "pytorch-sdpa-default",
+      "run_ids": [
+        "acceptance-L1-L1"
+      ],
+      "quality_status": "RECORDED_OR_PENDING_HUMAN_REVIEW"
+    }
+  ]
+}

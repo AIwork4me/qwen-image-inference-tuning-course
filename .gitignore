@@ -10,3 +10,11 @@ __pycache__/
 # (hashes + analyses are committed under evidence/)
 evidence/results/raw/
 evidence/**/cond-*.pt*
+# student runs: records (JSON) are committable in YOUR fork as course
+# evidence; raw PNGs and profiler CSVs stay local (too large, hashes are in
+# the records)
+runs/raw/
+runs/**/rocprof-*/**/*.csv
+runs/**/rocprof-*/**/*.dat
+runs/**/cond-*.pt*
+runs/**/_*.py

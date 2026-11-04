@@ -6,7 +6,7 @@ made. All evidence under `evidence/results/` unless noted.
 
 | # | Claim | Value | Evidence | Caveats |
 |---|---|---|---|---|
-| 1 | Frozen baseline warm latency (B0) | 55.21 s (median of 9; two sessions 55.24/55.11) | `p1-baseline-B0/`, `p1-baseline-r2-B0/*.json` | warm = same-prompt node-cache hit; fresh +0.3–0.6 s TE |
+| 1 | Frozen baseline warm latency (B0) | 55.21 s (median of 18: two independent 9-run sessions, 55.24 / 55.21) | `p1-baseline-B0/`, `p1-baseline-r2-B0/*.json` | warm = same-prompt node-cache hit; fresh total +0.90 s = TE 0.56 s (median, measured on the fresh arm) + ~0.34 s scheduling variance |
 | 2 | Baseline steady step time | 1.345 s (min 1.336 / max 1.367) | same records, `steady_step_median_s` | step[0] excluded (protocol v1.3) |
 | 3 | Baseline pipeline split | DiT 53.88 s (97.6%) · VAE 0.90 · TE 0.56 fresh · other 0.43 | `p2-profile-profile/pipeline_breakdown.json` | derived from 18 warm records |
 | 4 | Kernel composition of one warm gen | GEMM 61.3% / attention 32.4% / elementwise 4.7% / norm 1.3% of GPU busy 97.8% | `p2-profile-profile/rocprof-dit/analysis.json` (+ raw CSVs, not committed) | traced run: composition only, interception overhead ~1%; TE phase outside window (measured at pipeline layer instead) |

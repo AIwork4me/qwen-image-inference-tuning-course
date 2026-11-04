@@ -1,0 +1,22 @@
+{
+ "events": [
+  {
+   "tag": "cold",
+   "seed": 1000042,
+   "steps": 40,
+   "wall_s": 77.878
+  },
+  {
+   "tag": "warmup",
+   "seed": 2000042,
+   "steps": 40,
+   "wall_s": 55.179
+  },
+  {
+   "tag": "traced-fresh",
+   "seed": 43,
+   "steps": 40,
+   "wall_s": 56.619
+  }
+ ]
+}

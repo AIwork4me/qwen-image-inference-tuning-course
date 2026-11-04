@@ -1,0 +1,5 @@
+# Quality-gate extras (LPIPS) — installed into .venv-lab by
+# scripts/cloud/start.sh, NOT part of requirements-dev.txt (the CPU CI gate
+# must stay lightweight and torch-free; quality_gate.py degrades to
+# grids-only with --skip-lpips where this file is not installed).
+lpips>=0.1.4

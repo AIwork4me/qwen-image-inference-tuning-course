@@ -1,0 +1,29 @@
+{
+  "created_at": "2026-11-04T04:02:22+00:00",
+  "os_build": "Linux 6.8.0-79-generic (#79-Ubuntu SMP PREEMPT_DYNAMIC Tue Aug 12 14:42:46 UTC 2025)",
+  "python_version": "3.12.3",
+  "cpu": "AMD EPYC 9334 32-Core Processor",
+  "nproc": "128",
+  "ram_total_gb": 503.6,
+  "gpu_name": "AMD Radeon Graphics",
+  "gfx_arch": "gfx1100",
+  "torch": "2.9.1+gitff65f5b",
+  "hip": "7.2.53211-e1a6bc5663",
+  "comfyui": {
+    "version": "0.43.0",
+    "pinned_commit": "b5a432157de6b8884f81104cd02926adf4d597e4",
+    "tree_marker_ok": true
+  },
+  "repo_head": "041adf522ff73db4a515bca9df756fa5592aa9ad",
+  "repo_branch": "radeon-cloud-first",
+  "gpu_note": "detected at snapshot time (see gpu_name/gfx_arch; the reference campaign evidence was measured on a single Radeon PRO W7900 48GB gfx1100)",
+  "cuda_available": true,
+  "device_count": 1,
+  "device_name": "AMD Radeon Graphics",
+  "total_vram_mb": 49136,
+  "rocm": {
+    "rocminfo_gfx": "gfx1100",
+    "driver": "6.16.13",
+    "rocprofv3": "version: 1.1.0\n        git_revision: e1a6bc5663304b9c586b3254b8920f2981057804\n        library_arch: x86_64-linux-gnu\n         system_name: Linux\n    system_processor: x86_64\n      system_version: 6.8.0-85-generic\n         compiler_id: GNU\n    compiler_version: 13.3.0\n        rocm_version: 7.2.1"
+  }
+}

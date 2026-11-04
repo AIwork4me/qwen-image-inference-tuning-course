@@ -1,5 +1,21 @@
 """Report aggregation: records -> SUMMARY.json/md + charts.
 
+Scopes (evidence integrity):
+- ``reference`` (default): ONLY the frozen official campaign run dirs listed
+  in ``lab/reference_runs.json``. This is what the published README numbers
+  must equal — smoke, duplicate and student runs can never contaminate it.
+  READ-ONLY by default: writing into ``evidence/`` requires the explicit
+  ``--write`` flag (the deliberate maintenance path), so a plain
+  ``python -m lab report`` can never churn the frozen SUMMARY files.
+- ``student``: only new runs under ``runs/`` (the student's own
+  measurements), further split by run kind:
+  ``formal`` (default — full-protocol sessions, quotable medians) vs
+  ``smoke`` (bounded classroom runs) vs ``all`` kinds. Smoke medians are
+  NEVER pooled with formal ones by default — the same contamination rule
+  that protects the reference campaign, applied to your own data.
+- ``all``: reference and student side by side in one document, NEVER pooled
+  into shared medians (mixing hosts/sessions would corrupt them).
+
 Charts are generated ONLY from the aggregated summary numbers (never
 hand-edited) — a chart that disagrees with SUMMARY.json is a bug.
 """
@@ -12,24 +28,63 @@ from pathlib import Path
 
 from . import lab_env
 
+SCOPES = ("reference", "student", "all")
+KINDS = ("formal", "smoke", "all")
 
-def _load_records() -> list[dict]:
-    records = []
-    root = lab_env.RESULTS_ROOT
-    if not root.is_dir():
-        return records
-    for run_dir in sorted(root.iterdir()):
-        if not run_dir.is_dir() or run_dir.name in ("raw", "env"):
+
+def _reference_run_dirs() -> dict[str, list[str]]:
+    p = lab_env.LAB_DIR / "reference_runs.json"
+    return json.loads(p.read_text(encoding="utf-8"))["reference_run_dirs"]
+
+
+def _run_kind_of(dirname: str) -> str:
+    """Classify a run directory: bounded smoke runs are suffixed '-smoke'."""
+    return "smoke" if dirname.endswith("-smoke") else "formal"
+
+
+def _iter_record_files(scope: str, kinds: tuple[str, ...] = ("formal",)) -> list[Path]:
+    """Record JSON files for the requested scope (deterministic order).
+
+    kind filtering applies to the student scope only — the reference
+    campaign is pinned to its formal run dirs by construction."""
+    files: list[Path] = []
+    roots: list[Path] = []
+    if scope in ("reference", "all"):
+        roots.append(lab_env.RESULTS_ROOT)
+    if scope in ("student", "all"):
+        roots.append(lab_env.STUDENT_RUNS_ROOT)
+    for root in roots:
+        if not root.is_dir():
             continue
-        for f in sorted(run_dir.glob("*.json")):
-            if f.name.startswith(("server", "H1_", "H2_", "STATUS", "client")):
-                continue
-            try:
-                rec = json.loads(f.read_text(encoding="utf-8"))
-            except (OSError, ValueError):
-                continue
-            if isinstance(rec, dict) and "experiment" in rec and "runs" in rec:
-                records.append(rec)
+        if scope in ("reference", "all") and root == lab_env.RESULTS_ROOT:
+            allowed = {d for dirs in _reference_run_dirs().values() for d in dirs}
+            run_dirs = [root / d for d in sorted(allowed) if (root / d).is_dir()]
+        else:
+            run_dirs = []
+            for d in sorted(root.iterdir()):
+                if not d.is_dir() or d.name in ("raw", "env"):
+                    continue
+                if "all" not in kinds and _run_kind_of(d.name) not in kinds:
+                    continue
+                run_dirs.append(d)
+        for run_dir in run_dirs:
+            for f in sorted(run_dir.glob("*.json")):
+                files.append(f)
+    return files
+
+
+def _load_records(scope: str = "reference",
+                  kinds: tuple[str, ...] = ("formal",)) -> list[dict]:
+    records = []
+    for f in _iter_record_files(scope, kinds):
+        if f.name.startswith(("server", "H1_", "H2_", "STATUS", "client")):
+            continue
+        try:
+            rec = json.loads(f.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if isinstance(rec, dict) and "experiment" in rec and "runs" in rec:
+            records.append(rec)
     return records
 
 
@@ -84,7 +139,7 @@ def _quality_status(exp: str) -> str:
     return "RECORDED_OR_PENDING_HUMAN_REVIEW"
 
 
-def _charts(summary: dict) -> list[str]:
+def _charts(summary: dict, out_dir: Path | None = None) -> list[str]:
     try:
         import matplotlib
 
@@ -96,7 +151,7 @@ def _charts(summary: dict) -> list[str]:
     if not exps:
         return []
     written = []
-    out_dir = lab_env.RESULTS_ROOT
+    out_dir = out_dir or lab_env.RESULTS_ROOT
 
     order = {"B0": 0, "L1": 1, "L1O": 2, "F1": 3, "F2": 4,
              "LF1": 5, "LF2": 6, "LF3": 7, "BEST": 8}
@@ -147,12 +202,31 @@ def _markdown(s: dict) -> str:
     lines = [
         "# Lab results summary (auto-generated)",
         "",
-        f"Generated: {s['generated_at']}  ·  records: {s['n_records']}",
+        f"Generated: {s['generated_at']}  ·  scope: **{s['scope']}**  ·  "
+        f"kinds: **{s.get('kinds', 'formal')}**  ·  records: {s['n_records']}",
         "",
+        "Scope `reference` = the frozen official W7900 campaign only "
+        "(lab/reference_runs.json). Student runs live under `runs/` and are "
+        "aggregated separately (`python -m lab report --scope student`); "
+        "smoke runs are excluded from formal medians by default "
+        "(`--kind smoke` to inspect them).",
+        "",
+    ]
+    for section in s.get("sections", [s]):
+        lines += _markdown_table(section)
+    return "\n".join(lines) + "\n"
+
+
+def _markdown_table(section: dict) -> list[str]:
+    header = section.get("title")
+    lines = []
+    if header:
+        lines += [f"## {header}", ""]
+    lines += [
         "| Exp | Category | warm med (s) | step med (s) | fresh (s) | TE (s) | cold (s) | VRAM peak (MB) | util% p50 | attn | n | quality |",
         "|---|---|---|---|---|---|---|---|---|---|---|---|",
     ]
-    for e in s["per_experiment"]:
+    for e in section["per_experiment"]:
         lines.append(
             f"| {e['experiment']} | {e['category']} | {e['warm_total_median_s']} "
             f"| {e['warm_step_median_s']} | {e['fresh_total_median_s']} "
@@ -160,23 +234,69 @@ def _markdown(s: dict) -> str:
             f"| {e['vram_device_peak_mb'] or e['vram_peak_mb']} "
             f"| {e['gpu_util_pct_p50']} | {e['attention_backend']} "
             f"| {e['n_measure']} | {e['quality_status']} |")
-    return "\n".join(lines) + "\n"
+    return lines + [""]
 
 
-def build(write: bool = False) -> dict:
-    records = _load_records()
+def _summarize_scope(scope: str, kinds: tuple[str, ...]) -> dict:
+    records = _load_records(scope, kinds)
     by_exp: dict[str, list[dict]] = {}
     for r in records:
         by_exp.setdefault(r["experiment"], []).append(r)
-    summary = {
-        "generated_at": lab_env.build_snapshot()["created_at"],
+    return {
         "n_records": len(records),
-        "per_experiment": [summarize_experiment(rs) for _, rs in sorted(by_exp.items())],
+        "per_experiment": [summarize_experiment(rs)
+                           for _, rs in sorted(by_exp.items())],
     }
+
+
+def build(write: bool = False, scope: str = "reference",
+          kinds: str | tuple[str] = "formal") -> dict:
+    if scope not in SCOPES:
+        raise ValueError(f"scope must be one of {SCOPES}, got {scope!r}")
+    if isinstance(kinds, str):
+        kinds = (kinds,)
+    kinds = tuple(kinds)
+    if kinds not in (("formal",), ("smoke",), ("all",)):
+        raise ValueError(f"kinds must be one of {KINDS}, got {kinds!r}")
+    kind_label = kinds[0] if len(kinds) == 1 else "all"
+
+    if scope == "all":
+        # NEVER pool: the reference campaign and student runs are different
+        # measurement populations — render them side by side instead.
+        ref = _summarize_scope("reference", ("formal",))
+        stu = _summarize_scope("student", kinds)
+        summary = {
+            "generated_at": lab_env.build_snapshot()["created_at"],
+            "scope": "all",
+            "kinds": kind_label,
+            "n_records": ref["n_records"] + stu["n_records"],
+            "reference": ref,
+            "student": stu,
+            "per_experiment": ref["per_experiment"],  # compat view
+            "sections": [
+                dict(ref, title="Reference campaign (frozen, formal only)"),
+                dict(stu, title=f"Student runs ({kind_label})"),
+            ],
+        }
+    else:
+        part = _summarize_scope(scope, kinds)
+        summary = {
+            "generated_at": lab_env.build_snapshot()["created_at"],
+            "scope": scope,
+            "kinds": kind_label,
+            **part,
+        }
     if write:
-        out = lab_env.RESULTS_ROOT
+        if scope == "reference":
+            out = lab_env.RESULTS_ROOT
+            print("NOTE: writing the reference SUMMARY regenerates the frozen "
+                  f"files under {out} (deliberate maintenance action)")
+        else:
+            out = lab_env.STUDENT_RUNS_ROOT
         out.mkdir(parents=True, exist_ok=True)
-        (out / "SUMMARY.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
-        (out / "SUMMARY.md").write_text(_markdown(summary), encoding="utf-8")
-        summary["charts"] = _charts(summary)
+        name = "SUMMARY" if scope in ("reference", "student") else "SUMMARY-all"
+        (out / f"{name}.json").write_text(json.dumps(summary, indent=2),
+                                          encoding="utf-8")
+        (out / f"{name}.md").write_text(_markdown(summary), encoding="utf-8")
+        summary["charts"] = _charts(summary, out_dir=out)
     return summary

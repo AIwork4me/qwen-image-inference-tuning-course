@@ -14,7 +14,18 @@ REPO = Path(__file__).resolve().parents[1]
 LAB_DIR = Path(__file__).resolve().parent
 RESULTS_ROOT = REPO / "evidence" / "results"
 QUALITY_ROOT = REPO / "evidence" / "quality"
-ENV_DIR = RESULTS_ROOT / "env"
+
+# Student/new runs are ISOLATED from the frozen official campaign under
+# evidence/ (immutable, never written by the lab). Everything a student or a
+# fresh measurement session produces lands under runs/ instead:
+#   runs/<run_id>/          schema-valid records
+#   runs/raw/<run_id>/      generated PNGs (stay on the student host)
+#   runs/env/               environment snapshots
+#   runs/doctor.json        latest doctor output
+STUDENT_RUNS_ROOT = REPO / "runs"
+RUNS_ENV_DIR = STUDENT_RUNS_ROOT / "env"
+ENV_DIR = RUNS_ENV_DIR  # snapshots for NEW measurements (the 14 snapshots of
+# the official campaign remain frozen under evidence/results/env/)
 
 COMFY_DIR = REPO / "ComfyUI"
 COMFY_PINNED_COMMIT = "b5a432157de6b8884f81104cd02926adf4d597e4"
@@ -98,7 +109,9 @@ def build_snapshot() -> dict:
         "comfyui": comfyui_version(),
         "repo_head": _run(["git", "-C", str(REPO), "rev-parse", "HEAD"]),
         "repo_branch": _run(["git", "-C", str(REPO), "rev-parse", "--abbrev-ref", "HEAD"]),
-        "gpu_note": "single AMD Radeon PRO W7900 (gfx1100, 48GB) reference platform",
+        "gpu_note": "detected at snapshot time (see gpu_name/gfx_arch; the "
+                    "reference campaign evidence was measured on a single "
+                    "Radeon PRO W7900 48GB gfx1100)",
     }
     try:
         with open("/proc/meminfo") as f:
@@ -133,23 +146,50 @@ def latest_snapshot() -> dict:
     return json.loads(snaps[-1].read_text(encoding="utf-8")) if snaps else {}
 
 
-def check_gpu_expectations(snap: dict | None = None) -> list[str]:
-    """Fail-closed checks: exactly one AMD GPU of the gfx1100 family."""
+def classify_gpu_expectations(snap: dict | None = None) -> tuple[list[str], list[str]]:
+    """Split GPU expectations into (blocking problems, advisory warnings).
+
+    Blocking: no GPU at all, wrong GPU count, non-AMD device — measuring
+    here would produce invalid records (CPU fallback, multi-GPU ambiguity).
+    Advisory (non-blocking): a different-but-working AMD Radeon (arch or
+    VRAM differs from the W7900 reference) — the methodology still applies,
+    the numbers are simply not comparable to the committed reference.
+    """
     snap = snap or latest_snapshot()
-    problems = []
+    problems: list[str] = []
+    warnings: list[str] = []
     if snap.get("cuda_available") is False:
         problems.append("torch.cuda.is_available() is False — no usable GPU")
     if snap.get("device_count") not in (1, None):
         problems.append(f"expected exactly 1 GPU, torch sees {snap['device_count']}")
     arch = snap.get("gfx_arch") or snap.get("rocm", {}).get("rocminfo_gfx")
-    if arch and not str(arch).startswith("gfx1100"):
-        problems.append(f"expected gfx1100 (W7900), found {arch}")
     name = snap.get("gpu_name") or ""
+    vram = snap.get("total_vram_mb")
+    if arch and not str(arch).startswith("gfx1100"):
+        warnings.append(
+            f"gfx arch is {arch}, not gfx1100 (W7900-class) — this is NOT "
+            "the validated reference platform; your numbers are a valid "
+            "independent measurement but not comparable to the committed "
+            "evidence")
     if name and "AMD" not in name:
         problems.append(f"device name is not an AMD device: {name!r}")
-    vram = snap.get("total_vram_mb")
     if isinstance(vram, (int, float)) and not (46000 <= vram <= 50000):
-        problems.append(f"expected ~48GB VRAM (W7900), found {vram} MB")
+        warnings.append(
+            f"VRAM is {vram} MB, not ~48 GB (W7900-class) — check which "
+            "experiments fit (bf16 40-step peaks at ~37.7 GB; int8 turbo "
+            "at ~31.0 GB)")
+    return problems, warnings
+
+
+def check_gpu_expectations(snap: dict | None = None) -> list[str]:
+    """Fail-closed checks: exactly one AMD GPU of the gfx1100 family.
+
+    This is the STRICT gate used by `python -m lab doctor` (formal
+    reproduction of the reference campaign). Radeon-Cloud staged mode uses
+    `classify_gpu_expectations` so a working non-W7900 Radeon produces an
+    explicit warning instead of a silent substitution.
+    """
+    problems, _ = classify_gpu_expectations(snap)
     return problems
 
 

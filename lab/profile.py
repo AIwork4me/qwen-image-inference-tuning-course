@@ -269,15 +269,22 @@ def analyze_kernel_trace(kernel_csv: Path, hip_csv: Path | None) -> dict:
 def run(layers: str = "pipeline,kernel", date: str | None = None,
         port: int = 8199) -> int:
     date = date or datetime.now().strftime("%Y%m%d-%H%M%S")
-    out_root = lab_env.RESULTS_ROOT / f"{date}-profile"
+    out_root = lab_env.STUDENT_RUNS_ROOT / f"{date}-profile"
     out_root.mkdir(parents=True, exist_ok=True)
     statuses = {}
 
     if "pipeline" in layers:
         recs = []
-        for run_dir in sorted(lab_env.RESULTS_ROOT.glob("*-B0")):
-            if "smoke" in run_dir.name:
-                continue
+        # The student's OWN baseline (runs/) is preferred and never pooled
+        # with the frozen reference campaign (mixing hosts would corrupt
+        # the medians — same policy as `lab report` scopes).
+        own = ([d for d in sorted(lab_env.STUDENT_RUNS_ROOT.glob("*-B0"))
+                if "smoke" not in d.name]
+               if lab_env.STUDENT_RUNS_ROOT.is_dir() else [])
+        if not own and lab_env.RESULTS_ROOT.is_dir():
+            own = [d for d in sorted(lab_env.RESULTS_ROOT.glob("*-B0"))
+                   if "smoke" not in d.name]
+        for run_dir in own:
             for f in run_dir.glob("*.json"):
                 if f.name != "server.log":
                     try:
@@ -304,6 +311,16 @@ def run(layers: str = "pipeline,kernel", date: str | None = None,
                 "T_total_fresh_s": med(fresh, lambda r: r["runs"][0]["total_s"]),
                 "T_total_cold_s": cold[0]["runs"][0]["total_s"] if cold else None,
                 "step_median_s": med(warm, lambda r: r.get("steady_step_median_s")),
+                "method": {
+                    "T_total_warm_s": "measured (median of warm run records)",
+                    "T_dit_denoise_s": "measured (KSampler node timing, websocket events)",
+                    "T_vae_decode_s": "measured (VAEDecode node timing)",
+                    "T_text_encoder_cached_s": "measured (warm runs: TE node-cache hit)",
+                    "T_text_encoder_fresh_s": "measured (fresh-prompt arm)",
+                    "T_other_warm_s": "DERIVED by subtraction "
+                                      "(T_total - T_dit - T_vae - T_te), never measured",
+                    "T_total_cold_s": "measured (single cold run)",
+                },
                 "note": ("T_other = T_total - T_dit - T_vae - T_te; warm runs have "
                          "TE cached (node-cache hit), fresh runs pay TE"),
             }

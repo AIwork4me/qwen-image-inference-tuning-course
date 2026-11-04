@@ -81,9 +81,19 @@ def _sha256(path: Path) -> str:
 def verify_weight(rel: str, update_stamp: bool = True) -> dict:
     """Trusted integrity check: local file sha256 vs the PINNED digest.
 
-    Runs the full hash on every invocation (size-only shortcuts are a
-    bypass). A stamp cache (size+mtime keyed) makes repeat checks fast, but
-    any file change re-hashes. ``ok=false`` is reported, never raised.
+    Behavior (read this exactly — it is what the docs claim):
+    1. absent file or wrong byte size -> ``ok=false`` immediately (a size
+       mismatch can never verify, so no full hash is wasted on it);
+    2. otherwise the FULL sha256 is computed and compared to the pinned
+       digest — the first verification of each file always hashes it
+       completely (size-only shortcuts are a bypass);
+    3. after a successful full hash, a stamp (file size + mtime_ns + pinned
+       digest) is cached at ``weights/comfyui-split/.digest_cache.json``;
+       later checks whose size+mtime still match the stamp return
+       ``reason=stamp-cache-hit`` WITHOUT re-hashing. Any file change
+       (different size or mtime) invalidates the stamp and forces a fresh
+       full hash, so a modified file can never verify via the cache.
+    ``ok=false`` is reported, never raised.
     """
     if rel not in WEIGHTS:
         raise ValueError(f"unknown weight {rel!r}")

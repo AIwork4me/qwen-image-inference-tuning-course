@@ -1,0 +1,22 @@
+{
+  "_doc": "The frozen official W7900 campaign (2026-11-03) that produced every published number in README/docs. Only these run directories under evidence/results/ are aggregated by `python -m lab report` (reference scope). Student/smoke/duplicate runs can never contaminate the published medians: new measurements are written under runs/ and are excluded here by construction. Smoke runs are excluded by policy (bounded, non-protocol); B0 has TWO independent sessions (reproducibility arm, r1+r2) which is why its published median pools 18 measured runs while every other experiment pools 9.",
+  "reference_run_dirs": {
+    "B0": ["p1-baseline-B0", "p1-baseline-r2-B0"],
+    "L1": ["p34-L1-L1"],
+    "L1O": ["p3-L1O-L1O"],
+    "F1": ["p34-F1-F1"],
+    "F2": ["p34-F2-F2"],
+    "LF1": ["p34-LF1-LF1"],
+    "LF2": ["p34-LF2-LF2"],
+    "LF3": ["p34-LF3-LF3"],
+    "BEST": ["p6-BEST-rerun-BEST"]
+  },
+  "excluded_from_reference": {
+    "smoke-b0-B0-smoke": "smoke run (bounded, non-protocol) — never a published median",
+    "p2-profile-profile": "profiling artifacts, not latency records",
+    "p5-H1-H1-cpu-te": "H1 negative-result probe (own JSON, summarized separately)",
+    "p5-H1-r2-H1-cpu-te": "H1 rerun (reproducibility arm of the probe)",
+    "p5-H2-H2-pipeline": "H2 pipeline A/B (own JSON, summarized separately)",
+    "env": "environment snapshots"
+  }
+}

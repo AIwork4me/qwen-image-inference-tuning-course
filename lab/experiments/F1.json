@@ -16,5 +16,10 @@
   "tiled_vae": false,
   "attention_backend": "ck",
   "measured": 3,
-  "server_flags": ["--use-ck-attention"]
+  "server_flags": [
+    "--use-ck-attention"
+  ],
+  "quality_semantics": "fidelity",
+  "quality_reference": "B0",
+  "quality_tolerance_lpips": 0.1
 }

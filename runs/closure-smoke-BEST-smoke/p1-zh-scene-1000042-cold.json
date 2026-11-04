@@ -1,0 +1,99 @@
+{
+  "experiment": "BEST",
+  "phase": 6,
+  "framework": "comfyui",
+  "precision": "int8-convrot",
+  "width": 1024,
+  "height": 1024,
+  "steps": 8,
+  "seed": 1000042,
+  "prompt_id": "p1-zh-scene",
+  "protocol_version": "course-lab-v1 (protocol v1.3 timing semantics)",
+  "runs": [
+    {
+      "kind": "cold",
+      "total_s": 29.08,
+      "text_encode_s": 1.409,
+      "denoise_s": 28.245,
+      "vae_decode_s": 1.255,
+      "step_times_s": [
+        5.568,
+        0.901,
+        0.92,
+        0.923,
+        0.922,
+        0.918,
+        0.928,
+        0.92
+      ]
+    }
+  ],
+  "vram_peak_mb": 25939.5,
+  "env_ref": "snapshot-20261104-060247.json",
+  "created_at": "2026-11-04T06:03:22+00:00",
+  "run_kind": "cold",
+  "attention_backend": "pytorch-sdpa-default",
+  "execution_time_s": 28.245,
+  "sampler": "euler",
+  "scheduler": "simple",
+  "cfg": 1.0,
+  "ksampler_s": 12.887,
+  "node_timings_s": {
+    "VAELoader#vae_8bb36639": 2.048,
+    "EmptyLatentImage#latent_f253946f": 0.004,
+    "CLIPLoader#clip_93729c95": 10.268,
+    "CLIPTextEncode#neg_65f4ed1f": 0.842,
+    "CLIPTextEncode#pos_fcf0fd1a": 0.567,
+    "UNETLoader#unet_569fada5": 0.171,
+    "KSampler#ks_a6e1b9cb": 12.887,
+    "VAEDecode#dec_24136c9c": 1.255,
+    "SaveImage#save_30fec869": 0.511
+  },
+  "cached_nodes": [],
+  "vram_residency_mb": 24954.4,
+  "unet": "qwen_image_2.1_turbo_int8_convrot.safetensors",
+  "clip": "qwen3vl_8b_bf16.safetensors",
+  "vae": "qwen_image_2.1_vae_bf16.safetensors",
+  "weight_dtype": "default",
+  "tiled_vae": false,
+  "session_id": "closure-smoke-BEST-smoke",
+  "restart_idx": 0,
+  "lab": "qwen-image-inference-tuning-course",
+  "run_id": "closure-smoke-BEST-smoke",
+  "category": "final",
+  "steady_step_median_s": 0.92,
+  "server_boot_s": 6.13,
+  "attention_evidence": {
+    "Using pytorch attention": [
+      "\u001b[32m[INFO]\u001b[0m Using pytorch attention"
+    ],
+    "Using .* attention": [
+      "\u001b[32m[INFO]\u001b[0m Using split attention in VAE",
+      "\u001b[32m[INFO]\u001b[0m Using split attention in VAE",
+      "/workspace/qwen-image-inference-tuning-course/ComfyUI/comfy/ops.py:105: UserWarning: Using AOTriton backend for Efficient Attention forward... (Triggered internally at /app/pytorch/aten/src/ATen/native/transformers/hip/attention.hip:1452.)"
+    ],
+    "attention": [
+      "\u001b[32m[INFO]\u001b[0m Using split attention in VAE",
+      "/workspace/qwen-image-inference-tuning-course/ComfyUI/comfy/ops.py:105: UserWarning: Using AOTriton backend for Efficient Attention forward... (Triggered internally at /app/pytorch/aten/src/ATen/native/transformers/hip/attention.hip:1452.)",
+      "  return torch.nn.functional.scaled_dot_product_attention(q, k, v, *args, **kwargs)"
+    ],
+    "Set: torch\\.backends\\.cudnn": [
+      "\u001b[32m[INFO]\u001b[0m Set: torch.backends.cudnn.enabled = False for better AMD performance."
+    ],
+    "AMD arch": [
+      "\u001b[32m[INFO]\u001b[0m AMD arch: gfx1100"
+    ],
+    "ROCm version": [
+      "\u001b[32m[INFO]\u001b[0m ROCm version: (7, 2)"
+    ]
+  },
+  "vram_device_peak_mb": 27287.8,
+  "gpu_util_pct_p50": 11.0,
+  "gpu_util_pct_max": 100.0,
+  "host_mem": {
+    "host_mem_available_mib": 448.8,
+    "host_swap_used_mib": 0.0
+  },
+  "image_sha256": "d63c19efab12d78fd5505eb246c9bda10809fef63221323661967e7501bc097a",
+  "image_path": "runs/raw/closure-smoke-BEST-smoke/p1-zh-scene-1000042-cold.png"
+}

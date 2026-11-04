@@ -1,0 +1,42 @@
+{
+  "verdict": "PASS",
+  "mode": "cloud-staged",
+  "checks": [
+    {
+      "check": "gpu_amd_single_working",
+      "status": "PASS",
+      "detail": "AMD Radeon Graphics / gfx1100 / 49136MB"
+    },
+    {
+      "check": "torch_rocm",
+      "status": "PASS",
+      "detail": "torch 2.9.1+gitff65f5b hip 7.2.53211-e1a6bc5663"
+    },
+    {
+      "check": "comfyui_pinned",
+      "status": "PASS",
+      "detail": "v0.43.0 @ b5a432157de6"
+    },
+    {
+      "check": "weights_stage1_integrity",
+      "status": "PASS",
+      "detail": "{'per_file': [{'rel': 'diffusion_models/qwen_image_2.1_bf16.safetensors', 'ok': True, 'reason': 'stamp-cache-hit', 'required': False, 'verdict': 'PASS'}, {'rel': 'diffusion_models/qwen_image_2.1_int8_convrot.safetensors', 'ok': True, 'reason': 'stamp-cache-hit', 'required': False, 'verdict': 'PASS'}, {'rel': 'diffusion_models/qwen_image_2.1_turbo_bf16.safetensors', 'ok': True, 'reason': 'stamp-cac"
+    },
+    {
+      "check": "prompts_frozen",
+      "status": "PASS",
+      "detail": "3 prompts x 3 seeds, ids intact"
+    },
+    {
+      "check": "flash_sdpa_probe",
+      "status": "PASS",
+      "detail": "flash attention launches + syncs on gfx1100"
+    },
+    {
+      "check": "rocprofv3",
+      "status": "PASS",
+      "detail": "version: 1.1.0\n        git_revision: e1a6bc5663304b9c586b3254b8920f2981057804\n        library_arch: x86_64-linux-gnu\n         system_name: Linux\n    system_processor: x86_64\n      system_version: 6.8."
+    }
+  ],
+  "snapshot": "snapshot-20261104-061558.json"
+}

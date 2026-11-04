@@ -18,5 +18,7 @@
   "attention_backend": "pytorch-sdpa-default",
   "measured": 3,
   "fresh_prompt_arm": false,
-  "scheduler_note": "official Comfy-Org Turbo template schedule (9 sigma values = 8 steps)"
+  "scheduler_note": "official Comfy-Org Turbo template schedule (9 sigma values = 8 steps)",
+  "quality_semantics": "distance",
+  "quality_reference": "B0"
 }
