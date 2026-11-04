@@ -121,12 +121,15 @@ rm weights/comfyui-split/<the-file-listed>.safetensors
 bash scripts/cloud/start.sh
 ```
 
-### `BLOCKED: <N> GiB free ... needs ~25 GiB`
-Your persistent workspace cannot hold even the staged set. Either free
-space (`du -sh /workspace/*`), attach/expand the platform's persistent
-storage, or pick an instance flavor with ≥ 30 GB workspace (≥ 65 GB for
-`--all-models`). This is a provisioning problem — no code change will fix
-a full disk.
+### `BLOCKED: <N> GiB free ... needs ~M GiB of new downloads`
+The budget is INCREMENTAL — already-present pinned files are never counted
+again, and `M` is only what still has to be fetched (e.g. `--all-models`
+over a completed staged set needs the remaining ~33 GiB, not 61). Either
+free space (`du -sh /workspace/*` — a common culprit is leftover
+`ComfyUI.unknown.*` quarantine dirs you already inspected), attach/expand
+the platform's persistent storage, or pick an instance flavor with more
+workspace. This is a provisioning problem — no code change will fix a
+full disk. Note `--smoke-only` downloads nothing and is never disk-blocked.
 
 ### pip step fails (`Could not find a version ...`)
 The image's default pip mirror (Tsinghua) sometimes lags fresh packages.

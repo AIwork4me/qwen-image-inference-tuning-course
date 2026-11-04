@@ -102,6 +102,16 @@ print(f"  rocprofv3 : {'yes' if shutil.which('rocprofv3') else 'NO (M2 kernel pr
 repo = os.path.dirname(os.path.abspath("extra_model_paths.yaml"))
 st = os.statvfs(repo)
 print(f"  Disk {repo:<11}: {st.f_bavail*st.f_frsize/2**30:.0f} GiB free")
+# /tmp carries ROCm/LLVM codegen scratch — a full tmpfs kills the ComfyUI
+# server with a confusing "LLVM ERROR: IO failure on output stream"
+try:
+    stt = os.statvfs("/tmp")
+    tmp_free = stt.f_bavail * stt.f_frsize / 2**30
+    print(f"  /tmp        : {tmp_free:.1f} GiB free "
+          + ("(LOW — clean it: LLVM codegen needs a few GB, a full /tmp "
+             "crashes the server)" if tmp_free < 2 else ""))
+except OSError:
+    pass
 proxy = os.environ.get("HTTPS_PROXY") or os.environ.get("https_proxy")
 print(f"  Egress    : {'proxy ' + proxy if proxy else 'direct'}")
 PYEOF
@@ -146,9 +156,11 @@ if [[ "$COMFY_ACTION" != "keep" ]]; then
   # Stage into a private directory THIS run owns; verify; then move into
   # place. A failure cleans up only the staging dir — an existing user tree
   # was already quarantined (never deleted) above.
+  # NB: do NOT pre-create "$STAGING/tree" — the tarball path renames the
+  # extracted dir TO that path, and mv-into-an-existing-dir would nest it.
   STAGING="$REPO/.comfy-staging.$$"
   rm -rf "$STAGING"   # safe: uniquely named, created by this very run
-  mkdir -p "$STAGING/tree"
+  mkdir -p "$STAGING"
   if timeout 300 git -c http.version=HTTP/1.1 clone -q https://github.com/comfyanonymous/ComfyUI.git "$STAGING/tree" 2>/dev/null \
      && git -C "$STAGING/tree" checkout -q "$COMFY_PIN" 2>/dev/null; then
     OK "ComfyUI cloned via git at $COMFY_PIN"
