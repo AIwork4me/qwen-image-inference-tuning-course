@@ -13,6 +13,14 @@ import sys
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 COMFY_MAIN = os.path.join(REPO, "ComfyUI", "main.py")
+
+# Running THIS script puts lab/ itself at sys.path[0]; that SHADOWS stdlib
+# modules (lab/profile.py vs the stdlib `profile` imported via cProfile ->
+# torch._dynamo -> comfy_kitchen) and crashes the server at import time.
+# The server never needs lab/ on its path — remove it before ComfyUI boots.
+_here = os.path.dirname(os.path.abspath(__file__))
+sys.path[:] = [p for p in sys.path
+               if os.path.abspath(p or os.getcwd()) != _here]
 sys.path.insert(0, os.path.dirname(COMFY_MAIN))  # for the `comfy` package
 
 mode = os.environ.get("QIR_SDP", "")

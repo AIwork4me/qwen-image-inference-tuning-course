@@ -65,11 +65,20 @@ class RunMonitor(comfyui_client.RunMonitor):
                             pass
                 rows = csv_rows(["rocm-smi", "--showmeminfo", "vram", "--csv",
                                  "--loglevel", "error"])
-                # header: device,...,VRAM Total Memory (B),VRAM Total Used Memory (B)
-                for row in rows[1:]:
-                    if len(row) >= 4 and row[-1].strip().isdigit():
-                        self.device_vram_peak_mb = max(
-                            self.device_vram_peak_mb, int(row[-1]) / 2**20)
+                # Column layouts differ across ROCm releases (3 columns on
+                # 7.2.1: device,total,used; 4 on the reference host) — locate
+                # the used-bytes column by its HEADER instead of position.
+                if rows:
+                    header = [h.strip() for h in rows[0]]
+                    try:
+                        used_idx = header.index("VRAM Total Used Memory (B)")
+                    except ValueError:
+                        used_idx = len(header) - 1
+                    for row in rows[1:]:
+                        if len(row) > used_idx and row[used_idx].strip().isdigit():
+                            self.device_vram_peak_mb = max(
+                                self.device_vram_peak_mb,
+                                int(row[used_idx]) / 2**20)
             except Exception:  # noqa: BLE001
                 pass
             self._stop.wait(1.0)
