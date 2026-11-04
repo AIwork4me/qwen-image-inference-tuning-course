@@ -16,5 +16,7 @@
   "tiled_vae": false,
   "attention_backend": "pytorch-sdpa-default",
   "measured": 3,
-  "quality_semantics": "distance"
+  "quality_semantics": "distance",
+  "quality_reference": "B0",
+  "quality_fidelity_reference": "L1"
 }

@@ -107,41 +107,53 @@ print(f"  Egress    : {'proxy ' + proxy if proxy else 'direct'}")
 PYEOF
 OK "stack diagnosed"
 
-# disk budget guard (the weights land on the repo's filesystem)
-"$SYS_PY" - "$REPO" <<'PYEOF'
-import os, sys
-repo = sys.argv[1]
-need = 61.5 if os.environ.get("ALL_MODELS") == "1" else 25.5
-st = os.statvfs(repo)
-free = st.f_bavail * st.f_frsize / 2**30
-if free < need + 2:
-    print(f"BLOCKED: {free:.0f} GiB free at {repo} but this stage needs "
-          f"~{need:.0f} GiB (+ working room). Free space, attach larger "
-          "persistent storage, or run the default staged set (no --all-models).")
-    sys.exit(3)
-print(f"  disk budget: {free:.0f} GiB free >= ~{need:.0f} GiB needed")
-PYEOF
-
+# disk budget guard — INCREMENTAL: only files that still need downloading
+# count; --smoke-only downloads nothing and is never disk-blocked. The pure
+# logic (with regression tests) lives in scripts/cloud/plan_stage.py.
+PLAN_FLAGS=""
+[[ $ALL_MODELS == 1 ]] && PLAN_FLAGS="$PLAN_FLAGS --all-models"
+[[ $SMOKE_ONLY == 1 ]] && PLAN_FLAGS="$PLAN_FLAGS --smoke-only"
+PLAN_OUT="$("$SYS_PY" scripts/cloud/plan_stage.py plan --repo "$REPO" $PLAN_FLAGS)" \
+  || { grep '^MESSAGE' <<<"$PLAN_OUT" | sed 's/^MESSAGE /BLOCKED: /'; \
+       die "disk budget blocked (see above)"; }
+sed 's/^MESSAGE /  /' <<<"$PLAN_OUT" | head -1
 if [[ $SMOKE_ONLY == 1 ]]; then
   C "smoke-only: skipping setup steps 2-4"
 else
 
 # -----------------------------------------------------------------------------
-C "2/6 ComfyUI @ pinned commit b5a4321 (v0.43.0)"
+C "2/6 ComfyUI @ pinned commit b5a4321 (v0.43.0) — safe staging"
 # -----------------------------------------------------------------------------
 COMFY_DIR="$REPO/ComfyUI"
 COMFY_PIN="b5a432157de6b8884f81104cd02926adf4d597e4"
 COMFY_MARKER="$COMFY_DIR/.lab_pinned_commit"
-if [[ -f "$COMFY_MARKER" && "$(<"$COMFY_MARKER")" == "$COMFY_PIN" && -f "$COMFY_DIR/main.py" ]]; then
-  OK "ComfyUI tree already at pinned commit (marker verified)"
-else
-  rm -rf "$COMFY_DIR"
-  if timeout 300 git -c http.version=HTTP/1.1 clone -q https://github.com/comfyanonymous/ComfyUI.git "$COMFY_DIR" 2>/dev/null \
-     && git -C "$COMFY_DIR" checkout -q "$COMFY_PIN" 2>/dev/null; then
+COMFY_ACTION="$("$SYS_PY" scripts/cloud/plan_stage.py comfy-action --repo "$REPO" --action-only)"
+case "$COMFY_ACTION" in
+  keep)
+    OK "ComfyUI tree already at pinned commit (marker + version + main.py verified)"
+    ;;
+  refuse)
+    die "$COMFY_DIR exists but is not a directory — resolve it manually; nothing was touched"
+    ;;
+  quarantine_then_stage)
+    Q="$REPO/ComfyUI.unknown.$(date +%Y%m%d-%H%M%S)"
+    mv "$COMFY_DIR" "$Q" || die "could not move the unrecognized ComfyUI tree aside"
+    WARN "existing ComfyUI tree was NOT the lab's pinned checkout — moved to"
+    WARN "  $Q   (nothing was deleted; remove it yourself once you've checked it)"
+    ;;
+esac
+if [[ "$COMFY_ACTION" != "keep" ]]; then
+  # Stage into a private directory THIS run owns; verify; then move into
+  # place. A failure cleans up only the staging dir — an existing user tree
+  # was already quarantined (never deleted) above.
+  STAGING="$REPO/.comfy-staging.$$"
+  rm -rf "$STAGING"   # safe: uniquely named, created by this very run
+  mkdir -p "$STAGING/tree"
+  if timeout 300 git -c http.version=HTTP/1.1 clone -q https://github.com/comfyanonymous/ComfyUI.git "$STAGING/tree" 2>/dev/null \
+     && git -C "$STAGING/tree" checkout -q "$COMFY_PIN" 2>/dev/null; then
     OK "ComfyUI cloned via git at $COMFY_PIN"
   else
     WARN "git clone unavailable (cloud egress proxy) — tarball fallback"
-    rm -rf "$COMFY_DIR"
     TARBALL="$(mktemp /tmp/comfy-XXXXXX.tar.gz)"
     curl -fsSL --retry 3 -o "$TARBALL" \
       "https://codeload.github.com/comfyanonymous/ComfyUI/tar.gz/$COMFY_PIN" \
@@ -149,13 +161,22 @@ else
 import requests, sys
 open(sys.argv[2], "wb").write(requests.get(sys.argv[1], timeout=600).content)
 PYEOF
-    [[ -s "$TARBALL" ]] || die "cannot fetch ComfyUI $COMFY_PIN (git and tarball both blocked by the network)"
-    tar xzf "$TARBALL" -C "$REPO"
-    mv "$REPO/ComfyUI-$COMFY_PIN" "$COMFY_DIR"
+    [[ -s "$TARBALL" ]] || { rm -rf "$STAGING"; die "cannot fetch ComfyUI $COMFY_PIN (git and tarball both blocked by the network)"; }
+    tar xzf "$TARBALL" -C "$STAGING" || { rm -rf "$STAGING"; die "ComfyUI tarball extraction failed"; }
+    mv "$STAGING/ComfyUI-$COMFY_PIN" "$STAGING/tree" || { rm -rf "$STAGING"; die "unexpected tarball layout"; }
     rm -f "$TARBALL"
     OK "ComfyUI extracted from tarball at $COMFY_PIN"
   fi
+  # integrity gate BEFORE anything is moved into place
+  "$SYS_PY" scripts/cloud/plan_stage.py verify-staged "$STAGING/tree" >/dev/null \
+    || { rm -rf "$STAGING"; die "staged ComfyUI tree failed verification"; }
+  if [[ -e "$COMFY_DIR" ]]; then
+    rm -rf "$STAGING"
+    die "$COMFY_DIR appeared during staging — aborting without touching it"
+  fi
+  mv "$STAGING/tree" "$COMFY_DIR" && rmdir "$STAGING" 2>/dev/null || rm -rf "$STAGING"
   printf '%s\n' "$COMFY_PIN" > "$COMFY_MARKER"
+  OK "staged ComfyUI verified (v0.43.0) and moved into place"
 fi
 
 # -----------------------------------------------------------------------------
@@ -193,29 +214,19 @@ fi
 # -----------------------------------------------------------------------------
 C "4/6 Pinned model staging (SHA256-anchored, resumable, staged)"
 # -----------------------------------------------------------------------------
-STAGE1=(
-  "diffusion_models/qwen_image_2.1_turbo_int8_convrot.safetensors"
-  "text_encoders/qwen3vl_8b_bf16.safetensors"
-  "vae/qwen_image_2.1_vae_bf16.safetensors"
-)
-ALL=(
-  "diffusion_models/qwen_image_2.1_bf16.safetensors"
-  "diffusion_models/qwen_image_2.1_int8_convrot.safetensors"
-  "diffusion_models/qwen_image_2.1_turbo_bf16.safetensors"
-  "diffusion_models/qwen_image_2.1_turbo_int8_convrot.safetensors"
-  "text_encoders/qwen3vl_8b_bf16.safetensors"
-  "vae/qwen_image_2.1_vae_bf16.safetensors"
-)
-if [[ $ALL_MODELS == 1 ]]; then TARGETS=("${ALL[@]}"); else TARGETS=("${STAGE1[@]}"); fi
-
+# The download list comes from the INCREMENTAL plan computed above (only
+# absent/size-mismatched files are fetched; present files cost nothing).
 need_dl=()
-for rel in "${TARGETS[@]}"; do
-  if [[ -f "weights/comfyui-split/$rel" ]]; then
-    OK "present: ${rel##*/}"
-  else
-    need_dl+=("$rel")
-  fi
-done
+while IFS= read -r line; do
+  rel="${line#DOWNLOAD }"
+  need_dl+=("$rel")
+  OK "needs download: ${rel##*/}"
+done < <(grep '^DOWNLOAD ' <<<"$PLAN_OUT")
+n_present=$(grep -c '^PRESENT ' <<<"$PLAN_OUT" || true)
+[[ $n_present -gt 0 ]] && OK "$n_present pinned file(s) already present (not re-downloaded)"
+n_broken=$(grep -c '^BROKEN ' <<<"$PLAN_OUT" || true)
+[[ $n_broken -gt 0 ]] && WARN "$n_broken file(s) present with wrong size — will be re-downloaded"
+
 if [[ ${#need_dl[@]} -gt 0 ]]; then
   echo "  downloading ${#need_dl[@]} file(s) from $HF_BASE (16-way ranged, resumable)"
   for rel in "${need_dl[@]}"; do

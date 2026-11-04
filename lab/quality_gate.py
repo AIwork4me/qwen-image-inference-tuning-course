@@ -174,13 +174,29 @@ def write_quality_md(
     baseline_dir: str,
     experiment_dir: str,
     baseline_desc: str | None = None,
+    reference_experiment: str = "B0",
+    fidelity_threshold: float | None = None,
 ) -> None:
     lines = [
         f"# Quality gate — {experiment_name}",
         "",
+        "## Review protocol (manifest-declared, never guessed)",
+        "",
+        f"- Reference experiment: **{reference_experiment}**",
         f"- Baseline: {describe_baseline(baseline_dir, baseline_desc)}",
         f"- Experiment: `{experiment_dir}`",
         f"- {SEMANTICS_NOTE[semantics]}",
+    ]
+    if fidelity_threshold is not None and semantics == "fidelity":
+        lines.append(
+            f"- Fidelity review threshold: per-prompt median LPIPS above "
+            f"**{fidelity_threshold:.2f}** flags the grid for careful human "
+            "review. The threshold TRIAGES the review; it never auto-passes "
+            "or auto-fails anything.")
+    lines += [
+        f"- Quality-review status: **RECORDED_OR_PENDING_HUMAN_REVIEW** "
+        "(the binding verdict is the owner's three-tier call below)",
+        "",
     ]
     if noise_floor is not None:
         lines.append(
@@ -189,11 +205,21 @@ def write_quality_md(
         )
     lines += [
         "",
-        "| Prompt | median LPIPS | max LPIPS | n pairs |",
-        "|---|---|---|---|",
+        "| Prompt | median LPIPS | max LPIPS | n pairs |"
+        + (" review flag |" if fidelity_threshold is not None
+           and semantics == "fidelity" else ""),
+        "|---|---|---|---|"
+        + ("---|" if fidelity_threshold is not None
+           and semantics == "fidelity" else ""),
     ]
     for prompt, s in sorted(table.items()):
-        lines.append(f"| {prompt} | {s['median']:.4f} | {s['max']:.4f} | {s['n']} |")
+        row = (f"| {prompt} | {s['median']:.4f} | {s['max']:.4f} | {s['n']} |")
+        if fidelity_threshold is not None and semantics == "fidelity":
+            flag = ("ABOVE threshold — inspect carefully"
+                    if s["median"] > fidelity_threshold
+                    else "below threshold")
+            row += f" {flag} |"
+        lines.append(row)
     lines += [
         "",
         "## Verdict (user final — 三档终审)",
@@ -225,6 +251,11 @@ def main() -> None:
     ap.add_argument("--skip-lpips", action="store_true",
                     help="grids only (torch/lpips unavailable)")
     ap.add_argument("--baseline-desc", default=None)
+    ap.add_argument("--reference-experiment", default="B0",
+                    help="declared reference experiment (recorded in quality.md)")
+    ap.add_argument("--fidelity-threshold", type=float, default=None,
+                    help="fidelity review-triage threshold (per-prompt median "
+                         "LPIPS above it flags the grid; never auto-passes)")
     ns = ap.parse_args(sys.argv[1:])
 
     out_dir = Path(ns.out)
@@ -251,7 +282,9 @@ def main() -> None:
 
     write_quality_md(out_dir / "quality.md", ns.experiment_name, ns.semantics,
                      table, noise_floor, ns.baseline, ns.experiment,
-                     baseline_desc=ns.baseline_desc)
+                     baseline_desc=ns.baseline_desc,
+                     reference_experiment=ns.reference_experiment,
+                     fidelity_threshold=ns.fidelity_threshold)
     print(f"quality.md -> {out_dir / 'quality.md'}")
 
 

@@ -91,19 +91,28 @@ def _resolve_raw_dir(experiment: str, date: str | None = None) -> str:
 
 
 def cmd_quality(args) -> int:
-    """Quality gate for one experiment vs the B0 baseline.
+    """Quality gate for one experiment vs its declared reference.
 
-    Semantics are derived from the manifest (never guessed):
-    fidelity = quantized weights with the same schedule; distance =
-    everything that changes the schedule/numerics path.
+    Protocol (manifest-driven, never guessed):
+    - quality_semantics: fidelity (numerics-only variants — quantization,
+      attention backend) vs distance (schedule/model changes);
+    - quality_reference: the experiment whose raw images form the baseline
+      (F1/F2 vs B0; combined experiments vs B0 by default);
+    - quality_tolerance_lpips: review-triage threshold for fidelity gates —
+      per-prompt medians above it flag the grid for careful human review;
+      it NEVER auto-passes anything;
+    - quality_fidelity_reference (informational): the same-schedule
+      experiment that isolates one lever inside a combined config (e.g.
+      LF2 vs L1 isolates int8 on turbo) — pass it via --baseline to run
+      that deeper check.
     """
     import subprocess
 
     m = manifests.load_manifest(args.experiment)
-    semantics = m.get("quality_semantics",
-                      "fidelity" if (args.experiment == "F2" and m["steps"] == 40)
-                      else "distance")
-    baseline = args.baseline or _resolve_raw_dir("B0")
+    semantics = m.get("quality_semantics", "distance")
+    reference = args.reference or m.get("quality_reference", "B0")
+    tolerance = m.get("quality_tolerance_lpips")
+    baseline = args.baseline or _resolve_raw_dir(reference)
     experiment = _resolve_raw_dir(args.experiment, args.date)
     if not any(x.glob("*.png") for x in map(__import__("pathlib").Path,
                                             (baseline, experiment))):
@@ -126,19 +135,28 @@ def cmd_quality(args) -> int:
         skip_lpips = ["--skip-lpips"]
     else:
         skip_lpips = []
+    tol_args = ["--fidelity-threshold", str(tolerance)] if tolerance else []
     r = subprocess.run([
         sys.executable, "-I", str(manifests.lab_env.LAB_DIR / "quality_gate.py"),
         "--baseline", baseline,
         "--experiment", experiment,
         "--experiment-name", args.experiment,
         "--semantics", semantics,
-        "--baseline-desc", args.baseline_desc or "B0 frozen baseline",
+        "--reference-experiment", reference,
+        "--baseline-desc", args.baseline_desc
+        or f"{reference} frozen baseline",
+        *tol_args,
         *skip_lpips,
         # student gates land under runs/quality/ — the shipped
         # evidence/quality/<exp>/ grids of the frozen campaign are never
         # overwritten by new measurements
         "--out", str(manifests.lab_env.STUDENT_RUNS_ROOT / "quality" / args.experiment),
     ])
+    if r.returncode == 0 and m.get("quality_fidelity_reference"):
+        print(f"\nnote: {args.experiment} also declares a deeper isolating "
+              f"check vs {m['quality_fidelity_reference']} (same schedule, "
+              "one lever): re-run with "
+              f"--baseline <raw-dir-of-{m['quality_fidelity_reference']}>")
     return r.returncode
 
 
@@ -151,10 +169,14 @@ def _latest_run(experiment: str) -> str:  # retained for backwards compat
 
 def cmd_report(args) -> int:
     from . import report
-    out = report.build(write=True, scope=args.scope)
-    print(json.dumps({k: v for k, v in out.items() if k != "per_experiment"} |
+    out = report.build(write=args.write, scope=args.scope, kinds=args.kind)
+    print(json.dumps({k: v for k, v in out.items()
+                      if k not in ("per_experiment", "sections", "reference", "student")} |
                      {"per_experiment_count": len(out.get("per_experiment", []))},
                       indent=2, default=str))
+    if not args.write:
+        print("\n(read-only run — nothing was written; pass --write to "
+              "regenerate SUMMARY files)")
     return 0
 
 
@@ -192,17 +214,32 @@ def main(argv: list[str] | None = None) -> None:
 
     p = sub.add_parser("quality", help="quality gate for one experiment")
     p.add_argument("--experiment", required=True)
-    p.add_argument("--baseline", default=None, help="raw dir of baseline runs")
+    p.add_argument("--baseline", default=None,
+                   help="raw dir of the baseline runs (default: the "
+                        "manifest's quality_reference; use the manifest's "
+                        "quality_fidelity_reference for the deeper "
+                        "single-lever check)")
+    p.add_argument("--reference", default=None,
+                   help="override the declared reference experiment id")
     p.add_argument("--date", default=None)
     p.add_argument("--baseline-desc", default=None)
     p.set_defaults(func=cmd_quality)
 
     p = sub.add_parser("report", help="aggregate results into SUMMARY + charts "
-                      "(default scope: frozen reference campaign only)")
+                      "(default: frozen reference scope, READ-ONLY)")
     p.add_argument("--scope", choices=("reference", "student", "all"),
                    default="reference",
                    help="reference = frozen official campaign (published "
-                        "numbers); student = your runs/ only; all = pooled")
+                        "numbers); student = your runs/ only; all = both, "
+                        "side by side, never pooled")
+    p.add_argument("--kind", choices=("formal", "smoke", "all"),
+                   default="formal",
+                   help="student-scope filter: formal full-protocol sessions "
+                        "(default) vs bounded smoke runs")
+    p.add_argument("--write", action="store_true",
+                   help="actually write SUMMARY/charts (reference scope "
+                        "regenerates the frozen files under evidence/ — a "
+                        "deliberate maintenance action)")
     p.set_defaults(func=cmd_report)
 
     ns = ap.parse_args(argv)

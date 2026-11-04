@@ -287,6 +287,127 @@ def test_evidence_tree_is_frozen():
         f"evidence/results/ changed: added={actual - allowed}, removed={allowed - actual}"
 
 
+def test_report_separates_smoke_from_formal(tmp_path, monkeypatch):
+    """P0-4: bounded smoke runs must never contaminate the student's formal
+    medians by default (same rule that protects the frozen reference)."""
+    from lab import report
+
+    monkeypatch.setattr(lab_env, "STUDENT_RUNS_ROOT", tmp_path)
+    monkeypatch.setattr(report.lab_env, "STUDENT_RUNS_ROOT", tmp_path)
+
+    def rec(total, kind="measure"):
+        return {"experiment": "B0", "category": "baseline",
+                "run_kind": kind, "session_id": "t",
+                "attention_backend": "x",
+                "runs": [{"kind": "warm", "total_s": total,
+                          "text_encode_s": 0.0, "denoise_s": 1.0,
+                          "vae_decode_s": 0.1, "step_times_s": [1.0, 1.0]}]}
+
+    for run, records in {
+        "20260101-1000-B0": [rec(50.0), rec(50.2), rec(50.4)],
+        "20260101-2000-B0-smoke": [rec(90.0)],  # bounded classroom smoke
+    }.items():
+        d = tmp_path / run
+        d.mkdir(parents=True)
+        for i, r in enumerate(records):
+            (d / f"p1-zh-scene-42-r{i}.json").write_text(json.dumps(r))
+
+    formal = report.build(scope="student", kinds="formal")
+    smoke = report.build(scope="student", kinds="smoke")
+    everything = report.build(scope="student", kinds="all")
+    assert formal["n_records"] == 3
+    assert formal["per_experiment"][0]["warm_total_median_s"] == 50.2
+    assert smoke["n_records"] == 1
+    assert smoke["per_experiment"][0]["warm_total_median_s"] == 90.0
+    assert everything["n_records"] == 4  # explicit opt-in only
+
+
+def test_report_scope_all_never_pools(tmp_path, monkeypatch):
+    """P0-4: --scope all renders reference and student side by side and
+    NEVER merges them into shared medians."""
+    from lab import report
+
+    monkeypatch.setattr(report.lab_env, "STUDENT_RUNS_ROOT", tmp_path)
+    d = tmp_path / "20260101-1000-B0"
+    d.mkdir(parents=True)
+    (d / "p1-zh-scene-42-r0.json").write_text(json.dumps({
+        "experiment": "B0", "category": "baseline", "run_kind": "measure",
+        "session_id": "t", "attention_backend": "x",
+        "runs": [{"kind": "warm", "total_s": 99.9, "text_encode_s": 0.0,
+                  "denoise_s": 1.0, "vae_decode_s": 0.1,
+                  "step_times_s": [1.0, 1.0]}]}))
+    summary = report.build(scope="all", kinds="formal")
+    assert set(summary["sections"][0]) >= {"title", "per_experiment"}
+    ref_rows = {e["experiment"]: e["warm_total_median_s"]
+                for e in summary["reference"]["per_experiment"]}
+    stu_rows = {e["experiment"]: e["warm_total_median_s"]
+                for e in summary["student"]["per_experiment"]}
+    # the student's 99.9 s B0 must NOT have moved the reference median
+    assert stu_rows["B0"] == 99.9
+    assert ref_rows["B0"] != 99.9 and ref_rows["B0"] == pytest.approx(55.206, abs=0.01)
+
+
+def test_quality_protocol_fields_complete():
+    """P0-5: every quality-gated experiment declares its protocol in the
+    manifest — semantics, reference, and (for fidelity) a tolerance. An
+    attention-backend-only change (F1) MUST be fidelity, not distance."""
+    fidelity_refs = []
+    for mid in manifests.list_manifests():
+        if mid in ("H1", "H2"):
+            continue  # probes without quality gates
+        m = manifests.load_manifest(mid)
+        assert m["quality_semantics"] in ("fidelity", "distance"), mid
+        ref = m.get("quality_reference", "B0")
+        assert ref in manifests.KNOWN_IDS, (mid, ref)
+        if m["quality_semantics"] == "fidelity":
+            assert "quality_tolerance_lpips" in m, \
+                f"{mid}: fidelity gate without a review tolerance"
+            assert 0 < m["quality_tolerance_lpips"] < 1
+            fidelity_refs.append(mid)
+        frel = m.get("quality_fidelity_reference")
+        if frel:
+            assert frel in manifests.KNOWN_IDS, (mid, frel)
+            assert m["quality_semantics"] == "distance", \
+                f"{mid}: fidelity_reference is for combined (distance) configs"
+    # the attention-backend-only change is a numerics variant -> fidelity
+    assert "F1" in fidelity_refs and "F2" in fidelity_refs
+    # schedule-changing experiments stay distance
+    for mid in ("L1", "L1O", "BEST", "LF1", "LF2", "LF3"):
+        m = manifests.load_manifest(mid)
+        assert m["quality_semantics"] == "distance", mid
+
+
+def test_quality_md_records_protocol(tmp_path):
+    """The generated quality.md carries the review protocol block: declared
+    reference, tolerance triage flags, and the PENDING status."""
+    from lab.quality_gate import write_quality_md
+
+    out = tmp_path / "quality.md"
+    table = {"p1-zh-scene": {"median": 0.05, "max": 0.08, "n": 3},
+             "p3-poster-text": {"median": 0.20, "max": 0.25, "n": 3}}
+    write_quality_md(out, "F1", "fidelity", table, 0.0,
+                     "/raw/B0", "/raw/F1", reference_experiment="B0",
+                     fidelity_threshold=0.10)
+    text = out.read_text()
+    assert "Reference experiment: **B0**" in text
+    assert "0.10" in text
+    assert "RECORDED_OR_PENDING_HUMAN_REVIEW" in text
+    assert "ABOVE threshold — inspect carefully" in text      # 0.20 > 0.10
+    assert text.count("below threshold") == 1                  # 0.05 <= 0.10
+    assert "never auto-passes" in text
+
+
+def test_reference_report_default_writes_nothing():
+    """P0-4: the default report run is read-only — the frozen SUMMARY files
+    under evidence/ are untouched without an explicit --write."""
+    from lab import report
+
+    p = lab_env.RESULTS_ROOT / "SUMMARY.md"
+    before = p.read_bytes()
+    report.build(write=False, scope="reference")
+    assert p.read_bytes() == before
+
+
 def test_cli_importable():
     from lab.__main__ import main
     with pytest.raises(SystemExit):

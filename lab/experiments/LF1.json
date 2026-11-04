@@ -19,5 +19,7 @@
   "server_flags": [
     "--use-ck-attention"
   ],
-  "quality_semantics": "distance"
+  "quality_semantics": "distance",
+  "quality_reference": "B0",
+  "quality_fidelity_reference": "L1"
 }

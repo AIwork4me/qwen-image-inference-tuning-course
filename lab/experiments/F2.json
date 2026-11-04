@@ -16,5 +16,7 @@
   "tiled_vae": false,
   "attention_backend": "pytorch-sdpa-default",
   "measured": 3,
-  "quality_semantics": "fidelity"
+  "quality_semantics": "fidelity",
+  "quality_reference": "B0",
+  "quality_tolerance_lpips": 0.1
 }
