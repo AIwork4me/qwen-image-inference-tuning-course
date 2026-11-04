@@ -210,7 +210,7 @@ def test_shipped_summary_matches_records():
     from lab.report import _load_records, summarize_experiment
 
     by_exp: dict[str, list[dict]] = {}
-    for r in _load_records():
+    for r in _load_records("reference"):
         by_exp.setdefault(r["experiment"], []).append(r)
     shipped = json.loads(summary_path.read_text(encoding="utf-8"))
     shipped_warm = {e["experiment"]: e["warm_total_median_s"]
@@ -220,6 +220,71 @@ def test_shipped_summary_matches_records():
         if exp in shipped_warm and shipped_warm[exp] is not None:
             # warm medians agree within 0.05s (shipping rounded r1+r2 sets)
             assert abs(fresh["warm_total_median_s"] - shipped_warm[exp]) < 0.05, exp
+
+
+def test_reference_scope_excludes_smoke_and_duplicates():
+    """P2 evidence integrity: the reference scope pools ONLY the official
+    campaign run dirs — smoke runs and (for other experiments) duplicate
+    reruns can never contaminate published medians."""
+    from lab.report import _load_records, _reference_run_dirs
+
+    recs = _load_records("reference")
+    by_run: dict[str, int] = {}
+    for r in recs:
+        by_run[r["session_id"]] = by_run.get(r["session_id"], 0) + 1
+    allowed = {d for dirs in _reference_run_dirs().values() for d in dirs}
+    assert set(by_run) <= allowed, \
+        f"non-reference runs leaked into the reference scope: {set(by_run) - allowed}"
+    # B0 pools its two reproducibility sessions (18 measured runs)
+    b0 = [r for r in recs if r["experiment"] == "B0"
+          and r["run_kind"] == "measure"]
+    assert len(b0) == 18, len(b0)
+    assert "smoke-b0-B0-smoke" not in by_run
+
+
+def test_student_runs_are_isolated_from_frozen_evidence(tmp_path, monkeypatch):
+    """New records must never be written into the frozen evidence tree."""
+    from lab import runner
+
+    assert runner.lab_env.STUDENT_RUNS_ROOT == lab_env.REPO / "runs"
+    assert runner.lab_env.STUDENT_RUNS_ROOT != lab_env.RESULTS_ROOT
+    # the precheck refuses to start when required weights are absent
+    m = manifests.load_manifest("BEST")
+    monkeypatch.setattr("lab.weights.WEIGHTS_ROOT", tmp_path)
+    with pytest.raises(SystemExit, match="MISSING"):
+        runner._precheck_weights(m)
+
+
+def test_quality_raw_dir_resolution(tmp_path, monkeypatch):
+    """P2: `lab quality` must resolve RAW IMAGE dirs (with PNGs), and the
+    output must go to runs/quality (frozen evidence/quality untouched)."""
+    from lab.__main__ import _resolve_raw_dir
+
+    monkeypatch.setattr(manifests.lab_env, "STUDENT_RUNS_ROOT", tmp_path)
+    # no raw dirs at all -> instructive failure
+    with pytest.raises(SystemExit, match="run --experiment LF2"):
+        _resolve_raw_dir("LF2")
+    # a student raw dir with PNGs -> resolved, most recent wins
+    for tag in ("20261104-1000-LF2", "20261104-2000-LF2"):
+        d = tmp_path / "raw" / tag
+        d.mkdir(parents=True)
+        (d / "p1-42-r0.png").write_bytes(b"png")
+    assert _resolve_raw_dir("LF2").endswith("20261104-2000-LF2")
+    # explicit --date wins over "latest"
+    assert _resolve_raw_dir("LF2", "20261104-1000").endswith("20261104-1000-LF2")
+
+
+def test_evidence_tree_is_frozen():
+    """Guard: no new run directories appear under the frozen campaign tree
+    (student runs live under runs/)."""
+    from lab.report import _reference_run_dirs
+
+    allowed = {d for dirs in _reference_run_dirs().values() for d in dirs}
+    allowed |= {"smoke-b0-B0-smoke", "p2-profile-profile", "p5-H1-H1-cpu-te",
+                "p5-H1-r2-H1-cpu-te", "p5-H2-H2-pipeline", "env"}
+    actual = {d.name for d in lab_env.RESULTS_ROOT.iterdir() if d.is_dir()}
+    assert actual == allowed, \
+        f"evidence/results/ changed: added={actual - allowed}, removed={allowed - actual}"
 
 
 def test_cli_importable():
@@ -232,5 +297,7 @@ def test_lab_paths_are_course_layout():
     assert lab_env.RESULTS_ROOT.name == "results"
     assert lab_env.RESULTS_ROOT.parent.name == "evidence"
     assert lab_env.QUALITY_ROOT.name == "quality"
+    assert lab_env.STUDENT_RUNS_ROOT.name == "runs"
+    assert lab_env.STUDENT_RUNS_ROOT.parent == lab_env.REPO
     assert lab_env.LAB_DIR.name == "lab"
     assert (lab_env.LAB_DIR / "experiments").is_dir()

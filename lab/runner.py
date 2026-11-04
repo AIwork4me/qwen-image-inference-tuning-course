@@ -181,18 +181,58 @@ def build_record(manifest: dict, spec: dict, *, total_s: float, execution_time_s
     return record
 
 
+def _required_weight_files(manifest: dict) -> list[str]:
+    return [f"diffusion_models/{manifest['unet']}",
+            f"text_encoders/{manifest['clip']}",
+            f"vae/{manifest['vae']}"]
+
+
+def _precheck_weights(manifest: dict, *, verify: bool = False) -> None:
+    """Fail fast (before any server boot) when the platform cannot supply
+    the models this experiment needs. Staged-by-design: only the files the
+    manifest references are required, so a student can smoke-test BEST
+    before obtaining every variant."""
+    from . import weights as weights_mod
+
+    missing, corrupt = [], []
+    for rel in _required_weight_files(manifest):
+        path = weights_mod.WEIGHTS_ROOT / rel
+        if not path.exists():
+            missing.append(rel)
+        elif path.stat().st_size != weights_mod.WEIGHTS[rel][0]:
+            corrupt.append(rel)
+        elif verify:
+            r = weights_mod.verify_weight(rel)
+            if not r["ok"]:
+                corrupt.append(rel)
+    if missing or corrupt:
+        base = weights_mod.DEFAULT_MIRROR_BASE
+        lines = [f"experiment {manifest['id']} needs these pinned model files:"]
+        for rel in _required_weight_files(manifest):
+            size_gb = weights_mod.WEIGHTS[rel][0] / 1e9
+            flag = "MISSING" if rel in missing else (
+                "CORRUPT (size mismatch)" if rel in corrupt else "present")
+            lines.append(f"  [{flag}] {rel} ({size_gb:.2f} GB)")
+        lines.append(f"download (resumable, 16-way ranged):")
+        for rel in missing + corrupt:
+            lines.append(f"  python -I lab/download_weights.py "
+                         f"{base}/resolve/main/{rel} weights/comfyui-split/{rel} 16")
+        raise SystemExit("\n".join(lines))
+
+
 def run_experiment(experiment_id: str, *, date: str | None = None, port: int = 8188,
                    only_prompt: str | None = None, warmup: int | None = None,
                    measured: int | None = None, smoke: bool = False) -> Path:
     manifest = manifests.load_manifest(experiment_id)
+    _precheck_weights(manifest)
     date = date or datetime.now().strftime("%Y%m%d-%H%M%S")
     run_id = f"{date}-{manifest['id']}" + ("-smoke" if smoke else "")
-    results_dir = lab_env.RESULTS_ROOT / run_id
+    results_dir = lab_env.STUDENT_RUNS_ROOT / run_id
     if results_dir.exists() and any(results_dir.glob("*.json")):
         raise RuntimeError(f"results dir already has records: {results_dir} "
                            "(evidence is never overwritten; pick a new --date)")
     results_dir.mkdir(parents=True, exist_ok=True)
-    raw_dir = lab_env.RESULTS_ROOT / "raw" / run_id
+    raw_dir = lab_env.STUDENT_RUNS_ROOT / "raw" / run_id
 
     env_ref = lab_env.write_snapshot()
 

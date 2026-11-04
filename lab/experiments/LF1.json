@@ -16,5 +16,8 @@
   "tiled_vae": false,
   "attention_backend": "ck",
   "measured": 3,
-  "server_flags": ["--use-ck-attention"]
+  "server_flags": [
+    "--use-ck-attention"
+  ],
+  "quality_semantics": "distance"
 }

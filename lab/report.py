@@ -1,5 +1,12 @@
 """Report aggregation: records -> SUMMARY.json/md + charts.
 
+Scopes (P2 evidence integrity):
+- ``reference`` (default): ONLY the frozen official campaign run dirs listed
+  in ``lab/reference_runs.json``. This is what the published README numbers
+  must equal — smoke, duplicate and student runs can never contaminate it.
+- ``student``: only new runs under ``runs/`` (the student's own measurements).
+- ``all``: both, pooled (for quick side-by-side inspection only).
+
 Charts are generated ONLY from the aggregated summary numbers (never
 hand-edited) — a chart that disagrees with SUMMARY.json is a bug.
 """
@@ -12,24 +19,48 @@ from pathlib import Path
 
 from . import lab_env
 
+SCOPES = ("reference", "student", "all")
 
-def _load_records() -> list[dict]:
-    records = []
-    root = lab_env.RESULTS_ROOT
-    if not root.is_dir():
-        return records
-    for run_dir in sorted(root.iterdir()):
-        if not run_dir.is_dir() or run_dir.name in ("raw", "env"):
+
+def _reference_run_dirs() -> dict[str, list[str]]:
+    p = lab_env.LAB_DIR / "reference_runs.json"
+    return json.loads(p.read_text(encoding="utf-8"))["reference_run_dirs"]
+
+
+def _iter_record_files(scope: str) -> list[Path]:
+    """Record JSON files for the requested scope (deterministic order)."""
+    files: list[Path] = []
+    roots: list[Path] = []
+    if scope in ("reference", "all"):
+        roots.append(lab_env.RESULTS_ROOT)
+    if scope in ("student", "all"):
+        roots.append(lab_env.STUDENT_RUNS_ROOT)
+    for root in roots:
+        if not root.is_dir():
             continue
-        for f in sorted(run_dir.glob("*.json")):
-            if f.name.startswith(("server", "H1_", "H2_", "STATUS", "client")):
-                continue
-            try:
-                rec = json.loads(f.read_text(encoding="utf-8"))
-            except (OSError, ValueError):
-                continue
-            if isinstance(rec, dict) and "experiment" in rec and "runs" in rec:
-                records.append(rec)
+        if scope == "reference":
+            allowed = {d for dirs in _reference_run_dirs().values() for d in dirs}
+            run_dirs = [root / d for d in sorted(allowed) if (root / d).is_dir()]
+        else:
+            run_dirs = [d for d in sorted(root.iterdir())
+                        if d.is_dir() and d.name not in ("raw", "env")]
+        for run_dir in run_dirs:
+            for f in sorted(run_dir.glob("*.json")):
+                files.append(f)
+    return files
+
+
+def _load_records(scope: str = "reference") -> list[dict]:
+    records = []
+    for f in _iter_record_files(scope):
+        if f.name.startswith(("server", "H1_", "H2_", "STATUS", "client")):
+            continue
+        try:
+            rec = json.loads(f.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if isinstance(rec, dict) and "experiment" in rec and "runs" in rec:
+            records.append(rec)
     return records
 
 
@@ -84,7 +115,7 @@ def _quality_status(exp: str) -> str:
     return "RECORDED_OR_PENDING_HUMAN_REVIEW"
 
 
-def _charts(summary: dict) -> list[str]:
+def _charts(summary: dict, out_dir: Path | None = None) -> list[str]:
     try:
         import matplotlib
 
@@ -96,7 +127,7 @@ def _charts(summary: dict) -> list[str]:
     if not exps:
         return []
     written = []
-    out_dir = lab_env.RESULTS_ROOT
+    out_dir = out_dir or lab_env.RESULTS_ROOT
 
     order = {"B0": 0, "L1": 1, "L1O": 2, "F1": 3, "F2": 4,
              "LF1": 5, "LF2": 6, "LF3": 7, "BEST": 8}
@@ -147,7 +178,12 @@ def _markdown(s: dict) -> str:
     lines = [
         "# Lab results summary (auto-generated)",
         "",
-        f"Generated: {s['generated_at']}  ·  records: {s['n_records']}",
+        f"Generated: {s['generated_at']}  ·  scope: **{s['scope']}**  ·  "
+        f"records: {s['n_records']}",
+        "",
+        "Scope `reference` = the frozen official W7900 campaign only "
+        "(lab/reference_runs.json). Student runs live under `runs/` and are "
+        "aggregated separately (`python -m lab report --scope student`).",
         "",
         "| Exp | Category | warm med (s) | step med (s) | fresh (s) | TE (s) | cold (s) | VRAM peak (MB) | util% p50 | attn | n | quality |",
         "|---|---|---|---|---|---|---|---|---|---|---|---|",
@@ -163,20 +199,23 @@ def _markdown(s: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
-def build(write: bool = False) -> dict:
-    records = _load_records()
+def build(write: bool = False, scope: str = "reference") -> dict:
+    if scope not in SCOPES:
+        raise ValueError(f"scope must be one of {SCOPES}, got {scope!r}")
+    records = _load_records(scope)
     by_exp: dict[str, list[dict]] = {}
     for r in records:
         by_exp.setdefault(r["experiment"], []).append(r)
     summary = {
         "generated_at": lab_env.build_snapshot()["created_at"],
+        "scope": scope,
         "n_records": len(records),
         "per_experiment": [summarize_experiment(rs) for _, rs in sorted(by_exp.items())],
     }
     if write:
-        out = lab_env.RESULTS_ROOT
+        out = lab_env.RESULTS_ROOT if scope == "reference" else lab_env.STUDENT_RUNS_ROOT
         out.mkdir(parents=True, exist_ok=True)
         (out / "SUMMARY.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
         (out / "SUMMARY.md").write_text(_markdown(summary), encoding="utf-8")
-        summary["charts"] = _charts(summary)
+        summary["charts"] = _charts(summary, out_dir=out)
     return summary

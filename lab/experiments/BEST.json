@@ -16,5 +16,6 @@
   "tiled_vae": false,
   "attention_backend": "pytorch-sdpa-default",
   "measured": 3,
-  "fresh_prompt_arm": true
+  "fresh_prompt_arm": true,
+  "quality_semantics": "distance"
 }

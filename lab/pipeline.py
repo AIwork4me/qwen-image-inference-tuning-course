@@ -169,7 +169,7 @@ def install_custom_node() -> Path:
 
 def run_h1(date: str | None = None) -> Path:
     date = date or datetime.now().strftime("%Y%m%d-%H%M%S")
-    out_dir = lab_env.RESULTS_ROOT / f"{date}-H1-cpu-te"
+    out_dir = lab_env.STUDENT_RUNS_ROOT / f"{date}-H1-cpu-te"
     out_dir.mkdir(parents=True, exist_ok=True)
     results: dict = {"experiment": "H1", "date": date}
 
@@ -252,7 +252,7 @@ def run_h2(date: str | None = None, port: int = 8188) -> Path:
     B: CPU TE worker for upcoming requests overlapping GPU denoise; cond
     injected via LinuxLabCondLoader. Overlap proven by timestamps."""
     date = date or datetime.now().strftime("%Y%m%d-%H%M%S")
-    out_dir = lab_env.RESULTS_ROOT / f"{date}-H2-pipeline"
+    out_dir = lab_env.STUDENT_RUNS_ROOT / f"{date}-H2-pipeline"
     out_dir.mkdir(parents=True, exist_ok=True)
     install_custom_node()
 

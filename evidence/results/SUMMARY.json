@@ -1,15 +1,16 @@
 {
-  "generated_at": "2026-11-03T15:45:01+00:00",
-  "n_records": 146,
+  "generated_at": "2026-11-04T03:03:00+00:00",
+  "scope": "reference",
+  "n_records": 142,
   "per_experiment": [
     {
       "experiment": "B0",
       "category": "baseline",
-      "n_measure": 21,
+      "n_measure": 18,
       "n_fresh": 6,
-      "warm_total_median_s": 55.22,
-      "warm_ksampler_median_s": 53.902,
-      "warm_vae_median_s": 0.894,
+      "warm_total_median_s": 55.206,
+      "warm_ksampler_median_s": 53.877,
+      "warm_vae_median_s": 0.895,
       "warm_step_median_s": 1.345,
       "fresh_total_median_s": 56.105,
       "fresh_text_encode_median_s": 0.555,
@@ -21,8 +22,7 @@
       "attention_backend": "pytorch-sdpa-default",
       "run_ids": [
         "p1-baseline-B0",
-        "p1-baseline-r2-B0",
-        "smoke-b0-B0-smoke"
+        "p1-baseline-r2-B0"
       ],
       "quality_status": "REFERENCE"
     },
@@ -46,7 +46,7 @@
       "run_ids": [
         "p6-BEST-rerun-BEST"
       ],
-      "quality_status": "PENDING_HUMAN_REVIEW"
+      "quality_status": "RECORDED_OR_PENDING_HUMAN_REVIEW"
     },
     {
       "experiment": "F1",
@@ -68,7 +68,7 @@
       "run_ids": [
         "p34-F1-F1"
       ],
-      "quality_status": "PENDING_HUMAN_REVIEW"
+      "quality_status": "RECORDED_OR_PENDING_HUMAN_REVIEW"
     },
     {
       "experiment": "F2",
@@ -90,7 +90,7 @@
       "run_ids": [
         "p34-F2-F2"
       ],
-      "quality_status": "PENDING_HUMAN_REVIEW"
+      "quality_status": "RECORDED_OR_PENDING_HUMAN_REVIEW"
     },
     {
       "experiment": "L1",
@@ -112,7 +112,7 @@
       "run_ids": [
         "p34-L1-L1"
       ],
-      "quality_status": "PENDING_HUMAN_REVIEW"
+      "quality_status": "RECORDED_OR_PENDING_HUMAN_REVIEW"
     },
     {
       "experiment": "L1O",
@@ -134,7 +134,7 @@
       "run_ids": [
         "p3-L1O-L1O"
       ],
-      "quality_status": "PENDING_HUMAN_REVIEW"
+      "quality_status": "RECORDED_OR_PENDING_HUMAN_REVIEW"
     },
     {
       "experiment": "LF1",
@@ -156,7 +156,7 @@
       "run_ids": [
         "p34-LF1-LF1"
       ],
-      "quality_status": "PENDING_HUMAN_REVIEW"
+      "quality_status": "RECORDED_OR_PENDING_HUMAN_REVIEW"
     },
     {
       "experiment": "LF2",
@@ -178,7 +178,7 @@
       "run_ids": [
         "p34-LF2-LF2"
       ],
-      "quality_status": "PENDING_HUMAN_REVIEW"
+      "quality_status": "RECORDED_OR_PENDING_HUMAN_REVIEW"
     },
     {
       "experiment": "LF3",
@@ -200,7 +200,7 @@
       "run_ids": [
         "p34-LF3-LF3"
       ],
-      "quality_status": "PENDING_HUMAN_REVIEW"
+      "quality_status": "RECORDED_OR_PENDING_HUMAN_REVIEW"
     }
   ]
 }

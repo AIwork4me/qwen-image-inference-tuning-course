@@ -15,5 +15,6 @@
   "weight_dtype": "default",
   "tiled_vae": false,
   "attention_backend": "pytorch-sdpa-default",
-  "measured": 3
+  "measured": 3,
+  "quality_semantics": "fidelity"
 }

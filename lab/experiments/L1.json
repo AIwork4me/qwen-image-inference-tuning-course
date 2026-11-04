@@ -17,5 +17,6 @@
   "attention_backend": "pytorch-sdpa-default",
   "measured": 3,
   "fresh_prompt_arm": true,
-  "scheduler_note": "historical turbo protocol (simple scheduler); official template uses 8-step ManualSigmas"
+  "scheduler_note": "historical turbo protocol (simple scheduler); official template uses 8-step ManualSigmas",
+  "quality_semantics": "distance"
 }
