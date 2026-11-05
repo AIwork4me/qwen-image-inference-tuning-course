@@ -16,6 +16,13 @@ import time
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
+# Remove lab/ from sys.path (it contains profile.py which would shadow the
+# stdlib profile module and break torch dynamo/cProfile imports when this
+# script is invoked directly as `python lab/m51_baseline.py`), then put the
+# repo root and the pinned ComfyUI tree on the path.
+sys.path[:] = [p for p in sys.path if Path(p or ".").resolve() != Path(__file__).resolve().parent]
+if str(REPO) not in sys.path:
+    sys.path.insert(0, str(REPO))
 sys.path.insert(0, str(REPO / "ComfyUI"))
 
 TE_PATH = REPO / "weights" / "comfyui-split" / "text_encoders" / "qwen3vl_8b_bf16.safetensors"
@@ -81,9 +88,18 @@ def main() -> None:
         tokens = clip.tokenize(text)
         tok_s = time.perf_counter() - t0
         ids_clip = extract_ids(tokens)
+        # Production-policy diagnostic (P0-C): the pinned ComfyUI runtime's
+        # QwenImage21Tokenizer defaults to prevent_empty_text=False — that is
+        # what clip.tokenize("") executes and what the OpenVINO encoder
+        # replicates. The fallback policy (True) inserts the literal token
+        # 220 ("empty") for the empty string; it is recorded for explanation
+        # only (ids_manual_fallback), never used for conditioning.
         manual = manual_tok.tokenize_with_weights(
-            text, llama_template=None, prevent_empty_text=True, thinking=True, keep_vision=True)
+            text, llama_template=None, prevent_empty_text=False, thinking=True, keep_vision=True)
         ids_manual = extract_ids(manual)
+        fallback = manual_tok.tokenize_with_weights(
+            text, llama_template=None, prevent_empty_text=True, thinking=True, keep_vision=True)
+        ids_fallback = extract_ids(fallback)
         if args.device == "cuda":
             torch.cuda.synchronize()
         t0 = time.perf_counter()
@@ -96,6 +112,8 @@ def main() -> None:
                "encode_s": round(enc_s, 6), "shape": list(cond.shape),
                "dtype": str(cond.dtype), "ids_clip": ids_clip,
                "ids_manual": ids_manual, "ids_equal": ids_clip == ids_manual,
+               "ids_manual_fallback_preventTrue": ids_fallback,
+               "ids_production_equal_fallback": ids_manual == ids_fallback,
                "n_tokens_full": len(ids_clip),
                "n_tokens_kept": int(cond.shape[1]),
                "cond_sha256": tensor_hash(cond),

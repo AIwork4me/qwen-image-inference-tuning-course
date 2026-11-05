@@ -14,8 +14,17 @@ def run(cmd, timeout=30):
         return f"<unavailable: {e}>"
 
 def main():
-    ap = argparse.ArgumentParser(); ap.add_argument("--run", default=str(REPO/"runs"/RUN_ID)); args = ap.parse_args()
-    out = Path(args.run)/"environment.json"; out.parent.mkdir(parents=True, exist_ok=True)
+    ap = argparse.ArgumentParser(); ap.add_argument("--run", default=str(REPO/"runs"/RUN_ID))
+    ap.add_argument("--force", action="store_true",
+                    help="allow overwriting an existing environment.json (default: refuse, to protect frozen run records)")
+    args = ap.parse_args()
+    out = Path(args.run)/"environment.json"
+    # Evidence-safety guard: never silently overwrite an existing environment
+    # snapshot (the frozen campaign record lives at the default --run path).
+    if out.exists() and not args.force:
+        raise SystemExit(f"REFUSING to overwrite existing {out} (frozen evidence protection). "
+                         f"Pass a new --run directory, or --force to explicitly re-record.")
+    out.parent.mkdir(parents=True, exist_ok=True)
     import torch
     sys.path.insert(0, str(REPO/"ComfyUI"))
     snap = {

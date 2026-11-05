@@ -17,6 +17,13 @@ from pathlib import Path
 import numpy as np
 
 REPO = Path(__file__).resolve().parents[1]
+
+
+def artifact_root() -> Path:
+    """Artifact-root resolution shared with lab.m51_run (P1-B):
+    $M51_OV_ARTIFACTS, else <repo>/runs/m51-ov-artifacts."""
+    import os
+    return Path(os.environ.get("M51_OV_ARTIFACTS", REPO / "runs" / "m51-ov-artifacts"))
 sys.path[:] = [p for p in sys.path if Path(p or ".").resolve() != REPO / "lab"]
 sys.path.insert(0, str(REPO))
 
@@ -189,12 +196,14 @@ def main():
     if "C" in arms:
         print("=== Arm C ===", flush=True)
         env = dict(__import__("os").environ)
-        results["arms"]["C"] = run_pipeline("C", [str(REPO/".venv-ov/bin/python"), "-u", str(REPO/"lab/ov_worker.py"), "--model-dir", "/opt/m51-artifacts/bf16", "--xml", "language_model_bf16.xml", "--precision", "bf16", "--threads", "16"], str(REPO), env)
+        art = artifact_root()
+        results["arms"]["C"] = run_pipeline("C", [str(REPO/".venv-ov/bin/python"), "-u", str(REPO/"lab/ov_worker.py"), "--model-dir", str(art/"bf16"), "--xml", "language_model_bf16.xml", "--precision", "bf16", "--threads", "16"], str(REPO), env)
         print(json.dumps(results["arms"]["C"], indent=1), flush=True)
     if "D" in arms:
         print("=== Arm D ===", flush=True)
         env = dict(__import__("os").environ)
-        results["arms"]["D"] = run_pipeline("D", [str(REPO/".venv-ov/bin/python"), "-u", str(REPO/"lab/ov_worker.py"), "--model-dir", "/opt/m51-artifacts/int8", "--xml", "language_model_int8.xml", "--precision", "f32", "--threads", "16", "--dynamic-quant-group", "32"], str(REPO), env)
+        art = artifact_root()
+        results["arms"]["D"] = run_pipeline("D", [str(REPO/".venv-ov/bin/python"), "-u", str(REPO/"lab/ov_worker.py"), "--model-dir", str(art/"int8"), "--xml", "language_model_int8.xml", "--precision", "f32", "--threads", "16", "--dynamic-quant-group", "32"], str(REPO), env)
         print(json.dumps(results["arms"]["D"], indent=1), flush=True)
     (outdir / "pipeline_ab.json").write_text(json.dumps(results, indent=2))
     print(f"WROTE {outdir/'pipeline_ab.json'}")
