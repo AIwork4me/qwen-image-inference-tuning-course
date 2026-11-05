@@ -4,32 +4,44 @@
     {
       "path": "runs/m51-20261105-cleanroom-01/e2e/raw/G_native__p1-zh-scene__cfg1.png",
       "committed_in_git": true,
-      "sha256": "c7ee733186d8df944c3b4f439cfa30b0a29e449294043430823febfe974457f2"
+      "sha256": "c7ee733186d8df944c3b4f439cfa30b0a29e449294043430823febfe974457f2",
+      "git_blob": "65676395765b163a73ccd94d25ac5515cfa70325",
+      "provenance_note": "force-added 2026-11-05 by the course-v2 audit: the original INDEX claimed committed_in_git=true while .gitignore (runs/**/raw/) excluded these files; the exact digest-verified bytes are now committed, making the claim true. See docs/quality-v2/IMAGE_EVIDENCE_AUDIT.md."
     },
     {
       "path": "runs/m51-20261105-cleanroom-01/e2e/raw/C1b_OV_BF16__p1-zh-scene__cfg1.png",
       "committed_in_git": true,
-      "sha256": "2e9223016a6f06db0a06a44c996738245c604be8ef08acd80feba0241732d723"
+      "sha256": "2e9223016a6f06db0a06a44c996738245c604be8ef08acd80feba0241732d723",
+      "git_blob": "dacd27048c5319d49cb6e89c5eadc34715dc7c0c",
+      "provenance_note": "force-added 2026-11-05 by the course-v2 audit: the original INDEX claimed committed_in_git=true while .gitignore (runs/**/raw/) excluded these files; the exact digest-verified bytes are now committed, making the claim true. See docs/quality-v2/IMAGE_EVIDENCE_AUDIT.md."
     },
     {
       "path": "runs/m51-20261105-cleanroom-01/e2e/raw/G_native__p2-en-scene__cfg1.png",
       "committed_in_git": true,
-      "sha256": "f456d05c1945a0f07ad39a11aad8ff2389e4a0f5d8d9ed22ee5d137917216bdc"
+      "sha256": "f456d05c1945a0f07ad39a11aad8ff2389e4a0f5d8d9ed22ee5d137917216bdc",
+      "git_blob": "48a71df79b84d69da53a9108caef1e59825e531f",
+      "provenance_note": "force-added 2026-11-05 by the course-v2 audit: the original INDEX claimed committed_in_git=true while .gitignore (runs/**/raw/) excluded these files; the exact digest-verified bytes are now committed, making the claim true. See docs/quality-v2/IMAGE_EVIDENCE_AUDIT.md."
     },
     {
       "path": "runs/m51-20261105-cleanroom-01/e2e/raw/C1b_OV_BF16__p2-en-scene__cfg1.png",
       "committed_in_git": true,
-      "sha256": "50e0424a6668d448832e9c58cc4bf6e60754759500464f000003f64991d9f446"
+      "sha256": "50e0424a6668d448832e9c58cc4bf6e60754759500464f000003f64991d9f446",
+      "git_blob": "e6316b7a66c0048e88e660f7adaf570a1a7d5f30",
+      "provenance_note": "force-added 2026-11-05 by the course-v2 audit: the original INDEX claimed committed_in_git=true while .gitignore (runs/**/raw/) excluded these files; the exact digest-verified bytes are now committed, making the claim true. See docs/quality-v2/IMAGE_EVIDENCE_AUDIT.md."
     },
     {
       "path": "runs/m51-20261105-cleanroom-01/e2e/raw/G_native__p3-poster-text__cfg1.png",
       "committed_in_git": true,
-      "sha256": "cac599c5843f12d4daa2dfbe18fb0ecac1f67f818fe7859fa713b0d88fa5719c"
+      "sha256": "cac599c5843f12d4daa2dfbe18fb0ecac1f67f818fe7859fa713b0d88fa5719c",
+      "git_blob": "c538f20e935e6ed72a1b7a8659849c3c1f17f5df",
+      "provenance_note": "force-added 2026-11-05 by the course-v2 audit: the original INDEX claimed committed_in_git=true while .gitignore (runs/**/raw/) excluded these files; the exact digest-verified bytes are now committed, making the claim true. See docs/quality-v2/IMAGE_EVIDENCE_AUDIT.md."
     },
     {
       "path": "runs/m51-20261105-cleanroom-01/e2e/raw/C1b_OV_BF16__p3-poster-text__cfg1.png",
       "committed_in_git": true,
-      "sha256": "003cb5601eec1bf84a9714840857b278e45b43cc42b0502ef47683168b6d50b7"
+      "sha256": "003cb5601eec1bf84a9714840857b278e45b43cc42b0502ef47683168b6d50b7",
+      "git_blob": "6ef0a4cb420694e80f0b9de0c977618039bc7520",
+      "provenance_note": "force-added 2026-11-05 by the course-v2 audit: the original INDEX claimed committed_in_git=true while .gitignore (runs/**/raw/) excluded these files; the exact digest-verified bytes are now committed, making the claim true. See docs/quality-v2/IMAGE_EVIDENCE_AUDIT.md."
     },
     {
       "path": "runs/pr2-p4-pipewarm-120822/pipeline_warm/raw/A1__req1__cfg1.png",
@@ -126,5 +138,6 @@
       "comparison": "warm A vs C",
       "prompt": "req4"
     }
-  ]
+  ],
+  "remediated": "2026-11-05 course-v2 audit (see docs/quality-v2/IMAGE_EVIDENCE_AUDIT.md)"
 }
