@@ -22,7 +22,7 @@ path or test — no gate is claimed from a Markdown summary alone.
 | PR descriptions match final commits | both | PR #2 said verdict pending (it was, at freeze); PR #3 said 100 tests | updated to final heads, exact test counts and CI links | PR bodies via API | observed post-edit | YES — updated |
 | Dependency ordering correct | both | PR #3 stacked on PR #2 | preserved: base unchanged, merge brought PR #2 forward; PR #3 retarget to main only after PR #2 merges | git graph | `git merge-base` checks | YES — pass |
 | No automated merge / false approval | both | — | both PRs Draft, OPEN, unmerged; no reviews submitted | GitHub API state | observed | YES — pass |
-| Physical W7900 verification of the ported verdict path | #2+#3 | prior smokes at `a7fa69a` (PR #2 comments) | H3_OV_BF16 smoke at the merged closure head: owner verdict consumed, gates PASS, release no longer human-pending | `runs/pr2-port-verify-232500/` (new unique run ID) | run record + log | YES — pass |
+| Physical W7900 verification of the ported verdict path | #2+#3 | prior smokes at `a7fa69a` (PR #2 comments) | H3_OV_BF16 smoke at the merged closure head: owner verdict consumed, gates PASS, release no longer human-pending | `runs/pr2-port-verify-232727-H3_OV_BF16-smoke/` + `runs/pr2-port-verify-int8-H3_OV_INT8-smoke/` (new unique run IDs) | run record + log | YES — pass |
 
 ## Known non-blocking items (owner decisions, not defects)
 
