@@ -6,15 +6,27 @@ semantic quality. Nothing in this file may be read as a human verdict.
 
 ## 1. What the owner should review (all frozen, seed-42, turbo BF16 DiT 8-step 1024² cfg=1 unless noted)
 
-Primary comparison grids (original resolution, per prompt):
+**Fast path — committed review sheets (`docs/release-closure/review-sheets/`, built by
+`scripts/release-closure/build_review_sheets.py`, full-res sources pinned by SHA256 in
+`review-sheets/INDEX.json`):**
 
-| Prompt | Reference | C1b deployment (recommended) | C1a FP32 | C2 INT8 | Grid |
-|---|---|---|---|---|---|
-| p1 中文场景 | `e2e/raw/G_native__p1-zh-scene__cfg1.png` | `e2e/raw/C1b_OV_BF16__p1-zh-scene__cfg1.png` | `…/C1a_OV_FP32__p1-zh-scene__cfg1.png` | `…/C2_OV_INT8__p1-zh-scene__cfg1.png` | `e2e/grids/p1-zh-scene_cfg1.jpg` |
-| p2 English scene | `…/G_native__p2-en-scene__cfg1.png` | `…/C1b_OV_BF16__p2-en-scene__cfg1.png` | `…/C1a_OV_FP32__p2-en-scene__cfg1.png` | `…/C2_OV_INT8__p2-en-scene__cfg1.png` | `e2e/grids/p2-en-scene_cfg1.jpg` |
-| p3 中文海报排版 | `…/G_native__p3-poster-text__cfg1.png` | `…/C1b_OV_BF16__p3-poster-text__cfg1.png` | `…/C1a_OV_FP32__p3-poster-text__cfg1.png` | `…/C2_OV_INT8__p3-poster-text__cfg1.png` | `e2e/grids/p3-poster-text_cfg1.jpg` |
+- `campaign_p1-zh-scene_G_vs_C1b.jpg`, `campaign_p2-en-scene_G_vs_C1b.jpg`,
+  `campaign_p3-poster-text_G_vs_C1b.jpg` — side-by-side G_native vs C1b deployment.
+- `crop_poster_title_G_native.jpg` / `crop_poster_title_C1b.jpg` — 100% zoom of the p3
+  Chinese poster title block (typography fidelity).
+- `warmsteady_req1..4_A_vs_C.jpg` — audit warm balanced-session A vs C (steady-state
+  equivalence check; full-res originals stay on the audit host, hash-pinned).
 
-All paths are relative to `runs/m51-20261105-cleanroom-01/`.
+**Full-resolution originals:**
+
+| Prompt | Reference (committed in git) | C1b deployment (committed in git) |
+|---|---|---|
+| p1 中文场景 | `runs/m51-20261105-cleanroom-01/e2e/raw/G_native__p1-zh-scene__cfg1.png` | `…/C1b_OV_BF16__p1-zh-scene__cfg1.png` |
+| p2 English scene | `…/G_native__p2-en-scene__cfg1.png` | `…/C1b_OV_BF16__p2-en-scene__cfg1.png` |
+| p3 中文海报排版 | `…/G_native__p3-poster-text__cfg1.png` | `…/C1b_OV_BF16__p3-poster-text__cfg1.png` |
+
+Also committed: C1a FP32 and C2 INT8 full-res pairs in the same directory, plus
+side-by-side grids `runs/m51-20261105-cleanroom-01/e2e/grids/*.jpg`.
 
 - Chinese poster typography crop (worst-case text rendering):
   `runs/m51-20261105-cleanroom-01/e2e/typography/p3_poster_zh_native_crop.jpg` — request an
