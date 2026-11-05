@@ -20,7 +20,9 @@
     "docs/release-closure/review-sheets/INDEX.json"
   ],
   "review_sheet_sources": "Full-resolution G_native/C1b cfg1 PNG pairs (6 files, SHA256-pinned in review-sheets/INDEX.json) from run m51-20261105-cleanroom-01; now committed in git (see INDEX.json git_blob fields).",
-  "related_runs": ["m51-20261105-cleanroom-01"],
+  "related_runs": [
+    "m51-20261105-cleanroom-01"
+  ],
   "related_models": {
     "text_encoder": "qwen3vl_8b_bf16.safetensors (OpenVINO FP16-stored IR, BF16 execution hint)",
     "dit": "qwen_image_2.1_turbo_bf16.safetensors",
@@ -34,6 +36,6 @@
     "Any prompt, resolution, step count, seed, or cfg outside the measured 1024x1024 / 8-step / cfg=1 / seed-42 scope"
   ],
   "gate_propagation": "Per lab/m51_contract.py::settle_human_quality, this record settles human_quality=PASS for H3_OV_BF16-scope runs only. It never overrides a numerical FAIL (see release_status precedence: FAIL > BLOCKED > PENDING).",
-  "recorded_by": "course-v2 autonomous engineering session (branch feat/world-class-bilingual-inference-course)",
+  "recorded_by": "course-v2 autonomous engineering session (recorded 2026-11-05 on feat/world-class-bilingual-inference-course; ported to the M5.1 branch feat/m5-1-openvino-cpu-te-course by the publication-closure P2 stacked-PR dependency repair, 2026-11-06, so PR #2 is self-contained; content unchanged)",
   "record_format": "as specified by docs/release-closure/PR2_HUMAN_QUALITY_REVIEW_PACKAGE.md section 4"
 }

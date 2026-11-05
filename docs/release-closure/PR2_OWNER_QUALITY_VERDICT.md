@@ -23,7 +23,7 @@ trace exactly what was accepted, by whom, and on what evidence.
 |---|---|
 | Reviewer | AIwork4me (repository owner) |
 | Decision source | Owner-provided acceptance statement relayed verbatim in the course-v2 mission brief, 2026-11-05 |
-| Recorded by | Autonomous engineering session on branch `feat/world-class-bilingual-inference-course` |
+| Recorded by | Autonomous engineering session (2026-11-05, course-v2 branch); ported unchanged to the M5.1 branch `feat/m5-1-openvino-cpu-te-course` by the publication-closure P2 stacked-PR dependency repair (2026-11-06) so PR #2 is self-contained |
 | NOT done | No GitHub Approve review was submitted; no handwritten signature was created; no image samples beyond the declared review package were inspected by the recording session |
 
 The recording session did not view or judge the images itself; it maps the
