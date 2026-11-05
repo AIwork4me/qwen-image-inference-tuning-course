@@ -1,5 +1,7 @@
 # Reproduction Guide — Linux W7900 Lab
 
+中文版：[REPRODUCTION_GUIDE.zh-CN.md](REPRODUCTION_GUIDE.zh-CN.md) · English version: this file
+
 Everything below was executed on the physical W7900 lab (ROCm 7.2.1,
 torch 2.9.1+rocm7.2.1, ComfyUI v0.43.0 @ b5a4321, weights @ aacf31a6,
 SHA256-pinned), and re-validated 2026-11-04 end-to-end on a live Radeon

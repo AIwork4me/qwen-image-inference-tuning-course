@@ -1,5 +1,7 @@
 # Troubleshooting & Known Limitations (Linux W7900 Lab)
 
+中文版：[TROUBLESHOOTING.zh-CN.md](TROUBLESHOOTING.zh-CN.md) · English version: this file
+
 Collected from real failures during the lab build (each reproduced at least
 once before the fix was trusted).
 

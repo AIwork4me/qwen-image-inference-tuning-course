@@ -11,7 +11,7 @@ plus `sha256sum` of working-tree copies against recorded digests.
 | `INDEX.json` recorded **6 PNGs** under `runs/m51-20261105-cleanroom-01/e2e/raw/` as `committed_in_git: true` | **6/6 NOT in git** — `git cat-file` MISSING for all six | `.gitignore` rule `runs/**/raw/` excludes them; they were never force-added |
 | `PR2_HUMAN_QUALITY_REVIEW_PACKAGE.md` §1 table headers said "Reference (committed in git)" / "C1b deployment (committed in git)" for those PNGs | Inaccurate | inherited from INDEX |
 | Same doc: "Also committed: C1a FP32 and C2 INT8 full-res pairs" | Inaccurate (host-only) | inherited |
-| `INDEX.json` recorded **8 PNGs** under `runs/pr2-p4-pipewarm-120822/.../raw/` as `committed_in_git: false` with "audit host only; regenerate via lab.m51_pipeline_warm" | Honest and accurate; local digests match 8/8 | — |
+| `INDEX.json` recorded **8 PNGs** under `runs/pr2-p4-pipewarm-120822/pipeline_warm/raw/` as `committed_in_git: false` with "audit host only; regenerate via lab.m51_pipeline_warm" | Honest and accurate; local digests match 8/8 | — |
 
 Working-tree SHA256s matched the recorded digests **6/6** — the provenance data
 was correct; only the availability claim was wrong. All 27 campaign PNGs exist

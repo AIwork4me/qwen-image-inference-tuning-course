@@ -1,5 +1,7 @@
 # Radeon Cloud Quickstart — from zero to your first image
 
+中文版：[RADEON_CLOUD_QUICKSTART.zh-CN.md](RADEON_CLOUD_QUICKSTART.zh-CN.md) · English version: this file
+
 **Target reader:** a student who just got a Radeon Cloud instance approved.
 Total time on the audited instance: **~10–20 minutes** — dominated by the
 25.5 GB staged model download, which measured ~0.4 GB/s aggregate on the

@@ -96,7 +96,7 @@ Token IDs are exactly equal; shapes are `[1,52/37/64/8,4096]`; all tensors finit
 
 \* Precomputed conditioning; the encoder is outside the image wall. Serialized C1b fresh-prompt ≈ **12.58 s**.
 
-**VRAM:** full-pipeline peak **34.15 → 16.77 GB (17.26 GB saved)**; residency **33.09 → 16.29 GB (16.80 GB saved)**. This is the measured full-pipeline effect for this configuration, not an assumption from the 16.8 GB TE allocation.
+**VRAM:** full-pipeline peak **34.15 → 16.77 GB (17.26 GB saved)**; residency **33.09 → 16.29 GB (16.80 GB saved)**. This is the measured full-pipeline effect for this configuration, not an assumption from the 16.8 GB TE allocation. (A separate definition appears in the balanced audit warm session: peak **34.15 → 17.98 GB, i.e. 16.18 GB saved** — the two numbers use different session/peak definitions and must never be interchanged; see `PR2_STATISTICAL_AND_SYSTEM_PERFORMANCE_AUDIT.md` §P1-E.)
 
 Image grids: `runs/m51-20261105-cleanroom-01/e2e/grids/`; native-resolution Chinese poster crop: `e2e/typography/p3_poster_zh_native_crop.jpg`. **Human quality verdict: owner-accepted (PASS) for the C1b-vs-G scope on 2026-11-05** — provenance and explicit non-propagation in [`PR2_OWNER_QUALITY_VERDICT.md`](../../docs/release-closure/PR2_OWNER_QUALITY_VERDICT.md); INT8 and the FP32-stored-IR variant remain FAIL.
 

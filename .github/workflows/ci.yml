@@ -26,3 +26,9 @@ jobs:
         run: pip install -r requirements-dev.txt
       - name: Run tests
         run: python -m pytest tests/ -v
+      - name: Course-quality gates (links / bilingual / claims / examples)
+        run: |
+          python scripts/course-quality/check_links.py
+          python scripts/course-quality/check_bilingual.py
+          python scripts/course-quality/check_claims.py
+          python scripts/course-quality/check_examples.py

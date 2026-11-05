@@ -20,7 +20,7 @@ authoritative outcome.)
   equivalence check; full-res originals stay on the audit host, hash-pinned).
 
 **Full-resolution originals (availability audited 2026-11-05, see
-[`IMAGE_EVIDENCE_AUDIT`](../../quality-v2/IMAGE_EVIDENCE_AUDIT.md)):**
+[`IMAGE_EVIDENCE_AUDIT`](../quality-v2/IMAGE_EVIDENCE_AUDIT.md)):**
 
 | Prompt | Reference (committed in git) | C1b deployment (committed in git) |
 |---|---|---|
