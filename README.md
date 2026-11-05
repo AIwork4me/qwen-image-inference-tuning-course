@@ -50,9 +50,8 @@ still loses 14× in throughput.
 
 ## Start learning (three steps, ~15 minutes to your first image)
 
-**1 · Get a free Radeon Cloud GPU.** Apply for free AMD Radeon Cloud GPU
-compute time (platform: <https://developer.amd.com.cn/radeon>, docs:
-<https://amd-aim.github.io/radeon-cloud-docs/zh-cn/>), then start a
+**1 · Get a free Radeon Cloud GPU.** Apply for free [AMD Radeon Cloud](https://developer.amd.com.cn/login?source=WmhWQBvrH) GPU compute time
+([docs](https://amd-aim.github.io/radeon-cloud-docs/zh-cn/)), then start a
 **single-GPU Linux Notebook with a PyTorch-ROCm image**. Quotas (hours, GPU
 models, storage) are shown in the platform console — this course never
 promises a specific number. [Readiness audit of a live instance →](docs/RADEON_CLOUD_READINESS.md)
