@@ -13,7 +13,7 @@ Every row is a claim made by this work. Historical upstream numbers are labelled
 | 7 | BF16 on the FP32-stored IR fails the negative gate | 6.63% on the 8-token empty negative | FAIL |
 | 8 | INT8 positive prompts are within the declared envelope | 5.6–6.4%, cos ≥0.9979 | PASS |
 | 9 | INT8 fails the negative-conditioning gate | 28.25%, cos 0.9608 | FAIL |
-| 10 | OpenVINO CPU is 200–550× faster than the course PyTorch CPU path on the same CPU | `performance/encoder_ab.json` | PASS |
+| 10 | OpenVINO CPU is 155–549× faster across the measured C1/C2 arms (C1b 328–480×) than the course PyTorch CPU path on the same CPU | `performance/encoder_ab.json` | PASS |
 | 11 | The OpenVINO worker executes on CPU only | `EXECUTION_DEVICES=["CPU"]` in all probe JSONs | PASS |
 | 12 | Offloading the GPU TE reduces full-pipeline VRAM peak, not just allocation | 34.15 → 16.77 GB peak; 16.80 GB residency saved | PASS |
 | 13 | Generated images with OpenVINO conditioning are valid W7900 images | `e2e/raw/` (local), grids, typography crop | PASS |

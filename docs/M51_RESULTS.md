@@ -14,7 +14,7 @@ This document reports **only locally measured numbers**. Historical M5.0 and ups
 
 | Question | Local answer |
 |---|---|
-| Can OpenVINO accelerate the Qwen3-VL-8B text encoder on the same CPU? | **Yes.** Warm encoder latency falls from **176.0/136.8/207.4 s** (PyTorch CPU C0) to **0.532/0.285/0.555 s** (OV BF16 C1b) for 66/51/78-token prompts: **331–480×**. |
+| Can OpenVINO accelerate the Qwen3-VL-8B text encoder on the same CPU? | **Yes.** Warm encoder latency falls from **176.0/136.8/207.4 s** (PyTorch CPU C0) to **0.532/0.285/0.555 s** (OV BF16 C1b) for 66/51/78-token prompts: **331–480×** on positive prompts (**328×** on the empty negative). |
 | Does it preserve Qwen-Image conditioning? | **Yes for FP32 and BF16-deployment.** C1a FP32 rel L2 **3–5×10⁻⁶**; C1b BF16 deployment rel L2 **1.09–1.25%** on positive prompts, **1.91%** on the empty negative. Exact token IDs and `[1, seq, 4096]` pre-final-RMSNorm semantics verified. |
 | What does INT8 add? | 0.249–0.406 s warm (**488–549×** vs C0), 16.8 GB RSS, but **5.6–6.4%** positive conditioning error and **28.3%** on the empty negative. Positive prompts are close to the declared INT8 envelope; the negative path is not. |
 | How much GPU memory is saved? | **17.26 GB full-pipeline peak** and **16.80 GB residency** in the measured turbo 8-step 1024² configuration (native G 34.15 GB peak → precomputed C1b 16.77 GB). This is measured, not assumed from the TE allocation. |
@@ -122,7 +122,7 @@ C vs A: **1.33×** cold-inclusive, **1.04×** steady-state. B is **0.098×** (10
 ## 4. Interpretation
 
 1. **Why C0 is slow:** ComfyUI's CPU text path uses BF16 storage with FP32 manual-cast compute, per-op casts, and non-oneDNN custom attention. It is not a tuned CPU GEMM baseline. The measured 176–207 s is the course's real M5.0 path, reproduced within 1%.
-2. **What OpenVINO changes:** a compiled CPU graph with oneDNN BF16/INT8 kernels, persistent weights, no per-op cast, controlled 16 threads, and one-time compilation. That is why the encoder-only gain is 200–500×.
+2. **What OpenVINO changes:** a compiled CPU graph with oneDNN BF16/INT8 kernels, persistent weights, no per-op cast, controlled 16 threads, and one-time compilation. That is why the encoder-only gain is 155–549× across arms (C1b 328–480×).
 3. **Why E2E barely moves:** the 8-step turbo denoiser is **10.7–10.9 s** and the VAE **0.88 s**. A 0.55 s encoder is ~4% of the cycle. Once the encoder is hidden, the pipeline is GPU-bound; the Amdahl ceiling is about **1/(1−0.05) ≈ 1.05×**.
 4. **Where the large pipeline gain comes from:** the first request after idle avoids reloading a **16.8 GB GPU CLIP** in C/D, so cold-inclusive 4-request time drops 66.6 → 50.0 s. In steady state the gain is only ~4%.
 5. **Precision cost:** BF16 deployment is within 1.25% on positive prompts and passes the gate; INT8 is 5.6–6.4% positive but **28% on the empty negative**, so it is not the production recommendation for cfg>1.

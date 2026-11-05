@@ -66,5 +66,5 @@ These are one encode per case in a fresh process per arm; the first case include
 
 ## 6. What this does and does not prove
 
-- Proves: on this CPU, the same checkpoint and prompts, OpenVINO CPU is 200–550× faster than the course's PyTorch CPU path, with BF16 conditioning error ≤1.25% on positive prompts.
+- Proves: on this CPU, the same checkpoint and prompts, OpenVINO CPU is 155–549× faster across the measured C1/C2 arms (C1b 328–480×), with BF16 deployment conditioning error ≤1.25% on positive prompts.
 - Does not prove: a universal AMD CPU speedup, a tuned PyTorch BF16 comparison, or that encoder speed translates into image-generation speed. See `M51_E2E_AND_PIPELINE.md`.

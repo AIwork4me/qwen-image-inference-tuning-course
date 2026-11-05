@@ -5,7 +5,7 @@
 **Decision:** **GO** for OpenVINO BF16 CPU deployment; **INT8 is exploratory** (negative-conditioning gate fails).
 **Full evidence:** [M51_RESULTS.md](../../docs/M51_RESULTS.md) · run `runs/m51-20261105-cleanroom-01/`.
 
-**中文学习目标：** M5.0 中，把 Qwen3-VL-8B Text Encoder 搬到 CPU 可以释放约 16.8 GB GPU 显存，却让 PyTorch CPU 编码耗费 136.8–207.1 秒、四请求吞吐下降约 14 倍。M5.1 在同一块 EPYC 9334、同一批提示词、同一张 gfx1100 48 GB GPU、同一条 DiT/VAE 路径上，用 OpenVINO 重做 CPU 编码器。结论不是“端到端快 300 倍”，而是：**编码器快 200–500 倍，端到端只快约 3–8%，但显存节省是真实的 17 GB。**
+**中文学习目标：** M5.0 中，把 Qwen3-VL-8B Text Encoder 搬到 CPU 可以释放约 16.8 GB GPU 显存，却让 PyTorch CPU 编码耗费 136.8–207.1 秒、四请求吞吐下降约 14 倍。M5.1 在同一块 EPYC 9334、同一批提示词、同一张 gfx1100 48 GB GPU、同一条 DiT/VAE 路径上，用 OpenVINO 重做 CPU 编码器。结论不是“端到端快 300 倍”，而是：**编码器快 155–549 倍（C1b 328–480 倍），端到端只快约 3–8%，但显存节省是真实的 17 GB。**
 
 ---
 
@@ -153,7 +153,7 @@ Implementation files: `lab/ov_export.py`, `lab/ov_compress.py`, `lab/ov_quantize
 
 ## 6. Think — with measured answers
 
-1. **Why does the Zen5 22–69× not answer this course's C0→C1 question?** It compares different CPUs, weights, thread budgets and an INT8-vs-INT8 path. Local C1b vs C0 is 331–480×, but against the course's FP32-manual-cast CPU path.
+1. **Why does the Zen5 22–69× not answer this course's C0→C1 question?** It compares different CPUs, weights, thread budgets and an INT8-vs-INT8 path. Local C1b vs C0 is 328–480×, but against the course's FP32-manual-cast CPU path.
 2. **If GPU denoise is 10.8 s, GPU TE 0.6 s, OV CPU TE 0.44 s and handoff ~0.2 s, what is the cycle speedup?** `(10.8+0.6)/(max(0.44,10.8)+0.2) ≈ 11.4/11.0 ≈ 1.04×`, not 20×. Measured: 1.04–1.07× steady.
 3. **Why is `cosine ≥ 0.997` not automatic typography PASS?** Diffusion can amplify a small conditioning difference; inspect native-resolution crops and human review. Our p3 crop is evidence, not a PASS.
 4. **BF16-vs-BF16 backend or BF16-vs-INT8?** C1b vs C0 changes backend plus BF16 execution; C2 vs C1a changes quantization. They are separate causal axes.
