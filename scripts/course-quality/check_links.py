@@ -80,12 +80,16 @@ def check_file(path: Path, root: Path) -> list[str]:
     if rel_parts[0] in ("docs", "course", ".") or path.name.startswith("README"):
         if not any(d in rel_parts for d in BARE_PATH_SKIP_DIRS):
             for m in BARE_PATH.finditer(text):
-                t = m.group(1).rstrip("/.")
+                raw = m.group(1)
+                if raw.startswith(HOST_ONLY_PREFIXES):
+                    continue
+                t = raw.rstrip("/.")
                 if t.startswith(HOST_ONLY_PREFIXES):
                     continue
                 if "*" in t or "<" in t or "..." in t:
                     continue
-                if any(t == f or t.startswith(f) for f in FUTURE_DESTINATIONS):
+                if any(raw == f or raw.startswith(f) or t == f or t.startswith(f)
+                       for f in FUTURE_DESTINATIONS):
                     continue
                 if not (root / t).exists():
                     problems.append(f"{path.relative_to(root)}: bare path does not exist -> {t}")

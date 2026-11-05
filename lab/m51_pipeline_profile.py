@@ -44,9 +44,10 @@ REPO = Path(__file__).resolve().parents[1]
 sys.path[:] = [p for p in sys.path if Path(p or ".").resolve() != REPO / "lab"]
 sys.path.insert(0, str(REPO))
 
-from lab.m51_pipeline import PROMPTS, SEED, WorkerClient, artifact_root, server_rss  # noqa: E402
-from lab import m51_e2e as E  # noqa: E402
-from lab import comfyui_client  # noqa: E402
+# NOTE: lab.m51_pipeline and lab.m51_e2e pull heavy deps (numpy/safetensors/
+# torch) at import time; they are imported lazily inside the batch/main
+# functions so that this module (and its pure helper attribute_request)
+# stays importable on CPU-only CI.
 
 
 def attribute_request(rec: dict) -> dict:
@@ -86,6 +87,7 @@ def run_one_profiled(server, tag: str, wf: dict, raw_dir: Path, mode: str = "pol
     """
     import requests
 
+    from lab import comfyui_client
     mon = comfyui_client.RunMonitor(server.base_url)
     mon.start()
     rec: dict = {"tag": tag, "mode": mode}
@@ -177,6 +179,7 @@ def run_one_fast(mon, server, tag: str, wf: dict, raw_dir: Path, ev0: int,
     """
     import requests
 
+    from lab import comfyui_client
     rec: dict = {"tag": tag, "mode": "fast"}
     rec["t_pre_post"] = time.perf_counter()
     pid = comfyui_client.post_prompt(server.base_url, wf, client_id=mon.client_id)
@@ -239,6 +242,8 @@ def run_one_fast(mon, server, tag: str, wf: dict, raw_dir: Path, ev0: int,
 def batch_fast(srv, batch_id: str, outdir: Path, worker, cond_dir: Path) -> dict:
     """Optimized 4-request precomputed batch: one persistent RunMonitor,
     existing next-conditioning prefetch, per-request cond-file SHA256."""
+    from lab import comfyui_client, m51_e2e as E
+    from lab.m51_pipeline import PROMPTS
     from concurrent.futures import ThreadPoolExecutor
 
     mon = comfyui_client.RunMonitor(srv.base_url)
@@ -400,6 +405,8 @@ def main() -> None:
     run = Path(args.run)
     outdir = run / "pipeline_profile"
     (outdir / "raw").mkdir(parents=True, exist_ok=True)
+    from lab import m51_e2e as E
+    from lab.m51_pipeline import PROMPTS, WorkerClient, artifact_root, server_rss
     from lab.server import ComfyServer
     E.install_node()
 
