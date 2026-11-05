@@ -1,0 +1,403 @@
+{
+  "run": "runs/pr2-p4-pipewarm-120822",
+  "design": {
+    "sessions": "A warm -> 2x4 requests; C warm -> 2x4 requests (precomputed only); A2 warm -> 1x4 requests (order-drift control)",
+    "warm_definition": "one full generation completed in-session before measurement",
+    "steady_definition": "all measured requests run back-to-back, models resident, no idle",
+    "prompts": [
+      {
+        "id": "req1",
+        "text": "\u5915\u9633\u4e0b\u7684\u6c5f\u5357\u6c34\u4e61\u5c0f\u9547\uff0c\u77f3\u6865\u6a2a\u8de8\u6cb3\u9053\uff0c\u4e4c\u7bf7\u8239\u7f13\u7f13\u9a76\u8fc7\uff0c\u767d\u5899\u9edb\u74e6\u7684\u6c11\u5c45\u5012\u6620\u5728\u91d1\u8272\u7684\u6cb3\u9762\u4e0a\uff0c\u8fdc\u5904\u708a\u70df\u8885\u8885\uff0c\u8d85\u9ad8\u6e05\u6444\u5f71\u8d28\u611f",
+        "seed": 42
+      },
+      {
+        "id": "req2",
+        "text": "A lone hiker standing on a mountain ridge at dawn, a sea of clouds below, first light hitting the peaks, ultra-detailed landscape photography",
+        "seed": 42
+      },
+      {
+        "id": "req3",
+        "text": "\u7535\u5f71\u6d77\u62a5\u8bbe\u8ba1\uff0c\u4e3b\u6807\u9898\u6587\u5b57\u300c\u661f\u9645\u8fdc\u822a\u300d\uff0c\u526f\u6807\u9898\u6587\u5b57\u300c2026\u5e7410\u670830\u65e5 \u5168\u7403\u4e0a\u6620\u300d\uff0c\u753b\u9762\u662f\u6df1\u7a7a\u4e2d\u7684\u5de8\u578b\u98de\u8239\u4e0e\u7eda\u4e3d\u661f\u4e91\uff0c\u6807\u9898\u6587\u5b57\u6e05\u6670\u9510\u5229\u3001\u6392\u7248\u5c45\u4e2d",
+        "seed": 42
+      },
+      {
+        "id": "req4",
+        "text": "\u6e05\u6668\u7684\u7af9\u6797\u5c0f\u5f84\uff0c\u8584\u96fe\u5f25\u6f2b\uff0c\u9633\u5149\u900f\u8fc7\u7af9\u53f6\u6d12\u4e0b\u6591\u9a73\u5149\u5f71\uff0c\u4e00\u6761\u5c0f\u6eaa\u873f\u8712\u6d41\u8fc7\uff0c\u8d85\u9ad8\u6e05\u6444\u5f71\u8d28\u611f",
+        "seed": 42
+      }
+    ]
+  },
+  "arms": {
+    "A": {
+      "server_warmup_s": 49.321,
+      "batches": [
+        {
+          "batch": "A1",
+          "batch_wall_s": 54.421,
+          "requests": [
+            {
+              "req": "req1",
+              "wall_s": 13.032,
+              "text_encode_s": 0.568,
+              "ksampler_s": 10.703,
+              "vae_s": 0.894,
+              "vram_peak_mb": 33671.1,
+              "vram_residency_mb": 33090.7,
+              "t_end": 1793880573.2204516
+            },
+            {
+              "req": "req2",
+              "wall_s": 13.03,
+              "text_encode_s": 0.319,
+              "ksampler_s": 10.763,
+              "vae_s": 0.909,
+              "vram_peak_mb": 34167.6,
+              "vram_residency_mb": 33096.7,
+              "t_end": 1793880586.7412453
+            },
+            {
+              "req": "req3",
+              "wall_s": 13.033,
+              "text_encode_s": 0.603,
+              "ksampler_s": 10.753,
+              "vae_s": 0.893,
+              "vram_peak_mb": 33688.9,
+              "vram_residency_mb": 33096.7,
+              "t_end": 1793880600.4813814
+            },
+            {
+              "req": "req4",
+              "wall_s": 13.033,
+              "text_encode_s": 0.316,
+              "ksampler_s": 10.71,
+              "vae_s": 0.894,
+              "vram_peak_mb": 33978.9,
+              "vram_residency_mb": 33096.7,
+              "t_end": 1793880613.9305587
+            }
+          ],
+          "server_rss_mb": 1918.1
+        },
+        {
+          "batch": "A2",
+          "batch_wall_s": 54.136,
+          "requests": [
+            {
+              "req": "req1",
+              "wall_s": 13.029,
+              "text_encode_s": 0.558,
+              "ksampler_s": 10.696,
+              "vae_s": 0.894,
+              "vram_peak_mb": 33907.4,
+              "vram_residency_mb": 33096.7,
+              "t_end": 1793880627.5574403
+            },
+            {
+              "req": "req2",
+              "wall_s": 13.032,
+              "text_encode_s": 0.329,
+              "ksampler_s": 10.706,
+              "vae_s": 0.894,
+              "vram_peak_mb": 34167.6,
+              "vram_residency_mb": 33096.7,
+              "t_end": 1793880640.9446883
+            },
+            {
+              "req": "req3",
+              "wall_s": 13.03,
+              "text_encode_s": 0.601,
+              "ksampler_s": 10.753,
+              "vae_s": 0.894,
+              "vram_peak_mb": 33688.9,
+              "vram_residency_mb": 33096.7,
+              "t_end": 1793880654.65384
+            },
+            {
+              "req": "req4",
+              "wall_s": 13.03,
+              "text_encode_s": 0.318,
+              "ksampler_s": 10.696,
+              "vae_s": 0.893,
+              "vram_peak_mb": 34167.6,
+              "vram_residency_mb": 33096.7,
+              "t_end": 1793880668.066539
+            }
+          ],
+          "server_rss_mb": 1918.1
+        }
+      ]
+    },
+    "C": {
+      "server_warmup_s": 43.943,
+      "worker_load_s": 4.644,
+      "worker_meta": {
+        "openvino": "2026.4.1-22982-e213a147257-releases/2026/4",
+        "device": "CPU",
+        "execution_devices": [
+          "CPU"
+        ],
+        "inference_precision": "<Type: 'bfloat16'>",
+        "performance_hint": "LATENCY",
+        "execution_mode": "ExecutionMode.PERFORMANCE",
+        "threads": 16,
+        "num_streams": 1,
+        "read_s": 0.244,
+        "compile_s": 1.428,
+        "embed_table_load_s": 0.909,
+        "tokenizer_load_s": 0.143,
+        "model_dir": "/workspace/m51/qwen-image-inference-tuning-course/runs/m51-ov-artifacts/bf16",
+        "model_xml": "language_model_bf16.xml",
+        "dynamic_quant_group": null
+      },
+      "batches": [
+        {
+          "batch": "C1",
+          "batch_wall_s": 52.773,
+          "requests": [
+            {
+              "req": "req1",
+              "gen_start": 1793880729.294777,
+              "gen_end": 1793880742.3906147,
+              "gen_wall_s": 12.088,
+              "ksampler_s": 10.78,
+              "vae_s": 0.879,
+              "vram_peak_mb": 17035.6,
+              "vram_residency_mb": 16443.4,
+              "cpu_encode_start": 1793880728.6613667,
+              "cpu_encode_end": 1793880729.2942326,
+              "cpu_encode_s": 0.6191,
+              "next_overlap_s": 0.394
+            },
+            {
+              "req": "req2",
+              "gen_start": 1793880742.3906841,
+              "gen_end": 1793880755.3898776,
+              "gen_wall_s": 12.031,
+              "ksampler_s": 10.72,
+              "vae_s": 0.877,
+              "vram_peak_mb": 16996.8,
+              "vram_residency_mb": 16451.6,
+              "cpu_encode_start": 1793880729.2950864,
+              "cpu_encode_end": 1793880729.6890733,
+              "cpu_encode_s": 0.3878,
+              "next_overlap_s": 0.677
+            },
+            {
+              "req": "req3",
+              "gen_start": 1793880755.3900225,
+              "gen_end": 1793880768.3461282,
+              "gen_wall_s": 12.027,
+              "ksampler_s": 10.687,
+              "vae_s": 0.876,
+              "vram_peak_mb": 17201.4,
+              "vram_residency_mb": 16452.1,
+              "cpu_encode_start": 1793880742.391069,
+              "cpu_encode_end": 1793880743.0678182,
+              "cpu_encode_s": 0.6721,
+              "next_overlap_s": 0.377
+            },
+            {
+              "req": "req4",
+              "gen_start": 1793880768.3461466,
+              "gen_end": 1793880781.4337747,
+              "gen_wall_s": 12.077,
+              "ksampler_s": 10.753,
+              "vae_s": 0.878,
+              "vram_peak_mb": 17081.5,
+              "vram_residency_mb": 16443.2,
+              "cpu_encode_start": 1793880755.3903723,
+              "cpu_encode_end": 1793880755.766881,
+              "cpu_encode_s": 0.3722
+            }
+          ],
+          "server_rss_mb": 1824.7,
+          "worker_rss_mb": 16819.0
+        },
+        {
+          "batch": "C2",
+          "batch_wall_s": 52.71,
+          "requests": [
+            {
+              "req": "req1",
+              "gen_start": 1793880781.9969637,
+              "gen_end": 1793880794.9861414,
+              "gen_wall_s": 12.198,
+              "ksampler_s": 10.869,
+              "vae_s": 0.889,
+              "vram_peak_mb": 17983.1,
+              "vram_residency_mb": 16443.4,
+              "cpu_encode_start": 1793880781.434593,
+              "cpu_encode_end": 1793880781.9964812,
+              "cpu_encode_s": 0.5593,
+              "next_overlap_s": 0.467
+            },
+            {
+              "req": "req2",
+              "gen_start": 1793880794.9862154,
+              "gen_end": 1793880808.0068133,
+              "gen_wall_s": 12.032,
+              "ksampler_s": 10.734,
+              "vae_s": 0.878,
+              "vram_peak_mb": 17254.2,
+              "vram_residency_mb": 16451.6,
+              "cpu_encode_start": 1793880781.9971395,
+              "cpu_encode_end": 1793880782.464287,
+              "cpu_encode_s": 0.4649,
+              "next_overlap_s": 0.672
+            },
+            {
+              "req": "req3",
+              "gen_start": 1793880808.0068846,
+              "gen_end": 1793880821.0801513,
+              "gen_wall_s": 12.067,
+              "ksampler_s": 10.694,
+              "vae_s": 0.875,
+              "vram_peak_mb": 17023.9,
+              "vram_residency_mb": 16443.6,
+              "cpu_encode_start": 1793880794.9866123,
+              "cpu_encode_end": 1793880795.658502,
+              "cpu_encode_s": 0.6693,
+              "next_overlap_s": 0.526
+            },
+            {
+              "req": "req4",
+              "gen_start": 1793880821.0801702,
+              "gen_end": 1793880834.1438577,
+              "gen_wall_s": 12.053,
+              "ksampler_s": 10.734,
+              "vae_s": 0.878,
+              "vram_peak_mb": 16996.9,
+              "vram_residency_mb": 16451.7,
+              "cpu_encode_start": 1793880808.0070765,
+              "cpu_encode_end": 1793880808.5329247,
+              "cpu_encode_s": 0.5238
+            }
+          ],
+          "server_rss_mb": 1822.0,
+          "worker_rss_mb": 16819.0
+        }
+      ]
+    },
+    "A2": {
+      "server_warmup_s": 37.942,
+      "batches": [
+        {
+          "batch": "A2",
+          "batch_wall_s": 70.265,
+          "requests": [
+            {
+              "req": "req1",
+              "wall_s": 30.064,
+              "text_encode_s": 0.678,
+              "ksampler_s": 15.646,
+              "vae_s": 0.942,
+              "vram_peak_mb": 34310.1,
+              "vram_residency_mb": 33090.7,
+              "t_end": 1793880912.4185028
+            },
+            {
+              "req": "req2",
+              "wall_s": 13.033,
+              "text_encode_s": 0.314,
+              "ksampler_s": 10.929,
+              "vae_s": 0.894,
+              "vram_peak_mb": 33907.2,
+              "vram_residency_mb": 33096.7,
+              "t_end": 1793880925.735183
+            },
+            {
+              "req": "req3",
+              "wall_s": 13.033,
+              "text_encode_s": 0.6,
+              "ksampler_s": 10.732,
+              "vae_s": 0.893,
+              "vram_peak_mb": 33688.9,
+              "vram_residency_mb": 33096.7,
+              "t_end": 1793880939.3757484
+            },
+            {
+              "req": "req4",
+              "wall_s": 13.033,
+              "text_encode_s": 0.313,
+              "ksampler_s": 10.688,
+              "vae_s": 0.893,
+              "vram_peak_mb": 34155.2,
+              "vram_residency_mb": 33096.7,
+              "t_end": 1793880952.5018585
+            }
+          ],
+          "server_rss_mb": 2467.5
+        }
+      ]
+    }
+  },
+  "summary": {
+    "A_steady_per_request_s": {
+      "n": 8,
+      "median": 13.031,
+      "min": 13.029,
+      "max": 13.033,
+      "values": [
+        13.032,
+        13.03,
+        13.033,
+        13.033,
+        13.029,
+        13.032,
+        13.03,
+        13.03
+      ]
+    },
+    "A2_control_per_request_s": {
+      "n": 4,
+      "median": 13.033,
+      "values": [
+        30.064,
+        13.033,
+        13.033,
+        13.033
+      ]
+    },
+    "C_steady_per_request_s": {
+      "n": 8,
+      "median": 12.06,
+      "min": 12.027,
+      "max": 12.198,
+      "values": [
+        12.088,
+        12.031,
+        12.027,
+        12.077,
+        12.198,
+        12.032,
+        12.067,
+        12.053
+      ]
+    },
+    "A_vs_C_steady_median_ratio": 1.0805,
+    "A_vs_C_steady_spread_note": "ratio of medians; single host, n=8 vs 8",
+    "A_batch_walls_s": [
+      54.421,
+      54.136
+    ],
+    "C_batch_walls_s": [
+      52.773,
+      52.71
+    ],
+    "A_images_per_min_steady": 4.6,
+    "C_images_per_min_steady": 4.97,
+    "C_overlap_total_s": 3.113,
+    "C_cpu_encode_s": [
+      0.6191,
+      0.3878,
+      0.6721,
+      0.3722,
+      0.5593,
+      0.4649,
+      0.6693,
+      0.5238
+    ],
+    "A_vram_peak_mb": 34167.6,
+    "C_vram_peak_mb": 17983.1
+  }
+}

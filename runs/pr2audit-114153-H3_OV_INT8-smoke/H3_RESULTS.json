@@ -1,0 +1,114 @@
+{
+  "experiment": "H3_OV_INT8",
+  "status": "PASS",
+  "gates": {
+    "environment": "PASS",
+    "artifact_integrity": "PASS",
+    "encoder_runtime": "PASS",
+    "token_contract": "PASS",
+    "conditioning_alignment": "FAIL",
+    "e2e_gpu": "NOT_RUN",
+    "performance": "PASS",
+    "human_quality": "PENDING"
+  },
+  "release_status": "RELEASE_FAIL",
+  "timestamp": "2026-11-05T11:42:07+0000",
+  "source_head": "6aacd6f502ed37bfac77ff42ae0c04d056c387de",
+  "artifact_digest": "330f3a533d661e7045e92626306aba76d109e3aa166224c6dd906d8702325059",
+  "artifact_verification": {
+    "status": "PASS",
+    "warnings": [],
+    "manifest": {
+      "source_dir": "runs/m51-20261105-cleanroom-01/ov/fp32",
+      "source_xml_sha256": "9fbbc226be2ba66b00f7e8c801ec7e6491e3f0fead7b62a091a55577fe47a2ce",
+      "source_bin_bytes": 27784287208,
+      "tool": "nncf 3.4.0 compress_weights",
+      "mode": "INT8_ASYM",
+      "ratio": 1.0,
+      "group_size": -1,
+      "embeddings": "BF16->FP32 runtime gather from pinned checkpoint (not int8)",
+      "output_xml_sha256": "511cb158365382ca2134966ba77c51a3be9c79b49fefac96f2fe3dcb271583c3",
+      "output_bin_bytes": 6951187432,
+      "output_bin_sha256": "330f3a533d661e7045e92626306aba76d109e3aa166224c6dd906d8702325059",
+      "output_gib": 6.474
+    },
+    "files": {
+      "language_model_int8.bin": {
+        "sha256": "330f3a533d661e7045e92626306aba76d109e3aa166224c6dd906d8702325059",
+        "pinned_via": "output_bin_sha256"
+      },
+      "language_model_int8.xml": {
+        "sha256": "511cb158365382ca2134966ba77c51a3be9c79b49fefac96f2fe3dcb271583c3",
+        "pinned_via": "output_xml_sha256"
+      }
+    }
+  },
+  "artifact_manifest": {
+    "source_dir": "runs/m51-20261105-cleanroom-01/ov/fp32",
+    "source_xml_sha256": "9fbbc226be2ba66b00f7e8c801ec7e6491e3f0fead7b62a091a55577fe47a2ce",
+    "source_bin_bytes": 27784287208,
+    "tool": "nncf 3.4.0 compress_weights",
+    "mode": "INT8_ASYM",
+    "ratio": 1.0,
+    "group_size": -1,
+    "embeddings": "BF16->FP32 runtime gather from pinned checkpoint (not int8)",
+    "output_xml_sha256": "511cb158365382ca2134966ba77c51a3be9c79b49fefac96f2fe3dcb271583c3",
+    "output_bin_bytes": 6951187432,
+    "output_bin_sha256": "330f3a533d661e7045e92626306aba76d109e3aa166224c6dd906d8702325059",
+    "output_gib": 6.474
+  },
+  "environment": {
+    "openvino": "2026.4.1-22982-e213a147257-releases/2026/4",
+    "admission": "GO",
+    "admission_reasons": [],
+    "ram_gate": {
+      "status": "PASS",
+      "reason": null,
+      "basis": "cgroup_limit_minus_anon",
+      "available_bytes": 55568912384,
+      "usable_bytes": 53421428736,
+      "required_bytes": 21474836480,
+      "safety_bytes": 2147483648,
+      "concurrent_reserve_bytes": 0,
+      "cgroup": {
+        "limit_bytes": 59055800320,
+        "current_bytes": 41870376960,
+        "anon_bytes": 3486887936
+      }
+    }
+  },
+  "measurements": {
+    "encode_s": [
+      0.933928
+    ],
+    "load_s": 4.089,
+    "rss_peak_mb": 16822.7,
+    "shape": [
+      [
+        1,
+        52,
+        4096
+      ]
+    ],
+    "n_tokens_full": [
+      66
+    ]
+  },
+  "token_contract_detail": {
+    "checked": [
+      "p1-zh-scene"
+    ]
+  },
+  "conditioning_alignment_detail": {
+    "hash_repro": "reproduced byte-identical vs runs/m51-20261105-cleanroom-01",
+    "committed_cleanroom_verdict": "FAIL",
+    "note": "hash-repro proves determinism; the numerical verdict comes from the cleanroom alignment vs C0 and is never overridden here"
+  },
+  "evidence_paths": [
+    "/workspace/m51/qwen-image-inference-tuning-course/runs/pr2audit-114153-H3_OV_INT8-smoke/probe_H3_OV_INT8.json",
+    "/workspace/m51/qwen-image-inference-tuning-course/runs/pr2audit-114153-H3_OV_INT8-smoke/stdout.log",
+    "/workspace/m51/qwen-image-inference-tuning-course/runs/pr2audit-114153-H3_OV_INT8-smoke/stderr.log"
+  ],
+  "mode": "smoke",
+  "runtime_s": 7.99
+}

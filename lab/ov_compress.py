@@ -16,7 +16,7 @@ def main():
     t=time.time(); m=ov.Core().read_model(str(Path(args.src)/args.xml)); print("read",round(time.time()-t,2),flush=True)
     t=time.time(); ov.save_model(m,str(out/"language_model_bf16.xml"),compress_to_fp16=True); print("saved",round(time.time()-t,2),flush=True)
     b=out/"language_model_bf16.bin"; x=out/"language_model_bf16.xml"
-    def sha(f): 
+    def sha(f):
         h=hashlib.sha256()
         with open(f,"rb") as fh:
             for blk in iter(lambda: fh.read(1<<23), b""): h.update(blk)
