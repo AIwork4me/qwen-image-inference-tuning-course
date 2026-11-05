@@ -185,6 +185,24 @@ Implementation files: `lab/ov_export.py`, `lab/ov_compress.py`, `lab/ov_quantize
   cfg=1 *(at cfg=1 the negative branch is not consumed; at cfg>1 it is)* — then explain
   the mechanisms behind the three speedup notions (1.33× / 1.081× / 1.029×) and why
   collapsing them into one number is always misleading.
+- **Scientific fairness (publication-closure exercise):** a developer improves the
+  C client from 52.76 s to 50.32 s per four-request batch (persistent monitor,
+  +4.85%, run `overnight-course-v2-a7fa69a-p2ab-152000`) and then compares
+  **C-fast vs A-original** (4.77 vs 4.42 img/min, "1.079×"). Why is that NOT a
+  fair estimate of the OpenVINO architecture benefit, and what experiment
+  separates the client effect from the architecture effect?
+  *(Answer: A-original also pays the same per-request monitor teardown
+  (~0.5–1.0 s/request, measured in both arms), so the comparison mixes two
+  client generations across arms — part of the "gain" is fixing the baseline's
+  harness, not the deployment. A fair estimate needs the 2×2 factorial
+  {A,C} × {original client, fast client}, same warm sessions, interleaved
+  batches: the architecture effect is A-vs-C **under equivalent clients**,
+  the client effect is original-vs-fast **within each arm**, and the
+  interaction tells whether the client fix masks or reveals the architecture
+  difference. Measured answer: see the P4 fair-client factorial
+  [`docs/publication-closure/P4_FAIR_CLIENT_AB.md`](../../docs/publication-closure/P4_FAIR_CLIENT_AB.md)
+  and the registry entry `RATIO-CFAST-VS-AWARM-1.079`, which is kept only as
+  the declared cross-population motivation for that factorial.)*
 
 **Acceptance:** the student can explain the conditioning bridge, compute a fair ratio, reproduce the break-even, and refuse to call the 331× encoder gain a 331× image-generation gain.
 
