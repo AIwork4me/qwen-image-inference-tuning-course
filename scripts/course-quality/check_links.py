@@ -24,7 +24,8 @@ BARE_PATH = re.compile(r"`((?:docs|course|evidence|runs|lab|scripts)/[\w./-]+)`"
 
 # Paths that legitimately exist only on the measurement host (documented as
 # host-only in the evidence audits): never required to resolve in git.
-HOST_ONLY_PREFIXES = ("runs/raw/", "runs/quality/", "runs/m51-20261105-cleanroom-01/e2e/raw/")
+HOST_ONLY_PREFIXES = ("runs/raw/", "runs/quality/", "runs/m51-20261105-cleanroom-01/e2e/raw/",
+                      "runs/m51-ov-artifacts", "runs/pr2-p4-pipewarm-120822/pipeline_warm/raw/")
 # Forward-looking destinations described in instructional text (files the
 # owner or students will create): not existence claims, never flagged.
 FUTURE_DESTINATIONS = (
@@ -65,15 +66,28 @@ def extract_targets(md_text: str) -> tuple[set[str], set[str], set[str]]:
     return local, anchors, ext
 
 
-def check_file(path: Path, root: Path) -> list[str]:
+def git_tracked_paths(root: Path) -> tuple[set[str], set[str]]:
+    """(tracked files, tracked dirs) — a checkout materializes exactly these."""
+    out = subprocess.run(["git", "ls-files"], cwd=root, capture_output=True, text=True)
+    files = set(out.stdout.split("\n"))
+    dirs = {str(Path(p).parent) for p in files if p}
+    return files, dirs
+
+
+def check_file(path: Path, root: Path,
+               tracked: tuple[set[str], set[str]] | None = None) -> list[str]:
     problems = []
+    if tracked is None:
+        tracked = git_tracked_paths(root)
+    tracked_files, tracked_dirs = tracked
     text = path.read_text(encoding="utf-8", errors="replace")
     local, _anchors, _ext = extract_targets(text)
     for target in sorted(local):
         if target.startswith(HOST_ONLY_PREFIXES):
             continue
         resolved = (path.parent / target.split("#")[0]).resolve()
-        if not resolved.exists():
+        rel = str(resolved.relative_to(root))
+        if not resolved.exists() and rel not in tracked_files and rel not in tracked_dirs:
             problems.append(f"{path.relative_to(root)}: broken link -> {target}")
     # bare repo-path references in backticks (common drift source)
     rel_parts = path.relative_to(root).parts
@@ -91,7 +105,7 @@ def check_file(path: Path, root: Path) -> list[str]:
                 if any(raw == f or raw.startswith(f) or t == f or t.startswith(f)
                        for f in FUTURE_DESTINATIONS):
                     continue
-                if not (root / t).exists():
+                if not (root / t).exists() and t not in tracked_files and t not in tracked_dirs:
                     problems.append(f"{path.relative_to(root)}: bare path does not exist -> {t}")
     return problems
 
@@ -99,6 +113,7 @@ def check_file(path: Path, root: Path) -> list[str]:
 def run(root: Path, list_external: bool = False) -> tuple[list[str], set[str]]:
     problems: list[str] = []
     external: set[str] = set()
+    tracked = git_tracked_paths(root)
     for md in tracked_markdown(root):
         try:
             text = md.read_text(encoding="utf-8", errors="replace")
@@ -107,7 +122,7 @@ def run(root: Path, list_external: bool = False) -> tuple[list[str], set[str]]:
             continue
         _l, _a, ext = extract_targets(text)
         external |= ext
-        problems += check_file(md, root)
+        problems += check_file(md, root, tracked)
     return problems, external
 
 

@@ -159,3 +159,17 @@ def test_attribute_request_derives_phases_and_tolerates_missing():
     # missing fields must yield None, never invented numbers
     b = attribute_request({"mode": "ws"})
     assert b["post_http_s"] is None and b["wall_s"] is None
+
+
+def test_check_links_uses_git_tracked_fallback(tmp_path):
+    # a bare path that is gitignored (host-only) must not fail when it is
+    # absent, and must still fail when it is neither present nor tracked.
+    import subprocess
+    docs = tmp_path / "docs"; docs.mkdir()
+    (docs / "a.md").write_text("see `runs/m51-ov-artifacts` and `runs/ghost-dir`\n")
+    subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True)
+    subprocess.run(["git", "add", "-A"], cwd=tmp_path, check=True)
+    tracked = check_links.git_tracked_paths(tmp_path)
+    problems = check_links.check_file(docs / "a.md", tmp_path, tracked)
+    assert any("runs/ghost-dir" in p for p in problems)
+    assert not any("m51-ov-artifacts" in p for p in problems)
