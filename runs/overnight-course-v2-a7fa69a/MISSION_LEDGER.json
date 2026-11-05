@@ -4,7 +4,7 @@
   "source_head": "a7fa69ae18800fc1f7a83e24de1c0b8bad2e7eaa",
   "source_branch": "feat/m5-1-openvino-cpu-te-course (PR #2 head)",
   "work_branch": "feat/world-class-bilingual-inference-course",
-  "phase": "P1+P2+P3(large part) complete; P4-P8 remaining",
+  "phase": "COMPLETE - P0..P8 done, ready for owner review",
   "p0": {
     "evidence_freeze": [
       "runs/overnight-course-v2-a7fa69a/p0_blob_freeze.txt (579 blobs)",
@@ -31,7 +31,9 @@
   ],
   "resource_usage": {
     "gpu_minutes_used": 23,
-    "wall_hours_used_est": 4.0
+    "wall_hours_used_est": 6.5,
+    "added_git_files": 48,
+    "disk_added_mib": "~60 (incl. run records)"
   },
   "p1": {
     "methodology": "course/METHODOLOGY.md + .zh-CN.md (complete, bilingual)",
@@ -65,6 +67,23 @@
       "onboarding docs bilingual",
       "quality tools",
       "final audit+PR"
+    ]
+  },
+  "p4": "README EN/ZH redesigned (parity, hero arc, tracks, mermaid)",
+  "p5": "5 onboarding docs bilingual + optimization PR template + docs/research/",
+  "p6": "LECTURE_DEMO EN/ZH: 100-min agenda, 6 Q&As with misconceptions, research question, network-free",
+  "p7": "4 course-quality gates + 16 tests (negative-tested), CI wired; 100 tests green",
+  "p8": {
+    "final_audit": "docs/quality-v2/FINAL_RELEASE_AUDIT.md",
+    "evidence_immutability": "evidence/ 254/254 byte-identical; frozen campaign blobs 0 changed, 6 digest-verified PNGs added",
+    "recommendation": "READY_FOR_OWNER_REVIEW",
+    "commits": [
+      "914acc8 audit",
+      "45a9563 curriculum",
+      "648eefc perf",
+      "9ee2035 readme/workflows",
+      "da2c6b8 gates",
+      "+ final audit commit"
     ]
   }
 }
