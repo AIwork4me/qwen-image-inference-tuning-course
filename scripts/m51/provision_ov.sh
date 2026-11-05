@@ -2,10 +2,11 @@
 # M5.1 OPTIONAL OpenVINO provisioning. Never part of the default M0-M4 bootstrap.
 #
 #   bash scripts/m51/provision_ov.sh              # export FP32 + BF16-compressed + INT8
-#   bash scripts/m51/provision_ov.sh --check-only # verify existing artifacts only
+#   bash scripts/m51/provision_ov.sh --check-only # byte-verify existing artifacts only
 #
 # Requires: the pinned text encoder from scripts/cloud/start.sh, ~60 GB free,
 # ~45 GB RAM peak for the FP32 export, and the isolated .venv-ov.
+# Artifact root: $M51_OV_ARTIFACTS, else <repo>/runs/m51-ov-artifacts.
 set -euo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 ART="${M51_OV_ARTIFACTS:-$REPO/runs/m51-ov-artifacts}"
@@ -31,14 +32,23 @@ mkdir -p "$ART"
 FREE_GIB="$(df -BG "$ART" | awk 'NR==2{gsub("G","",$4);print $4}')"
 echo "  free on artifact volume: ${FREE_GIB} GiB; artifacts: $ART"
 if [[ $CHECK_ONLY == 1 ]]; then
+  # Real byte-level verification (streaming SHA256 vs conversion manifest,
+  # size + identity checks, safe cache). No downloads, no conversions.
   ART="$ART" "$PY" - <<'PY'
 import os,sys; sys.path.insert(0,".")
-from lab.m51_contract import artifact_status
-for name,files in [("fp32",["language_model_fp32.xml","language_model_fp32.bin"]),
-                   ("bf16",["language_model_bf16.xml","language_model_bf16.bin"]),
-                   ("int8",["language_model_int8.xml","language_model_int8.bin"])]:
-    print(name, artifact_status(os.path.join(os.environ["ART"],name), files))
+from lab.m51_contract import verify_artifact
+specs=[("fp32",["language_model_fp32.xml","language_model_fp32.bin"],{"dtype":"fp32"}),
+       ("bf16",["language_model_bf16.xml","language_model_bf16.bin"],{"storage":"FP16","runtime_precision":"bf16"}),
+       ("int8",["language_model_int8.xml","language_model_int8.bin"],{"mode":"INT8_ASYM"})]
+rc=0
+for name,files,ident in specs:
+    r=verify_artifact(os.path.join(os.environ["ART"],name),files,expected_identity=ident)
+    print(name, r["status"], r.get("reason","") or "", r.get("warnings",""))
+    if r["status"]=="BLOCKED": rc=1
+raise SystemExit(rc)
 PY
+  [[ $? == 0 ]] || die "artifact verification failed (see reasons above)"
+  echo "ARTIFACTS_VERIFIED"
   exit 0
 fi
 [[ ${FREE_GIB:-0} -ge 55 ]] || die "need ~55 GiB free for FP32+BF16+INT8 IRs (and more for caches)"
@@ -52,7 +62,11 @@ if [[ ! -x .venv-ov/bin/python ]]; then
     echo "$TORCH_SP" > "$SP/system_torch.pth"
   fi
 fi
-TMPDIR="${TMPDIR:-/workspace/tmp}" PIP_PROGRESS_BAR=off .venv-ov/bin/pip install -q --index-url https://pypi.org/simple/ \
+# Portable scratch dir (a small /tmp tmpfs must never break the pip install);
+# honors a pre-set TMPDIR.
+scratch="${TMPDIR:-$REPO/.tmp}"
+mkdir -p "$scratch"
+TMPDIR="$scratch" PIP_PROGRESS_BAR=off .venv-ov/bin/pip install -q --index-url https://pypi.org/simple/ \
   openvino==2026.4.1 nncf==3.4.0 comfy-aimdo==0.6.0 comfy-kitchen==0.2.40
 .venv-ov/bin/python -c "import openvino,nncf,torch;print('openvino',openvino.__version__,'nncf',nncf.__version__,'torch',torch.__version__)"
 
@@ -73,13 +87,14 @@ mkdir -p "$ART/bf16" "$ART/int8"
 .venv-ov/bin/python -u lab/ov_compress.py --src "$ART/fp32" --out "$ART/bf16"
 .venv-ov/bin/python -u lab/ov_quantize.py --src "$ART/fp32" --out "$ART/int8"
 
-C "Artifact status"
+C "Artifact status (byte-verified)"
 ART="$ART" "$PY" - <<'PY'
 import os,sys; sys.path.insert(0,".")
-from lab.m51_contract import artifact_status
-for name,files in [("fp32",["language_model_fp32.xml","language_model_fp32.bin"]),
-                   ("bf16",["language_model_bf16.xml","language_model_bf16.bin"]),
-                   ("int8",["language_model_int8.xml","language_model_int8.bin"])]:
-    print(name, artifact_status(os.path.join(os.environ["ART"],name), files)["status"])
+from lab.m51_contract import verify_artifact
+specs=[("fp32",["language_model_fp32.xml","language_model_fp32.bin"],{"dtype":"fp32"}),
+       ("bf16",["language_model_bf16.xml","language_model_bf16.bin"],{"storage":"FP16","runtime_precision":"bf16"}),
+       ("int8",["language_model_int8.xml","language_model_int8.bin"],{"mode":"INT8_ASYM"})]
+for name,files,ident in specs:
+    print(name, verify_artifact(os.path.join(os.environ["ART"],name),files,expected_identity=ident)["status"])
 PY
 echo "DONE. Run: .venv-lab/bin/python -m lab run --experiment H3_OV_BF16 --smoke"

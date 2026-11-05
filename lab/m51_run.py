@@ -1,59 +1,131 @@
-"""H3_OV_* experiment runner: explicit, optional, and honest about blockers."""
+"""H3_OV_* experiment runner: explicit, optional, and honest about blockers.
+
+P0-A release-gate semantics: a successful encoder execution reports
+encoder_runtime=PASS, never an automatic overall accuracy/release PASS. The
+result carries a gates dict (environment, artifact_integrity, encoder_runtime,
+token_contract, conditioning_alignment, e2e_gpu, performance, human_quality)
+plus a derived release_status. Missing evidence stays NOT_RUN; a human-quality
+verdict can only come from an explicit human record (settle_human_quality).
+
+P0-B: admission runs byte-level verify_artifact() (streaming SHA256 vs the
+conversion manifest, size checks, identity checks) once per run — never per
+inference request.
+
+P1-A: RAM admission uses conservative_ram_gate() (host MemAvailable and
+cgroup limit minus non-reclaimable anon, minus safety headroom), not the
+cgroup ceiling.
+"""
 from __future__ import annotations
 import json, os, shutil, subprocess, time
 from pathlib import Path
 
 from . import lab_env
-from .m51_contract import artifact_status, budget_check, classify_admission, validate_result_schema
+from .m51_contract import (artifact_status, budget_check, classify_admission,
+                           conservative_ram_gate, host_mem_available_bytes,
+                           read_cgroup_mem, release_status, settle_human_quality,
+                           validate_result_schema, verify_artifact)
 
 REPO = lab_env.REPO
 OV_PY = REPO / ".venv-ov" / "bin" / "python"
-ARTIFACT_ROOT = Path(os.environ.get("M51_OV_ARTIFACTS", REPO / "runs" / "m51-ov-artifacts"))
+
+
+def artifact_root() -> Path:
+    """Single documented artifact-root resolution policy (P1-B):
+    $M51_OV_ARTIFACTS, else <repo>/runs/m51-ov-artifacts."""
+    return Path(os.environ.get("M51_OV_ARTIFACTS", REPO / "runs" / "m51-ov-artifacts"))
+
+
+ARTIFACT_ROOT = artifact_root()
+TOKEN_CONTRACT = REPO / "lab" / "m51_token_contract.json"
+# Reference conditioning hashes from the frozen cleanroom campaign (same
+# artifacts). Used for the conditioning REPRODUCIBILITY check; the numerical
+# alignment vs C0 remains gate-scoped to the cleanroom run.
+REFERENCE_PROBES = {
+    "H3_OV_FP32": REPO / "runs/m51-20261105-cleanroom-01/ov/run_fp32/probe_C1a_OV_FP32.json",
+    "H3_OV_BF16": REPO / "runs/m51-20261105-cleanroom-01/ov/run_bf16_compressed/probe_C1b_OV_BF16_COMPRESSED.json",
+    "H3_OV_INT8": REPO / "runs/m51-20261105-cleanroom-01/ov/run_int8/probe_C2_OV_INT8.json",
+}
+# Committed numerical verdict of the frozen cleanroom alignment gate
+# (C1a FP32 PASS; C1b deployment BF16 PASS; C2 INT8 FAIL on the empty
+# negative at relL2 28.25%). A reproducible encoder never overrides a
+# declared accuracy failure: hash-repro AND committed verdict must both PASS.
+REFERENCE_VERDICT_KEYS = {
+    "H3_OV_FP32": "C1a",
+    "H3_OV_BF16": "C1b_compressed",
+    "H3_OV_INT8": "C2",
+}
+REFERENCE_ALIGNMENT = REPO / "runs/m51-20261105-cleanroom-01/alignment/conditioning_alignment.json"
 SPECS = {
-    "H3_OV_FP32": {"dir": "fp32", "xml": "language_model_fp32.xml", "precision": "f32", "group": None},
-    "H3_OV_BF16": {"dir": "bf16", "xml": "language_model_bf16.xml", "precision": "bf16", "group": None},
-    "H3_OV_INT8": {"dir": "int8", "xml": "language_model_int8.xml", "precision": "f32", "group": 32},
+    "H3_OV_FP32": {"dir": "fp32", "xml": "language_model_fp32.xml", "precision": "f32", "group": None,
+                   "identity": {"dtype": "fp32"}, "need_ram": 45 * 2**30},
+    "H3_OV_BF16": {"dir": "bf16", "xml": "language_model_bf16.xml", "precision": "bf16", "group": None,
+                   "identity": {"storage": "FP16", "runtime_precision": "bf16"}, "need_ram": 34 * 2**30},
+    "H3_OV_INT8": {"dir": "int8", "xml": "language_model_int8.xml", "precision": "f32", "group": 32,
+                   "identity": {"mode": "INT8_ASYM"}, "need_ram": 20 * 2**30},
 }
 
-def _blocked(out: Path, arm: str, reason: str, detail: dict) -> int:
+
+def _blocked(out: Path, arm: str, reason: str, detail: dict, gates: dict | None = None) -> int:
+    gates = gates or {}
+    gates.setdefault("environment", "NOT_RUN")
+    for k in ("artifact_integrity", "encoder_runtime", "token_contract",
+              "conditioning_alignment", "e2e_gpu", "performance"):
+        gates.setdefault(k, "NOT_RUN")
+    gates.setdefault("human_quality", "PENDING")
     rec = {"experiment": arm, "status": "BLOCKED", "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
            "source_head": subprocess.run(["git","-C",str(REPO),"rev-parse","HEAD"],capture_output=True,text=True).stdout.strip(),
            "artifact_digest": None, "environment": {"python": str(OV_PY)},
            "measurements": {}, "evidence_paths": [str(out)],
+           "gates": gates, "release_status": release_status(gates),
            "blocker": {"reason": reason, "detail": detail,
                        "next_action": "run: bash scripts/m51/provision_ov.sh"}}
     out.mkdir(parents=True, exist_ok=True); (out/"H3_RESULTS.json").write_text(json.dumps(rec,indent=2))
     print(f"BLOCKED {arm}: {reason}\n{json.dumps(detail,indent=1)}\nnext: bash scripts/m51/provision_ov.sh")
     return 2
 
+
 def run_h3(experiment: str, smoke: bool = False, date: str | None = None, port: int = 8188, threads: int = 16) -> int:
     spec = SPECS[experiment]
     date = date or time.strftime("%Y%m%d-%H%M%S")
     out = REPO / "runs" / f"{date}-{experiment}{'-smoke' if smoke else ''}"
     out.mkdir(parents=True, exist_ok=True)
-    model_dir = ARTIFACT_ROOT / spec["dir"]
-    status = artifact_status(model_dir, [spec["xml"], spec["xml"].replace(".xml", ".bin")])
-    if status["status"] != "PASS":
-        return _blocked(out, experiment, status.get("reason","artifact_invalid"), status)
-    if not OV_PY.exists():
-        return _blocked(out, experiment, "missing_openvino_venv", {"path": str(OV_PY)})
-    probe = subprocess.run([str(OV_PY), "-c", "import openvino; print(openvino.__version__)"],
-                           capture_output=True, text=True, timeout=120)
-    if probe.returncode != 0:
-        return _blocked(out, experiment, "openvino_import_failed", {"stderr": probe.stderr[-800:]})
+    gates: dict[str, str] = {}
+
+    # Gate: environment admission (GPU class; GO_WITH_DEVIATIONS is admissible)
     s0 = lab_env.build_snapshot()
     snap = {"gpu": {"gfx_arch": s0.get("gfx_arch"), "vram_mib": s0.get("total_vram_mb")},
             "torch": {"cuda_available": s0.get("cuda_available"), "device_count": s0.get("device_count")}}
     admission, why = classify_admission(snap)
-    mem = Path("/sys/fs/cgroup/memory.max"); cur = Path("/sys/fs/cgroup/memory.current")
-    # memory.current includes reclaimable page cache; use the cgroup ceiling
-    # (the export/encoder working set is anonymous memory, bounded by this).
-    free_ram = int(mem.read_text()) if mem.exists() and mem.read_text().strip().isdigit() else 0
-    need_ram = {"fp32": 45*2**30, "bf16": 34*2**30, "int8": 20*2**30}[spec["dir"]]
+    gates["environment"] = "BLOCKED" if admission == "BLOCKED_ENVIRONMENT" else "PASS"
+    if gates["environment"] == "BLOCKED":
+        return _blocked(out, experiment, "environment_admission", {"admission": admission, "reasons": why}, gates)
+
+    # Gate: byte-level artifact integrity (P0-B) — admission time, once.
+    model_dir = ARTIFACT_ROOT / spec["dir"]
+    files = [spec["xml"], spec["xml"].replace(".xml", ".bin")]
+    status = verify_artifact(model_dir, files, expected_identity=spec["identity"])
+    if status["status"] == "BLOCKED":
+        gates["artifact_integrity"] = "BLOCKED"
+        return _blocked(out, experiment, status.get("reason", "artifact_invalid"), status, gates)
+    gates["artifact_integrity"] = "PASS"
+    if status["status"] == "PASS_WITH_WARNINGS":
+        gates["artifact_integrity"] = "PASS"  # warnings recorded, not silent
+    if not OV_PY.exists():
+        gates["artifact_integrity"] = "BLOCKED"
+        return _blocked(out, experiment, "missing_openvino_venv", {"path": str(OV_PY)}, gates)
+    probe = subprocess.run([str(OV_PY), "-c", "import openvino; print(openvino.__version__)"],
+                           capture_output=True, text=True, timeout=120)
+    if probe.returncode != 0:
+        return _blocked(out, experiment, "openvino_import_failed", {"stderr": probe.stderr[-800:]}, gates)
+
+    # P1-A: conservative RAM admission (host MemAvailable + cgroup anon accounting)
+    ram = conservative_ram_gate(read_cgroup_mem(), host_mem_available_bytes(), spec["need_ram"])
     free_disk = shutil.disk_usage(out).free
-    budget = budget_check(free_disk, 2*2**30, free_ram, need_ram)
-    if budget["status"] != "PASS":
-        return _blocked(out, experiment, "resource_budget", budget)
+    budget = budget_check(free_disk, 2*2**30, ram["usable_bytes"], spec["need_ram"])
+    if budget["status"] != "PASS" or ram["status"] != "PASS":
+        return _blocked(out, experiment, "resource_budget",
+                        {"ram_gate": ram, "disk_free_bytes": free_disk, "disk_need_bytes": 2*2**30}, gates)
+
     cmd = [str(OV_PY), "-u", str(REPO/"lab/ov_encoder.py"), "--arm", experiment,
            "--model-dir", str(model_dir), "--xml", spec["xml"], "--precision", spec["precision"],
            "--out", str(out), "--threads", str(threads), "--repeats", "1" if smoke else "3"]
@@ -66,23 +138,89 @@ def run_h3(experiment: str, smoke: bool = False, date: str | None = None, port: 
     (out/"stdout.log").write_text(r.stdout[-50000:]); (out/"stderr.log").write_text(r.stderr[-50000:])
     pf = out / f"probe_{experiment}.json"
     if r.returncode != 0 or not pf.exists():
-        return _blocked(out, experiment, "encoder_run_failed", {"rc": r.returncode, "stderr": r.stderr[-1500:]})
+        gates["encoder_runtime"] = "FAIL"
+        return _blocked(out, experiment, "encoder_run_failed", {"rc": r.returncode, "stderr": r.stderr[-1500:]}, gates)
     d = json.loads(pf.read_text())
     finite = all(row["finite"] for rows in d["prompts"].values() for row in rows)
+    on_cpu = d.get("meta", {}).get("execution_devices") == ["CPU"]
+    gates["encoder_runtime"] = "PASS" if (finite and on_cpu) else "FAIL"
+
+    # Gate: token contract — live probe IDs must equal the pinned production
+    # contract (drift anywhere in tokenizer/prompt handling is a FAIL).
+    contract = json.loads(TOKEN_CONTRACT.read_text()) if TOKEN_CONTRACT.is_file() else None
+    if contract is None:
+        gates["token_contract"] = "NOT_RUN"
+        token_detail = {"reason": "lab/m51_token_contract.json missing"}
+    else:
+        drift = {}
+        for pid, rows in d["prompts"].items():
+            want = contract["prompts"].get(pid, {}).get("ids")
+            got = rows[0].get("ids")
+            if want is not None and list(got or []) != list(want):
+                drift[pid] = {"expected": want, "got": got}
+        gates["token_contract"] = "PASS" if not drift else "FAIL"
+        token_detail = drift or {"checked": sorted(d["prompts"])}
+
+    # Gate: conditioning reproducibility vs the frozen cleanroom reference,
+    # combined with the committed cleanroom numerical verdict. Hash-repro
+    # alone can never promote a declared accuracy failure (INT8 negative).
+    ref_path = REFERENCE_PROBES.get(experiment)
+    verdict_key = REFERENCE_VERDICT_KEYS.get(experiment)
+    committed = None
+    if REFERENCE_ALIGNMENT.is_file() and verdict_key:
+        try:
+            committed = json.loads(REFERENCE_ALIGNMENT.read_text())["verdict"][verdict_key]["status"]
+        except (KeyError, ValueError):
+            committed = None
+    if ref_path and ref_path.is_file():
+        ref = json.loads(ref_path.read_text())
+        mismatch = {}
+        for pid, rows in d["prompts"].items():
+            want = next((r["cond_sha256"] for r in ref.get("prompts", {}).get(pid, [])), None)
+            got = rows[0].get("cond_sha256")
+            if want and got and want != got:
+                mismatch[pid] = {"reference": want, "got": got}
+        if mismatch:
+            gates["conditioning_alignment"] = "FAIL"
+        elif committed == "FAIL":
+            gates["conditioning_alignment"] = "FAIL"
+        elif committed == "PASS":
+            gates["conditioning_alignment"] = "PASS"
+        else:
+            gates["conditioning_alignment"] = "NOT_RUN"
+        cond_detail = {"hash_repro": "reproduced byte-identical vs runs/m51-20261105-cleanroom-01"
+                       if not mismatch else mismatch,
+                       "committed_cleanroom_verdict": committed,
+                       "note": "hash-repro proves determinism; the numerical verdict comes from "
+                               "the cleanroom alignment vs C0 and is never overridden here"}
+    else:
+        gates["conditioning_alignment"] = "NOT_RUN"
+        cond_detail = {"reason": "no committed reference probe for this arm"}
+
+    gates["e2e_gpu"] = "NOT_RUN"  # scope: separate E2E experiment, never implied here
     measured = [row["encode_s"] for rows in d["prompts"].values() for row in rows]
-    rec = {"experiment": experiment, "status": "PASS" if finite else "FAIL",
+    gates["performance"] = "PASS" if measured else "NOT_RUN"
+    settle_human_quality(gates, None)  # always PENDING without an explicit human record
+    rel = release_status(gates)
+
+    exec_status = "PASS" if finite else "FAIL"
+    rec = {"experiment": experiment, "status": exec_status,
+           "gates": gates, "release_status": rel,
            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
            "source_head": subprocess.run(["git","-C",str(REPO),"rev-parse","HEAD"],capture_output=True,text=True).stdout.strip(),
-           "artifact_digest": status["manifest"].get("output_bin_sha256") or status["manifest"].get("source_sha256"),
-           "artifact_manifest": status["manifest"], "environment": {"openvino": probe.stdout.strip(), "admission": admission, "admission_reasons": why},
+           "artifact_digest": next((f["sha256"] for f in status.get("files", {}).values() if not f.get("unpinned")), None),
+           "artifact_verification": status, "artifact_manifest": status.get("manifest"),
+           "environment": {"openvino": probe.stdout.strip(), "admission": admission, "admission_reasons": why,
+                           "ram_gate": ram},
            "measurements": {"encode_s": measured, "load_s": d.get("load_s"), "rss_peak_mb": d.get("rss_peak_mb"),
                             "shape": [row["shape"] for rows in d["prompts"].values() for row in rows],
                             "n_tokens_full": [row["n_tokens_full"] for rows in d["prompts"].values() for row in rows]},
+           "token_contract_detail": token_detail, "conditioning_alignment_detail": cond_detail,
            "evidence_paths": [str(pf), str(out/"stdout.log"), str(out/"stderr.log")],
            "mode": "smoke" if smoke else "formal", "runtime_s": round(time.time()-t0,2)}
     errs = validate_result_schema(rec)
     if errs: rec["schema_errors"] = errs
     (out/"H3_RESULTS.json").write_text(json.dumps(rec,indent=2))
-    print(json.dumps({k: rec[k] for k in ("experiment","status","mode","runtime_s","measurements")}, indent=1)[:3000])
+    print(json.dumps({k: rec[k] for k in ("experiment","status","gates","release_status","mode","runtime_s")}, indent=1)[:3000])
     print(f"H3 results: {out/'H3_RESULTS.json'}")
-    return 0 if rec["status"] == "PASS" else 1
+    return 0 if exec_status == "PASS" else 1

@@ -1,18 +1,37 @@
 """Pure, dependency-light contracts for M5.1 (CPU-testable, no GPU/OV/torch).
 
 These functions are the single source of truth for admission classification,
-artifact provenance, conditioning shape/trim rules, numerical gates, budgets,
-worker status, and performance statistics. Tests exercise them on CPU-only CI.
+artifact provenance (incl. real byte-level digest verification), conditioning
+shape/trim rules, numerical gates, budgets, worker status, release-gate
+propagation, conservative RAM admission, empty-negative tokenizer policy, and
+performance statistics. Tests exercise them on CPU-only CI.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import math
+import os
 import statistics
 from pathlib import Path
 
 IM_START = 151644
 COND_DIM = 4096
+
+# ---------------------------------------------------------------------------
+# Release gates (P0-A): execution success is never scientific success.
+# ---------------------------------------------------------------------------
+
+GATE_ORDER = [
+    "environment", "artifact_integrity", "encoder_runtime", "token_contract",
+    "conditioning_alignment", "e2e_gpu", "performance", "human_quality",
+]
+GATE_STATES = ("PASS", "FAIL", "BLOCKED", "NOT_RUN", "PENDING")
+
+# The empty-string negative token of the fallback tokenizer policy (the
+# literal word "empty"). The pinned ComfyUI production tokenizer does NOT
+# insert it; see empty_negative_explain().
+EMPTY_FALLBACK_TOKEN = 220
 
 
 def classify_admission(snapshot: dict) -> tuple[str, list[str]]:
@@ -35,8 +54,308 @@ def classify_admission(snapshot: dict) -> tuple[str, list[str]]:
     return "GO", []
 
 
+def release_status(gates: dict) -> str:
+    """Derive the honest release status from gate states.
+
+    FAIL beats BLOCKED beats PENDING; human PENDING can only be cleared by an
+    explicit human verdict (settle_human_quality), never by numeric PASSes.
+    """
+    unknown = [k for k, v in gates.items() if v not in GATE_STATES]
+    if unknown:
+        raise ValueError(f"invalid gate states: {unknown}")
+    vals = [gates.get(k, "NOT_RUN") for k in GATE_ORDER]
+    if "FAIL" in vals:
+        return "RELEASE_FAIL"
+    if "BLOCKED" in vals:
+        return "BLOCKED"
+    if gates.get("human_quality") == "PENDING":
+        return "PENDING_HUMAN_REVIEW"
+    if "PENDING" in vals:
+        return "PENDING_GATES"
+    if "NOT_RUN" in vals:
+        return "INCOMPLETE_SCOPE"
+    if all(v == "PASS" for v in vals):
+        return "RELEASE_PASS"
+    return "INCOMPLETE_SCOPE"
+
+
+def settle_human_quality(gates: dict, verdict: dict | None) -> dict:
+    """Apply a human image-quality verdict. Only an explicit record with a
+    reviewer and a PASS/FAIL verdict may change the gate; nothing numeric."""
+    if not isinstance(verdict, dict) or not verdict.get("reviewer"):
+        gates["human_quality"] = "PENDING"
+        return gates
+    v = str(verdict.get("verdict", "")).upper()
+    if v in ("PASS", "FAIL"):
+        gates["human_quality"] = v
+    else:
+        gates["human_quality"] = "PENDING"
+    return gates
+
+
+def empty_negative_explain(ids_production: list[int], ids_fallback: list[int]) -> dict:
+    """Explain the empty-negative contract between the ComfyUI production
+    tokenizer (prevent_empty_text=False, the pinned default in
+    comfy/text_encoders/qwen_image21.py) and the diagnostic fallback policy
+    (prevent_empty_text=True, which inserts the literal token 220).
+    """
+    if ids_production == ids_fallback:
+        return {"policy": "identical", "inserted_fallback_token": None,
+                "production_ids": ids_production, "fallback_ids": ids_fallback}
+    extra = [t for t in ids_fallback if t == EMPTY_FALLBACK_TOKEN]
+    idx = None
+    for i, t in enumerate(ids_fallback):
+        if t == EMPTY_FALLBACK_TOKEN and (i >= len(ids_production) or ids_production[i] != t):
+            idx = i
+            break
+    return {"policy": "fallback_inserts_empty_token",
+            "inserted_fallback_token": EMPTY_FALLBACK_TOKEN if extra else None,
+            "inserted_at_index": idx,
+            "production_ids": ids_production, "fallback_ids": ids_fallback,
+            "production_is_canonical": EMPTY_FALLBACK_TOKEN not in ids_production or
+            ids_production.count(EMPTY_FALLBACK_TOKEN) == ids_fallback.count(EMPTY_FALLBACK_TOKEN)}
+
+
+# ---------------------------------------------------------------------------
+# Artifact integrity (P0-B): verify bytes, not manifest claims.
+# ---------------------------------------------------------------------------
+
+def streaming_sha256(path: str | Path, chunk_bytes: int = 1 << 23) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for block in iter(lambda: f.read(chunk_bytes), b""):
+            h.update(block)
+    return h.hexdigest()
+
+
+_DIGEST_KEYS = ("sha256", "output_sha256", "output_xml_sha256", "output_bin_sha256")
+
+
+def _manifest_digest_for(manifest: dict, filename: str) -> tuple[str | None, str]:
+    """Return (digest, key) the manifest pins for this artifact file.
+
+    Generic keys (output_bin_sha256 / output_xml_sha256) only apply to the
+    matching file type; stem-named keys (output_<stem>_sha256) apply to their
+    own file. A manifest pinning only the bin digest leaves the xml unpinned
+    (reported as a warning, not silently trusted).
+    """
+    stem = filename.rsplit(".", 1)[0]
+    cands = []
+    for key in (f"output_{stem}_sha256", f"{stem}_sha256"):
+        v = manifest.get(key)
+        if isinstance(v, str) and len(v) == 64:
+            cands.append((v, key))
+    if not cands:
+        generic = "output_xml_sha256" if filename.endswith(".xml") else \
+                  ("output_bin_sha256" if filename.endswith(".bin") else None)
+        if generic:
+            v = manifest.get(generic)
+            if isinstance(v, str) and len(v) == 64:
+                cands.append((v, generic))
+    return cands[0] if cands else (None, "")
+
+
+def _cache_load(root: Path) -> dict:
+    p = root / ".m51_verification_cache.json"
+    try:
+        return json.loads(p.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def _cache_save(root: Path, cache: dict) -> None:
+    p = root / ".m51_verification_cache.json"
+    try:
+        p.write_text(json.dumps(cache, indent=1), encoding="utf-8")
+    except OSError:
+        pass
+
+
+def verify_artifact(root: str | Path, required: list[str],
+                    manifest_name: str = "conversion_manifest.json",
+                    expected_identity: dict | None = None,
+                    use_cache: bool = False) -> dict:
+    """Byte-level artifact verification against the conversion manifest.
+
+    - streaming SHA256 of every required file (never loads the model in RAM)
+    - manifest must pin the SOURCE digest (chain anchor to the git-pinned TE
+      checkpoint) and a digest for each binary weights file
+    - size checks catch truncation even before hashing
+    - path safety: resolved artifact files must live under the resolved root
+      (directory symlinks into the root are allowed; file symlink escapes are
+      rejected)
+    - identity: optional expected manifest fields (storage/runtime_precision/
+      dtype/mode) must match, or the wrong artifact is BLOCKED
+    - optional persistent cache (use_cache=True) keyed by
+      (realpath, ino, size, mtime_ns, ctime_ns) remembers digests verified
+      against a pin. NOTE: filesystems with coarse timestamp granularity can
+      keep a stale entry alive across a same-size same-tick tamper, so the
+      default is NO persistent cache: admission re-verifies bytes each run
+      (~20 s for a 26 GB bin at NVMe speeds), and the cache exists only for
+      callers that accept the documented tradeoff (e.g. provisioning loops).
+
+    Statuses: PASS | PASS_WITH_WARNINGS | BLOCKED.
+    Runtime policy: call this at admission/provisioning time, NOT per
+    inference request.
+    """
+    root_p = Path(root)
+    if not root_p.is_dir():
+        return {"status": "BLOCKED", "reason": "missing_artifact_root", "root": str(root_p)}
+    root_real = root_p.resolve()
+    missing = [r for r in required if not (root_p / r).is_file()]
+    if missing:
+        return {"status": "BLOCKED", "reason": "missing_artifacts", "missing": missing}
+    manifest = root_p / manifest_name
+    if not manifest.is_file():
+        return {"status": "BLOCKED", "reason": "missing_manifest", "path": str(manifest)}
+    try:
+        m = json.loads(manifest.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as e:
+        return {"status": "BLOCKED", "reason": "corrupt_manifest", "error": repr(e)}
+    if not (m.get("source_sha256") or m.get("source_xml_sha256")):
+        return {"status": "BLOCKED", "reason": "manifest_has_no_source_digest"}
+
+    warnings: list[str] = []
+    cache = _cache_load(root_p) if use_cache else {}
+    files = {}
+    for name in sorted(required):
+        p = root_p / name
+        real = p.resolve()
+        if root_real != real and root_real not in real.parents:
+            return {"status": "BLOCKED", "reason": "unsafe_path", "file": name,
+                    "resolved": str(real), "root": str(root_real)}
+        st = p.stat()
+        pinned, pin_key = _manifest_digest_for(m, name)
+        stem = name.rsplit(".", 1)[0]
+        size_key = None
+        for key in (f"output_{stem}_bytes", f"{stem}_bytes"):
+            if isinstance(m.get(key), int):
+                size_key = key
+                break
+        if size_key is None and name.endswith(".bin"):
+            for key in ("output_bin_bytes", "bin_bytes"):
+                if isinstance(m.get(key), int):
+                    size_key = key
+                    break
+        if size_key and st.st_size != m[size_key]:
+            return {"status": "BLOCKED", "reason": "size_mismatch", "file": name,
+                    "expected": m[size_key], "actual": st.st_size}
+        ck = str(real)
+        entry = cache.get(ck) if use_cache else None
+        if (use_cache and pinned and entry and entry.get("verified")
+                and entry.get("size") == st.st_size
+                and entry.get("mtime_ns") == st.st_mtime_ns
+                and entry.get("ctime_ns") == st.st_ctime_ns
+                and entry.get("ino") == st.st_ino
+                and entry.get("sha256") == pinned):
+            files[name] = {"sha256": pinned, "cached": True, "pinned_via": pin_key}
+            continue
+        try:
+            digest = streaming_sha256(real)
+        except OSError as e:
+            return {"status": "BLOCKED", "reason": "unreadable_file", "file": name, "error": repr(e)}
+        if pinned:
+            if digest != pinned:
+                return {"status": "BLOCKED", "reason": "digest_mismatch", "file": name,
+                        "pinned": pinned, "actual": digest, "pinned_via": pin_key}
+            if use_cache:
+                cache[ck] = {"verified": True, "sha256": digest, "size": st.st_size,
+                             "mtime_ns": st.st_mtime_ns, "ctime_ns": st.st_ctime_ns,
+                             "ino": st.st_ino}
+            files[name] = {"sha256": digest, "pinned_via": pin_key}
+        else:
+            warnings.append(f"{name}: manifest pins no digest (computed {digest}); "
+                            f"re-provision to pin it")
+            files[name] = {"sha256": digest, "unpinned": True}
+    if use_cache and cache:
+        _cache_save(root_p, cache)
+
+    if expected_identity:
+        mism = {k: {"expected": v, "manifest": m.get(k)} for k, v in expected_identity.items()
+                if str(m.get(k)).lower() != str(v).lower()}
+        if mism:
+            return {"status": "BLOCKED", "reason": "identity_mismatch", "mismatch": mism,
+                    "manifest": m, "files": files}
+    status = "PASS_WITH_WARNINGS" if warnings else "PASS"
+    return {"status": status, "warnings": warnings, "manifest": m, "files": files}
+
+
+# ---------------------------------------------------------------------------
+# Conservative RAM admission (P1-A).
+# ---------------------------------------------------------------------------
+
+def read_cgroup_mem(path: str = "/sys/fs/cgroup") -> dict:
+    """Read effective cgroup memory facts without assuming availability."""
+    base = Path(path)
+    out: dict = {}
+    try:
+        mx = (base / "memory.max").read_text().strip()
+        out["limit_bytes"] = int(mx) if mx.isdigit() else None  # None == "max" (unlimited)
+    except OSError:
+        out["limit_bytes"] = None
+    try:
+        out["current_bytes"] = int((base / "memory.current").read_text().strip())
+    except OSError:
+        out["current_bytes"] = None
+    anon = 0
+    try:
+        for line in (base / "memory.stat").read_text().splitlines():
+            if line.startswith("anon "):
+                anon = int(line.split()[1])
+                break
+    except OSError:
+        pass
+    out["anon_bytes"] = anon
+    return out
+
+
+def host_mem_available_bytes(meminfo: str = "/proc/meminfo") -> int | None:
+    try:
+        for line in Path(meminfo).read_text().splitlines():
+            if line.startswith("MemAvailable:"):
+                return int(line.split()[1]) * 1024
+    except OSError:
+        pass
+    return None
+
+
+def conservative_ram_gate(cgroup: dict, host_available: int | None,
+                          required_bytes: int, safety_bytes: int = 2 * 2**30,
+                          concurrent_reserve_bytes: int = 0) -> dict:
+    """Conservative RAM admission.
+
+    Policy (explicit): available = min(host MemAvailable, cgroup_limit - cgroup_anon)
+    minus safety headroom minus concurrent process reserve (e.g. a resident
+    ComfyUI server). cgroup memory.current is NOT treated as available because
+    it mostly counts reclaimable page cache; the non-reclaimable part (anon) is
+    what constrains a new anonymous working set. Unlimited cgroup (limit None)
+    falls back to host MemAvailable only.
+    """
+    cands = []
+    if host_available is not None:
+        cands.append(("host_mem_available", host_available))
+    if cgroup.get("limit_bytes") is not None:
+        headroom = cgroup["limit_bytes"] - (cgroup.get("anon_bytes") or 0)
+        cands.append(("cgroup_limit_minus_anon", headroom))
+    if not cands:
+        return {"status": "BLOCKED", "reason": "no_memory_information",
+                "available_bytes": 0, "required_bytes": required_bytes}
+    basis, avail = min(cands, key=lambda kv: kv[1])
+    usable = avail - safety_bytes - concurrent_reserve_bytes
+    ok = usable >= required_bytes
+    return {"status": "PASS" if ok else "BLOCKED",
+            "reason": None if ok else "insufficient_ram_headroom",
+            "basis": basis, "available_bytes": avail, "usable_bytes": usable,
+            "required_bytes": required_bytes, "safety_bytes": safety_bytes,
+            "concurrent_reserve_bytes": concurrent_reserve_bytes,
+            "cgroup": {k: cgroup.get(k) for k in ("limit_bytes", "current_bytes", "anon_bytes")}}
+
+
 def artifact_status(root: str | Path, required: list[str], manifest_name: str = "conversion_manifest.json") -> dict:
-    """Check artifact presence + manifest shape. Missing/corrupt => BLOCKED."""
+    """Check artifact presence + manifest shape. Missing/corrupt => BLOCKED.
+
+    Byte-level verification is verify_artifact(); admission paths must use it.
+    """
     root = Path(root)
     missing = [r for r in required if not (root / r).is_file()]
     manifest = root / manifest_name
