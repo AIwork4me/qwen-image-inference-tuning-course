@@ -37,9 +37,13 @@ and all five student-onboarding docs are bilingual with substantive parity
 
 ## 4. Tests and CI
 
-- CPU tests: **100 passed** (84 pre-existing incl. 2 new verdict tests +
-16 course-quality tests, each gate with negative tests).
-- CI: pytest + the four course-quality gates; CPU-only, no GPU claims.
+- CPU tests at course-v2 head `4ec5905`: **101 passed**
+  ([CI run 42049486025](https://github.com/AIwork4me/qwen-image-inference-tuning-course/actions/runs/42049486025)).
+  (An earlier revision of this audit said "100 tests" — stale metadata,
+  corrected by the publication-closure P6 pass; the exact count always
+  belongs to the exact HEAD.)
+- CI: pytest + the course-quality gates (links / bilingual / claims /
+  examples / metric pairs); CPU-only, no GPU claims.
 - Standard cloud bootstrap (M0–M4): **no new mandatory dependencies** —
   OpenVINO remains optional behind `scripts/m51/provision_ov.sh`.
 

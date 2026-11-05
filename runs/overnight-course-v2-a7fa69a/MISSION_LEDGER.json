@@ -1,93 +1,103 @@
 {
-  "run_id": "overnight-course-v2-a7fa69a",
-  "mission": "world-class bilingual inference optimization course",
-  "source_head": "a7fa69ae18800fc1f7a83e24de1c0b8bad2e7eaa",
-  "source_branch": "feat/m5-1-openvino-cpu-te-course (PR #2 head)",
-  "work_branch": "feat/world-class-bilingual-inference-course",
-  "phase": "COMPLETE - P0..P8 done, ready for owner review",
-  "p0": {
-    "evidence_freeze": [
-      "runs/overnight-course-v2-a7fa69a/p0_blob_freeze.txt (579 blobs)",
-      "runs/overnight-course-v2-a7fa69a/p0_evidence_sha256.txt (254 digests)"
-    ],
-    "tests_at_baseline": "82 passed",
-    "findings": {
-      "image_evidence": "6/6 committed_in_git claims false -> force-added digest-verified PNGs, INDEX.json + review package repaired (docs/quality-v2/IMAGE_EVIDENCE_AUDIT.md)",
-      "metric_drift": "M5.1 lesson taught retired 1.04x steady estimate -> now teaches 1.33x/1.081x/1.029x as separate metrics",
-      "owner_verdict": "owner acceptance recorded via explicit mechanism (PR2_OWNER_QUALITY_VERDICT.json), scope-matched to H3_OV_BF16 in lab/m51_run.py; INT8/FP32-stored/M6-BEST/40-step NOT covered",
-      "scope_labels": "331-480x positive-prompt scope added in M5.0/M5.1 lessons"
-    },
-    "gate": "no unresolved P0 scientific contradiction"
-  },
-  "next_actions": [
-    "P1 methodology + verified_claims registry",
-    "P2 bounded pipeline-overhead study on W7900",
-    "P3 bilingual curriculum",
-    "P4 README redesign",
-    "P5 onboarding bilingual",
-    "P6 lecture",
-    "P7 quality gates",
-    "P8 audit + draft PR"
+ "run_id": "overnight-course-v2-a7fa69a",
+ "mission": "world-class bilingual inference optimization course",
+ "source_head": "a7fa69ae18800fc1f7a83e24de1c0b8bad2e7eaa",
+ "source_branch": "feat/m5-1-openvino-cpu-te-course (PR #2 head)",
+ "work_branch": "feat/world-class-bilingual-inference-course",
+ "phase": "COMPLETE - P0..P8 done, ready for owner review",
+ "p0": {
+  "evidence_freeze": [
+   "runs/overnight-course-v2-a7fa69a/p0_blob_freeze.txt (579 blobs)",
+   "runs/overnight-course-v2-a7fa69a/p0_evidence_sha256.txt (254 digests)"
   ],
-  "resource_usage": {
-    "gpu_minutes_used": 23,
-    "wall_hours_used_est": 6.5,
-    "added_git_files": 48,
-    "disk_added_mib": "~60 (incl. run records)"
+  "tests_at_baseline": "82 passed",
+  "findings": {
+   "image_evidence": "6/6 committed_in_git claims false -> force-added digest-verified PNGs, INDEX.json + review package repaired (docs/quality-v2/IMAGE_EVIDENCE_AUDIT.md)",
+   "metric_drift": "M5.1 lesson taught retired 1.04x steady estimate -> now teaches 1.33x/1.081x/1.029x as separate metrics",
+   "owner_verdict": "owner acceptance recorded via explicit mechanism (PR2_OWNER_QUALITY_VERDICT.json), scope-matched to H3_OV_BF16 in lab/m51_run.py; INT8/FP32-stored/M6-BEST/40-step NOT covered",
+   "scope_labels": "331-480x positive-prompt scope added in M5.0/M5.1 lessons"
   },
-  "p1": {
-    "methodology": "course/METHODOLOGY.md + .zh-CN.md (complete, bilingual)",
-    "registry": "course/data/verified_claims.json (23 claims)"
-  },
-  "p2": {
-    "profiling_run": "overnight-course-v2-a7fa69a-p2profile-140000",
-    "ab_run": "overnight-course-v2-a7fa69a-p2ab-152000",
-    "root_cause": "per-request RunMonitor teardown 0.4-1.0s in batch gap (both arms)",
-    "result": "fast client 1.0485x batch throughput (+4.85%, below 5% exploratory target; non-overlapping walls; mechanism proven; cond SHA256 stable)",
-    "decision": "production harness unchanged; optimization stays in experiment module; near-miss positive published",
-    "deliverable": "docs/quality-v2/PIPELINE_OVERHEAD_STUDY.md"
-  },
-  "p3_progress": {
-    "zh_lessons_done": [
-      "M00",
-      "M01",
-      "M02",
-      "M03",
-      "M04",
-      "M5.0",
-      "M5.1",
-      "M06",
-      "M07",
-      "SYLLABUS",
-      "LECTURE_DEMO"
-    ],
-    "en_lessons_upgraded": "learning objectives + tiered exercises + research extensions added",
-    "remaining": [
-      "README EN/ZH redesign",
-      "onboarding docs bilingual",
-      "quality tools",
-      "final audit+PR"
-    ]
-  },
-  "p4": "README EN/ZH redesigned (parity, hero arc, tracks, mermaid)",
-  "p5": "5 onboarding docs bilingual + optimization PR template + docs/research/",
-  "p6": "LECTURE_DEMO EN/ZH: 100-min agenda, 6 Q&As with misconceptions, research question, network-free",
-  "p7": "4 course-quality gates + 16 tests (negative-tested), CI wired; 100 tests green",
-  "p8": {
-    "final_audit": "docs/quality-v2/FINAL_RELEASE_AUDIT.md",
-    "evidence_immutability": "evidence/ 254/254 byte-identical; frozen campaign blobs 0 changed, 6 digest-verified PNGs added",
-    "recommendation": "READY_FOR_OWNER_REVIEW",
-    "commits": [
-      "914acc8 audit",
-      "45a9563 curriculum",
-      "648eefc perf",
-      "9ee2035 readme/workflows",
-      "da2c6b8 gates",
-      "+ final audit commit"
-    ],
-    "ci": "green (run 42049185034) after two CI-only fixes (import safety, git-tree link resolution)",
-    "pr": "https://github.com/AIwork4me/qwen-image-inference-tuning-course/pull/3 (draft, stacked on PR #2 branch)"
-  },
-  "final_head": "8244d4c",
-  "tests_final": "101 passed local; CI green"
+  "gate": "no unresolved P0 scientific contradiction"
+ },
+ "next_actions": [
+  "P1 methodology + verified_claims registry",
+  "P2 bounded pipeline-overhead study on W7900",
+  "P3 bilingual curriculum",
+  "P4 README redesign",
+  "P5 onboarding bilingual",
+  "P6 lecture",
+  "P7 quality gates",
+  "P8 audit + draft PR"
+ ],
+ "resource_usage": {
+  "gpu_minutes_used": 23,
+  "wall_hours_used_est": 6.5,
+  "added_git_files": 48,
+  "disk_added_mib": "~60 (incl. run records)"
+ },
+ "p1": {
+  "methodology": "course/METHODOLOGY.md + .zh-CN.md (complete, bilingual)",
+  "registry": "course/data/verified_claims.json (23 claims)"
+ },
+ "p2": {
+  "profiling_run": "overnight-course-v2-a7fa69a-p2profile-140000",
+  "ab_run": "overnight-course-v2-a7fa69a-p2ab-152000",
+  "root_cause": "per-request RunMonitor teardown 0.4-1.0s in batch gap (both arms)",
+  "result": "fast client 1.0485x batch throughput (+4.85%, below 5% exploratory target; non-overlapping walls; mechanism proven; cond SHA256 stable)",
+  "decision": "production harness unchanged; optimization stays in experiment module; near-miss positive published",
+  "deliverable": "docs/quality-v2/PIPELINE_OVERHEAD_STUDY.md"
+ },
+ "p3_progress": {
+  "zh_lessons_done": [
+   "M00",
+   "M01",
+   "M02",
+   "M03",
+   "M04",
+   "M5.0",
+   "M5.1",
+   "M06",
+   "M07",
+   "SYLLABUS",
+   "LECTURE_DEMO"
+  ],
+  "en_lessons_upgraded": "learning objectives + tiered exercises + research extensions added",
+  "remaining": [
+   "README EN/ZH redesign",
+   "onboarding docs bilingual",
+   "quality tools",
+   "final audit+PR"
+  ]
+ },
+ "p4": "README EN/ZH redesigned (parity, hero arc, tracks, mermaid)",
+ "p5": "5 onboarding docs bilingual + optimization PR template + docs/research/",
+ "p6": "LECTURE_DEMO EN/ZH: 100-min agenda, 6 Q&As with misconceptions, research question, network-free",
+ "p7": "5 course-quality gates + course-quality tests (negative-tested incl. strict status enums and metric-pair population checks), CI wired; see publication_closure for the final counts per HEAD",
+ "p8": {
+  "final_audit": "docs/quality-v2/FINAL_RELEASE_AUDIT.md",
+  "evidence_immutability": "evidence/ 254/254 byte-identical; frozen campaign blobs 0 changed, 6 digest-verified PNGs added",
+  "recommendation": "READY_FOR_OWNER_REVIEW",
+  "commits": [
+   "914acc8 audit",
+   "45a9563 curriculum",
+   "648eefc perf",
+   "9ee2035 readme/workflows",
+   "da2c6b8 gates",
+   "+ final audit commit"
+  ],
+  "ci": "green at final head 4ec5905a (run 42049486025; 101 passed) after two CI-only fixes (import safety, git-tree link resolution)",
+  "pr": "https://github.com/AIwork4me/qwen-image-inference-tuning-course/pull/3 (draft, stacked on PR #2 branch)"
+ },
+ "final_head": "8244d4c",
+ "tests_final": "101 passed local; CI green",
+ "publication_closure": {
+  "session": "2026-11-06 publication-closure (P0..P8)",
+  "p0_baseline": "docs/publication-closure/P0_BASELINE.md (tree hashes: evidence/ 33e735b7 identical on main/PR2/PR3)",
+  "p1_metric_provenance": "docs/publication-closure/P1_METRIC_PROVENANCE.{md,json}; README Mermaid cross-run mixing repaired EN+ZH; new gate scripts/course-quality/check_metric_pairs.py",
+  "p2_stacked_pr": "owner-verdict record + provenance + review-package/INDEX remediation + 6 committed PNGs + scoped m51_run consumption + verdict tests ported from PR3 to PR2 (audit: docs/publication-closure/P2_STACKED_PR_DEPENDENCY_AUDIT.md)",
+  "p3_gate": "strict status enums (measurement/numerical/human/release separated); registry v2.0.0; 15 negative gate tests; two latent evidence-path defects fixed",
+  "p4_fair_ab": "docs/publication-closure/P4_FAIR_CLIENT_AB.md; run p4-fairab-225326 (2x2 factorial, blocks interleaved)",
+  "p5_bilingual": "docs/publication-closure/P5_BILINGUAL_PUBLICATION_AUDIT.md; fairness exercise added to both M5.1 lessons",
+  "bugfix": "lab/m51_pipeline_profile.py batch_generic/batch_fast/main unbound PROMPTS/SEED after 1d797ad lazy-import refactor (caught by the P4 launch; regression-tested)"
+ }
 }
