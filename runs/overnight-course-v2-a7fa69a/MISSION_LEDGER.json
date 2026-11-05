@@ -84,6 +84,10 @@
       "9ee2035 readme/workflows",
       "da2c6b8 gates",
       "+ final audit commit"
-    ]
-  }
+    ],
+    "ci": "green (run 42049185034) after two CI-only fixes (import safety, git-tree link resolution)",
+    "pr": "https://github.com/AIwork4me/qwen-image-inference-tuning-course/pull/3 (draft, stacked on PR #2 branch)"
+  },
+  "final_head": "8244d4c",
+  "tests_final": "101 passed local; CI green"
 }
