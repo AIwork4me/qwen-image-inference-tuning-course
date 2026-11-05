@@ -1,0 +1,22 @@
+{
+  "run_id": "overnight-course-v2-a7fa69a",
+  "mission": "world-class bilingual inference optimization course",
+  "source_head": "a7fa69ae18800fc1f7a83e24de1c0b8bad2e7eaa",
+  "source_branch": "feat/m5-1-openvino-cpu-te-course (PR #2 head)",
+  "work_branch": "feat/world-class-bilingual-inference-course",
+  "phase": "P0 complete",
+  "p0": {
+    "evidence_freeze": ["runs/overnight-course-v2-a7fa69a/p0_blob_freeze.txt (579 blobs)",
+                        "runs/overnight-course-v2-a7fa69a/p0_evidence_sha256.txt (254 digests)"],
+    "tests_at_baseline": "82 passed",
+    "findings": {
+      "image_evidence": "6/6 committed_in_git claims false -> force-added digest-verified PNGs, INDEX.json + review package repaired (docs/quality-v2/IMAGE_EVIDENCE_AUDIT.md)",
+      "metric_drift": "M5.1 lesson taught retired 1.04x steady estimate -> now teaches 1.33x/1.081x/1.029x as separate metrics",
+      "owner_verdict": "owner acceptance recorded via explicit mechanism (PR2_OWNER_QUALITY_VERDICT.json), scope-matched to H3_OV_BF16 in lab/m51_run.py; INT8/FP32-stored/M6-BEST/40-step NOT covered",
+      "scope_labels": "331-480x positive-prompt scope added in M5.0/M5.1 lessons"
+    },
+    "gate": "no unresolved P0 scientific contradiction"
+  },
+  "next_actions": ["P1 methodology + verified_claims registry", "P2 bounded pipeline-overhead study on W7900", "P3 bilingual curriculum", "P4 README redesign", "P5 onboarding bilingual", "P6 lecture", "P7 quality gates", "P8 audit + draft PR"],
+  "resource_usage": {"gpu_hours_used": 0.0, "wall_hours_used_est": 1.2}
+}

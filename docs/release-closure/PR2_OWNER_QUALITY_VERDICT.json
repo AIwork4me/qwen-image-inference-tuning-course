@@ -1,0 +1,39 @@
+{
+  "reviewer": "AIwork4me (repository owner)",
+  "verdict": "PASS",
+  "date": "2026-11-05",
+  "scope": "M5.1 C1b deployment vs G_native",
+  "statement": "The human image-quality review is complete and the M5.1 result is acceptable.",
+  "source": "owner-provided acceptance statement, relayed verbatim through the course-v2 mission brief (2026-11-05); recorded by the autonomous engineering session with provenance below. No GitHub Approve review, handwritten signature, or additional image inspection was performed or implied by this record.",
+  "covered_deployment": {
+    "arm": "C1b",
+    "description": "OpenVINO CPU Text Encoder, FP16-stored OpenVINO IR, BF16 runtime execution",
+    "compared_against": "G_native (native GPU Text Encoder)",
+    "execution_scope": "turbo 8-step, 1024x1024, cfg=1, seed 42, Qwen-Image-2.1 turbo BF16 DiT + original VAE"
+  },
+  "reviewed_artifacts": [
+    "docs/release-closure/review-sheets/campaign_p1-zh-scene_G_vs_C1b.jpg",
+    "docs/release-closure/review-sheets/campaign_p2-en-scene_G_vs_C1b.jpg",
+    "docs/release-closure/review-sheets/campaign_p3-poster-text_G_vs_C1b.jpg",
+    "docs/release-closure/review-sheets/crop_poster_title_G_native.jpg",
+    "docs/release-closure/review-sheets/crop_poster_title_C1b.jpg",
+    "docs/release-closure/review-sheets/INDEX.json"
+  ],
+  "review_sheet_sources": "Full-resolution G_native/C1b cfg1 PNG pairs (6 files, SHA256-pinned in review-sheets/INDEX.json) from run m51-20261105-cleanroom-01; now committed in git (see INDEX.json git_blob fields).",
+  "related_runs": ["m51-20261105-cleanroom-01"],
+  "related_models": {
+    "text_encoder": "qwen3vl_8b_bf16.safetensors (OpenVINO FP16-stored IR, BF16 execution hint)",
+    "dit": "qwen_image_2.1_turbo_bf16.safetensors",
+    "vae": "qwen_image_2.1_vae_bf16.safetensors"
+  },
+  "explicitly_not_covered": [
+    "C2 (OpenVINO INT8): negative-conditioning numerical gate remains FAIL (relL2 28.25% on the empty negative); this verdict does not promote it",
+    "C1b-uncompressed (FP32-stored IR + BF16 execution): negative-conditioning gate remains FAIL (6.63%); this verdict does not promote it",
+    "Course-wide M6 BEST (Turbo INT8, 55.21 s -> 9.02 s, 6.12x): remains under its own independent quality gate (runs/quality/BEST/quality.md)",
+    "40-step BF16/CFG sweep: remains NOT_RUN",
+    "Any prompt, resolution, step count, seed, or cfg outside the measured 1024x1024 / 8-step / cfg=1 / seed-42 scope"
+  ],
+  "gate_propagation": "Per lab/m51_contract.py::settle_human_quality, this record settles human_quality=PASS for H3_OV_BF16-scope runs only. It never overrides a numerical FAIL (see release_status precedence: FAIL > BLOCKED > PENDING).",
+  "recorded_by": "course-v2 autonomous engineering session (branch feat/world-class-bilingual-inference-course)",
+  "record_format": "as specified by docs/release-closure/PR2_HUMAN_QUALITY_REVIEW_PACKAGE.md section 4"
+}

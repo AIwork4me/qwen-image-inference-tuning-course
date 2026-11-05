@@ -1,6 +1,6 @@
 # M5.0 — PyTorch CPU Text Encoding & Pipelining (on ONE GPU)
 
-**Next:** [M5.1 — CPU Text Encoder accelerated by OpenVINO](M5_1_OPENVINO_CPU_TE.md) treats this PyTorch CPU implementation as the baseline. **Same-stack W7900 measurements are now COMPLETED (2026-11-05):** encoder 331–480× faster, E2E only ~3–8% faster, 17.26 GB full-pipeline peak saved. See [the measured lesson](M5_1_OPENVINO_CPU_TE.md) and [M51_RESULTS](../../docs/M51_RESULTS.md).
+**Next:** [M5.1 — CPU Text Encoder accelerated by OpenVINO](M5_1_OPENVINO_CPU_TE.md) treats this PyTorch CPU implementation as the baseline. **Same-stack W7900 measurements are now COMPLETED (2026-11-05):** encoder 331–480× faster on positive prompts (328× on the empty negative), warm E2E service latency 1.081× / actual 4-request batch throughput 1.029× better, 17.26 GB full-pipeline peak saved. See [the measured lesson](M5_1_OPENVINO_CPU_TE.md) and [M51_RESULTS](../../docs/M51_RESULTS.md).
 
 **Problem.** Marketing parallelism is easy: "just move work to the CPU and
 overlap!" Engineering parallelism is measured. This module takes the two

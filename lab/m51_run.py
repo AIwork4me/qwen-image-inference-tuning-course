@@ -5,7 +5,10 @@ encoder_runtime=PASS, never an automatic overall accuracy/release PASS. The
 result carries a gates dict (environment, artifact_integrity, encoder_runtime,
 token_contract, conditioning_alignment, e2e_gpu, performance, human_quality)
 plus a derived release_status. Missing evidence stays NOT_RUN; a human-quality
-verdict can only come from an explicit human record (settle_human_quality).
+verdict can only come from an explicit human record (settle_human_quality) —
+for H3_OV_BF16 this may be the committed owner verdict
+(docs/release-closure/PR2_OWNER_QUALITY_VERDICT.json), applied only when the
+record's declared scope covers the experiment's arm.
 
 P0-B: admission runs byte-level verify_artifact() (streaming SHA256 vs the
 conversion manifest, size checks, identity checks) once per run — never per
@@ -55,6 +58,32 @@ REFERENCE_VERDICT_KEYS = {
     "H3_OV_INT8": "C2",
 }
 REFERENCE_ALIGNMENT = REPO / "runs/m51-20261105-cleanroom-01/alignment/conditioning_alignment.json"
+# Committed owner human-quality verdict (docs/release-closure/PR2_OWNER_QUALITY_
+# VERDICT.json). Applied ONLY to experiments whose arm falls inside the
+# record's declared scope; every other experiment keeps human_quality=PENDING.
+OWNER_VERDICT = REPO / "docs/release-closure/PR2_OWNER_QUALITY_VERDICT.json"
+OWNER_VERDICT_SCOPE = {"H3_OV_BF16": "M5.1 C1b deployment vs G_native"}
+
+
+def load_owner_verdict(experiment: str) -> dict | None:
+    """Return the committed owner verdict record iff it exists and its
+    declared scope covers this experiment's arm. Anything missing, malformed
+    or out-of-scope keeps the gate PENDING (never guesses a verdict)."""
+    if not OWNER_VERDICT.is_file() or experiment not in OWNER_VERDICT_SCOPE:
+        return None
+    try:
+        rec = json.loads(OWNER_VERDICT.read_text())
+    except ValueError:
+        return None
+    if not isinstance(rec, dict):
+        return None
+    if rec.get("scope") != OWNER_VERDICT_SCOPE[experiment]:
+        return None
+    if not rec.get("reviewer") or str(rec.get("verdict", "")).upper() not in ("PASS", "FAIL"):
+        return None
+    return {"reviewer": rec["reviewer"], "verdict": str(rec["verdict"]).upper(),
+            "date": rec.get("date"), "scope": rec.get("scope"),
+            "record_path": str(OWNER_VERDICT.relative_to(REPO))}
 SPECS = {
     "H3_OV_FP32": {"dir": "fp32", "xml": "language_model_fp32.xml", "precision": "f32", "group": None,
                    "identity": {"dtype": "fp32"}, "need_ram": 45 * 2**30},
@@ -200,7 +229,8 @@ def run_h3(experiment: str, smoke: bool = False, date: str | None = None, port: 
     gates["e2e_gpu"] = "NOT_RUN"  # scope: separate E2E experiment, never implied here
     measured = [row["encode_s"] for rows in d["prompts"].values() for row in rows]
     gates["performance"] = "PASS" if measured else "NOT_RUN"
-    settle_human_quality(gates, None)  # always PENDING without an explicit human record
+    owner_verdict = load_owner_verdict(experiment)
+    settle_human_quality(gates, owner_verdict)  # PASS only from the committed owner record, scope-matched
     rel = release_status(gates)
 
     exec_status = "PASS" if finite else "FAIL"

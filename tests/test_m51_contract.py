@@ -418,3 +418,44 @@ def test_never_downgrade_blocked_to_pass():
     assert C.honest_status("PASS", {"blocked": True, "measured": True}) == "BLOCKED"
     assert C.honest_status("PASS", {"blocked": False, "measured": False}) == "NOT_RUN"
     assert C.honest_status("PASS", {"blocked": False, "measured": True}) == "PASS"
+
+
+# --- Owner-verdict record wiring (course-v2) -------------------------------
+
+def test_owner_verdict_load_is_scope_matched():
+    from lab import m51_run
+    # The committed record exists and its scope covers H3_OV_BF16 only.
+    v = m51_run.load_owner_verdict("H3_OV_BF16")
+    if m51_run.OWNER_VERDICT.is_file():
+        assert v is not None and v["verdict"] in ("PASS", "FAIL")
+        assert v["scope"] == "M5.1 C1b deployment vs G_native"
+    else:
+        assert v is None
+    # Out-of-scope experiments never inherit the owner verdict.
+    assert m51_run.load_owner_verdict("H3_OV_INT8") is None
+    assert m51_run.load_owner_verdict("H3_OV_FP32") is None
+    assert m51_run.load_owner_verdict("unknown") is None
+
+
+def test_owner_verdict_never_rescues_int8_release_fail(monkeypatch, tmp_path):
+    from lab import m51_contract as C2
+    from lab import m51_run
+    # A PASS owner verdict on the C1b scope cannot upgrade the INT8 gates:
+    # the committed numerical FAIL keeps release_status at RELEASE_FAIL.
+    g = _gates(conditioning_alignment="FAIL")
+    C2.settle_human_quality(g, {"reviewer": "owner", "verdict": "PASS"})
+    assert g["human_quality"] == "PASS"
+    assert C2.release_status(g) == "RELEASE_FAIL"
+    # And a malformed / out-of-scope record keeps the gate PENDING.
+    g2 = _gates()
+    C2.settle_human_quality(g2, {"verdict": "PASS"})  # no reviewer
+    assert g2["human_quality"] == "PENDING"
+    # load_owner_verdict rejects malformed JSON and wrong scope
+    bad = tmp_path / "bad.json"; bad.write_text("{not json")
+    monkeypatch.setattr(m51_run, "OWNER_VERDICT", bad)
+    assert m51_run.load_owner_verdict("H3_OV_BF16") is None
+    wrong = tmp_path / "wrong.json"
+    wrong.write_text(json.dumps({"reviewer": "x", "verdict": "PASS",
+                                 "scope": "some other scope"}))
+    monkeypatch.setattr(m51_run, "OWNER_VERDICT", wrong)
+    assert m51_run.load_owner_verdict("H3_OV_BF16") is None

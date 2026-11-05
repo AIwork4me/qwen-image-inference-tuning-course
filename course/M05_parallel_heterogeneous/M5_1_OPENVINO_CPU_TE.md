@@ -90,9 +90,9 @@ Token IDs are exactly equal; shapes are `[1,52/37/64/8,4096]`; all tensors finit
 
 **VRAM:** full-pipeline peak **34.15 → 16.77 GB (17.26 GB saved)**; residency **33.09 → 16.29 GB (16.80 GB saved)**. This is the measured full-pipeline effect for this configuration, not an assumption from the 16.8 GB TE allocation.
 
-Image grids: `runs/m51-20261105-cleanroom-01/e2e/grids/`; native-resolution Chinese poster crop: `e2e/typography/p3_poster_zh_native_crop.jpg`. **Human review is PENDING.**
+Image grids: `runs/m51-20261105-cleanroom-01/e2e/grids/`; native-resolution Chinese poster crop: `e2e/typography/p3_poster_zh_native_crop.jpg`. **Human quality verdict: owner-accepted (PASS) for the C1b-vs-G scope on 2026-11-05** — provenance and explicit non-propagation in [`PR2_OWNER_QUALITY_VERDICT.md`](../../docs/release-closure/PR2_OWNER_QUALITY_VERDICT.md); INT8 and the FP32-stored-IR variant remain FAIL.
 
-### 3.4 Four-request pipeline
+### 3.4 Four-request pipeline — and three distinct "speedup" notions
 
 | Arm | Total | Fill | CPU TE | GPU denoise | Images/min | Bound |
 |---|---:|---:|---:|---:|---:|---|
@@ -101,19 +101,43 @@ Image grids: `runs/m51-20261105-cleanroom-01/e2e/grids/`; native-resolution Chin
 | **C OV BF16** | **50.05 s** | 0.56 s | 0.436 s | 12.19 s | **4.80** | GPU |
 | **D OV INT8** | **49.75 s** | 0.40 s | 0.405 s | 12.13 s | **4.82** | GPU |
 
-C vs A: **1.33× cold-inclusive**, **1.04× steady-state**. B is **0.098×** (10× slower). Overlap is proven from timestamps: B 37.09 s, C 1.62 s, D 1.40 s. No measurable GPU slowdown under 16-thread CPU load.
+B is **0.098×** (10× slower than A). Overlap is proven from timestamps: B 37.09 s, C 1.62 s, D 1.40 s. No measurable GPU slowdown under 16-thread CPU load.
+
+**Do not collapse C-vs-A into one number — there are three, and they answer different questions** (independently measured in the release-closure audit, n=8/8 warm, non-overlapping; raw JSON: [`PR2_LATENCY_VS_THROUGHPUT.json`](../../docs/release-closure/PR2_LATENCY_VS_THROUGHPUT.json)):
+
+| Notion | Value | What it means |
+|---|---:|---|
+| Cold-inclusive batch ratio | **1.33×** (66.62 → 50.05 s) | One session from idle: C avoids reloading a 16.8 GB GPU CLIP |
+| Warm per-request **service latency** | **1.081×** (13.031 → 12.060 s) | What one requester waits per image |
+| Warm **actual 4-request batch throughput** | **1.029×** (4.42 → 4.55 img/min) | Images/minute including inter-request orchestration |
+
+The historical "**≈1.04× steady-state**" figure was the campaign's *estimate* of
+the last row; the audit replaced it with direct measurement. Why is the
+throughput gain (2.9%) smaller than the service gain (8.1%)? The precomputed
+arm pays ≈0.54 s/request of orchestration the native arm does not (conditioning
+staging + workflow submission), and A's own gaps (≈0.45 s median) partly
+overlap its GPU TE work. Any "images/min" computed from sum-of-service-times
+must be labeled naive/upper-bound (A: naive 4.60 vs actual 4.42; C: naive 4.98
+vs actual 4.55).
 
 ### 3.5 Why the end-to-end gain is small (Amdahl)
 
 ```text
 Sequential cycle  = GPU_TE + GPU_denoise ≈ 0.60 + 12.43 = 13.03 s
 Pipelined cycle   = max(OV_TE, GPU_denoise_under_load) + handoff
-                  ≈ max(0.44, 12.19) ≈ 12.19 s
+                   ≈ max(0.44, 12.19) ≈ 12.19 s
 Encoder-only      = 176.02 / 0.532 = 331×
-E2E steady gain   = 13.03 / 12.19 ≈ 1.07×
+Cycle estimate    = 13.03 / 12.19 ≈ 1.07×
 ```
 
-The encoder is ~4% of the image cycle. Once it is hidden, making it 300× faster cannot break the denoiser bound. The large cold-inclusive 1.33× comes mostly from **avoiding a 16.8 GB GPU CLIP reload**, not from overlap.
+The encoder is ~4% of the image cycle. Once it is hidden, making it 300×
+faster cannot break the denoiser bound — the cycle estimate 1.04–1.07× brackets
+the **measured** warm service-latency ratio **1.081×**. The large
+cold-inclusive 1.33× comes mostly from **avoiding a 16.8 GB GPU CLIP reload**,
+not from overlap. And the **actual batch throughput** is bounded lower still
+(1.029×) because orchestration overhead — not encoder time — fills part of the
+gap the service gain opened. Three metrics, three mechanisms, one Amdahl
+ceiling.
 
 ---
 
@@ -154,7 +178,7 @@ Implementation files: `lab/ov_export.py`, `lab/ov_compress.py`, `lab/ov_quantize
 ## 6. Think — with measured answers
 
 1. **Why does the Zen5 22–69× not answer this course's C0→C1 question?** It compares different CPUs, weights, thread budgets and an INT8-vs-INT8 path. Local C1b vs C0 is 328–480×, but against the course's FP32-manual-cast CPU path.
-2. **If GPU denoise is 10.8 s, GPU TE 0.6 s, OV CPU TE 0.44 s and handoff ~0.2 s, what is the cycle speedup?** `(10.8+0.6)/(max(0.44,10.8)+0.2) ≈ 11.4/11.0 ≈ 1.04×`, not 20×. Measured: 1.04–1.07× steady.
+2. **If GPU denoise is 10.8 s, GPU TE 0.6 s, OV CPU TE 0.44 s and handoff ~0.2 s, what is the cycle speedup?** `(10.8+0.6)/(max(0.44,10.8)+0.2) ≈ 11.4/11.0 ≈ 1.04×`, not 20×. Measured: service latency 1.081×, actual batch throughput 1.029× — the cycle estimate sits between them because it ignores inter-request orchestration.
 3. **Why is `cosine ≥ 0.997` not automatic typography PASS?** Diffusion can amplify a small conditioning difference; inspect native-resolution crops and human review. Our p3 crop is evidence, not a PASS.
 4. **BF16-vs-BF16 backend or BF16-vs-INT8?** C1b vs C0 changes backend plus BF16 execution; C2 vs C1a changes quantization. They are separate causal axes.
 
@@ -162,7 +186,7 @@ Implementation files: `lab/ov_export.py`, `lab/ov_compress.py`, `lab/ov_quantize
 
 ## 7. Limitations students must quote
 
-- Turbo 8-step, cfg 1.0, one seed suite; human review PENDING.
+- Turbo 8-step, cfg 1.0, one seed suite; human quality verdict owner-accepted for C1b-vs-G only (see `docs/release-closure/PR2_OWNER_QUALITY_VERDICT.md`).
 - C2 INT8 fails the empty-negative gate (28.25%); do not call it production.
 - C0 has n=1 warm sample per prompt; the two identical encodes differ <0.3%.
 - The host is a 16-CPU/55 GiB cgroup of an EPYC 9334, not the full host.
