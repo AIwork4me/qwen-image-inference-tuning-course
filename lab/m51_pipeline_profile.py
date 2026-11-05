@@ -243,7 +243,7 @@ def batch_fast(srv, batch_id: str, outdir: Path, worker, cond_dir: Path) -> dict
     """Optimized 4-request precomputed batch: one persistent RunMonitor,
     existing next-conditioning prefetch, per-request cond-file SHA256."""
     from lab import comfyui_client, m51_e2e as E
-    from lab.m51_pipeline import PROMPTS
+    from lab.m51_pipeline import PROMPTS, SEED
     from concurrent.futures import ThreadPoolExecutor
 
     mon = comfyui_client.RunMonitor(srv.base_url)
@@ -286,6 +286,13 @@ def batch_fast(srv, batch_id: str, outdir: Path, worker, cond_dir: Path) -> dict
 def batch_generic(srv, batch_id: str, mode: str, outdir: Path, results: dict,
                   worker=None, cond_dir: Path | None = None):
     """One 4-request batch. Native (worker=None) or precomputed arm."""
+    # Local lazy imports (CPU-only CI import safety): this helper references
+    # PROMPTS/SEED and E directly, so they MUST be bound here — regression-tested
+    # in tests/test_course_quality.py after the 1d797ad refactor silently
+    # unbound them (NameError at first GPU use).
+    from lab import m51_e2e as E
+    from lab.m51_pipeline import PROMPTS, SEED
+
     reqs = []
     pool_workers = 1 if worker is not None else 0
     from concurrent.futures import ThreadPoolExecutor
@@ -406,7 +413,7 @@ def main() -> None:
     outdir = run / "pipeline_profile"
     (outdir / "raw").mkdir(parents=True, exist_ok=True)
     from lab import m51_e2e as E
-    from lab.m51_pipeline import PROMPTS, WorkerClient, artifact_root, server_rss
+    from lab.m51_pipeline import PROMPTS, SEED, WorkerClient, artifact_root, server_rss
     from lab.server import ComfyServer
     E.install_node()
 
