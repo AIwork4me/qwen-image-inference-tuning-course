@@ -41,6 +41,9 @@ def cmd_profile(args) -> int:
 
 
 def cmd_run(args) -> int:
+    if args.experiment in ("H3_OV_FP32", "H3_OV_BF16", "H3_OV_INT8"):
+        from .m51_run import run_h3
+        return run_h3(args.experiment, smoke=args.smoke, date=args.date, port=args.port)
     if args.experiment == "H1":
         from .pipeline import run_h1
         run_h1(date=args.date)
