@@ -1,0 +1,36 @@
+{
+  "arm": "G_native",
+  "warmup_s": 31.088,
+  "runs": {
+    "G_native|p1-zh-scene|cfg1": {
+      "wall_s": 26.058,
+      "text_encode_s": 0.589,
+      "ksampler_s": 11.637,
+      "vae_decode_s": 0.941,
+      "vram_peak_mb": 33674.1,
+      "vram_residency_mb": 33093.7,
+      "image": "/workspace/m51/qwen-image-inference-tuning-course/runs/m51-20261105-cleanroom-01/e2e/raw/G_native__p1-zh-scene__cfg1.png",
+      "image_sha256": "c7ee733186d8df944c3b4f439cfa30b0a29e449294043430823febfe974457f2"
+    },
+    "G_native|p2-en-scene|cfg1": {
+      "wall_s": 13.035,
+      "text_encode_s": 0.318,
+      "ksampler_s": 10.786,
+      "vae_decode_s": 0.905,
+      "vram_peak_mb": 34031.3,
+      "vram_residency_mb": 33093.7,
+      "image": "/workspace/m51/qwen-image-inference-tuning-course/runs/m51-20261105-cleanroom-01/e2e/raw/G_native__p2-en-scene__cfg1.png",
+      "image_sha256": "f456d05c1945a0f07ad39a11aad8ff2389e4a0f5d8d9ed22ee5d137917216bdc"
+    },
+    "G_native|p3-poster-text|cfg1": {
+      "wall_s": 13.028,
+      "text_encode_s": 0.603,
+      "ksampler_s": 10.938,
+      "vae_decode_s": 0.891,
+      "vram_peak_mb": 34078.8,
+      "vram_residency_mb": 33093.7,
+      "image": "/workspace/m51/qwen-image-inference-tuning-course/runs/m51-20261105-cleanroom-01/e2e/raw/G_native__p3-poster-text__cfg1.png",
+      "image_sha256": "cac599c5843f12d4daa2dfbe18fb0ecac1f67f818fe7859fa713b0d88fa5719c"
+    }
+  }
+}

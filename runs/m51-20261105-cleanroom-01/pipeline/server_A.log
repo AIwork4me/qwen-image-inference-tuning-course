@@ -1,0 +1,164 @@
+[INFO] setup plugin alembic.autogenerate.schemas
+[INFO] setup plugin alembic.autogenerate.tables
+[INFO] setup plugin alembic.autogenerate.types
+[INFO] setup plugin alembic.autogenerate.constraints
+[INFO] setup plugin alembic.autogenerate.defaults
+[INFO] setup plugin alembic.autogenerate.comments
+[INFO] setup plugin alembic.ext.checkconstraint_byname
+[INFO] Adding extra search path diffusion_models /workspace/m51/qwen-image-inference-tuning-course/weights/comfyui-split/diffusion_models
+[INFO] Adding extra search path text_encoders /workspace/m51/qwen-image-inference-tuning-course/weights/comfyui-split/text_encoders
+[INFO] Adding extra search path vae /workspace/m51/qwen-image-inference-tuning-course/weights/comfyui-split/vae
+[INFO] Found comfy_kitchen backend eager: {'available': True, 'disabled': False, 'unavailable_reason': None, 'capabilities': ['adaln', 'apply_rope', 'apply_rope1', 'apply_rope1_', 'apply_rope_', 'apply_rope_split_half', 'apply_rope_split_half1', 'apply_rope_split_half1_', 'apply_rope_split_half_', 'convrot_w4a4_linear', 'dequantize_convrot_w4a4_weight', 'dequantize_int8_convrot_weight', 'dequantize_int8_convrot_weight_dtype', 'dequantize_int8_embedding', 'dequantize_int8_simple', 'dequantize_int8_simple_dtype', 'dequantize_mxfp8', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'dequantize_w4a8_int8_weight', 'fp16_conv3d', 'fp16_conv3d_out', 'fp16_linear', 'gemv_awq_w4a16', 'group_norm_silu_pad3d', 'group_norm_silu_pad3d_out', 'group_norm_stats3d', 'int8_linear', 'int8_linear_modulated', 'int8_linear_rms_modulated', 'na3d', 'prepare_int4_weight_for_int8_linear', 'quantize_and_rotate_rowwise', 'quantize_convrot_w4a4_weight', 'quantize_int8_convrot_weight', 'quantize_int8_rowwise', 'quantize_int8_tensorwise', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8', 'quantize_svdquant_w4a4', 'quantize_w4a8_int8_weight', 'rms_adaln', 'rms_gated_residual', 'rms_rope', 'rms_rope1', 'rms_rope1_', 'rms_rope_', 'rms_rope_split_half', 'rms_rope_split_half1', 'rms_rope_split_half1_', 'rms_rope_split_half_', 'rotate_int8_convrot_weight', 'scaled_mm_mxfp8', 'scaled_mm_nvfp4', 'scaled_mm_svdquant_w4a4', 'sol_attn', 'stochastic_rounding_fp8', 'w4a8_int8_linear', 'w4a8_packed_linear']}
+[INFO] Found comfy_kitchen backend cuda: {'available': True, 'disabled': True, 'unavailable_reason': None, 'capabilities': ['adaln', 'apply_rope', 'apply_rope1', 'apply_rope1_', 'apply_rope_', 'apply_rope_split_half', 'apply_rope_split_half1', 'apply_rope_split_half1_', 'apply_rope_split_half_', 'closest_point_on_mesh', 'connected_components', 'convrot_w4a4_linear', 'delaunay3d', 'dequantize_convrot_w4a4_weight', 'dequantize_int8_convrot_weight', 'dequantize_int8_convrot_weight_dtype', 'dequantize_int8_simple', 'dequantize_int8_simple_dtype', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'dequantize_w4a8_int8_weight', 'edge_collapse_checks', 'fp16_conv3d', 'fp16_conv3d_out', 'fp16_linear', 'gemv_awq_w4a16', 'group_norm_silu_pad3d', 'group_norm_silu_pad3d_out', 'group_norm_stats3d', 'mesh_bvh', 'min_cut', 'na3d', 'prepare_int4_weight_for_int8_linear', 'quantize_and_rotate_rowwise', 'quantize_convrot_w4a4_weight', 'quantize_int8_convrot_weight', 'quantize_int8_rowwise', 'quantize_int8_tensorwise', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8', 'quantize_svdquant_w4a4', 'quantize_w4a8_int8_weight', 'rms_adaln', 'rms_rope', 'rms_rope1', 'rms_rope1_', 'rms_rope_', 'rms_rope_split_half', 'rms_rope_split_half1', 'rms_rope_split_half1_', 'rms_rope_split_half_', 'rotate_int8_convrot_weight', 'scaled_mm_svdquant_w4a4', 'sol_attn', 'stochastic_rounding_fp8', 'w4a8_int8_linear', 'w4a8_packed_linear']}
+[INFO] Found comfy_kitchen backend hip: {'available': True, 'disabled': False, 'unavailable_reason': None, 'capabilities': ['adaln', 'apply_rope', 'apply_rope1', 'apply_rope1_', 'apply_rope_', 'apply_rope_split_half', 'apply_rope_split_half1', 'apply_rope_split_half1_', 'apply_rope_split_half_', 'convrot_w4a4_linear', 'dequantize_convrot_w4a4_weight', 'dequantize_int8_convrot_weight_dtype', 'dequantize_int8_simple_dtype', 'dequantize_per_tensor_fp8', 'dequantize_w4a8_int8_weight', 'fp16_conv3d', 'fp16_conv3d_out', 'fp16_linear', 'gemv_awq_w4a16', 'group_norm_silu_pad3d', 'group_norm_silu_pad3d_out', 'group_norm_stats3d', 'int8_linear', 'int8_linear_modulated', 'int8_linear_rms_modulated', 'na3d', 'quantize_and_rotate_rowwise', 'quantize_convrot_w4a4_weight', 'quantize_int8_convrot_weight', 'quantize_int8_rowwise', 'quantize_int8_tensorwise', 'quantize_per_tensor_fp8', 'quantize_svdquant_w4a4', 'quantize_w4a8_int8_weight', 'rms_adaln', 'rms_gated_residual', 'rms_rope', 'rms_rope1', 'rms_rope1_', 'rms_rope_', 'rms_rope_split_half', 'rms_rope_split_half1', 'rms_rope_split_half1_', 'rms_rope_split_half_', 'scaled_mm_svdquant_w4a4', 'sol_attn', 'stochastic_rounding_fp8', 'w4a8_int8_linear']}
+[INFO] Found comfy_kitchen backend triton: {'available': True, 'disabled': True, 'unavailable_reason': None, 'capabilities': ['adaln', 'apply_rope', 'apply_rope1', 'apply_rope1_', 'apply_rope_', 'apply_rope_split_half', 'apply_rope_split_half1', 'apply_rope_split_half1_', 'apply_rope_split_half_', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'int8_linear', 'na3d', 'quantize_and_rotate_rowwise', 'quantize_int8_rowwise', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8', 'rms_adaln', 'rms_rope', 'rms_rope1', 'rms_rope1_', 'rms_rope_', 'rms_rope_split_half', 'rms_rope_split_half1', 'rms_rope_split_half1_', 'rms_rope_split_half_', 'w4a8_int8_linear']}
+[INFO] Found comfy_kitchen backend ascend: {'available': False, 'disabled': False, 'unavailable_reason': "torch-npu is not installed: No module named 'torch_npu'", 'capabilities': []}
+[INFO] Checkpoint files will always be loaded safely.
+[INFO] Total VRAM 49136 MB, total RAM 56320 MB
+[INFO] RAM limited by cgroup to 56320 MB (host has 515648 MB)
+[INFO] pytorch version: 2.9.1+gitff65f5b
+[INFO] Set: torch.backends.cudnn.enabled = False for better AMD performance.
+[INFO] AMD arch: gfx1100
+[INFO] ROCm version: (7, 2)
+[INFO] Set vram state to: NORMAL_VRAM
+[INFO] Device: cuda:0 AMD Radeon Graphics : native
+[INFO] Using async weight offloading with 2 streams
+[INFO] Enabled pinned memory 39936
+[INFO] Using pytorch attention
+/opt/venv/lib/python3.12/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.
+  warnings.warn(
+[INFO] Python version: 3.12.3 (main, Mar  3 2026, 12:15:18) [GCC 13.3.0]
+[INFO] ComfyUI version: 0.43.0
+[INFO] comfy-aimdo version: 0.6.0
+[INFO] comfy-kitchen version: 0.2.40
+[INFO] comfyui-frontend-package version: 1.57.6
+[INFO] comfyui-workflow-templates version: 0.11.100
+[INFO] comfyui-embedded-docs version: 0.5.15
+[INFO] comfy-aimdo version: 0.6.0
+[INFO] comfy-kitchen version: 0.2.40
+[INFO] [Prompt Server] web root: /workspace/m51/qwen-image-inference-tuning-course/.venv-lab/lib/python3.12/site-packages/comfyui_frontend_package/static
+[INFO] Asset seeder disabled
+[WARNING] Traceback (most recent call last):
+  File "/workspace/m51/qwen-image-inference-tuning-course/ComfyUI/nodes.py", line 2276, in load_custom_node
+    module_spec.loader.exec_module(module)
+  File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/workspace/m51/qwen-image-inference-tuning-course/ComfyUI/comfy_extras/nodes_glsl.py", line 12, in <module>
+    import comfy_angle
+ModuleNotFoundError: No module named 'comfy_angle'
+
+[WARNING] Cannot import /workspace/m51/qwen-image-inference-tuning-course/ComfyUI/comfy_extras/nodes_glsl.py module for custom nodes: No module named 'comfy_angle'
+[INFO]
+Import times for custom nodes:
+[INFO]    0.0 seconds: /workspace/m51/qwen-image-inference-tuning-course/ComfyUI/custom_nodes/websocket_image_save.py
+[INFO]    0.0 seconds: /workspace/m51/qwen-image-inference-tuning-course/ComfyUI/custom_nodes/tuning_lab_safetensors
+[INFO]
+[WARNING] WARNING: some comfy_extras/ nodes did not import correctly. This may be because they are missing some dependencies.
+
+[WARNING] IMPORT FAILED: nodes_glsl.py
+[WARNING]
+This issue might be caused by new missing dependencies added the last time you updated ComfyUI.
+[WARNING] Please do a: pip install -r requirements.txt
+[WARNING]
+[ERROR] ********** ERROR ***********
+
+comfyui-workflow-templates is not installed.
+
+Please install the updated requirements.txt file by running:
+/workspace/m51/qwen-image-inference-tuning-course/.venv-lab/bin/python -m pip install -r /workspace/m51/qwen-image-inference-tuning-course/ComfyUI/requirements.txt
+If you are on the portable package you can run: update\update_comfyui.bat to solve this problem.
+
+The ComfyUI frontend is shipped in a pip package so it needs to be updated separately from the ComfyUI code.
+
+********** ERROR ***********
+[INFO] Using RAM pressure cache.
+[INFO] ComfyUI is developed by Comfy Org. We also offer commercial products to deploy ComfyUI as scalable cloud endpoints. Visit platform.comfy.org/ascii for more information.
+[INFO] Starting server
+
+[INFO] To see the GUI go to: http://127.0.0.1:8199
+[INFO] got prompt
+[INFO] Model storage policy: fast_disk=False paths=['/workspace/m51/qwen-image-inference-tuning-course/weights/comfyui-split/vae/qwen_image_2.1_vae_bf16.safetensors']
+[INFO] Using split attention in VAE
+[INFO] Using split attention in VAE
+[INFO] VAE load device: cuda:0, offload device: cpu, dtype: torch.bfloat16
+[INFO] Model storage policy: fast_disk=False paths=['/workspace/m51/qwen-image-inference-tuning-course/weights/comfyui-split/text_encoders/qwen3vl_8b_bf16.safetensors']
+[INFO] Requested to load QwenImage21TEModel_
+[INFO] loaded completely;  16721.96 MB loaded, full load: True
+[INFO] CLIP/text encoder model load device: cuda:0, offload device: cpu, current: cuda:0, dtype: torch.float16
+[INFO] model weight dtype torch.bfloat16, manual cast: None
+[INFO] model_type FLUX
+[INFO] Model storage policy: fast_disk=False paths=['/workspace/m51/qwen-image-inference-tuning-course/weights/comfyui-split/diffusion_models/qwen_image_2.1_turbo_bf16.safetensors']
+[INFO] Requested to load QwenImage21
+[INFO] loaded completely; 45980.80 MB usable, 13571.02 MB loaded, full load: True
+
+  0%|                                                                                                                              | 0/8 [00:00<?, ?it/s]/workspace/m51/qwen-image-inference-tuning-course/ComfyUI/comfy/ops.py:85: UserWarning: Using AOTriton backend for Efficient Attention forward... (Triggered internally at /app/pytorch/aten/src/ATen/native/transformers/hip/attention.hip:1452.)
+  return torch.nn.functional.scaled_dot_product_attention(q, k, v, *args, **kwargs)
+
+ 12%|██████████████▊                                                                                                       | 1/8 [00:00<00:01,  4.13it/s]
+ 25%|█████████████████████████████▌                                                                                        | 2/8 [00:01<00:05,  1.10it/s]
+ 38%|████████████████████████████████████████████▎                                                                         | 3/8 [00:02<00:05,  1.10s/it]
+ 50%|███████████████████████████████████████████████████████████                                                           | 4/8 [00:04<00:04,  1.19s/it]
+ 62%|█████████████████████████████████████████████████████████████████████████▊                                            | 5/8 [00:05<00:03,  1.24s/it]
+ 75%|████████████████████████████████████████████████████████████████████████████████████████▌                             | 6/8 [00:06<00:02,  1.27s/it]
+ 88%|███████████████████████████████████████████████████████████████████████████████████████████████████████▎              | 7/8 [00:08<00:01,  1.29s/it]
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 8/8 [00:09<00:00,  1.30s/it]
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 8/8 [00:09<00:00,  1.20s/it]
+[INFO] Requested to load WanVAE
+[INFO] loaded completely; 31303.92 MB usable, 644.19 MB loaded, full load: True
+[INFO] Prompt executed in 29.43 seconds
+[INFO] got prompt
+[INFO] Model storage policy: fast_disk=False paths=['/workspace/m51/qwen-image-inference-tuning-course/weights/comfyui-split/text_encoders/qwen3vl_8b_bf16.safetensors']
+[INFO] Requested to load QwenImage21TEModel_
+[INFO] Unloaded partially: 2979.02 MB freed, 10592.04 MB remains loaded, 96.00 MB buffer reserved, lowvram patches: 0
+[INFO] loaded completely;  16721.96 MB loaded, full load: True
+[INFO] CLIP/text encoder model load device: cuda:0, offload device: cpu, current: cuda:0, dtype: torch.float16
+[INFO] loaded completely; 29050.20 MB usable, 13571.02 MB loaded, full load: True
+
+  0%|                                                                                                                              | 0/8 [00:00<?, ?it/s]
+ 25%|█████████████████████████████▌                                                                                        | 2/8 [00:01<00:04,  1.41it/s]
+ 38%|████████████████████████████████████████████▎                                                                         | 3/8 [00:02<00:04,  1.03it/s]
+ 50%|███████████████████████████████████████████████████████████                                                           | 4/8 [00:04<00:04,  1.10s/it]
+ 62%|█████████████████████████████████████████████████████████████████████████▊                                            | 5/8 [00:05<00:03,  1.18s/it]
+ 75%|████████████████████████████████████████████████████████████████████████████████████████▌                             | 6/8 [00:06<00:02,  1.23s/it]
+ 88%|███████████████████████████████████████████████████████████████████████████████████████████████████████▎              | 7/8 [00:08<00:01,  1.26s/it]
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 8/8 [00:09<00:00,  1.28s/it]
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 8/8 [00:09<00:00,  1.17s/it]
+[INFO] Requested to load WanVAE
+[INFO] loaded completely; 14496.07 MB usable, 644.19 MB loaded, full load: True
+[INFO] Prompt executed in 25.51 seconds
+[INFO] got prompt
+
+  0%|                                                                                                                              | 0/8 [00:00<?, ?it/s]
+ 25%|█████████████████████████████▌                                                                                        | 2/8 [00:01<00:04,  1.42it/s]
+ 38%|████████████████████████████████████████████▎                                                                         | 3/8 [00:02<00:04,  1.04it/s]
+ 50%|███████████████████████████████████████████████████████████                                                           | 4/8 [00:04<00:04,  1.10s/it]
+ 62%|█████████████████████████████████████████████████████████████████████████▊                                            | 5/8 [00:05<00:03,  1.18s/it]
+ 75%|████████████████████████████████████████████████████████████████████████████████████████▌                             | 6/8 [00:06<00:02,  1.23s/it]
+ 88%|███████████████████████████████████████████████████████████████████████████████████████████████████████▎              | 7/8 [00:08<00:01,  1.26s/it]
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 8/8 [00:09<00:00,  1.28s/it]
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 8/8 [00:09<00:00,  1.17s/it]
+[INFO] Prompt executed in 12.05 seconds
+[INFO] got prompt
+
+  0%|                                                                                                                              | 0/8 [00:00<?, ?it/s]
+ 25%|█████████████████████████████▌                                                                                        | 2/8 [00:01<00:04,  1.42it/s]
+ 38%|████████████████████████████████████████████▎                                                                         | 3/8 [00:02<00:04,  1.03it/s]
+ 50%|███████████████████████████████████████████████████████████                                                           | 4/8 [00:04<00:04,  1.10s/it]
+ 62%|█████████████████████████████████████████████████████████████████████████▊                                            | 5/8 [00:05<00:03,  1.18s/it]
+ 75%|████████████████████████████████████████████████████████████████████████████████████████▌                             | 6/8 [00:06<00:02,  1.23s/it]
+ 88%|███████████████████████████████████████████████████████████████████████████████████████████████████████▎              | 7/8 [00:08<00:01,  1.26s/it]
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 8/8 [00:09<00:00,  1.29s/it]
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 8/8 [00:09<00:00,  1.18s/it]
+[INFO] Prompt executed in 12.37 seconds
+[INFO] got prompt
+
+  0%|                                                                                                                              | 0/8 [00:00<?, ?it/s]
+ 25%|█████████████████████████████▌                                                                                        | 2/8 [00:01<00:04,  1.42it/s]
+ 38%|████████████████████████████████████████████▎                                                                         | 3/8 [00:02<00:04,  1.04it/s]
+ 50%|███████████████████████████████████████████████████████████                                                           | 4/8 [00:04<00:04,  1.10s/it]
+ 62%|█████████████████████████████████████████████████████████████████████████▊                                            | 5/8 [00:05<00:03,  1.18s/it]
+ 75%|████████████████████████████████████████████████████████████████████████████████████████▌                             | 6/8 [00:06<00:02,  1.23s/it]
+ 88%|███████████████████████████████████████████████████████████████████████████████████████████████████████▎              | 7/8 [00:08<00:01,  1.26s/it]
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 8/8 [00:09<00:00,  1.28s/it]
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 8/8 [00:09<00:00,  1.17s/it]
+[INFO] Prompt executed in 12.11 seconds

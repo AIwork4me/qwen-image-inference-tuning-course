@@ -1,0 +1,333 @@
+{
+  "run": "runs/m51-20261105-cleanroom-01",
+  "prompts": [
+    {
+      "id": "req1",
+      "text": "\u5915\u9633\u4e0b\u7684\u6c5f\u5357\u6c34\u4e61\u5c0f\u9547\uff0c\u77f3\u6865\u6a2a\u8de8\u6cb3\u9053\uff0c\u4e4c\u7bf7\u8239\u7f13\u7f13\u9a76\u8fc7\uff0c\u767d\u5899\u9edb\u74e6\u7684\u6c11\u5c45\u5012\u6620\u5728\u91d1\u8272\u7684\u6cb3\u9762\u4e0a\uff0c\u8fdc\u5904\u708a\u70df\u8885\u8885\uff0c\u8d85\u9ad8\u6e05\u6444\u5f71\u8d28\u611f",
+      "seed": 42
+    },
+    {
+      "id": "req2",
+      "text": "A lone hiker standing on a mountain ridge at dawn, a sea of clouds below, first light hitting the peaks, ultra-detailed landscape photography",
+      "seed": 42
+    },
+    {
+      "id": "req3",
+      "text": "\u7535\u5f71\u6d77\u62a5\u8bbe\u8ba1\uff0c\u4e3b\u6807\u9898\u6587\u5b57\u300c\u661f\u9645\u8fdc\u822a\u300d\uff0c\u526f\u6807\u9898\u6587\u5b57\u300c2026\u5e7410\u670830\u65e5 \u5168\u7403\u4e0a\u6620\u300d\uff0c\u753b\u9762\u662f\u6df1\u7a7a\u4e2d\u7684\u5de8\u578b\u98de\u8239\u4e0e\u7eda\u4e3d\u661f\u4e91\uff0c\u6807\u9898\u6587\u5b57\u6e05\u6670\u9510\u5229\u3001\u6392\u7248\u5c45\u4e2d",
+      "seed": 42
+    },
+    {
+      "id": "req4",
+      "text": "\u6e05\u6668\u7684\u7af9\u6797\u5c0f\u5f84\uff0c\u8584\u96fe\u5f25\u6f2b\uff0c\u9633\u5149\u900f\u8fc7\u7af9\u53f6\u6d12\u4e0b\u6591\u9a73\u5149\u5f71\uff0c\u4e00\u6761\u5c0f\u6eaa\u873f\u8712\u6d41\u8fc7\uff0c\u8d85\u9ad8\u6e05\u6444\u5f71\u8d28\u611f",
+      "seed": 42
+    }
+  ],
+  "arms": {
+    "A": {
+      "server_warmup_s": 30.73,
+      "requests": [
+        {
+          "req": "req1",
+          "wall_s": 26.065,
+          "text_encode_s": 0.601,
+          "ksampler_s": 11.524,
+          "vae_s": 0.992,
+          "vram_peak_mb": 33396.4,
+          "vram_residency_mb": 33090.7,
+          "t_end": 1793873550.3325624
+        },
+        {
+          "req": "req2",
+          "wall_s": 13.033,
+          "text_encode_s": 0.316,
+          "ksampler_s": 10.693,
+          "vae_s": 0.881,
+          "vram_peak_mb": 34648.2,
+          "vram_residency_mb": 33096.7,
+          "t_end": 1793873563.633793
+        },
+        {
+          "req": "req3",
+          "wall_s": 13.032,
+          "text_encode_s": 0.598,
+          "ksampler_s": 10.729,
+          "vae_s": 0.878,
+          "vram_peak_mb": 33688.9,
+          "vram_residency_mb": 33096.7,
+          "t_end": 1793873577.0161188
+        },
+        {
+          "req": "req4",
+          "wall_s": 13.032,
+          "text_encode_s": 0.315,
+          "ksampler_s": 10.7,
+          "vae_s": 0.879,
+          "vram_peak_mb": 34081.8,
+          "vram_residency_mb": 33096.7,
+          "t_end": 1793873590.1389616
+        }
+      ],
+      "total_s": 66.615,
+      "images_per_min": 3.6,
+      "server_rss_after_mb": 2482.6,
+      "server_rss_before_mb": 1225.8,
+      "vram_residency_mb": 33096.7,
+      "vram_peak_mb": 34648.2
+    },
+    "C": {
+      "worker_ready": {
+        "ready": true,
+        "load_s": 4.052,
+        "meta": {
+          "openvino": "2026.4.1-22982-e213a147257-releases/2026/4",
+          "device": "CPU",
+          "execution_devices": [
+            "CPU"
+          ],
+          "inference_precision": "<Type: 'bfloat16'>",
+          "performance_hint": "LATENCY",
+          "execution_mode": "ExecutionMode.PERFORMANCE",
+          "threads": 16,
+          "num_streams": 1,
+          "read_s": 0.246,
+          "compile_s": 1.194,
+          "embed_table_load_s": 0.459,
+          "tokenizer_load_s": 0.15,
+          "model_dir": "/opt/m51-artifacts/bf16",
+          "model_xml": "language_model_bf16.xml",
+          "dynamic_quant_group": null
+        }
+      },
+      "server_warmup_s": 32.079,
+      "fill_s": 0.561,
+      "requests": [
+        {
+          "req": "req1",
+          "gen_start": 1793873646.0851748,
+          "gen_end": 1793873659.1137638,
+          "gen_wall_s": 13.029,
+          "cpu_encode_start": 1793873646.0891807,
+          "cpu_encode_end": 1793873646.496054,
+          "cpu_encode_s": 0.4044,
+          "overlap_s": 0.407,
+          "wait_after_gen_s": 0.0
+        },
+        {
+          "req": "req2",
+          "gen_start": 1793873659.1139143,
+          "gen_end": 1793873671.2001739,
+          "gen_wall_s": 12.086,
+          "cpu_encode_start": 1793873659.115948,
+          "cpu_encode_end": 1793873659.8905644,
+          "cpu_encode_s": 0.77,
+          "overlap_s": 0.775,
+          "wait_after_gen_s": 0.0
+        },
+        {
+          "req": "req3",
+          "gen_start": 1793873671.2003324,
+          "gen_end": 1793873683.3538904,
+          "gen_wall_s": 12.154,
+          "cpu_encode_start": 1793873671.2021399,
+          "cpu_encode_end": 1793873671.641045,
+          "cpu_encode_s": 0.4363,
+          "overlap_s": 0.439,
+          "wait_after_gen_s": 0.0
+        },
+        {
+          "req": "req4",
+          "gen_start": 1793873683.354012,
+          "gen_end": 1793873695.5698223,
+          "gen_wall_s": 12.216
+        }
+      ],
+      "total_s": 50.046,
+      "steady_total_s": 49.485,
+      "images_per_min": 4.8,
+      "overlap_s_total": 1.621,
+      "overlap_proven": true,
+      "worker_rss_after_mb": 30027.2,
+      "server_rss_after_mb": 1951.2,
+      "worker_load_s": 4.052,
+      "worker_meta": {
+        "openvino": "2026.4.1-22982-e213a147257-releases/2026/4",
+        "device": "CPU",
+        "execution_devices": [
+          "CPU"
+        ],
+        "inference_precision": "<Type: 'bfloat16'>",
+        "performance_hint": "LATENCY",
+        "execution_mode": "ExecutionMode.PERFORMANCE",
+        "threads": 16,
+        "num_streams": 1,
+        "read_s": 0.246,
+        "compile_s": 1.194,
+        "embed_table_load_s": 0.459,
+        "tokenizer_load_s": 0.15,
+        "model_dir": "/opt/m51-artifacts/bf16",
+        "model_xml": "language_model_bf16.xml",
+        "dynamic_quant_group": null
+      }
+    },
+    "D": {
+      "worker_ready": {
+        "ready": true,
+        "load_s": 4.373,
+        "meta": {
+          "openvino": "2026.4.1-22982-e213a147257-releases/2026/4",
+          "device": "CPU",
+          "execution_devices": [
+            "CPU"
+          ],
+          "inference_precision": "<Type: 'float32'>",
+          "performance_hint": "LATENCY",
+          "execution_mode": "ExecutionMode.PERFORMANCE",
+          "threads": 16,
+          "num_streams": 1,
+          "read_s": 0.25,
+          "compile_s": 1.517,
+          "embed_table_load_s": 0.52,
+          "tokenizer_load_s": 0.14,
+          "model_dir": "/opt/m51-artifacts/int8",
+          "model_xml": "language_model_int8.xml",
+          "dynamic_quant_group": 32
+        }
+      },
+      "server_warmup_s": 47.254,
+      "fill_s": 0.404,
+      "requests": [
+        {
+          "req": "req1",
+          "gen_start": 1793873760.0533066,
+          "gen_end": 1793873773.0841062,
+          "gen_wall_s": 13.031,
+          "cpu_encode_start": 1793873760.0557785,
+          "cpu_encode_end": 1793873760.4194221,
+          "cpu_encode_s": 0.3607,
+          "overlap_s": 0.364,
+          "wait_after_gen_s": 0.0
+        },
+        {
+          "req": "req2",
+          "gen_start": 1793873773.08425,
+          "gen_end": 1793873785.1353607,
+          "gen_wall_s": 12.051,
+          "cpu_encode_start": 1793873773.0859215,
+          "cpu_encode_end": 1793873773.7155445,
+          "cpu_encode_s": 0.6258,
+          "overlap_s": 0.63,
+          "wait_after_gen_s": 0.0
+        },
+        {
+          "req": "req3",
+          "gen_start": 1793873785.1355095,
+          "gen_end": 1793873797.2420843,
+          "gen_wall_s": 12.107,
+          "cpu_encode_start": 1793873785.137143,
+          "cpu_encode_end": 1793873785.5443392,
+          "cpu_encode_s": 0.4045,
+          "overlap_s": 0.407,
+          "wait_after_gen_s": 0.0
+        },
+        {
+          "req": "req4",
+          "gen_start": 1793873797.2422457,
+          "gen_end": 1793873809.39748,
+          "gen_wall_s": 12.155
+        }
+      ],
+      "total_s": 49.749,
+      "steady_total_s": 49.344,
+      "images_per_min": 4.82,
+      "overlap_s_total": 1.401,
+      "overlap_proven": true,
+      "worker_rss_after_mb": 16854.1,
+      "server_rss_after_mb": 1886.8,
+      "worker_load_s": 4.373,
+      "worker_meta": {
+        "openvino": "2026.4.1-22982-e213a147257-releases/2026/4",
+        "device": "CPU",
+        "execution_devices": [
+          "CPU"
+        ],
+        "inference_precision": "<Type: 'float32'>",
+        "performance_hint": "LATENCY",
+        "execution_mode": "ExecutionMode.PERFORMANCE",
+        "threads": 16,
+        "num_streams": 1,
+        "read_s": 0.25,
+        "compile_s": 1.517,
+        "embed_table_load_s": 0.52,
+        "tokenizer_load_s": 0.14,
+        "model_dir": "/opt/m51-artifacts/int8",
+        "model_xml": "language_model_int8.xml",
+        "dynamic_quant_group": 32
+      }
+    },
+    "B": {
+      "worker_ready": {
+        "ready": true,
+        "load_s": 16.932,
+        "threads": 16
+      },
+      "server_warmup_s": 51.297,
+      "fill_s": 176.165,
+      "requests": [
+        {
+          "req": "req1",
+          "gen_start": 1793874137.4936569,
+          "gen_end": 1793874150.521725,
+          "gen_wall_s": 13.028,
+          "cpu_encode_start": 1793874137.4965246,
+          "cpu_encode_end": 1793874274.5120678,
+          "cpu_encode_s": 137.0155,
+          "overlap_s": 13.025,
+          "wait_after_gen_s": 123.99
+        },
+        {
+          "req": "req2",
+          "gen_start": 1793874274.5140924,
+          "gen_end": 1793874286.5538902,
+          "gen_wall_s": 12.04,
+          "cpu_encode_start": 1793874274.5166578,
+          "cpu_encode_end": 1793874482.089285,
+          "cpu_encode_s": 207.5726,
+          "overlap_s": 12.037,
+          "wait_after_gen_s": 195.535
+        },
+        {
+          "req": "req3",
+          "gen_start": 1793874482.0916572,
+          "gen_end": 1793874494.118175,
+          "gen_wall_s": 12.027,
+          "cpu_encode_start": 1793874482.0942404,
+          "cpu_encode_end": 1793874629.2335315,
+          "cpu_encode_s": 147.1393,
+          "overlap_s": 12.024,
+          "wait_after_gen_s": 135.115
+        },
+        {
+          "req": "req4",
+          "gen_start": 1793874629.2355385,
+          "gen_end": 1793874641.332591,
+          "gen_wall_s": 12.097
+        }
+      ],
+      "total_s": 680.004,
+      "steady_total_s": 503.839,
+      "images_per_min": 0.35,
+      "overlap_s_total": 37.086,
+      "overlap_proven": true,
+      "worker_rss_after_mb": 17793.2,
+      "server_rss_after_mb": 1893.2,
+      "worker_load_s": 16.932,
+      "worker_meta": null
+    }
+  },
+  "definitions": {
+    "A": "GPU native TE + GPU denoise, sequential",
+    "B": "persistent PyTorch CPU BF16-storage/FP32-manual-cast TE overlapped with GPU denoise",
+    "C": "persistent OpenVINO BF16 CPU TE overlapped with GPU denoise",
+    "D": "persistent OpenVINO INT8 CPU TE overlapped with GPU denoise"
+  }
+}
