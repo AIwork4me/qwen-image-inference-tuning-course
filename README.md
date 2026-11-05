@@ -65,21 +65,42 @@ This is the course's flagship story, taught end-to-end in
    batch throughput improves only **1.029×** (4.42 → 4.55 img/min) — three
    different questions, three different numbers (cold-inclusive: 1.33×), one
    Amdahl ceiling.
+4. **The client lesson (measure the measurer):** the benchmark client itself
+   became part of the bottleneck — a per-request monitor teardown worth
+   ~0.5–1.0 s/request sat inside *both* arms' batch gaps. Fixing only C's
+   client (+4.85%, honest near-miss of a pre-registered 5% exploratory
+   target) made a C-vs-A "architecture" quote quietly measure the harness.
+   The controlled 2×2 follow-up — {A, C} × {original, fast client} — is the
+   course's flagship fairness experiment
+   ([P4 study](docs/publication-closure/P4_FAIR_CLIENT_AB.md)).
 
 ```mermaid
 flowchart LR
-  subgraph M5.0 ["M5.0: naive offload (negative)"]
+  subgraph M5.0 ["M5.0: naive offload — negative (H2 campaign)"]
     A1["Prompt"] --> A2["PyTorch CPU TE<br/>136-207 s"]
     A2 --> A3["GPU DiT + VAE<br/>12 s"]
-    A3 --> A4["4 reqs: 737 s<br/>0.35 img/min"]
+    A3 --> A4["4 reqs: 737 s<br/>0.33 img/min"]
   end
-  subgraph M5.1 ["M5.1: OpenVINO (recovered)"]
+  subgraph M5.1 ["M5.1: OpenVINO — recovered (cleanroom campaign, cold-inclusive)"]
     B1["Prompt"] --> B2["OpenVINO BF16 CPU TE<br/>0.28-0.56 s (prefetched)"]
     B2 -. overlapped .-> B3["GPU DiT + VAE<br/>~12 s"]
-    B3 --> B4["4 reqs: 50 s<br/>4.55 img/min + 17.26 GB VRAM saved"]
+    B3 --> B4["4 reqs: 50.05 s cold-incl.<br/>4.80 img/min + 17.26 GB VRAM saved"]
   end
   M5.0 ==>|"same architecture,<br/>better implementation"| M5.1
 ```
+
+*Population discipline (why these exact pairs):* every time/throughput pair
+above comes from **one run population** — the M5.0 side is the frozen H2
+campaign record (`737.1 s → 240/737.1 = 0.33 img/min`), the M5.1 side is the
+cleanroom campaign's cold-inclusive C1b session (`50.05 s → 4.80 img/min`;
+VRAM is the campaign warm-session definition). The **warm** steady-state
+numbers are deliberately *not* in this diagram because they answer a different
+question — see item 3 above (service 1.081×, actual batch throughput 1.029× =
+4.42 → 4.55 img/min). Mixing populations (e.g. `737 s` with `0.35 img/min`,
+or `50 s` with `4.55 img/min`) was a real defect in an earlier revision of
+this diagram and is now CI-enforced
+([`check_metric_pairs.py`](scripts/course-quality/check_metric_pairs.py),
+provenance in [`P1_METRIC_PROVENANCE.json`](docs/publication-closure/P1_METRIC_PROVENANCE.json)).
 
 ## What you will learn: the three ways to make inference faster
 

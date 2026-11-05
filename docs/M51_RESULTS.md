@@ -115,7 +115,7 @@ C0 native and C1a FP32 produce **comparable image differences from G** (p1 LPIPS
 | **C OV BF16** | **50.05 s** | 0.56 s | 0.436 s | 12.19 s | **4.80** | GPU | 1.62 s |
 | **D OV INT8** | **49.75 s** | 0.40 s | 0.405 s | 12.13 s | **4.82** | GPU | 1.40 s |
 
-C vs A: **1.33×** cold-inclusive, **1.04×** steady-state. B is **0.098×** (10× slower than A).
+C vs A: **1.33×** cold-inclusive, **1.04×** steady-state (campaign *estimate*; the audit's directly measured warm results are service 1.081× / actual batch 1.029× — see the top table). B is **0.098×** (10× slower than A).
 
 ---
 
