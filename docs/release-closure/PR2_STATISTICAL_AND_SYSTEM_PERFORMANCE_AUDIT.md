@@ -46,13 +46,30 @@ control, 1×4). All requests back-to-back, models resident.
 
 | Metric | A (GPU-native) | C (OV BF16 precomputed) |
 |---|---|---|
-| steady per-request median | **13.031 s** (n=8; 13.029–13.033) | **12.060 s** (n=8; 12.027–12.198) |
-| steady ratio | **C is 1.081× faster (8.05%)** — measured, non-overlapping spreads | |
-| warm images/min | 4.60 | 4.97 |
-| batch walls (2×4) | 54.42 / 54.14 s | 52.77 / 52.71 s |
+| steady per-request SERVICE latency (median) | **13.031 s** (n=8; 13.029–13.033) | **12.060 s** (n=8; 12.027–12.198) |
+| service-latency ratio | **C is 1.081× faster (8.05%)** — measured, non-overlapping spreads | |
+| inter-request overhead (submission/monitoring/cond staging) | ≈0.54 s/request (gap totals 2.0–2.3 s per 4-request batch) | ≈1.10 s/request (4.4–4.6 s per batch; gen-level gaps are 0.0 — requests are back-to-back, the overhead is client-side orchestration) |
+| ACTUAL warm batch throughput | **4.42 img/min** (batch walls 54.42/54.14 s) | **4.55 img/min** (batch walls 52.77/52.71 s) |
+| actual batch-throughput ratio | **C is 1.029× faster (≈2.9%)** — the honest batch-level number | |
 | VRAM peak | 34.17 GB | 17.98 GB (**−16.18 GB**) |
 | CPU encode per request (hidden) | 0.60 s GPU TE (inside wall) | 0.37–0.67 s OV CPU (overlap Σ 3.11 s) |
 | worker / server RSS | — / 1.92 GB | 16.8 GB / 1.82 GB |
+
+**Service latency vs actual batch throughput (corrected distinction, PR2 final polish).**
+Recomputed from committed raw timestamps
+(`scripts/release-closure/latency_vs_throughput.py` →
+`PR2_LATENCY_VS_THROUGHPUT.json`): removing the GPU TE improves what a single
+requester waits by 8.05% (13.031→12.060 s), but the precomputed arm pays
+≈0.56 s/request MORE client-side orchestration overhead (workflow submission +
+cond-file staging + worker bookkeeping), so the **actual four-request batch
+throughput improves only ≈2.9% (4.42→4.55 img/min)**. The earlier "4.60 vs
+4.97 img/min" figures in this file's first edition were naive sum-of-walls
+upper bounds and are superseded. The campaign's original conservative
+"≈1.04× steady" batch-level estimate was therefore closer to the batch truth
+than the 8% service-latency figure; both are now directly measured and
+explicitly labeled. Campaign cold-inclusive decomposition from raw timestamps:
+A sum-of-walls 65.162 s + inter-request gaps 0.71 s + pre-batch 0.74 s =
+66.615 s recorded total (fully reconciled).
 
 - **The campaign's "≈1.04× steady" was a conservative estimate; the directly measured warm
   steady gain is ≈8.1%** (0.97 s/request ≈ the removed GPU-TE encode + its overhead).

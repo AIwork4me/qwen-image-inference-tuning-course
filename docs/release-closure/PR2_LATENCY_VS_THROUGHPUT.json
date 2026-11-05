@@ -1,0 +1,235 @@
+{
+  "definitions": {
+    "service_latency": "wall_s/gen_wall_s of a single request (what one requester waits)",
+    "inter_request_gap": "time between consecutive requests that is NOT service: workflow submission, cond-file reads, monitoring, queueing",
+    "actual_batch_throughput": "n images divided by the true batch wall (gaps included); the naive sum-of-walls figure OVERSTATES it"
+  },
+  "campaign_cold_inclusive": {
+    "A": {
+      "arm": "A (campaign, cold-inclusive session)",
+      "n": 4,
+      "service_latency_s": [
+        26.065,
+        13.033,
+        13.032,
+        13.032
+      ],
+      "first_request_s": 26.065,
+      "steady_service_median_s": 13.032,
+      "inter_request_gaps_s": [
+        0.268,
+        0.35,
+        0.091
+      ],
+      "sum_service_s": 65.162,
+      "batch_span_from_timestamps_s": 65.871,
+      "recorded_total_s": 66.615,
+      "prebatch_overhead_s": 0.744,
+      "actual_batch_throughput_img_per_min": 3.6,
+      "naive_sum_throughput_img_per_min": 3.68
+    },
+    "C": {
+      "arm": "C (campaign, cold-inclusive session)",
+      "n": 4,
+      "service_latency_s": [
+        13.029,
+        12.086,
+        12.154,
+        12.216
+      ],
+      "steady_service_median_s": 12.185,
+      "inter_request_gaps_s": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sum_service_s": 49.485,
+      "recorded_total_s": 50.046,
+      "fill_s": 0.561,
+      "actual_batch_throughput_img_per_min": 4.8,
+      "naive_sum_throughput_img_per_min": 4.8
+    },
+    "D": {
+      "arm": "D (campaign, cold-inclusive session)",
+      "n": 4,
+      "service_latency_s": [
+        13.031,
+        12.051,
+        12.107,
+        12.155
+      ],
+      "steady_service_median_s": 12.131,
+      "inter_request_gaps_s": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sum_service_s": 49.344,
+      "recorded_total_s": 49.749,
+      "fill_s": 0.404,
+      "actual_batch_throughput_img_per_min": 4.82,
+      "naive_sum_throughput_img_per_min": 4.82
+    },
+    "B": {
+      "arm": "B (campaign, cold-inclusive session)",
+      "n": 4,
+      "service_latency_s": [
+        13.028,
+        12.04,
+        12.027,
+        12.097
+      ],
+      "steady_service_median_s": 12.069,
+      "inter_request_gaps_s": [
+        123.992,
+        195.538,
+        135.117
+      ],
+      "sum_service_s": 49.192,
+      "recorded_total_s": 680.004,
+      "fill_s": 176.165,
+      "actual_batch_throughput_img_per_min": 0.35,
+      "naive_sum_throughput_img_per_min": 1.06
+    }
+  },
+  "audit_warm_sessions": {
+    "A": {
+      "arm": "A (audit warm session)",
+      "n": 8,
+      "service_latency_median_s": 13.031,
+      "service_latency_min_max_s": [
+        13.029,
+        13.033
+      ],
+      "per_batch": [
+        {
+          "batch": "A1",
+          "service_latency_s": [
+            13.032,
+            13.03,
+            13.033,
+            13.033
+          ],
+          "inter_request_gaps_s": [
+            0.491,
+            0.707,
+            0.416
+          ],
+          "batch_wall_s": 54.421,
+          "gap_total_s": 2.293,
+          "actual_batch_img_per_min": 4.41,
+          "naive_sum_img_per_min": 4.6
+        },
+        {
+          "batch": "A2",
+          "service_latency_s": [
+            13.029,
+            13.032,
+            13.03,
+            13.03
+          ],
+          "inter_request_gaps_s": [
+            0.355,
+            0.679,
+            0.383
+          ],
+          "batch_wall_s": 54.136,
+          "gap_total_s": 2.015,
+          "actual_batch_img_per_min": 4.43,
+          "naive_sum_img_per_min": 4.6
+        }
+      ],
+      "inter_request_gap_median_s": 0.454,
+      "inter_request_gap_max_s": 0.707
+    },
+    "A2_control": {
+      "arm": "A2 (audit warm session)",
+      "n": 4,
+      "service_latency_median_s": 13.033,
+      "service_latency_min_max_s": [
+        13.033,
+        30.064
+      ],
+      "per_batch": [
+        {
+          "batch": "A2",
+          "service_latency_s": [
+            30.064,
+            13.033,
+            13.033,
+            13.033
+          ],
+          "inter_request_gaps_s": [
+            0.284,
+            0.608,
+            0.093
+          ],
+          "batch_wall_s": 70.265,
+          "gap_total_s": 1.102,
+          "actual_batch_img_per_min": 3.42,
+          "naive_sum_img_per_min": 3.47
+        }
+      ],
+      "inter_request_gap_median_s": 0.284,
+      "inter_request_gap_max_s": 0.608
+    },
+    "C": {
+      "arm": "C (audit warm session)",
+      "n": 8,
+      "service_latency_median_s": 12.06,
+      "service_latency_min_max_s": [
+        12.027,
+        12.198
+      ],
+      "per_batch": [
+        {
+          "batch": "C1",
+          "service_latency_s": [
+            12.088,
+            12.031,
+            12.027,
+            12.077
+          ],
+          "inter_request_gaps_s": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "batch_wall_s": 52.773,
+          "gap_total_s": 4.55,
+          "actual_batch_img_per_min": 4.55,
+          "naive_sum_img_per_min": 4.98
+        },
+        {
+          "batch": "C2",
+          "service_latency_s": [
+            12.198,
+            12.032,
+            12.067,
+            12.053
+          ],
+          "inter_request_gaps_s": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "batch_wall_s": 52.71,
+          "gap_total_s": 4.36,
+          "actual_batch_img_per_min": 4.55,
+          "naive_sum_img_per_min": 4.96
+        }
+      ],
+      "inter_request_gap_median_s": 0.0,
+      "inter_request_gap_max_s": 0.0
+    }
+  },
+  "corrected_summary": {
+    "warm_service_latency_ratio_A_over_C": 1.0805,
+    "warm_actual_batch_throughput_img_per_min": {
+      "A": 4.42,
+      "C": 4.55
+    },
+    "warm_actual_batch_throughput_ratio_C_over_A": 1.0294,
+    "interpretation": "Warm per-request service latency improves 8.05% (13.031 -> 12.060 s, n=8/8, non-overlapping). ACTUAL four-request batch throughput improves only ~3% (~4.41 -> ~4.55 img/min) because the precomputed arm carries ~0.54 s/request more inter-request overhead (cond-file staging + workflow submission). Both numbers are honest; they answer different questions. Any 'images/min' computed from sum-of-walls must be labeled naive/upper-bound."
+  }
+}

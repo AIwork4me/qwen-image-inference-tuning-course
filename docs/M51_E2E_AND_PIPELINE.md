@@ -82,10 +82,17 @@ Do **not** deploy C2 INT8 as the default for cfg>1: its empty-negative condition
 A directly measured, balanced **warm steady-state** experiment
 (`runs/pr2-p4-pipewarm-120822/pipeline_warm/pipeline_warm.json`; A: warm GPU-native session,
 n=8 requests, 13.029–13.033 s; C: warm precomputed-cond session where **no CLIPLoader is ever
-instantiated**, n=8, 12.027–12.198 s) finds **C is 1.081× faster warm (≈8.05%, 0.97 s/request)** —
-non-overlapping ranges — versus the campaign's conservative 4-request estimate of ≈1.04×. The
+instantiated**, n=8, 12.027–12.198 s) finds, **per-request service latency**, C is
+**1.081× faster warm (≈8.05%, 0.97 s/request)** — non-overlapping ranges. Recomputation from
+the raw timestamps additionally separates the two latency notions
+(`docs/release-closure/PR2_LATENCY_VS_THROUGHPUT.json`): the precomputed arm carries
+≈0.56 s/request more client-side orchestration overhead (cond staging + workflow submission),
+so the **actual four-request batch throughput improves only ≈2.9% (4.42→4.55 img/min)** —
+the campaign's original ≈1.04× batch-level steady estimate was in the right range; the 8%
+figure answers "what does one requester wait", not "how many images per minute". The
 cold-inclusive 1.30–1.33× remains a session-start effect (recurring ≈26–30 s first-request
-GPU reload, observed again). VRAM peak in the balanced run: 34.17 GB (A) vs 17.98 GB (C) =
+GPU reload, observed again; fully reconciled: 65.162 s walls + 0.71 s gaps + 0.74 s pre-batch
+= 66.615 s recorded). VRAM peak in the balanced run: 34.17 GB (A) vs 17.98 GB (C) =
 16.18 GB saved. Additional 3-session CPU A/B pairs
 (`runs/pr2-p4-cpuab-v2-114711/`) reproduce C0 within 0.5% and give p2 speedup 480.7× (n=3/6).
 Details: `docs/release-closure/PR2_STATISTICAL_AND_SYSTEM_PERFORMANCE_AUDIT.md`.
