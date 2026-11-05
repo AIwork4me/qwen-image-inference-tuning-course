@@ -2,14 +2,19 @@
 
 **Course:** graduate-level enterprise AI engineering, Sun Yat-sen University
 **Date & time:** **2026-11-19, 16:30–18:10 (exactly 100 minutes)**
-**Theme:** *Making Generative AI Faster: Less Computation, Faster
-Computation, and Parallel Computing*
+**Theme:** *Why is the best optimization often the one that removes
+unnecessary computation — or moves work to the right execution engine?*
+(Less Computation · Faster Computation · Parallel & Heterogeneous Computing)
+中文版：[LECTURE_DEMO.zh-CN.md](LECTURE_DEMO.zh-CN.md)
 **Hardware story:** one AMD Radeon PRO W7900 (gfx1100, 48 GB), Linux ROCm
 7.2.1, torch 2.9.1+rocm — every number below was measured on this GPU
 2026-11-03 and resolves to a committed run record (see
 [CLAIM_EVIDENCE_MATRIX.md](../docs/CLAIM_EVIDENCE_MATRIX.md)). The same
 methodology was re-validated 2026-11-04 on a live Radeon Cloud instance
 (B0 warm 55.10 s, BEST smoke 9.023 s — matching the frozen medians).
+**Network independence:** the lecture itself needs NO live network — the
+demo runs on the pre-provisioned instance and every fallback artifact is
+committed in the repo.
 
 **Prerequisite (announced one week ahead):** students must have arranged
 their Radeon Cloud access BEFORE the lecture — application approved,
@@ -21,17 +26,17 @@ follow the evidence-reading track of the worksheet.
 
 ## Timed agenda (100 minutes)
 
-| Clock | Minutes | Segment |
-|---|---|---|
-| 16:30–16:40 | 10 | Slide 1 + Q1 (interactive): the problem, how students run generative models today |
-| 16:40–16:52 | 12 | Slide 2: profile before optimizing (two layers, Amdahl as a planning tool) |
-| 16:52–17:07 | 15 | Slide 3 + Q2 (interactive): less computation — and why not 5× |
-| 17:07–17:22 | 15 | Slide 4: faster computation — attention & INT8, theory vs measurement |
-| 17:22–17:40 | 18 | **Teacher demonstration** (live, bounded — see below) |
-| 17:40–17:50 | 10 | Slide 5 + Q4 (interactive): parallel & heterogeneous — the 14× lesson |
-| 17:50–17:58 | 8 | Slides 6–7: combined optimization, tradeoffs, the binding quality gate |
-| 17:58–18:08 | 10 | **Student exercise** (bounded, runs during wrap-up — see below) |
-| 18:08–18:10 | 2 | Slide 8: open-source challenge + homework assignment |
+| Clock | Minutes | Segment | Key learning point |
+|---|---|---|---|
+| 16:30–16:40 | 10 | Slide 1 + Q1 (interactive): the problem, how students run generative models today | Where the time actually goes |
+| 16:40–16:52 | 12 | Slide 2: profile before optimizing (two layers, Amdahl as a planning tool) | Diagnosis before treatment |
+| 16:52–17:07 | 15 | Slide 3 + Q2 (interactive): less computation — and why not 5× | Biggest lever + its quality price |
+| 17:07–17:20 | 13 | Slide 4: faster computation — attention & INT8, theory vs measurement | Measured vs paper numbers |
+| 17:20–17:38 | 18 | **Teacher demonstration** (live, bounded — see below) | Evidence discipline live |
+| 17:38–17:52 | 14 | Slide 5 + Q4 + Q5 (interactive): parallel & heterogeneous — the 14× lesson and the 1.029× lesson | Local gain ≠ system gain |
+| 17:52–17:59 | 7 | Slides 6–7 + Q3 + Q6: combined optimization, tradeoffs, the binding quality gate | Composition + judgment |
+| 17:59–18:08 | 9 | **Student exercise** (bounded, runs during wrap-up — see below) | Own the measurement |
+| 18:08–18:10 | 2 | Slide 8: open-source challenge + final research question | Contribute |
 
 ---
 
@@ -105,9 +110,9 @@ derived.
 
 ## Slide 5 — Parallel computing (one GPU + one CPU)
 
-**Measured research extension (2026-11-05, this repo's own W7900 host):** [M5.1 OpenVINO CPU TE](M05_parallel_heterogeneous/M5_1_OPENVINO_CPU_TE.md) builds on M5.0's slow PyTorch CPU baseline. The same-host A/B is now complete: encoder 331–480× faster on the shared 16-CPU cgroup, warm per-request service latency ≈8% better and actual four-request batch throughput ≈3% better once the encoder is hidden behind GPU denoise, and 17.26 GB full-pipeline VRAM peak saved (turbo BF16 DiT, 8 steps, 1024², cfg=1). INT8 fails the empty-negative conditioning gate (relL2 28.25%) and stays exploratory. Independent [Zen5](https://github.com/AIwork4me/qwen3vl-cpu-benchmark) and [Zen4/W7900D](https://github.com/AIwork4me/qwen-image21-openvino-alignment) results remain historical cross-machine references; do not replace M5.0's negative numbers or M5.1's same-host ratios with them.
+**The arc: a negative result, its diagnosis, and a partial recovery.**
 
-Can CPU work overlap the GPU? We measured it (4 requests, turbo):
+**M5.0 (negative):** can CPU work overlap the GPU? We measured it (4 requests, turbo):
 
 | Design | 4-image time | imgs/min |
 |---|---|---|
@@ -119,9 +124,28 @@ B's overlap is *real* — 50.4 s of proven CPU∩GPU concurrency (timestamps in
 (8B encoder; 152–391× slower than the GPU's 0.3–0.6 s), AND the CPU matmuls
 starve the GPU's launch threads (gens slowed 12→19 s).
 
-Talking points: (1) throughput ≠ single-image latency — neither design
-changes one image's 9–12 s; (2) parallelism has a price (contention);
-(3) a negative result with proof is worth more than an optimistic guess.
+**M5.1 (recovery, measured 2026-11-05 on this repo's own W7900 host):** a
+better CPU *implementation* — [OpenVINO CPU TE](M05_parallel_heterogeneous/M5_1_OPENVINO_CPU_TE.md)
+— changes the outcome without changing the architecture:
+
+| Notion | Value | Mechanism |
+|---|---|---|
+| Encoder-only | **331–480×** faster (positive prompts) | compiled CPU graph, BF16-execution IR, persistent worker |
+| Warm per-request service latency | **1.081×** (13.031 → 12.060 s) | encoder was ~4% of the cycle (Amdahl) |
+| Actual 4-request batch throughput | **1.029×** (4.42 → 4.55 img/min) | ~0.54 s/request orchestration overhead |
+| Cold-inclusive batch | 1.33× | avoids a 16.8 GB GPU CLIP reload |
+| VRAM peak | **−17.26 GB** (34.15 → 16.77) | TE no longer resident on GPU |
+
+INT8 fails the empty-negative conditioning gate (relL2 28.25%) and stays
+exploratory. The C1b-vs-G human quality verdict is owner-accepted (2026-11-05,
+scope-limited). Independent [Zen5](https://github.com/AIwork4me/qwen3vl-cpu-benchmark)
+and [Zen4/W7900D](https://github.com/AIwork4me/qwen-image21-openvino-alignment)
+results remain historical cross-machine references.
+
+Talking points: (1) throughput ≠ single-image latency; (2) parallelism has a
+price (contention); (3) a better implementation can flip a negative result —
+but Amdahl still caps the system gain; (4) negative results with proof are
+first-class science.
 
 ## Slide 6 — Combined optimization (measured, never multiplied)
 
@@ -213,8 +237,7 @@ attach the SUMMARY row to the course sheet).
 
 ---
 
-## Interactive classroom Q&A (the four required questions; answers backed
-by this lab's data)
+## Interactive classroom Q&A (six questions; answers backed by this lab's data)
 
 **Q1 — How do students usually run generative models? (and where does the
 time actually go?)**
@@ -226,7 +249,9 @@ independent instruments: websocket per-node/per-step timing on the live
 server, and a rocprofv3 trace of the server process capturing exactly 40.0
 steps (95,600 kernel dispatches). Speaker note: stress that both layers
 agreed before any optimization was attempted — that's what makes the later
-attributions trustworthy.
+attributions trustworthy. *Likely misconception:* "the model is one thing,
+so make 'it' faster" — the pipeline has three separable stages with very
+different costs.
 
 **Q2 — If steps go 40 → 8, should generation automatically become 5× faster?**
 No: measured 4.55×. The 32 removed steps were 97.6% of the workload, but the
@@ -234,7 +259,10 @@ remaining ~1.4 s (VAE + TE + queue/save) is now fixed cost — Amdahl's law in
 one line: 55.2 / (55.2×0.976×(8/40) + 1.4) ≈ 4.6× ceiling, 4.55× measured.
 Also per-step cost is unchanged (1.337 vs 1.345 s) — proof the gain is purely
 "less computation", not hidden execution changes. Speaker note: ask students
-to compute the ceiling live before revealing the measurement.
+to compute the ceiling live before revealing the measurement. *Likely
+misconception:* "fewer steps = lower quality, always" — the schedule change
+makes images *different* (distance 0.19–0.30); acceptability is a separate
+human judgment, not an automatic FAIL.
 
 **Q3 — Why do independent optimization gains not multiply? (why might an
 attention optimization help the baseline but barely move an
@@ -249,12 +277,14 @@ steps 5×, the same 0.3 s attention saving is a much smaller fraction of a
 and never multiply independent ratios, the levers interact. Speaker note:
 tie back to slide 6's 4.55 × 1.08 × 1.25 ≈ 6.14 "prediction" vs 6.12
 measured — the closeness is coincidence, the composition is the lesson.
+*Likely misconception:* "6.12 ≈ 6.14 validates multiplication" — it is a
+one-off coincidence; the honest method is measuring the combination.
 
 **Q4 — With only one GPU, how can CPU–GPU scheduling improve multiple
 requests? (and why can real overlap still reduce throughput?)**
-Honest answer from our measurements: on this host it can't — but we proved
-why with numbers. True overlap exists (50.4 s of concurrent CPU-TE +
-GPU-denoise, proven by timestamps), yet the CPU's 8B text encoder is
+Honest answer from our measurements: on this host the naive version can't —
+but we proved why with numbers. True overlap exists (50.4 s of concurrent
+CPU-TE + GPU-denoise, proven by timestamps), yet the CPU's 8B text encoder is
 152–391× slower than the GPU's, and its 128-thread matmuls contend with
 kernel-launch threads, slowing the GPU 1.5×. Net: 4.69 → 0.33 img/min. The
 break-even is computable: pipelining wins only when CPU-encode time <
@@ -263,7 +293,52 @@ DOES pay on one GPU: overlapping *cheap* host work (png save, queueing) —
 which ComfyUI already does — or batching multiple images into one denoise
 (untested; open challenge). Speaker note: negative results with timestamps
 are first-class science; invite students to find the batching experiment in
-the M7 challenges.
+the M7 challenges. *Likely misconception:* "overlap shown ⇒ speedup gained" —
+utilization and overlap are not outcomes; images/minute is.
+
+**Q5 — If the CPU encoder becomes hundreds of times faster, why does
+end-to-end throughput improve only slightly?**
+Measured (M5.1): OpenVINO makes the CPU encoder 331–480× faster on positive
+prompts — yet warm service latency improves just 1.081× (13.031 → 12.060 s)
+and actual four-request batch throughput just 1.029× (4.42 → 4.55 img/min).
+Three stacked reasons: (1) Amdahl — after prefetching hides the encoder, it
+is ~4% of the cycle, so 1/(1−0.04) ≈ 1.04× is the ceiling; (2) the GPU
+denoise (≈12 s) is the new binding stage — the pipeline runs at GPU speed;
+(3) the precomputed arm pays ~0.54 s/request of orchestration (conditioning
+staging + workflow submission) that eats part of the service gain at batch
+level. The large *cold-inclusive* 1.33× is mostly avoiding a 16.8 GB GPU CLIP
+reload — a session-start effect, not steady state. And the real prize of the
+redesign is memory: −17.26 GB of VRAM peak. Speaker note: this is the
+lecture's thesis in one question — enormous local speedups are worth exactly
+the fraction of the cycle they used to occupy; systems keep score in the
+metric you define. *Likely misconception:* "331× encoder ⇒ 331× images" —
+and its subtler cousin "≈8% service ⇒ ≈8% throughput" (it is 2.9%).
+
+**Q6 — When would saving 16 GB of GPU memory be more valuable than another
+5% latency reduction?**
+Concrete cases from this lab's data: (1) co-tenancy — freeing 17.26 GB is
+the difference between one 48 GB card serving one image pipeline vs serving
+the image pipeline *plus* another model (or a second user); (2) fitting
+bigger work — INT8's −6.7 GB was, on the 24 GB Windows card, the difference
+between 2048² rendering at all or OOM-ing; (3) cost — memory sizes the
+instance you rent per hour; 5% of 12 s does not. The rule: latency is a
+flow metric (per request), capacity is a stock metric (what can coexist);
+they are not interchangeable currencies, and the binding constraint decides
+which one to buy. Speaker note: connect to M5.1 — the OpenVINO redesign was
+adopted *for* the 17.26 GB, with the 2.9–8% speed as a bonus. *Likely
+misconception:* "faster is always the goal" — for a deployment engineer,
+capacity, VRAM headroom, and cost-per-image are goals of equal rank.
+
+---
+
+## Final open-ended research question (closing 2 minutes)
+
+> On one GPU, every configuration we measured is batch_size=1. The measured
+> frontier is ~6.6 img/min (BEST, fresh prompts). If batching N=4 images per
+> denoise step raises per-step GPU utilization, per-image latency, throughput,
+> AND VRAM all at once — which one wins, by how much, and at what quality
+> cost? Design the experiment (manifest, controls, metrics, gates) and bring
+> a paired measurement, not a story. (M7 Task 6 — genuinely unmeasured.)
 
 ---
 

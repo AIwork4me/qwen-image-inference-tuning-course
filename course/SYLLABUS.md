@@ -4,6 +4,8 @@
 *(a hands-on inference-acceleration engineering course built on a real,
 fully-evidenced measurement campaign)*
 
+中文版：[SYLLABUS.zh-CN.md](SYLLABUS.zh-CN.md)
+
 - **Audience:** graduate students / engineers who can write Python and have
   used PyTorch; no prior AMD/ROCm experience required.
 - **Format:** 7 modules ≈ 8 course hours + a 100-minute lecture (2026-11-19
@@ -11,7 +13,11 @@ fully-evidenced measurement campaign)*
 - **Hardware for labs:** a free Radeon Cloud GPU instance (single GPU,
   PyTorch-ROCm image) provisioned via `bash scripts/cloud/start.sh` — see
   [the quickstart](../docs/RADEON_CLOUD_QUICKSTART.md).
-- **Language:** English-first, 中文支持 (slide notes and verdict terms are bilingual).
+- **Language:** English-first canonical files with complete co-located
+  Chinese versions (`*.zh-CN.md`).
+- **Methodology spine:** [METHODOLOGY.md](METHODOLOGY.md) — Measure → Model
+  → Hypothesize → Optimize → Validate → Explain → Reproduce → Contribute;
+  read it before M1 and again after M6.
 
 ## The one-line story
 
@@ -28,7 +34,7 @@ fully-evidenced measurement campaign)*
 | 3 | [Less computation](M03_less_computation/) | Less compute | Turbo 8-step: 4.55× — and why it isn't 5× |
 | 4 | [Faster computation](M04_faster_computation/) | Faster compute | ck attention 1.22×; INT8 1.08× + −6.7 GB VRAM |
 | 5.0 | [PyTorch CPU text encoding baseline](M05_parallel_heterogeneous/LESSON.md) | Parallel baseline | measured 14× throughput LOSS (negative result) |
-| 5.1 | [OpenVINO CPU text encoder](M05_parallel_heterogeneous/M5_1_OPENVINO_CPU_TE.md) | Research extension | same-stack W7900 A/B **COMPLETED 2026-11-05** (encoder 331–480×; warm per-request service latency ≈8% better, actual 4-request batch throughput ≈3% better; cold-inclusive 1.30–1.33×; 17.26 GB VRAM peak saved; INT8 negative-conditioning gate FAIL → exploratory; human quality review PENDING; see [M51_RESULTS](../../docs/M51_RESULTS.md)) |
+| 5.1 | [OpenVINO CPU text encoder](M05_parallel_heterogeneous/M5_1_OPENVINO_CPU_TE.md) | Research extension | same-stack W7900 A/B **COMPLETED 2026-11-05** (encoder 331–480× on positive prompts; warm per-request service latency ≈8% better, actual 4-request batch throughput ≈3% better; cold-inclusive 1.30–1.33×; 17.26 GB VRAM peak saved; INT8 negative-conditioning gate FAIL → exploratory; C1b-vs-G human quality verdict owner-accepted — scope in [PR2_OWNER_QUALITY_VERDICT](../docs/release-closure/PR2_OWNER_QUALITY_VERDICT.md); see [M51_RESULTS](../docs/M51_RESULTS.md)) |
 | 6 | [Combined optimization & the quality gate](M06_combined_quality/) | Combined + quality | BEST 9.02 s = 6.12×; human verdict pending |
 | 7 | [Student challenge](M07_student_challenge/) | Open source | 6 graded tasks with acceptance criteria |
 

@@ -1,5 +1,13 @@
 # M2 — Profiling: Where the Time Actually Goes
 
+**Learning objectives (you will be able to):**
+1. Locate the real hotspots of an inference workload with two profiling layers (pipeline timing + kernel tracing), stating what each layer captures and misses;
+2. Compute Amdahl bounds from profiling data and use them as planning predictions, not results;
+3. Label every number as measured vs derived and keep the two apart in tables;
+4. State what 97.8% GPU-busy does and does not establish (no idle time ≠ compute-bound proof).
+
+中文版：[LESSON.zh-CN.md](LESSON.zh-CN.md)
+
 **Problem.** You have a baseline (55 s) and a budget of GPU hours, not
 weeks. Which optimization do you build first? Guessing wastes credits;
 profiling ranks the opportunities *before* you spend anything — and tells
@@ -129,6 +137,22 @@ byte-for-byte in the numbers they display; a disagreeing chart is a bug).
    consistent with the data, not a direct observation. (This is exactly
    the measured-vs-derived discipline: `pipeline_breakdown.json` now
    carries a per-key `method` map.)</details>
+
+**Student exercise (tiered).**
+- Beginner: reproduce the by-class table's top-3 kernels (name, count, total ms) from your
+  (or the provided) `analysis.json`. Acceptance: numbers match the JSON.
+- Intermediate: pick any "optimize X to zero" hypothesis from the table, write the Amdahl
+  bound step by step, citing the file the share comes from. Acceptance: formula + path at
+  every step.
+- Advanced: design a minimal experiment that would distinguish compute-bound vs
+  memory-bound on this workload (instrument, window, decision rule), and argue whether it
+  fits the course GPU budget. Submit: a one-page design.
+
+**Research extension (testable hypothesis).** Hypothesis: at 2048×2048 the attention share
+rises well above 32.4% (sequence length ~×4), reordering the "attention backend" lever
+above INT8. Predict the share threshold at which the ranking flips (Amdahl), and design a
+bounded experiment to test it — noting that 2048² is currently BLOCKED behind the 1024²
+quality verdict, and stating that dependency explicitly.
 
 **Acceptance.**
 - [ ] Layer A ran on YOUR baseline records (smoke evidence accepted if

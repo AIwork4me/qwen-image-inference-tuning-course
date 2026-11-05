@@ -1,5 +1,13 @@
 # M0 — Setup & the Discipline
 
+**Learning objectives (you will be able to):**
+1. Bootstrap the course environment on a Radeon Cloud GPU instance with one command, and explain what it does and does not do;
+2. Name the fail-closed doctor's checks and the accident each one prevents;
+3. Explain SHA256 pinning and the stamp-cache verification semantics, including the attack it still catches;
+4. Distinguish the cold / fresh / warm / boot latency notions and why mixing them is a classic bug.
+
+中文版：[LESSON.zh-CN.md](LESSON.zh-CN.md)
+
 **Problem.** You just got a cloud GPU and you want to make an image model
 faster. The professional's first move is the opposite of what you expect:
 *prove the environment is trustworthy before touching anything*. A
@@ -119,6 +127,22 @@ The verdict vocabulary everywhere: **PASS / FAIL / BLOCKED / NOT_RUN**.
    of the official campaign; anything your machine produces is *your*
    evidence. Appending would contaminate the published medians — the exact
    bug class this repo guards against in code.</details>
+
+**Student exercise (tiered).**
+- Beginner: run `doctor --cloud`, keep `runs/doctor.json`, and write one sentence per PASS
+  about the accident it prevents. Acceptance: 7 correct sentences.
+- Intermediate: cause one real failure (e.g. temporarily rename a weight so the size check
+  fails), observe the fail-closed behavior, then restore. Submit: the FAIL output plus the
+  recovered PASS output.
+- Advanced: read the safetensors header gate in `lab/download_weights.py` and explain its
+  relation to the same-length-different-bytes attack. Submit: a 150-word explanation citing
+  the exact code lines.
+
+**Research extension (testable hypothesis).** Hypothesis: on a low-egress-bandwidth cloud
+instance, staging the 25.5 GB weight set on demand (turbo + VAE first, 40-step weights
+later) can cut time-to-first-image by 40%+ without weakening the SHA256 integrity gate.
+Design the measurement (time-to-first-image, n≥3), predict a bound, and explain how you
+would prove the fail-closed semantics survive.
 
 **Acceptance.**
 - [ ] `start.sh` completed and printed your first-image path (or you

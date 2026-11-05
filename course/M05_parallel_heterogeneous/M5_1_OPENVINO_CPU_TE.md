@@ -1,5 +1,13 @@
 # M5.1 — Make CPU Text Encoding Fast with OpenVINO
 
+**Learning objectives (you will be able to):**
+1. Design the controlled five-arm encoder A/B (G/C0/C1a/C1b/C2) and name the causal axis each arm isolates (backend, execution precision, quantization);
+2. Judge numerical gates from conditioning alignment data (rel L2 / cosine / token IDs) and scope "331–480×" to positive prompts;
+3. Attribute the three speedup notions (cold-inclusive 1.33× / warm service 1.081× / actual batch throughput 1.029×) to their mechanisms (CLIP reload, encoder share, orchestration overhead) and refuse to conflate them;
+4. Explain why the INT8 empty-negative FAIL (28.25%) cannot be overturned by any subjective acceptance, and its differing consequences at cfg=1 vs cfg>1.
+
+中文版：[M5_1_OPENVINO_CPU_TE.zh-CN.md](M5_1_OPENVINO_CPU_TE.zh-CN.md)
+
 **M5.0 baseline:** [PyTorch CPU offloading & 4-request pipelining](LESSON.md)
 **Experiment status:** **COMPLETED on a physical gfx1100 48 GiB W7900-class GPU, 2026-11-05.**
 **Decision:** **GO** for OpenVINO BF16 CPU deployment; **INT8 is exploratory** (negative-conditioning gate fails).
@@ -161,15 +169,22 @@ Implementation files: `lab/ov_export.py`, `lab/ov_compress.py`, `lab/ov_quantize
 
 ---
 
-## 5. Student exercise (beginner-friendly, reproducible)
+## 5. Student exercise (tiered, reproducible)
 
-**Question:** how much of a 300× encoder speedup survives to the image pipeline?
+**Core question:** how much of a 300× encoder speedup survives to the image pipeline?
 
-1. Read the measured tables above. Compute the encoder share of the sequential cycle: `TE / (TE + KSampler + VAE)`.
-2. Use the pipeline JSON to verify that C's CPU encode interval lies inside the GPU denoise interval.
-3. Compute the break-even: for what denoise time would a 0.53 s encoder be 50% of the cycle? *(Answer: ~0.53 s; this GPU denoise is ~12 s.)*
-4. Compare C1b's 1.25% conditioning difference with C0-native's image-difference metrics. Why does a 7e−6 FP32 conditioning delta already produce LPIPS ~0.01? *(Diffusion amplifies small perturbations; image-difference metrics are not quality verdicts.)*
-5. Explain why INT8's 28% negative-conditioning error matters at cfg>1 but not at cfg=1. *(At cfg=1 the negative branch is not consumed; at cfg>1 it is.)*
+- Beginner: read the measured tables above and compute the encoder share of the sequential
+  cycle: `TE / (TE + KSampler + VAE)`; verify from the pipeline JSON that C's CPU encode
+  interval lies inside the GPU denoise interval.
+- Intermediate: compute the break-even — for what denoise time would a 0.53 s encoder be
+  50% of the cycle? *(Answer: ~0.53 s; this GPU denoises at ~12 s.)* Compare C1b's 1.25%
+  conditioning difference with C0-native's image-difference metrics: why does a 7e−6 FP32
+  conditioning delta already produce LPIPS ~0.01? *(Diffusion amplifies small
+  perturbations; image-difference metrics are not quality verdicts.)*
+- Advanced: explain why INT8's 28% negative-conditioning error matters at cfg>1 but not at
+  cfg=1 *(at cfg=1 the negative branch is not consumed; at cfg>1 it is)* — then explain
+  the mechanisms behind the three speedup notions (1.33× / 1.081× / 1.029×) and why
+  collapsing them into one number is always misleading.
 
 **Acceptance:** the student can explain the conditioning bridge, compute a fair ratio, reproduce the break-even, and refuse to call the 331× encoder gain a 331× image-generation gain.
 
