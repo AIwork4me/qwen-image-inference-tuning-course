@@ -74,8 +74,8 @@ vs G_native`, and only the `M51-OWNER-QUALITY-VERDICT` claim may carry
 ## 4. Latent registry defects the strict gate immediately caught
 
 1. `NOISE-FLOOR.evidence_path` was `evidence/results/quality noise_floor.json`
-   — the space-separated first token silently validated against the
-   `evidence/results/quality` directory. Real path:
+   (with a space) — the space-separated first token silently validated against
+   a "quality" subdirectory under results. Real path:
    `evidence/results/noise_floor.json` (fixed).
 2. `TORCH-COMPILE.evidence_path` cited a nonexistent `P4_PREFLIGHT` file in
    the case-study directory (real rationale journal:
