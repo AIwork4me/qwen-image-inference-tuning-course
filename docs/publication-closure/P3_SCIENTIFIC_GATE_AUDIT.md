@@ -77,8 +77,8 @@ vs G_native`, and only the `M51-OWNER-QUALITY-VERDICT` claim may carry
    — the space-separated first token silently validated against the
    `evidence/results/quality` directory. Real path:
    `evidence/results/noise_floor.json` (fixed).
-2. `TORCH-COMPILE.evidence_path` cited `docs/case-study/P4_PREFLIGHT.md` —
-   a file that does not exist (real rationale journal:
+2. `TORCH-COMPILE.evidence_path` cited a nonexistent `P4_PREFLIGHT` file in
+   the case-study directory (real rationale journal:
    `docs/case-study/P4_FASTER_COMPUTATION.md`; fixed).
 3. `BEST-SPEEDUP` was `status: derived` with **no** machine-checkable
    derivation; now `derivation: {B0-WARM-MEDIAN, BEST-WARM-MEDIAN}`, and the
