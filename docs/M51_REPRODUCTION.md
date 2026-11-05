@@ -103,7 +103,7 @@ CPU time is ~12–15 min for these four prompts. Do not mix cold and warm sample
 .venv-lab/bin/python -m lab run --experiment H3_OV_BF16       # formal
 ```
 
-The CLI checks `.venv-ov`, artifact manifests, disk/RAM budget, and writes `H3_RESULTS.json` with explicit `PASS`/`FAIL`/`BLOCKED` status. If artifacts are absent it prints the provisioning command and exits with BLOCKED; it never fakes a run.
+The CLI byte-verifies the OpenVINO artifacts (streaming SHA256 vs the conversion manifest, sizes, precision identity), checks `.venv-ov`, and applies a conservative RAM gate (host MemAvailable vs cgroup-limit-minus-anon, safety headroom) before writing `H3_RESULTS.json`. The record carries per-gate statuses (`environment`, `artifact_integrity`, `encoder_runtime`, `token_contract`, `conditioning_alignment`, `e2e_gpu`, `performance`, `human_quality`) plus a derived `release_status` — a successful encoder execution alone never yields a release PASS. If artifacts are absent it prints the provisioning command and exits with BLOCKED; it never fakes a run.
 
 ## 6. Raw encoder probes and analysis
 

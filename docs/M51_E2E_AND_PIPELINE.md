@@ -73,6 +73,19 @@ For this workload, use **C1b OpenVINO BF16 CPU + a persistent worker + a bounded
 - the GPU must retain maximum headroom for a larger/40-step DiT or concurrent jobs;
 - cold-start GPU CLIP load is expensive;
 - BF16 conditioning fidelity (≤1.25% positive) is acceptable;
-- the operator accepts a ~1.04–1.07× steady-state image-throughput gain, not a 300× E2E gain.
+- the operator accepts a single-digit-percent steady-state image-throughput gain, not a 300× E2E gain.
 
 Do **not** deploy C2 INT8 as the default for cfg>1: its empty-negative conditioning error is 28%. It may be useful when a different valid image sample is acceptable and memory is tight.
+
+## 7. Independent release-closure addendum (2026-11-05, audit session)
+
+A directly measured, balanced **warm steady-state** experiment
+(`runs/pr2-p4-pipewarm-120822/pipeline_warm/pipeline_warm.json`; A: warm GPU-native session,
+n=8 requests, 13.029–13.033 s; C: warm precomputed-cond session where **no CLIPLoader is ever
+instantiated**, n=8, 12.027–12.198 s) finds **C is 1.081× faster warm (≈8.05%, 0.97 s/request)** —
+non-overlapping ranges — versus the campaign's conservative 4-request estimate of ≈1.04×. The
+cold-inclusive 1.30–1.33× remains a session-start effect (recurring ≈26–30 s first-request
+GPU reload, observed again). VRAM peak in the balanced run: 34.17 GB (A) vs 17.98 GB (C) =
+16.18 GB saved. Additional 3-session CPU A/B pairs
+(`runs/pr2-p4-cpuab-v2-114711/`) reproduce C0 within 0.5% and give p2 speedup 480.7× (n=3/6).
+Details: `docs/release-closure/PR2_STATISTICAL_AND_SYSTEM_PERFORMANCE_AUDIT.md`.

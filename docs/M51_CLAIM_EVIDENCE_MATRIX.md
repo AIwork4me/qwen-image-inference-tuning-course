@@ -31,6 +31,9 @@ Every row is a claim made by this work. Historical upstream numbers are labelled
 | 25 | Universal AMD CPU speedup | not tested | NOT_RUN |
 | 26 | 40-step BF16/CFG quality sweep | not run | NOT_RUN |
 | 27 | INT8 is the production recommendation | contradicted by negative-path 28% | FAIL / not recommended |
+| 28 | Warm steady-state A vs C gain ≈8% (1.081×) | audit `runs/pr2-p4-pipewarm-120822/pipeline_warm/pipeline_warm.json`, n=8/8, non-overlapping ranges | MEASURED (supersedes the ≈1.04× estimate for row "steady 4req") |
+| 29 | C0/C1b p2 encoder A/B 480.7× across 3 paired sessions | audit `runs/pr2-p4-cpuab-v2-114711/` | MEASURED (strengthens row 6-class claims) |
+| 30 | Empty-negative token contract: production inserts no `220`; diagnostic fallback did | audit `lab/m51_token_contract.json` + live pinned-runtime verification | RESOLVED (was open discrepancy) |
 
 ## Historical numbers deliberately not reused as local evidence
 

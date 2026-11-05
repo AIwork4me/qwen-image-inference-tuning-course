@@ -28,7 +28,7 @@ fully-evidenced measurement campaign)*
 | 3 | [Less computation](M03_less_computation/) | Less compute | Turbo 8-step: 4.55× — and why it isn't 5× |
 | 4 | [Faster computation](M04_faster_computation/) | Faster compute | ck attention 1.22×; INT8 1.08× + −6.7 GB VRAM |
 | 5.0 | [PyTorch CPU text encoding baseline](M05_parallel_heterogeneous/LESSON.md) | Parallel baseline | measured 14× throughput LOSS (negative result) |
-| 5.1 | [OpenVINO CPU text encoder](M05_parallel_heterogeneous/M5_1_OPENVINO_CPU_TE.md) | Research extension | prior Zen5/Zen4 results available; same-stack W7900 A/B **NOT_RUN** |
+| 5.1 | [OpenVINO CPU text encoder](M05_parallel_heterogeneous/M5_1_OPENVINO_CPU_TE.md) | Research extension | same-stack W7900 A/B **COMPLETED 2026-11-05** (encoder 331–480×, E2E warm steady ≈8% measured / cold-inclusive 1.30–1.33×, 17.26 GB VRAM peak saved; INT8 negative-conditioning gate FAIL → exploratory; human quality review PENDING; see [M51_RESULTS](../../docs/M51_RESULTS.md)) |
 | 6 | [Combined optimization & the quality gate](M06_combined_quality/) | Combined + quality | BEST 9.02 s = 6.12×; human verdict pending |
 | 7 | [Student challenge](M07_student_challenge/) | Open source | 6 graded tasks with acceptance criteria |
 

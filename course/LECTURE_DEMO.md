@@ -105,7 +105,7 @@ derived.
 
 ## Slide 5 — Parallel computing (one GPU + one CPU)
 
-**Follow-up research, not a measured result in this course:** [M5.1 OpenVINO CPU TE](M05_parallel_heterogeneous/M5_1_OPENVINO_CPU_TE.md) builds on M5.0's slow PyTorch CPU baseline. Independent [Zen5](https://github.com/AIwork4me/qwen3vl-cpu-benchmark) and [Zen4/W7900D](https://github.com/AIwork4me/qwen-image21-openvino-alignment) work shows CPU OpenVINO conditioning is feasible, but a same-host A/B is still required; do not replace M5.0's negative numbers with cross-machine ratios.
+**Measured research extension (2026-11-05, this repo's own W7900 host):** [M5.1 OpenVINO CPU TE](M05_parallel_heterogeneous/M5_1_OPENVINO_CPU_TE.md) builds on M5.0's slow PyTorch CPU baseline. The same-host A/B is now complete: encoder 331–480× faster on the shared 16-CPU cgroup, but E2E throughput only ~3–8% better once the encoder is hidden behind GPU denoise, and 17.26 GB full-pipeline VRAM peak saved (turbo BF16 DiT, 8 steps, 1024², cfg=1). INT8 fails the empty-negative conditioning gate (relL2 28.25%) and stays exploratory. Independent [Zen5](https://github.com/AIwork4me/qwen3vl-cpu-benchmark) and [Zen4/W7900D](https://github.com/AIwork4me/qwen-image21-openvino-alignment) results remain historical cross-machine references; do not replace M5.0's negative numbers or M5.1's same-host ratios with them.
 
 Can CPU work overlap the GPU? We measured it (4 requests, turbo):
 
