@@ -1,0 +1,1434 @@
+{
+  "run": "runs/overnight-course-v2-a7fa69a-p2profile-140000",
+  "design": {
+    "arms": "A warm native (poll); C warm precomputed with interleaved poll/ws batches",
+    "single_variable": "completion detection: 1.0s history polling vs ws event + one GET",
+    "frozen": "model, precision, tokenizer, conditioning tensors, seed, latent, DiT, VAE, scheduler, 8 steps, cfg, prompts \u2014 all unchanged; image bytes must match",
+    "prompts": [
+      {
+        "id": "req1",
+        "text": "\u5915\u9633\u4e0b\u7684\u6c5f\u5357\u6c34\u4e61\u5c0f\u9547\uff0c\u77f3\u6865\u6a2a\u8de8\u6cb3\u9053\uff0c\u4e4c\u7bf7\u8239\u7f13\u7f13\u9a76\u8fc7\uff0c\u767d\u5899\u9edb\u74e6\u7684\u6c11\u5c45\u5012\u6620\u5728\u91d1\u8272\u7684\u6cb3\u9762\u4e0a\uff0c\u8fdc\u5904\u708a\u70df\u8885\u8885\uff0c\u8d85\u9ad8\u6e05\u6444\u5f71\u8d28\u611f",
+        "seed": 42
+      },
+      {
+        "id": "req2",
+        "text": "A lone hiker standing on a mountain ridge at dawn, a sea of clouds below, first light hitting the peaks, ultra-detailed landscape photography",
+        "seed": 42
+      },
+      {
+        "id": "req3",
+        "text": "\u7535\u5f71\u6d77\u62a5\u8bbe\u8ba1\uff0c\u4e3b\u6807\u9898\u6587\u5b57\u300c\u661f\u9645\u8fdc\u822a\u300d\uff0c\u526f\u6807\u9898\u6587\u5b57\u300c2026\u5e7410\u670830\u65e5 \u5168\u7403\u4e0a\u6620\u300d\uff0c\u753b\u9762\u662f\u6df1\u7a7a\u4e2d\u7684\u5de8\u578b\u98de\u8239\u4e0e\u7eda\u4e3d\u661f\u4e91\uff0c\u6807\u9898\u6587\u5b57\u6e05\u6670\u9510\u5229\u3001\u6392\u7248\u5c45\u4e2d",
+        "seed": 42
+      },
+      {
+        "id": "req4",
+        "text": "\u6e05\u6668\u7684\u7af9\u6797\u5c0f\u5f84\uff0c\u8584\u96fe\u5f25\u6f2b\uff0c\u9633\u5149\u900f\u8fc7\u7af9\u53f6\u6d12\u4e0b\u6591\u9a73\u5149\u5f71\uff0c\u4e00\u6761\u5c0f\u6eaa\u873f\u8712\u6d41\u8fc7\uff0c\u8d85\u9ad8\u6e05\u6444\u5f71\u8d28\u611f",
+        "seed": 42
+      }
+    ]
+  },
+  "arms": {
+    "A": {
+      "batches": [
+        {
+          "batch": "A1_poll",
+          "mode": "poll",
+          "batch_wall_s": 66.583,
+          "requests": [
+            {
+              "tag": "A1_poll|req1",
+              "mode": "poll",
+              "t_pre_post": 11168144.6096885,
+              "t_post": 11168144.612976216,
+              "prompt_id": "1894976c-257b-41c4-b097-7c11d4af5822",
+              "history_polls": 26,
+              "t_hist": 11168169.671167428,
+              "t_fetched": 11168169.676547332,
+              "t_written": 11168169.677861659,
+              "t_wall_end": 11168169.677861659,
+              "t_first_exec": 11168144.624999853,
+              "t_ws_done": 11168169.572184548,
+              "image": "runs/overnight-course-v2-a7fa69a-p2profile-140000/pipeline_profile/raw/A1_poll__req1__poll.png",
+              "image_sha256": "2c4572521acc36105ee42a746815d6dba98babac3af54fe2f91377ef65380025",
+              "image_bytes": 1908492,
+              "summary": {
+                "text_encode_s": 0.632,
+                "vae_decode_s": 0.921,
+                "ksampler_s": 11.461,
+                "step_times_s": [
+                  0.702,
+                  1.354,
+                  1.339,
+                  1.329,
+                  1.33,
+                  1.405,
+                  1.366,
+                  1.326
+                ],
+                "node_timings_s": {
+                  "CLIPLoader#clip_41bc1fb2": 11.458,
+                  "CLIPTextEncode#pos_efeda01f": 0.632,
+                  "KSampler#ks_6942d398": 11.461,
+                  "VAEDecode#dec_05d9640b": 0.921,
+                  "SaveImage#save_00d3bc5f": 0.474
+                },
+                "cached_nodes": [
+                  "UNETLoader#unet_742300dd",
+                  "VAELoader#vae_dc16877e",
+                  "CLIPTextEncode#neg_e284640d",
+                  "EmptyLatentImage#latent_572fd55a"
+                ],
+                "vram_peak_mb": 34075.8,
+                "vram_residency_mb": 33090.7,
+                "monitor_error": null
+              },
+              "attrib": {
+                "post_http_s": 0.0033,
+                "queue_to_first_node_s": 0.012,
+                "server_exec_s": 24.9472,
+                "poll_wait_after_done_s": 0.099,
+                "fetch_image_s": 0.0054,
+                "write_file_s": 0.0013,
+                "client_tail_s": 0.0,
+                "wall_s": 25.0682,
+                "history_polls": 26,
+                "mode": "poll"
+              },
+              "wf_build_s": 0.0001,
+              "loop_head_s": 0.0
+            },
+            {
+              "tag": "A1_poll|req2",
+              "mode": "poll",
+              "t_pre_post": 11168170.5762758,
+              "t_post": 11168170.580433289,
+              "prompt_id": "b4182b42-1762-4347-91da-ccce8b5e14fe",
+              "history_polls": 14,
+              "t_hist": 11168183.610253414,
+              "t_fetched": 11168183.612894569,
+              "t_written": 11168183.613894666,
+              "t_wall_end": 11168183.613894666,
+              "t_first_exec": 11168170.583873052,
+              "t_ws_done": 11168183.009319682,
+              "image": "runs/overnight-course-v2-a7fa69a-p2profile-140000/pipeline_profile/raw/A1_poll__req2__poll.png",
+              "image_sha256": "896a39410592e774d1a61207336f3e9414d4b33108ade67ad54da9bdd5e5c0a7",
+              "image_bytes": 1536194,
+              "summary": {
+                "text_encode_s": 0.318,
+                "vae_decode_s": 0.878,
+                "ksampler_s": 10.791,
+                "step_times_s": [
+                  0.057,
+                  1.351,
+                  1.329,
+                  1.329,
+                  1.342,
+                  1.358,
+                  1.327,
+                  1.387
+                ],
+                "node_timings_s": {
+                  "CLIPTextEncode#pos_14c24f24": 0.318,
+                  "KSampler#ks_e451b000": 10.791,
+                  "VAEDecode#dec_3db4e232": 0.878,
+                  "SaveImage#save_7bec20a2": 0.439
+                },
+                "cached_nodes": [
+                  "UNETLoader#unet_36ab4be2",
+                  "CLIPLoader#clip_bbec9627",
+                  "VAELoader#vae_f5f5269e",
+                  "CLIPTextEncode#neg_f295f861",
+                  "EmptyLatentImage#latent_448f2876"
+                ],
+                "vram_peak_mb": 33733.9,
+                "vram_residency_mb": 33096.7,
+                "monitor_error": null
+              },
+              "attrib": {
+                "post_http_s": 0.0042,
+                "queue_to_first_node_s": 0.0034,
+                "server_exec_s": 12.4254,
+                "poll_wait_after_done_s": 0.6009,
+                "fetch_image_s": 0.0026,
+                "write_file_s": 0.001,
+                "client_tail_s": 0.0,
+                "wall_s": 13.0376,
+                "history_polls": 14,
+                "mode": "poll"
+              },
+              "wf_build_s": 0.0001,
+              "loop_head_s": 0.8972
+            },
+            {
+              "tag": "A1_poll|req3",
+              "mode": "poll",
+              "t_pre_post": 11168184.013182295,
+              "t_post": 11168184.01561335,
+              "prompt_id": "9afc6b91-da63-4a4e-b453-0eb6b339020b",
+              "history_polls": 14,
+              "t_hist": 11168197.046022791,
+              "t_fetched": 11168197.048618456,
+              "t_written": 11168197.049799172,
+              "t_wall_end": 11168197.049799172,
+              "t_first_exec": 11168184.022188753,
+              "t_ws_done": 11168196.751290256,
+              "image": "runs/overnight-course-v2-a7fa69a-p2profile-140000/pipeline_profile/raw/A1_poll__req3__poll.png",
+              "image_sha256": "706ba2ea31b87d3bf0755748eee62b0e7d0b28260c3e94a63a42a3e7ba06bf6a",
+              "image_bytes": 1548809,
+              "summary": {
+                "text_encode_s": 0.6,
+                "vae_decode_s": 0.877,
+                "ksampler_s": 10.797,
+                "step_times_s": [
+                  0.06,
+                  1.358,
+                  1.332,
+                  1.339,
+                  1.363,
+                  1.335,
+                  1.334,
+                  1.343
+                ],
+                "node_timings_s": {
+                  "CLIPTextEncode#pos_d6b60659": 0.6,
+                  "KSampler#ks_8e074195": 10.797,
+                  "VAEDecode#dec_c7f30df1": 0.877,
+                  "SaveImage#save_5cd29713": 0.455
+                },
+                "cached_nodes": [
+                  "UNETLoader#unet_1510d578",
+                  "CLIPLoader#clip_fac9f9b5",
+                  "VAELoader#vae_778dd54e",
+                  "CLIPTextEncode#neg_43a28d40",
+                  "EmptyLatentImage#latent_07513945"
+                ],
+                "vram_peak_mb": 34347.9,
+                "vram_residency_mb": 33096.7,
+                "monitor_error": null
+              },
+              "attrib": {
+                "post_http_s": 0.0024,
+                "queue_to_first_node_s": 0.0066,
+                "server_exec_s": 12.7291,
+                "poll_wait_after_done_s": 0.2947,
+                "fetch_image_s": 0.0026,
+                "write_file_s": 0.0012,
+                "client_tail_s": 0.0,
+                "wall_s": 13.0366,
+                "history_polls": 14,
+                "mode": "poll"
+              },
+              "wf_build_s": 0.0001,
+              "loop_head_s": 0.3981
+            },
+            {
+              "tag": "A1_poll|req4",
+              "mode": "poll",
+              "t_pre_post": 11168197.754833512,
+              "t_post": 11168197.758343084,
+              "prompt_id": "ef5fe0e2-8f91-4b23-9bd2-1cc8cb95e112",
+              "history_polls": 14,
+              "t_hist": 11168210.785114564,
+              "t_fetched": 11168210.789691169,
+              "t_written": 11168210.791553758,
+              "t_wall_end": 11168210.791553758,
+              "t_first_exec": 11168197.761212904,
+              "t_ws_done": 11168210.18843436,
+              "image": "runs/overnight-course-v2-a7fa69a-p2profile-140000/pipeline_profile/raw/A1_poll__req4__poll.png",
+              "image_sha256": "8351befd66dcb73f325731f2214c09c8650a94c15a1c6efc0695c1ed8b61af00",
+              "image_bytes": 2433251,
+              "summary": {
+                "text_encode_s": 0.317,
+                "vae_decode_s": 0.877,
+                "ksampler_s": 10.744,
+                "step_times_s": [
+                  0.059,
+                  1.352,
+                  1.33,
+                  1.33,
+                  1.336,
+                  1.336,
+                  1.348,
+                  1.338
+                ],
+                "node_timings_s": {
+                  "CLIPTextEncode#pos_26c7058b": 0.317,
+                  "KSampler#ks_13edb9ce": 10.744,
+                  "VAEDecode#dec_742a6b24": 0.877,
+                  "SaveImage#save_77ad83a5": 0.489
+                },
+                "cached_nodes": [
+                  "UNETLoader#unet_a1899bbd",
+                  "CLIPLoader#clip_804639c0",
+                  "VAELoader#vae_b249f5df",
+                  "CLIPTextEncode#neg_6fd00206",
+                  "EmptyLatentImage#latent_72733505"
+                ],
+                "vram_peak_mb": 33996.2,
+                "vram_residency_mb": 33096.7,
+                "monitor_error": null
+              },
+              "attrib": {
+                "post_http_s": 0.0035,
+                "queue_to_first_node_s": 0.0029,
+                "server_exec_s": 12.4272,
+                "poll_wait_after_done_s": 0.5967,
+                "fetch_image_s": 0.0046,
+                "write_file_s": 0.0019,
+                "client_tail_s": 0.0,
+                "wall_s": 13.0367,
+                "history_polls": 14,
+                "mode": "poll"
+              },
+              "wf_build_s": 0.0001,
+              "loop_head_s": 0.704
+            }
+          ],
+          "server_rss_mb": 2501.4
+        }
+      ]
+    },
+    "C": {
+      "worker_load_s": 5.262,
+      "batches": [
+        {
+          "batch": "C1_poll",
+          "mode": "poll",
+          "batch_wall_s": 52.887,
+          "requests": [
+            {
+              "tag": "C1_poll|req1",
+              "mode": "poll",
+              "t_pre_post": 11168269.211302197,
+              "t_post": 11168269.215379264,
+              "prompt_id": "7c9777b1-229b-4296-8b69-340130279a1e",
+              "history_polls": 13,
+              "t_hist": 11168281.379515365,
+              "t_fetched": 11168281.38763512,
+              "t_written": 11168281.388899475,
+              "t_wall_end": 11168281.388899475,
+              "t_first_exec": 11168269.21749948,
+              "t_ws_done": 11168281.075386552,
+              "image": "runs/overnight-course-v2-a7fa69a-p2profile-140000/pipeline_profile/raw/C1_poll__req1__poll.png",
+              "image_sha256": "d49acd4b78b3f58604238664515bb3fbdf7f2816170b838d9b06d0bc5eb40703",
+              "image_bytes": 1908247,
+              "summary": {
+                "text_encode_s": 0,
+                "vae_decode_s": 0.897,
+                "ksampler_s": 10.762,
+                "step_times_s": [
+                  0.111,
+                  1.346,
+                  1.333,
+                  1.332,
+                  1.333,
+                  1.333,
+                  1.333,
+                  1.333
+                ],
+                "node_timings_s": {
+                  "LinuxLabCondSafetensors#pos_a11d330d": 0.014,
+                  "KSampler#ks_9974a695": 10.762,
+                  "VAEDecode#dec_4a7e9e9e": 0.897,
+                  "SaveImage#save_59bf07be": 0.184
+                },
+                "cached_nodes": [
+                  "UNETLoader#unet_155e8e1a",
+                  "VAELoader#vae_dae57947",
+                  "LinuxLabCondSafetensors#neg_0f497d91",
+                  "EmptyLatentImage#latent_069bfd70"
+                ],
+                "vram_peak_mb": 16781.9,
+                "vram_residency_mb": 16443.4,
+                "monitor_error": null
+              },
+              "attrib": {
+                "post_http_s": 0.0041,
+                "queue_to_first_node_s": 0.0021,
+                "server_exec_s": 11.8579,
+                "poll_wait_after_done_s": 0.3041,
+                "fetch_image_s": 0.0081,
+                "write_file_s": 0.0013,
+                "client_tail_s": 0.0,
+                "wall_s": 12.1776,
+                "history_polls": 13,
+                "mode": "poll"
+              },
+              "wf_build_s": 0.0003,
+              "loop_head_s": 0.0003,
+              "cpu_encode_s": 0.5759,
+              "cpu_encode_wall": {
+                "t_start": 1793887369.1451745,
+                "t_end": 1793887369.7284713
+              }
+            },
+            {
+              "tag": "C1_poll|req2",
+              "mode": "poll",
+              "t_pre_post": 11168282.079426335,
+              "t_post": 11168282.083791422,
+              "prompt_id": "8c2d6bfd-ea0f-43df-84bb-99ef6712e0ef",
+              "history_polls": 13,
+              "t_hist": 11168294.247519907,
+              "t_fetched": 11168294.25484957,
+              "t_written": 11168294.25587896,
+              "t_wall_end": 11168294.25587896,
+              "t_first_exec": 11168282.085702442,
+              "t_ws_done": 11168294.246050112,
+              "image": "runs/overnight-course-v2-a7fa69a-p2profile-140000/pipeline_profile/raw/C1_poll__req2__poll.png",
+              "image_sha256": "0746df31d0ba2e9bb67ea1252a1533fe7cb2a786f942c91e501d868a4995760a",
+              "image_bytes": 1539294,
+              "summary": {
+                "text_encode_s": 0,
+                "vae_decode_s": 0.895,
+                "ksampler_s": 10.771,
+                "step_times_s": [
+                  0.059,
+                  1.354,
+                  1.332,
+                  1.333,
+                  1.333,
+                  1.335,
+                  1.342,
+                  1.372
+                ],
+                "node_timings_s": {
+                  "LinuxLabCondSafetensors#pos_c9aef90c": 0.005,
+                  "KSampler#ks_3fefd3ce": 10.771,
+                  "VAEDecode#dec_16313c21": 0.895,
+                  "SaveImage#save_4e48bdf2": 0.489
+                },
+                "cached_nodes": [
+                  "UNETLoader#unet_18fe3784",
+                  "VAELoader#vae_2cbebd00",
+                  "LinuxLabCondSafetensors#neg_9e974fdc",
+                  "EmptyLatentImage#latent_805afe13"
+                ],
+                "vram_peak_mb": 17011.1,
+                "vram_residency_mb": 16443.1,
+                "monitor_error": null
+              },
+              "attrib": {
+                "post_http_s": 0.0044,
+                "queue_to_first_node_s": 0.0019,
+                "server_exec_s": 12.1603,
+                "poll_wait_after_done_s": 0.0015,
+                "fetch_image_s": 0.0073,
+                "write_file_s": 0.001,
+                "client_tail_s": 0.0,
+                "wall_s": 12.1765,
+                "history_polls": 13,
+                "mode": "poll"
+              },
+              "wf_build_s": 0.0002,
+              "loop_head_s": 0.6892,
+              "cpu_encode_s": 0.398,
+              "cpu_encode_wall": {
+                "t_start": 1793887369.7290473,
+                "t_end": 1793887370.1306653
+              }
+            },
+            {
+              "tag": "C1_poll|req3",
+              "mode": "poll",
+              "t_pre_post": 11168295.249343153,
+              "t_post": 11168295.253300052,
+              "prompt_id": "6ce1ea97-51e6-401a-8722-a050bb094bd0",
+              "history_polls": 13,
+              "t_hist": 11168307.342265774,
+              "t_fetched": 11168307.349743266,
+              "t_written": 11168307.350714287,
+              "t_wall_end": 11168307.350714287,
+              "t_first_exec": 11168295.255905664,
+              "t_ws_done": 11168307.341124287,
+              "image": "runs/overnight-course-v2-a7fa69a-p2profile-140000/pipeline_profile/raw/C1_poll__req3__poll.png",
+              "image_sha256": "22f1e1027432524dbd20ef472c118e086222770185d13fd96deceac9c1b2c650",
+              "image_bytes": 1545377,
+              "summary": {
+                "text_encode_s": 0,
+                "vae_decode_s": 0.893,
+                "ksampler_s": 10.707,
+                "step_times_s": [
+                  0.096,
+                  1.318,
+                  1.326,
+                  1.327,
+                  1.337,
+                  1.347,
+                  1.326,
+                  1.326
+                ],
+                "node_timings_s": {
+                  "LinuxLabCondSafetensors#pos_802b294c": 0.007,
+                  "KSampler#ks_197dbf03": 10.707,
+                  "VAEDecode#dec_72e69b69": 0.893,
+                  "SaveImage#save_e84a9ee4": 0.478
+                },
+                "cached_nodes": [
+                  "UNETLoader#unet_1bf85bdc",
+                  "VAELoader#vae_301e3280",
+                  "LinuxLabCondSafetensors#neg_3b2d1c2e",
+                  "EmptyLatentImage#latent_cb2e1d52"
+                ],
+                "vram_peak_mb": 17254.6,
+                "vram_residency_mb": 16443.6,
+                "monitor_error": null
+              },
+              "attrib": {
+                "post_http_s": 0.004,
+                "queue_to_first_node_s": 0.0026,
+                "server_exec_s": 12.0852,
+                "poll_wait_after_done_s": 0.0011,
+                "fetch_image_s": 0.0075,
+                "write_file_s": 0.001,
+                "client_tail_s": 0.0,
+                "wall_s": 12.1014,
+                "history_polls": 13,
+                "mode": "poll"
+              },
+              "wf_build_s": 0.0002,
+              "loop_head_s": 0.9919,
+              "cpu_encode_s": 0.6664,
+              "cpu_encode_wall": {
+                "t_start": 1793887382.5975232,
+                "t_end": 1793887383.2699933
+              }
+            },
+            {
+              "tag": "C1_poll|req4",
+              "mode": "poll",
+              "t_pre_post": 11168308.344818313,
+              "t_post": 11168308.349248396,
+              "prompt_id": "91232e6a-c889-47a9-8746-b50b871483bd",
+              "history_polls": 13,
+              "t_hist": 11168320.51087233,
+              "t_fetched": 11168320.519650418,
+              "t_written": 11168320.521257082,
+              "t_wall_end": 11168320.521257082,
+              "t_first_exec": 11168308.350926168,
+              "t_ws_done": 11168320.509745102,
+              "image": "runs/overnight-course-v2-a7fa69a-p2profile-140000/pipeline_profile/raw/C1_poll__req4__poll.png",
+              "image_sha256": "e86374935e6740a6f7502b7a97462f649d5fd9bde6deb531bbc98fdd04405a78",
+              "image_bytes": 2433191,
+              "summary": {
+                "text_encode_s": 0,
+                "vae_decode_s": 0.895,
+                "ksampler_s": 10.754,
+                "step_times_s": [
+                  0.058,
+                  1.353,
+                  1.333,
+                  1.333,
+                  1.345,
+                  1.333,
+                  1.333,
+                  1.354
+                ],
+                "node_timings_s": {
+                  "LinuxLabCondSafetensors#pos_99a057c2": 0.005,
+                  "KSampler#ks_08dbd9d3": 10.754,
+                  "VAEDecode#dec_1557d7bb": 0.895,
+                  "SaveImage#save_4a94780e": 0.505
+                },
+                "cached_nodes": [
+                  "UNETLoader#unet_c1fd4812",
+                  "VAELoader#vae_a96dfc78",
+                  "LinuxLabCondSafetensors#neg_f5b635a1",
+                  "EmptyLatentImage#latent_6d243db1"
+                ],
+                "vram_peak_mb": 17253.7,
+                "vram_residency_mb": 16443.2,
+                "monitor_error": null
+              },
+              "attrib": {
+                "post_http_s": 0.0044,
+                "queue_to_first_node_s": 0.0017,
+                "server_exec_s": 12.1588,
+                "poll_wait_after_done_s": 0.0011,
+                "fetch_image_s": 0.0088,
+                "write_file_s": 0.0016,
+                "client_tail_s": 0.0,
+                "wall_s": 12.1764,
+                "history_polls": 13,
+                "mode": "poll"
+              },
+              "wf_build_s": 0.0001,
+              "loop_head_s": 0.9929,
+              "cpu_encode_s": 0.373,
+              "cpu_encode_wall": {
+                "t_start": 1793887395.7671967,
+                "t_end": 1793887396.1454499
+              }
+            }
+          ],
+          "server_rss_mb": 1874.4,
+          "worker_rss_mb": 26912.9
+        },
+        {
+          "batch": "C2_ws",
+          "mode": "ws",
+          "batch_wall_s": 52.888,
+          "requests": [
+            {
+              "tag": "C2_ws|req1",
+              "mode": "ws",
+              "t_pre_post": 11168322.043190878,
+              "t_post": 11168322.047340363,
+              "prompt_id": "50f0e484-5136-4276-a355-8858da06bc48",
+              "history_polls": 1,
+              "t_hist": 11168334.207758589,
+              "t_fetched": 11168334.213210933,
+              "t_written": 11168334.21443826,
+              "t_wall_end": 11168334.21443826,
+              "t_first_exec": 11168322.05073398,
+              "t_ws_done": 11168334.199255047,
+              "image": "runs/overnight-course-v2-a7fa69a-p2profile-140000/pipeline_profile/raw/C2_ws__req1__ws.png",
+              "image_sha256": "5c696f5d4ac05c1bcbf84e6e031e3e45e5084abcd3a2f2e6e3667ed4c73cdabf",
+              "image_bytes": 1908247,
+              "summary": {
+                "text_encode_s": 0,
+                "vae_decode_s": 0.896,
+                "ksampler_s": 10.731,
+                "step_times_s": [
+                  0.089,
+                  1.329,
+                  1.338,
+                  1.328,
+                  1.333,
+                  1.332,
+                  1.333,
+                  1.333
+                ],
+                "node_timings_s": {
+                  "LinuxLabCondSafetensors#pos_29dc7823": 0.056,
+                  "KSampler#ks_28f6b7b6": 10.731,
+                  "VAEDecode#dec_078b3815": 0.896,
+                  "SaveImage#save_7474f961": 0.466
+                },
+                "cached_nodes": [
+                  "UNETLoader#unet_f5dca1d5",
+                  "VAELoader#vae_136f5d19",
+                  "LinuxLabCondSafetensors#neg_394196db",
+                  "EmptyLatentImage#latent_d0390f74"
+                ],
+                "vram_peak_mb": 17035.6,
+                "vram_residency_mb": 16443.4,
+                "monitor_error": null
+              },
+              "attrib": {
+                "post_http_s": 0.0041,
+                "queue_to_first_node_s": 0.0034,
+                "server_exec_s": 12.1485,
+                "poll_wait_after_done_s": 0.0085,
+                "fetch_image_s": 0.0055,
+                "write_file_s": 0.0012,
+                "client_tail_s": 0.0,
+                "wall_s": 12.1712,
+                "history_polls": 1,
+                "mode": "ws"
+              },
+              "wf_build_s": 0.0002,
+              "loop_head_s": 0.0003,
+              "cpu_encode_s": 0.5237,
+              "cpu_encode_wall": {
+                "t_start": 1793887422.0329554,
+                "t_end": 1793887422.560628
+              }
+            },
+            {
+              "tag": "C2_ws|req2",
+              "mode": "ws",
+              "t_pre_post": 11168335.20390988,
+              "t_post": 11168335.207235506,
+              "prompt_id": "56c587c9-6eef-447b-842d-bf5e4374ed02",
+              "history_polls": 1,
+              "t_hist": 11168347.338579385,
+              "t_fetched": 11168347.342212526,
+              "t_written": 11168347.343350673,
+              "t_wall_end": 11168347.343350673,
+              "t_first_exec": 11168335.210951388,
+              "t_ws_done": 11168347.327797307,
+              "image": "runs/overnight-course-v2-a7fa69a-p2profile-140000/pipeline_profile/raw/C2_ws__req2__ws.png",
+              "image_sha256": "0fcf51a5592902e1720a2f2a9c17e0d56e6e7c253a94c02c23f3b81e84d79ad9",
+              "image_bytes": 1539294,
+              "summary": {
+                "text_encode_s": 0,
+                "vae_decode_s": 0.898,
+                "ksampler_s": 10.742,
+                "step_times_s": [
+                  0.157,
+                  1.269,
+                  1.334,
+                  1.334,
+                  1.334,
+                  1.333,
+                  1.337,
+                  1.331
+                ],
+                "node_timings_s": {
+                  "LinuxLabCondSafetensors#pos_53c52ba3": 0.009,
+                  "KSampler#ks_43e3db38": 10.742,
+                  "VAEDecode#dec_7cf32640": 0.898,
+                  "SaveImage#save_59ff5168": 0.469
+                },
+                "cached_nodes": [
+                  "UNETLoader#unet_5f174bb6",
+                  "VAELoader#vae_9be6f31f",
+                  "LinuxLabCondSafetensors#neg_2ea0c5fa",
+                  "EmptyLatentImage#latent_dd45cb85"
+                ],
+                "vram_peak_mb": 16996.3,
+                "vram_residency_mb": 16443.1,
+                "monitor_error": null
+              },
+              "attrib": {
+                "post_http_s": 0.0033,
+                "queue_to_first_node_s": 0.0037,
+                "server_exec_s": 12.1168,
+                "poll_wait_after_done_s": 0.0108,
+                "fetch_image_s": 0.0036,
+                "write_file_s": 0.0011,
+                "client_tail_s": 0.0,
+                "wall_s": 12.1394,
+                "history_polls": 1,
+                "mode": "ws"
+              },
+              "wf_build_s": 0.0003,
+              "loop_head_s": 0.9876,
+              "cpu_encode_s": 0.3999,
+              "cpu_encode_wall": {
+                "t_start": 1793887422.561352,
+                "t_end": 1793887422.9640548
+              }
+            },
+            {
+              "tag": "C2_ws|req3",
+              "mode": "ws",
+              "t_pre_post": 11168348.33126191,
+              "t_post": 11168348.333697235,
+              "prompt_id": "eb219635-9235-4bd2-bbb0-97738f391437",
+              "history_polls": 1,
+              "t_hist": 11168360.554476593,
+              "t_fetched": 11168360.558010174,
+              "t_written": 11168360.559060823,
+              "t_wall_end": 11168360.559060823,
+              "t_first_exec": 11168348.335730411,
+              "t_ws_done": 11168360.548566513,
+              "image": "runs/overnight-course-v2-a7fa69a-p2profile-140000/pipeline_profile/raw/C2_ws__req3__ws.png",
+              "image_sha256": "f54c322c8906ed1a8308c6e2e148610eb6166b92af94aa90d0ff6c1fa0f1dbe6",
+              "image_bytes": 1545377,
+              "summary": {
+                "text_encode_s": 0,
+                "vae_decode_s": 0.893,
+                "ksampler_s": 10.845,
+                "step_times_s": [
+                  0.22,
+                  1.353,
+                  1.328,
+                  1.327,
+                  1.328,
+                  1.329,
+                  1.327,
+                  1.328
+                ],
+                "node_timings_s": {
+                  "LinuxLabCondSafetensors#pos_5c3b3936": 0.006,
+                  "KSampler#ks_c70477b7": 10.845,
+                  "VAEDecode#dec_9bd5d64d": 0.893,
+                  "SaveImage#save_110e67f4": 0.469
+                },
+                "cached_nodes": [
+                  "UNETLoader#unet_d4e5689f",
+                  "VAELoader#vae_da30b77b",
+                  "LinuxLabCondSafetensors#neg_f65a54e4",
+                  "EmptyLatentImage#latent_b6d09144"
+                ],
+                "vram_peak_mb": 17035.8,
+                "vram_residency_mb": 16443.6,
+                "monitor_error": null
+              },
+              "attrib": {
+                "post_http_s": 0.0024,
+                "queue_to_first_node_s": 0.002,
+                "server_exec_s": 12.2128,
+                "poll_wait_after_done_s": 0.0059,
+                "fetch_image_s": 0.0035,
+                "write_file_s": 0.0011,
+                "client_tail_s": 0.0,
+                "wall_s": 12.2278,
+                "history_polls": 1,
+                "mode": "ws"
+              },
+              "wf_build_s": 0.0004,
+              "loop_head_s": 0.9865,
+              "cpu_encode_s": 0.7174,
+              "cpu_encode_wall": {
+                "t_start": 1793887435.7214112,
+                "t_end": 1793887436.4417365
+              }
+            },
+            {
+              "tag": "C2_ws|req4",
+              "mode": "ws",
+              "t_pre_post": 11168361.55248424,
+              "t_post": 11168361.55623728,
+              "prompt_id": "0b42c4ec-6f68-444b-82d1-f1640d94832a",
+              "history_polls": 1,
+              "t_hist": 11168373.680625131,
+              "t_fetched": 11168373.6894798,
+              "t_written": 11168373.691059224,
+              "t_wall_end": 11168373.691059224,
+              "t_first_exec": 11168361.557951491,
+              "t_ws_done": 11168373.39777102,
+              "image": "runs/overnight-course-v2-a7fa69a-p2profile-140000/pipeline_profile/raw/C2_ws__req4__ws.png",
+              "image_sha256": "ec358ec7edfd7689242d42bf795e8e6ebfd59d1c198fc24965db9bdb26e3f204",
+              "image_bytes": 2433191,
+              "summary": {
+                "text_encode_s": 0,
+                "vae_decode_s": 0.895,
+                "ksampler_s": 10.728,
+                "step_times_s": [
+                  0.059,
+                  1.353,
+                  1.334,
+                  1.334,
+                  1.335,
+                  1.333,
+                  1.333,
+                  1.334
+                ],
+                "node_timings_s": {
+                  "LinuxLabCondSafetensors#pos_32bdf7b6": 0.005,
+                  "KSampler#ks_72be4657": 10.728,
+                  "VAEDecode#dec_23ef57e4": 0.895,
+                  "SaveImage#save_7508422c": 0.211
+                },
+                "cached_nodes": [
+                  "UNETLoader#unet_03daf300",
+                  "VAELoader#vae_d7a8268e",
+                  "LinuxLabCondSafetensors#neg_972fd75d",
+                  "EmptyLatentImage#latent_099f6b16"
+                ],
+                "vram_peak_mb": 16996.9,
+                "vram_residency_mb": 16443.2,
+                "monitor_error": null
+              },
+              "attrib": {
+                "post_http_s": 0.0038,
+                "queue_to_first_node_s": 0.0017,
+                "server_exec_s": 11.8398,
+                "poll_wait_after_done_s": 0.2829,
+                "fetch_image_s": 0.0089,
+                "write_file_s": 0.0016,
+                "client_tail_s": 0.0,
+                "wall_s": 12.1386,
+                "history_polls": 1,
+                "mode": "ws"
+              },
+              "wf_build_s": 0.0002,
+              "loop_head_s": 0.992,
+              "cpu_encode_s": 0.5074,
+              "cpu_encode_wall": {
+                "t_start": 1793887448.849357,
+                "t_end": 1793887449.3591297
+              }
+            }
+          ],
+          "server_rss_mb": 1880.1,
+          "worker_rss_mb": 26912.9
+        },
+        {
+          "batch": "C3_poll",
+          "mode": "poll",
+          "batch_wall_s": 52.599,
+          "requests": [
+            {
+              "tag": "C3_poll|req1",
+              "mode": "poll",
+              "t_pre_post": 11168374.933329616,
+              "t_post": 11168374.939931735,
+              "prompt_id": "c68e7045-1d5e-4fa7-b921-ff37ea0aea65",
+              "history_polls": 13,
+              "t_hist": 11168387.126489492,
+              "t_fetched": 11168387.135939771,
+              "t_written": 11168387.13717685,
+              "t_wall_end": 11168387.13717685,
+              "t_first_exec": 11168374.942690719,
+              "t_ws_done": 11168386.842113117,
+              "image": "runs/overnight-course-v2-a7fa69a-p2profile-140000/pipeline_profile/raw/C3_poll__req1__poll.png",
+              "image_sha256": "d912a109fa99f380bd657017c63a350db744bf69715ed87e6add12858db80aaa",
+              "image_bytes": 1908247,
+              "summary": {
+                "text_encode_s": 0,
+                "vae_decode_s": 0.896,
+                "ksampler_s": 10.809,
+                "step_times_s": [
+                  0.2,
+                  1.279,
+                  1.334,
+                  1.334,
+                  1.335,
+                  1.336,
+                  1.345,
+                  1.336
+                ],
+                "node_timings_s": {
+                  "LinuxLabCondSafetensors#pos_acc1d109": 0.01,
+                  "KSampler#ks_8524cb3f": 10.809,
+                  "VAEDecode#dec_393cbd9f": 0.896,
+                  "SaveImage#save_46428f58": 0.184
+                },
+                "cached_nodes": [
+                  "UNETLoader#unet_270146c6",
+                  "VAELoader#vae_4e5d5084",
+                  "LinuxLabCondSafetensors#neg_b02ea9da",
+                  "EmptyLatentImage#latent_76b115af"
+                ],
+                "vram_peak_mb": 17035.6,
+                "vram_residency_mb": 16443.4,
+                "monitor_error": null
+              },
+              "attrib": {
+                "post_http_s": 0.0066,
+                "queue_to_first_node_s": 0.0028,
+                "server_exec_s": 11.8994,
+                "poll_wait_after_done_s": 0.2844,
+                "fetch_image_s": 0.0095,
+                "write_file_s": 0.0012,
+                "client_tail_s": 0.0,
+                "wall_s": 12.2038,
+                "history_polls": 13,
+                "mode": "poll"
+              },
+              "wf_build_s": 0.0001,
+              "loop_head_s": 0.0003,
+              "cpu_encode_s": 0.5269,
+              "cpu_encode_wall": {
+                "t_start": 1793887474.9212048,
+                "t_end": 1793887475.4507663
+              }
+            },
+            {
+              "tag": "C3_poll|req2",
+              "mode": "poll",
+              "t_pre_post": 11168387.845979132,
+              "t_post": 11168387.853200644,
+              "prompt_id": "5390470e-0303-42f2-9795-1ea355c8e24a",
+              "history_polls": 13,
+              "t_hist": 11168399.993569534,
+              "t_fetched": 11168400.001080167,
+              "t_written": 11168400.002220424,
+              "t_wall_end": 11168400.002220424,
+              "t_first_exec": 11168387.85673302,
+              "t_ws_done": 11168399.992500296,
+              "image": "runs/overnight-course-v2-a7fa69a-p2profile-140000/pipeline_profile/raw/C3_poll__req2__poll.png",
+              "image_sha256": "e324ca88e330915cd98ddfe637defa6e87a850c0ed2a52b690313862e0ece0bd",
+              "image_bytes": 1539294,
+              "summary": {
+                "text_encode_s": 0,
+                "vae_decode_s": 0.895,
+                "ksampler_s": 10.787,
+                "step_times_s": [
+                  0.172,
+                  1.292,
+                  1.336,
+                  1.335,
+                  1.335,
+                  1.335,
+                  1.334,
+                  1.335
+                ],
+                "node_timings_s": {
+                  "LinuxLabCondSafetensors#pos_3aa5ed5a": 0.009,
+                  "KSampler#ks_0b705ae4": 10.787,
+                  "VAEDecode#dec_933ced6b": 0.895,
+                  "SaveImage#save_fedd6b1b": 0.445
+                },
+                "cached_nodes": [
+                  "UNETLoader#unet_1ff1ffe6",
+                  "VAELoader#vae_adf74a47",
+                  "LinuxLabCondSafetensors#neg_3aff7d8d",
+                  "EmptyLatentImage#latent_b56d50d0"
+                ],
+                "vram_peak_mb": 16932.4,
+                "vram_residency_mb": 16443.1,
+                "monitor_error": null
+              },
+              "attrib": {
+                "post_http_s": 0.0072,
+                "queue_to_first_node_s": 0.0035,
+                "server_exec_s": 12.1358,
+                "poll_wait_after_done_s": 0.0011,
+                "fetch_image_s": 0.0075,
+                "write_file_s": 0.0011,
+                "client_tail_s": 0.0,
+                "wall_s": 12.1562,
+                "history_polls": 13,
+                "mode": "poll"
+              },
+              "wf_build_s": 0.0001,
+              "loop_head_s": 0.7078,
+              "cpu_encode_s": 0.4175,
+              "cpu_encode_wall": {
+                "t_start": 1793887475.4519756,
+                "t_end": 1793887475.8721592
+              }
+            },
+            {
+              "tag": "C3_poll|req3",
+              "mode": "poll",
+              "t_pre_post": 11168400.99623907,
+              "t_post": 11168400.99914097,
+              "prompt_id": "e48ebc8d-a7b0-47d5-adbe-a2d2cbb1862d",
+              "history_polls": 13,
+              "t_hist": 11168413.036388248,
+              "t_fetched": 11168413.040246436,
+              "t_written": 11168413.041280257,
+              "t_wall_end": 11168413.041280257,
+              "t_first_exec": 11168401.00392636,
+              "t_ws_done": 11168413.035260508,
+              "image": "runs/overnight-course-v2-a7fa69a-p2profile-140000/pipeline_profile/raw/C3_poll__req3__poll.png",
+              "image_sha256": "ebb5a2da0770f2249b1a716afbf47cafe46326f18ede11429628ebbee61e28f1",
+              "image_bytes": 1545377,
+              "summary": {
+                "text_encode_s": 0,
+                "vae_decode_s": 0.892,
+                "ksampler_s": 10.691,
+                "step_times_s": [
+                  0.138,
+                  1.279,
+                  1.328,
+                  1.329,
+                  1.328,
+                  1.328,
+                  1.33,
+                  1.326
+                ],
+                "node_timings_s": {
+                  "LinuxLabCondSafetensors#pos_1ca3ec09": 0.008,
+                  "KSampler#ks_716c4758": 10.691,
+                  "VAEDecode#dec_2e90e25b": 0.892,
+                  "SaveImage#save_9df21ba5": 0.441
+                },
+                "cached_nodes": [
+                  "UNETLoader#unet_9c81768a",
+                  "VAELoader#vae_013f2515",
+                  "LinuxLabCondSafetensors#neg_c23bb38e",
+                  "EmptyLatentImage#latent_539dc18f"
+                ],
+                "vram_peak_mb": 16997.3,
+                "vram_residency_mb": 16452.1,
+                "monitor_error": null
+              },
+              "attrib": {
+                "post_http_s": 0.0029,
+                "queue_to_first_node_s": 0.0048,
+                "server_exec_s": 12.0313,
+                "poll_wait_after_done_s": 0.0011,
+                "fetch_image_s": 0.0039,
+                "write_file_s": 0.001,
+                "client_tail_s": 0.0,
+                "wall_s": 12.045,
+                "history_polls": 13,
+                "mode": "poll"
+              },
+              "wf_build_s": 0.0004,
+              "loop_head_s": 0.9929,
+              "cpu_encode_s": 0.7134,
+              "cpu_encode_wall": {
+                "t_start": 1793887488.3644874,
+                "t_end": 1793887489.0808933
+              }
+            },
+            {
+              "tag": "C3_poll|req4",
+              "mode": "poll",
+              "t_pre_post": 11168414.038734544,
+              "t_post": 11168414.041591804,
+              "prompt_id": "57dfb729-7689-4524-9f1d-f63a28e4ab91",
+              "history_polls": 13,
+              "t_hist": 11168426.284922384,
+              "t_fetched": 11168426.293692093,
+              "t_written": 11168426.295414645,
+              "t_wall_end": 11168426.295414645,
+              "t_first_exec": 11168414.04591146,
+              "t_ws_done": 11168425.99767636,
+              "image": "runs/overnight-course-v2-a7fa69a-p2profile-140000/pipeline_profile/raw/C3_poll__req4__poll.png",
+              "image_sha256": "d0ba21344ea432ef26d5a2d408ed9bb54f5ebaf93e80bb7dd4862033303e2a97",
+              "image_bytes": 2433191,
+              "summary": {
+                "text_encode_s": 0,
+                "vae_decode_s": 0.899,
+                "ksampler_s": 10.836,
+                "step_times_s": [
+                  0.058,
+                  1.396,
+                  1.394,
+                  1.334,
+                  1.335,
+                  1.334,
+                  1.334,
+                  1.334
+                ],
+                "node_timings_s": {
+                  "LinuxLabCondSafetensors#pos_31c23378": 0.004,
+                  "KSampler#ks_a81b4cd8": 10.836,
+                  "VAEDecode#dec_eb27aed2": 0.899,
+                  "SaveImage#save_31fb3287": 0.212
+                },
+                "cached_nodes": [
+                  "UNETLoader#unet_a1bb50d7",
+                  "VAELoader#vae_89d4a7b6",
+                  "LinuxLabCondSafetensors#neg_e533416c",
+                  "EmptyLatentImage#latent_3e781953"
+                ],
+                "vram_peak_mb": 17035.4,
+                "vram_residency_mb": 16443.2,
+                "monitor_error": null
+              },
+              "attrib": {
+                "post_http_s": 0.0029,
+                "queue_to_first_node_s": 0.0043,
+                "server_exec_s": 11.9518,
+                "poll_wait_after_done_s": 0.2872,
+                "fetch_image_s": 0.0088,
+                "write_file_s": 0.0017,
+                "client_tail_s": 0.0,
+                "wall_s": 12.2567,
+                "history_polls": 13,
+                "mode": "poll"
+              },
+              "wf_build_s": 0.0002,
+              "loop_head_s": 0.9966,
+              "cpu_encode_s": 0.4121,
+              "cpu_encode_wall": {
+                "t_start": 1793887501.514459,
+                "t_end": 1793887501.9287996
+              }
+            }
+          ],
+          "server_rss_mb": 1879.1,
+          "worker_rss_mb": 26912.9
+        },
+        {
+          "batch": "C4_ws",
+          "mode": "ws",
+          "batch_wall_s": 52.172,
+          "requests": [
+            {
+              "tag": "C4_ws|req1",
+              "mode": "ws",
+              "t_pre_post": 11168427.536530713,
+              "t_post": 11168427.540726459,
+              "prompt_id": "0421b9f7-52ae-4bc6-a21f-00b576017f00",
+              "history_polls": 1,
+              "t_hist": 11168439.719173368,
+              "t_fetched": 11168439.728175255,
+              "t_written": 11168439.72947892,
+              "t_wall_end": 11168439.72947892,
+              "t_first_exec": 11168427.542600367,
+              "t_ws_done": 11168439.42646012,
+              "image": "runs/overnight-course-v2-a7fa69a-p2profile-140000/pipeline_profile/raw/C4_ws__req1__ws.png",
+              "image_sha256": "b4c573b367e6c1b1e515d68c7727abe4d613877f693a5d2337693c9d42d96a10",
+              "image_bytes": 1908247,
+              "summary": {
+                "text_encode_s": 0,
+                "vae_decode_s": 0.895,
+                "ksampler_s": 10.798,
+                "step_times_s": [
+                  0.11,
+                  1.367,
+                  1.335,
+                  1.334,
+                  1.334,
+                  1.335,
+                  1.335,
+                  1.335
+                ],
+                "node_timings_s": {
+                  "LinuxLabCondSafetensors#pos_d290ebb7": 0.006,
+                  "KSampler#ks_683177e2": 10.798,
+                  "VAEDecode#dec_8d9101a8": 0.895,
+                  "SaveImage#save_90019a90": 0.185
+                },
+                "cached_nodes": [
+                  "UNETLoader#unet_07b455f3",
+                  "VAELoader#vae_9e353d6c",
+                  "LinuxLabCondSafetensors#neg_237e027e",
+                  "EmptyLatentImage#latent_aa19b34c"
+                ],
+                "vram_peak_mb": 16781.9,
+                "vram_residency_mb": 16443.4,
+                "monitor_error": null
+              },
+              "attrib": {
+                "post_http_s": 0.0042,
+                "queue_to_first_node_s": 0.0019,
+                "server_exec_s": 11.8839,
+                "poll_wait_after_done_s": 0.2927,
+                "fetch_image_s": 0.009,
+                "write_file_s": 0.0013,
+                "client_tail_s": 0.0,
+                "wall_s": 12.1929,
+                "history_polls": 1,
+                "mode": "ws"
+              },
+              "wf_build_s": 0.0002,
+              "loop_head_s": 0.0003,
+              "cpu_encode_s": 0.5303,
+              "cpu_encode_wall": {
+                "t_start": 1793887527.52092,
+                "t_end": 1793887528.0536852
+              }
+            },
+            {
+              "tag": "C4_ws|req2",
+              "mode": "ws",
+              "t_pre_post": 11168440.430637687,
+              "t_post": 11168440.432914471,
+              "prompt_id": "92f8e2a7-08bd-4718-a6c7-8cb84e5c99b0",
+              "history_polls": 1,
+              "t_hist": 11168452.56218559,
+              "t_fetched": 11168452.565961052,
+              "t_written": 11168452.56704608,
+              "t_wall_end": 11168452.56704608,
+              "t_first_exec": 11168440.436888112,
+              "t_ws_done": 11168452.553430252,
+              "image": "runs/overnight-course-v2-a7fa69a-p2profile-140000/pipeline_profile/raw/C4_ws__req2__ws.png",
+              "image_sha256": "941e3e090bd37800adbfa7de6a88a0eb6689fa99b3509e471d75e3ab278a51d2",
+              "image_bytes": 1539294,
+              "summary": {
+                "text_encode_s": 0,
+                "vae_decode_s": 0.896,
+                "ksampler_s": 10.734,
+                "step_times_s": [
+                  0.095,
+                  1.32,
+                  1.334,
+                  1.335,
+                  1.335,
+                  1.333,
+                  1.334,
+                  1.335
+                ],
+                "node_timings_s": {
+                  "LinuxLabCondSafetensors#pos_7d0b0410": 0.004,
+                  "KSampler#ks_07593b18": 10.734,
+                  "VAEDecode#dec_a23d06cb": 0.896,
+                  "SaveImage#save_24338403": 0.484
+                },
+                "cached_nodes": [
+                  "UNETLoader#unet_9a0af9a7",
+                  "VAELoader#vae_1a0212f9",
+                  "LinuxLabCondSafetensors#neg_e21f14cf",
+                  "EmptyLatentImage#latent_37fb6d94"
+                ],
+                "vram_peak_mb": 16996.8,
+                "vram_residency_mb": 16443.1,
+                "monitor_error": null
+              },
+              "attrib": {
+                "post_http_s": 0.0023,
+                "queue_to_first_node_s": 0.004,
+                "server_exec_s": 12.1165,
+                "poll_wait_after_done_s": 0.0088,
+                "fetch_image_s": 0.0038,
+                "write_file_s": 0.0011,
+                "client_tail_s": 0.0,
+                "wall_s": 12.1364,
+                "history_polls": 1,
+                "mode": "ws"
+              },
+              "wf_build_s": 0.0005,
+              "loop_head_s": 0.6997,
+              "cpu_encode_s": 0.3809,
+              "cpu_encode_wall": {
+                "t_start": 1793887528.0543525,
+                "t_end": 1793887528.4380426
+              }
+            },
+            {
+              "tag": "C4_ws|req3",
+              "mode": "ws",
+              "t_pre_post": 11168453.557964444,
+              "t_post": 11168453.561541043,
+              "prompt_id": "b3c0e3d9-bca2-4308-ba33-11fcf8cb6ba3",
+              "history_polls": 1,
+              "t_hist": 11168465.602127003,
+              "t_fetched": 11168465.605906142,
+              "t_written": 11168465.606955392,
+              "t_wall_end": 11168465.606955392,
+              "t_first_exec": 11168453.563478677,
+              "t_ws_done": 11168465.314941728,
+              "image": "runs/overnight-course-v2-a7fa69a-p2profile-140000/pipeline_profile/raw/C4_ws__req3__ws.png",
+              "image_sha256": "d65d01285725f9a82d7878baaddc7c69e7e7e82da26e5bfb56cdc8f5e6dacbd1",
+              "image_bytes": 1545377,
+              "summary": {
+                "text_encode_s": 0,
+                "vae_decode_s": 0.893,
+                "ksampler_s": 10.692,
+                "step_times_s": [
+                  0.06,
+                  1.353,
+                  1.328,
+                  1.33,
+                  1.328,
+                  1.329,
+                  1.331,
+                  1.326
+                ],
+                "node_timings_s": {
+                  "LinuxLabCondSafetensors#pos_d1197b15": 0.006,
+                  "KSampler#ks_7755afa0": 10.692,
+                  "VAEDecode#dec_7be43851": 0.893,
+                  "SaveImage#save_08c9ac20": 0.161
+                },
+                "cached_nodes": [
+                  "UNETLoader#unet_219c7fc3",
+                  "VAELoader#vae_4cd0cad6",
+                  "LinuxLabCondSafetensors#neg_79b6aee6",
+                  "EmptyLatentImage#latent_032fa287"
+                ],
+                "vram_peak_mb": 16991.6,
+                "vram_residency_mb": 16452.1,
+                "monitor_error": null
+              },
+              "attrib": {
+                "post_http_s": 0.0036,
+                "queue_to_first_node_s": 0.0019,
+                "server_exec_s": 11.7515,
+                "poll_wait_after_done_s": 0.2872,
+                "fetch_image_s": 0.0038,
+                "write_file_s": 0.001,
+                "client_tail_s": 0.0,
+                "wall_s": 12.049,
+                "history_polls": 1,
+                "mode": "ws"
+              },
+              "wf_build_s": 0.0002,
+              "loop_head_s": 0.989,
+              "cpu_encode_s": 0.6809,
+              "cpu_encode_wall": {
+                "t_start": 1793887540.9484746,
+                "t_end": 1793887541.632116
+              }
+            },
+            {
+              "tag": "C4_ws|req4",
+              "mode": "ws",
+              "t_pre_post": 11168466.318489708,
+              "t_post": 11168466.321375728,
+              "prompt_id": "ff3a1954-f335-45c4-ad97-44c8ac1d1c2b",
+              "history_polls": 1,
+              "t_hist": 11168478.445763497,
+              "t_fetched": 11168478.454241788,
+              "t_written": 11168478.45582502,
+              "t_wall_end": 11168478.45582502,
+              "t_first_exec": 11168466.32501812,
+              "t_ws_done": 11168478.169812156,
+              "image": "runs/overnight-course-v2-a7fa69a-p2profile-140000/pipeline_profile/raw/C4_ws__req4__ws.png",
+              "image_sha256": "1e4f7cbd96e57e24f2389ee852d0b0124e00badb8fea68cd06c1ebbb43cafdb2",
+              "image_bytes": 2433191,
+              "summary": {
+                "text_encode_s": 0,
+                "vae_decode_s": 0.894,
+                "ksampler_s": 10.736,
+                "step_times_s": [
+                  0.059,
+                  1.355,
+                  1.335,
+                  1.337,
+                  1.335,
+                  1.335,
+                  1.334,
+                  1.334
+                ],
+                "node_timings_s": {
+                  "LinuxLabCondSafetensors#pos_0ff378db": 0.004,
+                  "KSampler#ks_13533c09": 10.736,
+                  "VAEDecode#dec_7e759e99": 0.894,
+                  "SaveImage#save_7ba7f989": 0.21
+                },
+                "cached_nodes": [
+                  "UNETLoader#unet_f79cd224",
+                  "VAELoader#vae_732bb989",
+                  "LinuxLabCondSafetensors#neg_5e73e208",
+                  "EmptyLatentImage#latent_ecd6d551"
+                ],
+                "vram_peak_mb": 16996.9,
+                "vram_residency_mb": 16443.2,
+                "monitor_error": null
+              },
+              "attrib": {
+                "post_http_s": 0.0029,
+                "queue_to_first_node_s": 0.0036,
+                "server_exec_s": 11.8448,
+                "poll_wait_after_done_s": 0.276,
+                "fetch_image_s": 0.0085,
+                "write_file_s": 0.0016,
+                "client_tail_s": 0.0,
+                "wall_s": 12.1373,
+                "history_polls": 1,
+                "mode": "ws"
+              },
+              "wf_build_s": 0.0002,
+              "loop_head_s": 0.7106,
+              "cpu_encode_s": 0.3699,
+              "cpu_encode_wall": {
+                "t_start": 1793887554.075414,
+                "t_end": 1793887554.4475322
+              }
+            }
+          ],
+          "server_rss_mb": 1877.2,
+          "worker_rss_mb": 26912.9
+        }
+      ]
+    }
+  },
+  "attribution": {
+    "C_poll": {
+      "n": 8,
+      "wall_s_median": 12.1764,
+      "poll_wait_after_done_s_median": 0.0013,
+      "fetch_image_s_median": 0.0078,
+      "write_file_s_median": 0.0011,
+      "queue_to_first_node_s_median": 0.0027,
+      "history_polls_median": 13.0
+    },
+    "C_ws": {
+      "n": 8,
+      "wall_s_median": 12.139,
+      "poll_wait_after_done_s_median": 0.1434,
+      "fetch_image_s_median": 0.0046,
+      "write_file_s_median": 0.0011,
+      "queue_to_first_node_s_median": 0.0027,
+      "history_polls_median": 1.0
+    },
+    "A_poll": {
+      "n": 4,
+      "wall_s_median": 13.0372,
+      "poll_wait_after_done_s_median": 0.4457,
+      "queue_to_first_node_s_median": 0.005
+    },
+    "C_batch_wall_s": {
+      "poll": [
+        52.887,
+        52.599
+      ],
+      "ws": [
+        52.888,
+        52.172
+      ],
+      "poll_median": 52.743,
+      "ws_median": 52.53,
+      "ws_vs_poll_batch_ratio": 1.0041
+    },
+    "image_hash_identical_across_modes": {
+      "req1": false,
+      "req2": false,
+      "req3": false,
+      "req4": false
+    }
+  }
+}

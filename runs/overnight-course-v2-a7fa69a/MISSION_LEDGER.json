@@ -4,10 +4,12 @@
   "source_head": "a7fa69ae18800fc1f7a83e24de1c0b8bad2e7eaa",
   "source_branch": "feat/m5-1-openvino-cpu-te-course (PR #2 head)",
   "work_branch": "feat/world-class-bilingual-inference-course",
-  "phase": "P0 complete",
+  "phase": "P1+P2+P3(large part) complete; P4-P8 remaining",
   "p0": {
-    "evidence_freeze": ["runs/overnight-course-v2-a7fa69a/p0_blob_freeze.txt (579 blobs)",
-                        "runs/overnight-course-v2-a7fa69a/p0_evidence_sha256.txt (254 digests)"],
+    "evidence_freeze": [
+      "runs/overnight-course-v2-a7fa69a/p0_blob_freeze.txt (579 blobs)",
+      "runs/overnight-course-v2-a7fa69a/p0_evidence_sha256.txt (254 digests)"
+    ],
     "tests_at_baseline": "82 passed",
     "findings": {
       "image_evidence": "6/6 committed_in_git claims false -> force-added digest-verified PNGs, INDEX.json + review package repaired (docs/quality-v2/IMAGE_EVIDENCE_AUDIT.md)",
@@ -17,6 +19,52 @@
     },
     "gate": "no unresolved P0 scientific contradiction"
   },
-  "next_actions": ["P1 methodology + verified_claims registry", "P2 bounded pipeline-overhead study on W7900", "P3 bilingual curriculum", "P4 README redesign", "P5 onboarding bilingual", "P6 lecture", "P7 quality gates", "P8 audit + draft PR"],
-  "resource_usage": {"gpu_hours_used": 0.0, "wall_hours_used_est": 1.2}
+  "next_actions": [
+    "P1 methodology + verified_claims registry",
+    "P2 bounded pipeline-overhead study on W7900",
+    "P3 bilingual curriculum",
+    "P4 README redesign",
+    "P5 onboarding bilingual",
+    "P6 lecture",
+    "P7 quality gates",
+    "P8 audit + draft PR"
+  ],
+  "resource_usage": {
+    "gpu_minutes_used": 23,
+    "wall_hours_used_est": 4.0
+  },
+  "p1": {
+    "methodology": "course/METHODOLOGY.md + .zh-CN.md (complete, bilingual)",
+    "registry": "course/data/verified_claims.json (23 claims)"
+  },
+  "p2": {
+    "profiling_run": "overnight-course-v2-a7fa69a-p2profile-140000",
+    "ab_run": "overnight-course-v2-a7fa69a-p2ab-152000",
+    "root_cause": "per-request RunMonitor teardown 0.4-1.0s in batch gap (both arms)",
+    "result": "fast client 1.0485x batch throughput (+4.85%, below 5% exploratory target; non-overlapping walls; mechanism proven; cond SHA256 stable)",
+    "decision": "production harness unchanged; optimization stays in experiment module; near-miss positive published",
+    "deliverable": "docs/quality-v2/PIPELINE_OVERHEAD_STUDY.md"
+  },
+  "p3_progress": {
+    "zh_lessons_done": [
+      "M00",
+      "M01",
+      "M02",
+      "M03",
+      "M04",
+      "M5.0",
+      "M5.1",
+      "M06",
+      "M07",
+      "SYLLABUS",
+      "LECTURE_DEMO"
+    ],
+    "en_lessons_upgraded": "learning objectives + tiered exercises + research extensions added",
+    "remaining": [
+      "README EN/ZH redesign",
+      "onboarding docs bilingual",
+      "quality tools",
+      "final audit+PR"
+    ]
+  }
 }
