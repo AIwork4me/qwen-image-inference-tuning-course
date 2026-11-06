@@ -59,6 +59,12 @@ import sys
 import time
 from pathlib import Path
 
+# Allow both invocation forms (`python -m lab.m51_pipeline_fair_ab` and the
+# script form `python lab/m51_pipeline_fair_ab.py` used by campaign drivers)
+# to resolve the `lab.` package imports.
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 from lab.lab_env import REPO
 from lab.source_provenance import capture as capture_source_provenance
 

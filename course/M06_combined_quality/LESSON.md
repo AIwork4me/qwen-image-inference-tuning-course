@@ -1,5 +1,13 @@
 # M6 — Combined Optimization & the Quality Gate
 
+## Run it as a notebook (three declared modes)
+
+Every module ships paired EN/zh-CN Jupyter notebooks. Set `COURSE_MODE` in
+the first cell: `REFERENCE` (offline CPU analysis of the frozen campaign),
+`GPU_CLASSROOM` (your own bounded physical W7900 exercise, ~5 min per arm —
+the default lab experience), or `GPU_RESEARCH` (this full protocol). See
+[notebooks/README.md](../../notebooks/README.md).
+
 **Learning objectives (you will be able to):**
 1. Interpret LPIPS under fidelity vs distance semantics and label given quality claims VALID or FORBIDDEN;
 2. State what each automated artifact (paired grids, native-resolution crops, noise floor) prepares — and why the binding verdict must stay human;

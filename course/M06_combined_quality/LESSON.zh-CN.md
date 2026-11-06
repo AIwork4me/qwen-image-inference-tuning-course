@@ -1,5 +1,13 @@
 # M6 — 组合优化与质量门
 
+## 以 Notebook 方式运行（三种声明模式）
+
+每个模块配有中英文对照 Jupyter Notebook。在第一个单元设置
+`COURSE_MODE`：`REFERENCE`（离线 CPU 分析冻结实验数据）、`GPU_CLASSROOM`
+（你自己的 W7900 有界物理练习，每臂约 5 分钟——默认实验体验）或
+`GPU_RESEARCH`（本文档所述完整协议）。见
+[notebooks/README.zh-CN.md](../../notebooks/README.zh-CN.md)。
+
 **学习目标（学完本课你能够）：**
 1. 用"保真度 vs 距离"两种语义正确解读 LPIPS，并对给定的每个质量主张标注 VALID 或 FORBIDDEN；
 2. 说明自动化指标（配对网格、原生分辨率裁切、噪声底）各自准备什么证据，以及为什么最终判定必须交给人；

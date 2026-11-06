@@ -1,5 +1,13 @@
 # M2 — 剖析：时间到底去哪儿了
 
+## 以 Notebook 方式运行（三种声明模式）
+
+每个模块配有中英文对照 Jupyter Notebook。在第一个单元设置
+`COURSE_MODE`：`REFERENCE`（离线 CPU 分析冻结实验数据）、`GPU_CLASSROOM`
+（你自己的 W7900 有界物理练习，每臂约 5 分钟——默认实验体验）或
+`GPU_RESEARCH`（本文档所述完整协议）。见
+[notebooks/README.zh-CN.md](../../notebooks/README.zh-CN.md)。
+
 **学习目标（学完本课你能够）：**
 1. 用两层剖析（流水线计时 + 内核追踪）定位推理负载的真实热点，并说明每层数据的来源与盲区；
 2. 用 Amdahl 公式从剖析数据计算优化上界，把它当作预测（planning）而非结果；

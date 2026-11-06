@@ -1,5 +1,13 @@
 # M4 — 加速计算
 
+## 以 Notebook 方式运行（三种声明模式）
+
+每个模块配有中英文对照 Jupyter Notebook。在第一个单元设置
+`COURSE_MODE`：`REFERENCE`（离线 CPU 分析冻结实验数据）、`GPU_CLASSROOM`
+（你自己的 W7900 有界物理练习，每臂约 5 分钟——默认实验体验）或
+`GPU_RESEARCH`（本文档所述完整协议）。见
+[notebooks/README.zh-CN.md](../../notebooks/README.zh-CN.md)。
+
 **学习目标（学完本课你能够）：**
 1. 对同一基线分别执行"换注意力内核"与"INT8 权重量化"两个干净 A/B，并用服务端日志证明实际使用的后端；
 2. 用 F1 与 M2 的交叉验证解释"实测 / 实测 / 推导估计"三种数字来源的差别；

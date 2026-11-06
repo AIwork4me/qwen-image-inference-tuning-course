@@ -1,5 +1,13 @@
 # M5.1 — 用 OpenVINO 让 CPU 文本编码变快
 
+## 以 Notebook 方式运行（三种声明模式）
+
+每个模块配有中英文对照 Jupyter Notebook。在第一个单元设置
+`COURSE_MODE`：`REFERENCE`（离线 CPU 分析冻结实验数据）、`GPU_CLASSROOM`
+（你自己的 W7900 有界物理练习，每臂约 5 分钟——默认实验体验）或
+`GPU_RESEARCH`（本文档所述完整协议）。见
+[notebooks/README.zh-CN.md](../../notebooks/README.zh-CN.md)。
+
 **学习目标（学完本课你能够）：**
 1. 设计一个受控的编码器 A/B（G/C0/C1a/C1b/C2 五臂），说明每臂控制的因果轴（后端、执行精度、量化）；
 2. 用条件张量对齐数据（rel L2 / cosine / token IDs）判定数值门，并解释"331–480×"必须限定在正提示词范围；

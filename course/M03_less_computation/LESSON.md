@@ -1,5 +1,13 @@
 # M3 — Less Computation
 
+## Run it as a notebook (three declared modes)
+
+Every module ships paired EN/zh-CN Jupyter notebooks. Set `COURSE_MODE` in
+the first cell: `REFERENCE` (offline CPU analysis of the frozen campaign),
+`GPU_CLASSROOM` (your own bounded physical W7900 exercise, ~5 min per arm —
+the default lab experience), or `GPU_RESEARCH` (this full protocol). See
+[notebooks/README.md](../../notebooks/README.md).
+
 **Learning objectives (you will be able to):**
 1. Separate "less computation" (M3) from "faster computation" (M4) using the per-step-cost criterion;
 2. Derive the 40→8-step Amdahl ceiling (≈4.6×) from the DiT fraction BEFORE reading the measured number, and explain why 4.55× is not 5×;
