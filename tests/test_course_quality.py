@@ -147,6 +147,49 @@ def test_examples_accepts_documented_placeholders(tmp_path):
     assert check_examples.run(tmp_path, docs=["README.md"]) == []
 
 
+# --- P6 hardening: invalid checksum commands & broken command paths ---------
+
+def test_examples_reject_sha256sum_check_on_json_manifest(tmp_path):
+    # the exact historical defect: a JSON conversion manifest is not a GNU
+    # checksum list; the gate must refuse it in any scanned doc
+    (tmp_path / "d.md").write_text(
+        "```bash\nsha256sum -c /opt/m51-artifacts/bf16/conversion_manifest.json\n```\n")
+    problems = check_examples.checksum_command_problems((tmp_path / "d.md").read_text())
+    assert any("invalid checksum form" in p for p in problems)
+    # ...but the explicit quoted-defect exemption marker works (defect docs)
+    (tmp_path / "d.md").write_text(
+        "```bash\nsha256sum -c /x/m.json # quoted-defect\n```\n")
+    assert check_examples.checksum_command_problems((tmp_path / "d.md").read_text()) == []
+
+
+def test_examples_accept_legitimate_sha256_usage(tmp_path):
+    text = ("```bash\nsha256sum model.safetensors\n"
+            "sha256sum -c SHA256SUMS.txt\n"
+            'sha256sum -c <<< "62eee985... language_model_bf16.bin"\n'
+            "bash scripts/m51/provision_ov.sh --check-only\n```\n")
+    (tmp_path / "d.md").write_text(text)
+    assert check_examples.checksum_command_problems(text) == []
+    assert check_examples.broken_cmd_path_problems(text, REPO) == []
+
+
+def test_examples_reject_broken_command_path(tmp_path):
+    (tmp_path / "d.md").write_text("```bash\nbash scripts/m51/ghost_script.py\n```\n")
+    problems = check_examples.broken_cmd_path_problems(
+        (tmp_path / "d.md").read_text(), REPO)
+    assert any("ghost_script.py" in p for p in problems)
+    # placeholders and globs are never flagged
+    ok = "python -m lab.m51_pipeline_fair_ab --run runs/<new-unique-run-id>"
+    assert check_examples.broken_cmd_path_problems(ok, REPO) == []
+
+
+def test_examples_scans_publication_closure_docs():
+    # reproduction commands live in docs/publication-closure too; the run()
+    # doc set must include them
+    docs = check_examples._docs_with_closure(REPO)
+    assert any("docs/publication-closure/P4_FAIR_CLIENT_AB.md" in d for d in docs)
+    assert any(d.endswith("README.zh-CN.md") for d in docs)
+
+
 # --- P2 study helper ----------------------------------------------------------
 
 def test_attribute_request_derives_phases_and_tolerates_missing():

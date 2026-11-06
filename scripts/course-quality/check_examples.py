@@ -53,6 +53,48 @@ BASH_BLOCK = re.compile(r"```bash\n(.*?)```", re.S)
 # flags documented for commands that are intentionally environment-specific
 IGNORED_FLAGS = {"--hf-base"}  # checked against start.sh separately below
 
+# --- P6 hardening: invalid checksum verification forms -----------------------
+# `sha256sum -c` expects a GNU checksum list ("digest  filename" lines). A
+# structured JSON manifest (e.g. conversion_manifest.json) is NOT that format;
+# feeding it to sha256sum -c always fails. Legitimate usage (plain hashing,
+# .txt checksum lists, heredoc/herestring digest lines) is never flagged.
+SHA256SUM_CHECK_JSON = re.compile(
+    r"\bsha256sum\b[^\n|]*?(?:\s|=)(?:-c|--check)\b[^\n|]*?[\w./$'\"-]*?\.json\b")
+# documented repo-relative command arguments that must resolve (no
+# placeholders/globs): known script/config extensions under tracked roots.
+CMD_PATH_RE = re.compile(
+    r"(?<![\w./<-])((?:scripts|lab|docs|course)/[\w./-]+\.(?:py|sh|md|json|yaml))(?![\w.-])")
+# publication-closure documents also carry reproduction commands
+def _docs_with_closure(root: Path) -> list[str]:
+    extra = sorted(str(p.relative_to(root)) for p in (root / "docs/publication-closure").glob("*.md"))
+    return CORE_DOCS + extra
+
+
+# Lines carrying this marker are exempt (documented quotations of an invalid
+# command inside a defect description — the marker makes the exemption explicit
+# and greppable rather than silent). Forms: `# quoted-defect` inside bash
+# fences (must stay bash-parseable) or `<!-- quoted-defect -->` in prose.
+QUOTE_OK_MARKER = "quoted-defect"
+
+
+def checksum_command_problems(text: str) -> list[str]:
+    return [f"invalid checksum form: `sha256sum -c` applied to a JSON manifest "
+            f"(JSON is not a GNU checksum list): {m.group(0).strip()[:90]}"
+            for line in text.splitlines()
+            if QUOTE_OK_MARKER not in line
+            for m in SHA256SUM_CHECK_JSON.finditer(line)]
+
+
+def broken_cmd_path_problems(text: str, root: Path) -> list[str]:
+    out = []
+    for m in CMD_PATH_RE.finditer(text):
+        rel = m.group(1)
+        if "<" in rel or "*" in rel:
+            continue
+        if not (root / rel).exists():
+            out.append(f"documented command path does not exist: {rel}")
+    return out
+
 
 def implemented_flags(root: Path) -> tuple[set[str], set[str]]:
     """Collect argparse flags from lab/*.py and option flags from start.sh."""
@@ -98,7 +140,7 @@ def bash_syntax_errors(blocks: list[str]) -> list[str]:
 def run(root: Path, docs: list[str] | None = None) -> list[str]:
     problems: list[str] = []
     lab_flags, sh_flags = implemented_flags(root)
-    for rel in (docs if docs is not None else CORE_DOCS):
+    for rel in (docs if docs is not None else _docs_with_closure(root)):
         p = root / rel
         if not p.is_file():
             problems.append(f"doc missing for command check: {rel}")
@@ -111,6 +153,8 @@ def run(root: Path, docs: list[str] | None = None) -> list[str]:
         blocks = BASH_BLOCK.findall(text)
         for err in bash_syntax_errors(blocks):
             problems.append(f"{rel}: bash syntax: {err}")
+        problems += [f"{rel}: {p2}" for p2 in checksum_command_problems(text)]
+        problems += [f"{rel}: {p2}" for p2 in broken_cmd_path_problems(text, root)]
     return problems
 
 
