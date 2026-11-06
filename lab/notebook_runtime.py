@@ -719,11 +719,14 @@ class Session:
 
     def run_m51_pipeline(self, *, arms: str = "A,C", tag: str | None = None) -> Path:
         """M5.1 Part B: four-request heterogeneous pipeline (A=GPU TE seq,
-        C=OpenVINO CPU TE overlap). Requires staged OV artifacts."""
+        C=OpenVINO CPU TE overlap). Requires staged OV artifacts.
+
+        The CLI takes the run as a repo-relative path (`--run runs/<tag>`),
+        matching the documented campaign invocation."""
         run = tag or (self._fresh_tag("m51pipe") + "-m51pipe")
-        self._run_cli([sys.executable, "-u", "lab/m51_pipeline.py", "--run", run,
-                       "--arms", arms], timeout=3600, kind=f"m51-pipeline:{arms}",
-                      bind=run)
+        self._run_cli([sys.executable, "-u", "lab/m51_pipeline.py",
+                       "--run", f"runs/{run}", "--arms", arms],
+                      timeout=3600, kind=f"m51-pipeline:{arms}", bind=run)
         return lab_env.STUDENT_RUNS_ROOT / run
 
     def run_fairab(self, *, pairs: int = 1, blocks: int = 1,
@@ -731,7 +734,7 @@ class Session:
         """M5.1 Part C: fair-client factorial (A/C x original/fast)."""
         run = tag or (self._fresh_tag("fairab") + "-fairab")
         self._run_cli([sys.executable, "-u", "lab/m51_pipeline_fair_ab.py",
-                       "--run", run, "--pairs", str(pairs),
+                       "--run", f"runs/{run}", "--pairs", str(pairs),
                        "--blocks", str(blocks)], timeout=5400,
                       kind="m51-fairab", bind=run)
         return lab_env.STUDENT_RUNS_ROOT / run
