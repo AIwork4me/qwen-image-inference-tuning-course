@@ -15,7 +15,7 @@ transient proxy 503s, refs re-confirmed via `gh`)
 
 `git merge-base(PR#3, PR#2) = 532b501` — stacking intact. Worktree at freeze:
 tracked files clean (`git status --short` shows only untracked host-side
-leftovers: the failed first-launch run dir `runs/p4-fairab-224922/` and the
+leftovers: the failed first-launch run `p4-fairab-224922` (host-side trail) and the
 port-verify probe/stdout/stderr logs — retained untouched, none tracked).
 
 ## 2. Protected identities (frozen at `6503e8d`)

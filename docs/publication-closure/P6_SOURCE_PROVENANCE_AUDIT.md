@@ -10,7 +10,7 @@ The run's own `environment.git` record (never rewritten):
 
 - HEAD `4ec5905a`, branch `feat/world-class-bilingual-inference-course`,
   `dirty: true`, dirty files: untracked `docs/publication-closure/`,
-  untracked `lab/m51_pipeline_fair_ab.py`, untracked `runs/p4-fairab-224922/`,
+  untracked `lab/m51_pipeline_fair_ab.py`, untracked run `p4-fairab-224922` (host-side trail),
   modified `lab/m51_pipeline_profile.py`.
 
 Git HEAD therefore does **not** identify the executed bytes. This audit

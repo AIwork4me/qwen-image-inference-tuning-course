@@ -86,3 +86,19 @@ gates pass; evidence is immutable; provenance of the one human verdict is
 explicit and scope-limited. Remaining items are owner decisions (merge PR #2
 first, then retarget this stacked PR to main; optionally the M6 BEST
 verdict), not engineering defects.
+
+## 9. Addendum — reproducibility & publication polish pass (2026-11-06)
+
+A final polish session (post-`6503e8d`) closed three reproduction defects
+without touching any measurement: (1) the P4 reproduction guide's invalid
+`sha256sum -c <json-manifest>` command was replaced by the verified official
+admission workflow (`provision_ov.sh --check-only`, executed against the real
+artifact set); (2) the original P4 campaign's dirty-worktree source gap was
+forensically audited (`SOURCE_RECONSTRUCTED_WITH_EVIDENCE`) and every future
+physical run now records a per-module source manifest with exact-byte
+snapshots (`lab/source_provenance.py`); (3) a bounded clean-HEAD physical
+regression re-verified the factorial result from a fully committed source
+state. Course-quality gates grew checksum-command and command-path checks.
+Final counts per exact HEAD live in
+[`P6_FINAL_POLISH_GATE_MATRIX.md`](../publication-closure/P6_FINAL_POLISH_GATE_MATRIX.md);
+the statements above about earlier HEADs are historical and unchanged.
