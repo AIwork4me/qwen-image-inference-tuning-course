@@ -8,6 +8,10 @@ Everything here matches the CLI exactly (`python -m lab <cmd> --help`).*
 
 ---
 
+## First: CPU-only Jupyter evidence labs
+
+Launch a Python 3 Jupyter kernel from the repository root and open the [English practice index](../notebooks/README.md) ([中文](../notebooks/README.zh-CN.md)). The 18 bilingual notebooks use actual committed W7900 results with **zero default GPU work**, so they are the preferred classroom warm-up before any expensive smoke or formal experiment. Each notebook includes its own exercise and guardrails.
+
 ## The classroom-safe smoke workflow (bounded by design)
 
 **Cost: 1–3 GPU-minutes per command. Safe to interrupt — every run is

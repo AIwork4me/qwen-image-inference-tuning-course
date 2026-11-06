@@ -45,6 +45,10 @@ Plus: [LECTURE_DEMO.md](LECTURE_DEMO.md) — the 100-minute classroom package
 (8 slides + 4 interactive Q&As + bounded teacher demo and student exercise,
 all backed by the case-study data).
 
+## Accompanying Jupyter practice
+
+All nine teaching units (M0–M7 including M5.1) now have [English](../notebooks/README.md) and [中文](../notebooks/README.zh-CN.md) notebooks. Run All is **offline/CPU/read-only by default**; the code independently recomputes published W7900 statistics. GPU smoke is a separate explicit opt-in and is not valid as formal performance evidence. Use [instructor guidance](../notebooks/INSTRUCTOR_GUIDE.md) for pacing and grading.
+
 ## Grading rubric (suggested)
 
 | Component | Weight | Pass bar |

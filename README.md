@@ -12,6 +12,12 @@ reproduce the whole methodology yourself on a free Radeon Cloud GPU.
 
 ---
 
+## Interactive Jupyter labs — learn by doing
+
+**[Start the 9-module Jupyter laboratory](notebooks/README.md)** · [中文实践入口](notebooks/README.zh-CN.md) · [M1 baseline notebook](notebooks/01_baseline_and_uncertainty.ipynb)
+
+Each module now has **paired English/Chinese executable notebooks (18 total)**. Run All is CPU-only by default: inspect the actual frozen W7900 JSON, derive bottleneck/step/latency/throughput metrics, critique a fair A/B, and prepare a reproducible PR. A separately confirmed, bounded GPU smoke is optional; smoke output cannot become a formal published benchmark. These notebooks complement, not replace, the theory and full-protocol lab CLI.
+
 ## The result (real, measured, honestly caveated)
 
 Same prompt, same seed, same GPU — the engineering changed, and so did the

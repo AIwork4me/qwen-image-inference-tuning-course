@@ -37,6 +37,10 @@
 另有：[LECTURE_DEMO.zh-CN.md](LECTURE_DEMO.zh-CN.md)——100 分钟课堂包
 （8 页讲义 + 4 组互动问答 + 有界的教师演示与学生练习，全部由案例数据支撑）。
 
+## 配套 Jupyter 实践
+
+九个教学单元（M0–M7，包含 M5.1）均有[中文](../notebooks/README.zh-CN.md)与 [English](../notebooks/README.md) Notebook。默认 Run All **离线、CPU、只读**，直接重算真实 W7900 数据；GPU 冒烟需单独明确授权，不能作为正式发布基准。教学安排见[中文教师指南](../notebooks/INSTRUCTOR_GUIDE.zh-CN.md)。
+
 ## 评分建议
 
 | 组成 | 权重 | 及格线 |

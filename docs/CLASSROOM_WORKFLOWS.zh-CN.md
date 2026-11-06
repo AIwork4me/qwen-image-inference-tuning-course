@@ -6,6 +6,10 @@ English version: [CLASSROOM_WORKFLOWS.md](CLASSROOM_WORKFLOWS.md)
 
 ---
 
+## 首先：离线、纯 CPU 的 Jupyter 证据实践
+
+从仓库根目录启动 Python 3 Jupyter 内核，打开[中文 Notebook 索引](../notebooks/README.zh-CN.md)（[English](../notebooks/README.md)）。18本中英文 Notebook 使用真实 W7900 固定记录，**默认不启动 GPU**，非常适合课堂先学统计与算法归因，再进入成本更高的冒烟/正式实验。
+
 ## 课堂安全的冒烟工作流（设计上有界）
 
 **成本：每条命令 1–3 GPU 分钟。可安全中断——每次运行都可恢复，绝不重复下载。**

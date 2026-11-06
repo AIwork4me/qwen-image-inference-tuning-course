@@ -33,3 +33,4 @@ jobs:
           python scripts/course-quality/check_claims.py
           python scripts/course-quality/check_examples.py
           python scripts/course-quality/check_metric_pairs.py
+          python scripts/course-quality/check_notebooks.py

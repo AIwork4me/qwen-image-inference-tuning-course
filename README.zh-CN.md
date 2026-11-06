@@ -13,6 +13,12 @@ PyTorch 2.9.1）上实测并提交的运行记录——而你可以自己在免�
 
 ---
 
+## 交互式 Jupyter 实践：学完原理立即验证
+
+**[9模块中文 Notebook 实验入口](notebooks/README.zh-CN.md)** · [English Labs](notebooks/README.md) · [M1 基准统计 Notebook](notebooks/01_baseline_and_uncertainty.zh-CN.ipynb)
+
+本课程现有**9个实践主题、18本中英文对照的可执行 Notebook**。默认 Run All 只用 CPU，从真实 W7900 固定数据独立重算瓶颈、步数、延迟和吞吐，检验公平 A/B，并准备可信的开源 PR。GPU 冒烟必须另行显式确认，冒烟数据不得冒充正式基准。Notebook 补充现有理论课与完整实验 CLI，不替代它们。
+
 ## 实测结果（真实、已测、如实附带但书）
 
 同提示词、同种子、同 GPU——改变的是工程，同时改变的还有模型变体、采样调度与精度：
