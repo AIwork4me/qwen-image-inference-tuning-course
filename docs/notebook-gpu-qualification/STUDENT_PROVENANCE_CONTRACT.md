@@ -19,7 +19,7 @@ structurally impossible.
 | Category | Meaning | Who may claim it |
 |---|---|---|
 | `CURRENT_SESSION_PHYSICAL` | This notebook session initiated **and awaited** the workload; the run dir carries a `PROVENANCE.json` binding to this session's `session_id`. | Only the session that executed it |
-| `SAME_STUDENT_PRIOR_PHYSICAL` | An earlier session on this workspace, selected by exact run id; that session's record must still exist under `runs/notebook-sessions/` (or a campaign `sessions/`). | Same workspace, explicit id |
+| `SAME_STUDENT_PRIOR_PHYSICAL` | An earlier session on this workspace, selected by exact run id; that session's record must still exist in the repo-local notebook-sessions directory under `runs/` (or a campaign `sessions/`). | Same workspace, explicit id |
 | `SHARED_CAMPAIGN_PHYSICAL` | A verified physical run from a declared campaign (`$QIR_NOTEBOOK_CAMPAIGN` or `runs/notebook-gpu-qualification/`) reused deliberately. | Anyone, explicitly |
 | `COMMITTED_PHYSICAL_REFERENCE` | A physical result tracked in Git. Real hardware evidence; **never** newly measured by the current student. | Anyone, explicitly |
 | `FROZEN_REFERENCE` | Official archived evidence under `evidence/`. | Anyone, explicitly |
@@ -58,7 +58,7 @@ structurally impossible.
 Every notebook session gets `session_id = stu-YYYYmmdd-HHMMSS-<6 hex>` created in
 `Session.__init__` — before any admission or GPU work. `session.finish()` writes the
 session record (now including `session_id`, `source.head`, `source.dirty`, and
-per-execution `run_origin`) under `runs/notebook-sessions/` (or the campaign
+per-execution `run_origin`) under the gitignored notebook-sessions directory of `runs/` (or the campaign
 `sessions/` root). These records are what make `SAME_STUDENT_PRIOR_PHYSICAL`
 verifiable later.
 

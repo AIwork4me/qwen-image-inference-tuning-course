@@ -57,7 +57,7 @@ RUN_OWN_GPU_ARMS = True    # run my own bounded arms on THIS GPU (default)
 ```
 
 Selecting a run always requires its **exact run id** (printed next to every
-measurement and stored in your session record under `runs/notebook-sessions/`).
+measurement and stored in the session records under `runs/` → `notebook-sessions/`).
 Nothing is ever picked "because it is the newest file", and a reused run is
 never counted as a second independent measurement — e.g. the Chinese and
 English M5.1 notebooks may share one physical A/C run, labelled as reuse.
