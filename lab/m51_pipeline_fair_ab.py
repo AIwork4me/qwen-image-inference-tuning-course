@@ -55,22 +55,55 @@ import hashlib
 import json
 import statistics
 import subprocess
+import sys
 import time
 from pathlib import Path
 
 from lab.lab_env import REPO
+from lab.source_provenance import capture as capture_source_provenance
 
 SEED = 42
 
 
-def _git_head() -> dict:
-    def g(*a):
-        return subprocess.run(["git", *a], cwd=REPO, capture_output=True,
-                              text=True).stdout.strip()
-    return {"head": g("rev-parse", "HEAD"),
-            "branch": g("rev-parse", "--abbrev-ref", "HEAD"),
-            "dirty": bool(g("status", "--porcelain")),
-            "dirty_files": sorted(g("status", "--porcelain").splitlines())}
+# Project modules that materially affect this experiment's measurements
+# (runner, reused helpers, pipeline plumbing, worker, custom node).
+EXPERIMENT_MODULES = [
+    "lab/m51_pipeline_fair_ab.py",
+    "lab/m51_pipeline_profile.py",
+    "lab/m51_pipeline.py",
+    "lab/m51_e2e.py",
+    "lab/comfyui_client.py",
+    "lab/server.py",
+    "lab/ov_worker.py",
+    "lab/lab_env.py",
+    "lab/custom_nodes/linuxlab_cond_safetensors.py",
+]
+
+
+def _dependency_probes() -> dict:
+    """Fail-safe version probes for the two runtimes that materially affect
+    results (OpenVINO worker venv; lab/ComfyUI torch). Never raises."""
+    out = {}
+    for label, py in (("openvino_venv", REPO / ".venv-ov/bin/python"),
+                      ("lab_venv", REPO / ".venv-lab/bin/python")):
+        try:
+            r = subprocess.run(
+                [str(py), "-c",
+                 "import sys;d={};\n"
+                 "import importlib\n"
+                 "for m in ('openvino','torch'):\n"
+                 "    try:\n"
+                 "        d[m]=importlib.import_module(m).__version__\n"
+                 "    except Exception:\n"
+                 "        d[m]=None\n"
+                 "print(sys.version.split()[0], d.get('openvino'), d.get('torch'))"],
+                capture_output=True, text=True, timeout=60)
+            if r.returncode == 0:
+                pyver, ov, torch = (r.stdout.strip().split() + [None, None, None])[:3]
+                out[label] = {"python": pyver, "openvino": ov, "torch": torch}
+        except Exception:
+            continue
+    return out
 
 
 def batch_fast_native(srv, batch_id: str, outdir: Path) -> dict:
@@ -265,6 +298,10 @@ def main() -> None:
     run = Path(args.run)
     outdir = run / "pipeline_profile"
     (outdir / "raw").mkdir(parents=True, exist_ok=True)
+    # Source identity is captured BEFORE anything executes, with exact-byte
+    # snapshots of any dirty/untracked module (publication-closure P2).
+    source_provenance = capture_source_provenance(
+        EXPERIMENT_MODULES, REPO, snapshot_dir=outdir / "source_snapshot")
     from lab import m51_e2e as E
     from lab.m51_pipeline import PROMPTS
     E.install_node()
@@ -287,7 +324,10 @@ def main() -> None:
                       "workflows byte-identical to the P2 study (same helpers)",
         },
         "environment": {
-            "git": _git_head(),
+            "source_provenance": source_provenance,
+            "git": source_provenance["git"],
+            "argv": list(sys.argv),
+            "dependencies": _dependency_probes(),
             "cgroup_cpu_max": Path("/sys/fs/cgroup/cpu.max").read_text().strip()
             if Path("/sys/fs/cgroup/cpu.max").exists() else None,
             "cgroup_memory_max": Path("/sys/fs/cgroup/memory.max").read_text().strip()
