@@ -1,4 +1,4 @@
-# 课堂工作流 —— 冒烟 vs 正式，具体化
+# 课堂工作流 —— GPU_CLASSROOM Notebook、冒烟 vs 正式，具体化
 
 *一页纸，无歧义：课堂上跑什么（有界、便宜、可安全中断），要出可引用结果时跑什么
 （完整协议、有预算）。这里的一切都与 CLI 完全一致（`python -m lab <cmd> --help`）。*
@@ -6,9 +6,9 @@ English version: [CLASSROOM_WORKFLOWS.md](CLASSROOM_WORKFLOWS.md)
 
 ---
 
-## 首先：离线、纯 CPU 的 Jupyter 证据实践
+## 首先：GPU_CLASSROOM Notebook（推荐的学生路径）
 
-从仓库根目录启动 Python 3 Jupyter 内核，打开[中文 Notebook 索引](../notebooks/README.zh-CN.md)（[English](../notebooks/README.md)）。18本中英文 Notebook 使用真实 W7900 固定记录，**默认不启动 GPU**，非常适合课堂先学统计与算法归因，再进入成本更高的冒烟/正式实验。
+完成 `bash scripts/cloud/start.sh` 后，从仓库根目录打开[中文 Notebook 索引](../notebooks/README.zh-CN.md)（[English](../notebooks/README.md)），在第一个单元设置 `COURSE_MODE = "GPU_CLASSROOM"`，Restart & Run All。每个模块会执行**自己的有界 W7900 物理练习**（每臂约 5 分钟：全新服务器、cold、warmup、单提示词 2 次测量），并在冻结参考数字旁计算你的统计量。运行时强制：硬件准入、同一时刻仅一个 GPU 负载的文件锁、按实验的超时、`runs/` 下只追加的记录，以及自动的 `BOUNDED_PHYSICAL_COMPARISON` 标注——课堂运行是教学实验，绝不是正式基准结论。`COURSE_MODE = "REFERENCE"` 时，同样的笔记本变成离线 CPU 分析（CI 配置）。
 
 ## 课堂安全的冒烟工作流（设计上有界）
 

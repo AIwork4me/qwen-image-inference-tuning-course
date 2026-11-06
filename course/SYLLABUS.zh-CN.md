@@ -39,7 +39,7 @@
 
 ## 配套 Jupyter 实践
 
-九个教学单元（M0–M7，包含 M5.1）均有[中文](../notebooks/README.zh-CN.md)与 [English](../notebooks/README.md) Notebook。默认 Run All **离线、CPU、只读**，直接重算真实 W7900 数据；GPU 冒烟需单独明确授权，不能作为正式发布基准。教学安排见[中文教师指南](../notebooks/INSTRUCTOR_GUIDE.zh-CN.md)。
+九个教学单元（M0–M7，包含 M5.1）均有[中文](../notebooks/README.zh-CN.md)与 [English](../notebooks/README.md) Notebook，提供三种声明模式：`REFERENCE`（离线 CPU 分析——CI 默认）、`GPU_CLASSROOM`（你自己的 W7900 有界实测，约 5 分钟/臂——快速入门完成后的默认实验模式）、`GPU_RESEARCH`（完整冻结协议）。学生应在课前完成 W7900 使用资格；物理 GPU 测量是首要实践验证方式，已提交证据保持参考与对照地位。课堂运行是有界教学实验，不是正式基准。教学安排见[中文教师指南](../notebooks/INSTRUCTOR_GUIDE.zh-CN.md)。
 
 ## 评分建议
 

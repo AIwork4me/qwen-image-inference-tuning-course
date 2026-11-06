@@ -17,7 +17,7 @@ PyTorch 2.9.1）上实测并提交的运行记录——而你可以自己在免�
 
 **[9模块中文 Notebook 实验入口](notebooks/README.zh-CN.md)** · [English Labs](notebooks/README.md) · [M1 基准统计 Notebook](notebooks/01_baseline_and_uncertainty.zh-CN.ipynb)
 
-本课程现有**9个实践主题、18本中英文对照的可执行 Notebook**。默认 Run All 只用 CPU，从真实 W7900 固定数据独立重算瓶颈、步数、延迟和吞吐，检验公平 A/B，并准备可信的开源 PR。GPU 冒烟必须另行显式确认，冒烟数据不得冒充正式基准。Notebook 补充现有理论课与完整实验 CLI，不替代它们。
+本课程现有**9个实践主题、18本中英文对照的可执行 Notebook**，提供三种声明模式：`REFERENCE`（离线 CPU 分析冻结实验数据——GitHub CI 配置）、`GPU_CLASSROOM`（你自己在 W7900 上的有界实测——Radeon Cloud 入门后的默认实验体验）、`GPU_RESEARCH`（完整冻结协议）。在第一个单元设置 `COURSE_MODE` 后 Restart & Run All；准入横幅会显示已准入的 GPU 或确切阻断原因。物理 GPU 测量是首要的实践验证方式，已提交证据仍是参考与科学对照来源。课堂练习是有界教学实验——正式加速结论需要研究协议。
 
 ## 实测结果（真实、已测、如实附带但书）
 
@@ -146,16 +146,16 @@ bash scripts/cloud/start.sh
 doctor，并生成一张有界冒烟图（路径会打印出来）。
 [完整快速开始 + 经实测的恢复指南 →](docs/RADEON_CLOUD_QUICKSTART.zh-CN.md)
 
-**还没有 GPU？** 每个模块都有纯证据模式：读已提交的测量、重算加速比、剖析数据——
-并提交纯 CPU 的改进 PR（见下方[学习轨道 A](#选择你的学习轨道)）。
+**还没有 GPU？** 每个模块都有 `REFERENCE` 模式：读已提交的测量、重算加速比、
+剖析数据——并提交纯 CPU 的改进 PR（见下方[学习轨道 A](#选择你的学习轨道)）。
 
 ## 选择你的学习轨道
 
 | 轨道 | 适合谁 | 时间 | 做什么 |
 |---|---|---|---|
-| **A — 纯证据**（无需 GPU） | 所有人 | 2–4 小时 | 阅读已提交运行记录、重算比值、审视主张与证据、通过 PR 改进文档/测试 |
-| **B — 课堂 GPU 冒烟** | GPU 时间有限的学生 | +2 小时 | 有界 `--smoke` 运行（每次 1–3 分钟），输出有界地放在 `runs/` |
-| **C — 完整研究复现** | 进阶学习者 | +6–10 小时 GPU | 严格 doctor、固定模型、完整协议、重复 A/B、质量门、不确定度、贡献 |
+| **A — REFERENCE**（无需 GPU） | 所有人 | 2–4 小时 | 阅读已提交运行记录、重算比值、审视主张与证据、通过 PR 改进文档/测试 |
+| **B — GPU_CLASSROOM**（你的 W7900 默认模式） | 已完成入门的学生 | +2–3 小时 | 每模块产出自己的有界物理测量（约 5 分钟/臂、1 提示词），自动标注 `BOUNDED_PHYSICAL_COMPARISON` |
+| **C — GPU_RESEARCH**（完整复现） | 进阶学习者 | +6–10 小时 GPU | 严格 doctor、固定模型、完整协议（3 提示词 × 3 种子）、重复 A/B、质量门、不确定度、贡献 |
 
 详情：[docs/CLASSROOM_WORKFLOWS.zh-CN.md](docs/CLASSROOM_WORKFLOWS.zh-CN.md) ·
 English: [docs/CLASSROOM_WORKFLOWS.md](docs/CLASSROOM_WORKFLOWS.md)

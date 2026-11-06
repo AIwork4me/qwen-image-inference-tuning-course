@@ -1,46 +1,62 @@
-# Jupyter 实验课程：Qwen-Image × ROCm 推理优化
+# Jupyter 实验课程：GPU 优先的 Qwen-Image × ROCm 推理优化
 
 [English](README.md) · [中文教学大纲](../course/SYLLABUS.zh-CN.md) · [仓库首页](../README.zh-CN.md)
 
-**9个实践主题、18本中英文 Notebook、一条原则：没有证据就不能声称加速。** 每个实验都直接分析已提交的 W7900 真实测量，贯穿基准统计、性能剖析、少计算、快计算、异构并行、公平 A/B、画质门禁和开源 PR。
+**9 个模块、18 本中英文 Notebook、一条科学原则：没有证据就不能声称加速——而在 Radeon Cloud 上，首要证据来自你自己的 W7900 实测。**
 
-## 三步开始：没有 GPU 也能 Run All
+实验课在物理 AMD Radeon PRO W7900 上完成完整实验闭环：
+**理解 → 预测 → 跑 GPU 基线 → 实施或选择优化 → 跑 GPU 候选 → 测量 → 对比 → 质量验证 → 解释 → 贡献。**
 
-1. 克隆仓库后，从**仓库根目录**打开 Jupyter（Radeon Cloud 可直接使用现有 Notebook 界面）。如缺少 Jupyter，仅在独立 Notebook 环境按 `requirements-notebooks.txt` 安装；**不要改动已有 ROCm PyTorch 环境**。
-2. 打开 `notebooks/00_experimental_discipline.zh-CN.ipynb`，选择 Python 3 内核，点击 **Run All**。默认只读取本地固定 JSON，无需网络、下载模型或运行 GPU。
-3. 按课程顺序运行，逐步对照 Markdown 理论、源 JSON 和自己的计算结果。
+## 三步开始（GPU_CLASSROOM，Radeon Cloud 课堂默认模式）
 
-**重要：** Jupyter 应从克隆后的仓库根目录启动；第一个代码单元会寻找 `lab/reference_runs.json`。若启动目录不对，请导航到仓库后再打开 Notebook。
+1. 先完成一次 [Radeon Cloud 快速入门](../docs/RADEON_CLOUD_QUICKSTART.zh-CN.md)：它会布置锁定的 ROCm 环境、ComfyUI 与模型权重，并运行 `python -m lab doctor`（不得 FAIL）。
+2. 从**仓库根目录**启动 Jupyter，用课程环境的 Python 内核打开 `notebooks/00_experimental_discipline.zh-CN.ipynb`（或英文版）。
+3. 在**第一个代码单元**设置模式，然后 *Kernel → Restart & Run All*：
+
+```python
+COURSE_MODE = "GPU_CLASSROOM"
+```
+
+横幅会醒目显示已准入的 GPU（`AMD ... gfx1100 ... 48GB`），或给出学生可读的阻断原因与确切修复方法。每次物理运行都会打印 `run_id`，记录只追加地写入 `runs/<run-id>/`——不覆盖、绝不触碰冻结的 `evidence/`。
+
+还没有 GPU？保持 `COURSE_MODE = "REFERENCE"`：笔记本改为分析已提交的冻结实验数据（纯 CPU、离线、无网络）——相同的单元，全部标注 `[HISTORICAL]`。
+
+## 三种模式
+
+| 模式 | 运行内容 | 输出位置 | 适用场景 |
+|---|---|---|---|
+| `REFERENCE` | 仅分析冻结的已提交证据 | 无（仅分析） | CPU CI、离线学习、调试 |
+| `GPU_CLASSROOM` | **你自己在这台 W7900 上的有界实测**（每臂 1 提示词 × warmup+2 测量，约 5 分钟/臂） | `runs/` | 默认学生实验模式 |
+| `GPU_RESEARCH` | 完整冻结协议（3 提示词 × 3 种子 × warmup+3 测量 + fresh-prompt 臂） | `runs/` | 毕业课题、研究级复现 |
+
+运行时与测试双重保障：同一时刻仅一个 GPU 负载（文件锁）；执行前必须硬件准入；课堂模式有按实验定制的超时预算；research 档位仅限 `GPU_RESEARCH` 模式；记录只追加；旧版 smoke 助手仍保留 `QIR_NOTEBOOK_GPU_ACK` 显式确认。
+
+**课堂练习是有界物理实验，不是正式性能结论。** 正式结论需要研究协议（多提示词/种子重复、匹配总体、声明顺序）——笔记本会自动为每次对比标注 `BOUNDED_PHYSICAL_COMPARISON` 或 `FORMAL_PROTOCOL_MEASURED`。
 
 ## 9 个实践模块
 
-| 模块 | 中文 Notebook | English | 实践主题 |
+| 模块 | 中文 Notebook | English | 物理练习（GPU 模式） |
 |---|---|---|---|
-| M0 · Environment / 实验规范 | [打开](00_experimental_discipline.zh-CN.ipynb) | [Open](00_experimental_discipline.ipynb) | 来源可验证的 CPU 数据重算 |
-| M1 · Baseline / 基准统计 | [打开](01_baseline_and_uncertainty.zh-CN.ipynb) | [Open](01_baseline_and_uncertainty.ipynb) | 来源可验证的 CPU 数据重算 |
-| M2 · Profiling / 性能剖析 | [打开](02_profile_and_bottlenecks.zh-CN.ipynb) | [Open](02_profile_and_bottlenecks.ipynb) | 来源可验证的 CPU 数据重算 |
-| M3 · Less compute / 少计算 | [打开](03_less_computation.zh-CN.ipynb) | [Open](03_less_computation.ipynb) | 来源可验证的 CPU 数据重算 |
-| M4 · Faster compute / 快计算 | [打开](04_faster_computation.zh-CN.ipynb) | [Open](04_faster_computation.ipynb) | 来源可验证的 CPU 数据重算 |
-| M5.0 · Negative offload / CPU 卸载负结果 | [打开](05_cpu_offload_negative.zh-CN.ipynb) | [Open](05_cpu_offload_negative.ipynb) | 来源可验证的 CPU 数据重算 |
-| M5.1 · OpenVINO fair A/B / 公平对照 | [打开](06_openvino_and_fair_ab.zh-CN.ipynb) | [Open](06_openvino_and_fair_ab.ipynb) | 来源可验证的 CPU 数据重算 |
-| M6 · Combined & quality / 组合与画质 | [打开](07_combined_and_quality.zh-CN.ipynb) | [Open](07_combined_and_quality.ipynb) | 来源可验证的 CPU 数据重算 |
-| M7 · Evidence-backed PR / 开源挑战 | [打开](08_capstone_and_pr.zh-CN.ipynb) | [Open](08_capstone_and_pr.ipynb) | 来源可验证的 CPU 数据重算 |
+| M0 · Environment / 实验规范 | [打开](00_experimental_discipline.zh-CN.ipynb) | [Open](00_experimental_discipline.ipynb) | 设备准入、同步 vs 异步计时、模型指纹校验 |
+| M1 · Baseline / 基准统计 | [打开](01_baseline_and_uncertainty.zh-CN.ipynb) | [Open](01_baseline_and_uncertainty.ipynb) | 你自己的 B0（BF16、40 步）基线 + 与 55.206 秒参考值对比 |
+| M2 · Profiling / 性能剖析 | [打开](02_profile_and_bottlenecks.zh-CN.ipynb) | [Open](02_profile_and_bottlenecks.ipynb) | 流水线分解 + 真实 rocprofv3 内核轨迹、Amdahl 上限 |
+| M3 · Less compute / 少计算 | [打开](03_less_computation.zh-CN.ipynb) | [Open](03_less_computation.ipynb) | B0 vs L1（Turbo 8 步）物理 A/B、混淆变量分析 |
+| M4 · Faster compute / 快计算 | [打开](04_faster_computation.zh-CN.ipynb) | [Open](04_faster_computation.ipynb) | F1 ck 注意力与 F2 INT8 双臂、后端生效验证 |
+| M5.0 · Negative offload / CPU 卸载负结果 | [打开](05_cpu_offload_negative.zh-CN.ipynb) | [Open](05_cpu_offload_negative.ipynb) | GPU vs CPU 文本编码器试点（实测负结果） |
+| M5.1 · OpenVINO fair A/B / 公平对照 | [打开](06_openvino_and_fair_ab.zh-CN.ipynb) | [Open](06_openvino_and_fair_ab.ipynb) | OV 工件准入、编码器 A/B、流水线 A/C、公平因子实验 |
+| M6 · Combined & quality / 组合与画质 | [打开](07_combined_and_quality.zh-CN.ipynb) | [Open](07_combined_and_quality.ipynb) | B0 vs BEST 物理对比 + 你自己的成对质量网格 |
+| M7 · Evidence PR / 开源挑战 | [打开](08_capstone_and_pr.zh-CN.ipynb) | [Open](08_capstone_and_pr.ipynb) | 用你的记录组装毕业报告 + PR 草稿 |
 
-## 三种学习轨道
+## 质量与完整性
 
-**A · 无 GPU / 证据分析（默认）：** 只依赖 Python 标准库，读取固定 `evidence/` 与 `runs/` 数据。可选 matplotlib 图表默认关闭。GitHub CPU CI 会自动运行所有 Notebook 的代码单元，验证无 GPU 模式。
+- 中英文笔记本**可执行单元完全一致**（CI 强制检查），学习文字各自本地化。
+- 源输入只读。任何笔记本都不写 `evidence/`。
+- 每行摘要都用标签区分 实测 / 历史 / 估计 / 模拟 值。
+- M5.0 负结果保持可见。M5.1 INT8 数值 **FAIL 永远是 FAIL**；C1b 所有者验收只限定于其历史评估的部署范围。M6 BEST 人工质量判定保持 **PENDING_HUMAN_REVIEW**——没有任何单元会自动批准质量。
+- 讲师可无头复跑全部 18 本笔记本：
+  `python scripts/notebook-qualification/run_all.py --mode REFERENCE`（CPU CI）或
+  在 W7900 主机上 `--mode GPU_CLASSROOM`。
 
-**B · GPU 冒烟（自愿）：** 部分 Notebook 提供 `RUN_GPU=False` 开关。学生确认硬件/额度与模型准备后，再显式改成 `True`，并在自己的可信环境设置 `QIR_NOTEBOOK_GPU_ACK=YES`。只运行白名单中的 `--smoke`，带超时，写入 `runs/`，绝不污染 `evidence/`。运行前先读[显卡云入门](../docs/RADEON_CLOUD_QUICKSTART.zh-CN.md)；**GitHub CPU CI 不等于真机验收**。
+**环境要求：** Python 3.10+（推荐 3.12）。REFERENCE 模式仅需标准库。GPU 模式需要快速入门布置的锁定 `.venv-lab` ROCm 环境（绝不重装云镜像的 torch）。可选 Notebook 依赖：`requirements-notebooks.txt`。
 
-**C · 正式研究复现：** 遵守[完整复现指南](../docs/REPRODUCTION_GUIDE.zh-CN.md)，匹配实验总体、模型/源码 SHA、CPU/GPU 预算、质量验收并附真实 PR 证据。Notebook 不会自动启动完整长时间评测。
-
-## 双语一致性与安全规则
-
-- 两种语言的**可执行代码逐单元完全相同**，由 CI 强制检查；教学目标、任务、解释分别使用中英文。
-- `evidence/` 只读；M5.0 的负结果不改写，M5.1 的人工接受只覆盖 C1b，INT8 数值 FAIL 保留，M6 BEST 人工画质仍然 Pending。
-- `python -m pytest tests/test_notebooks.py -q` 可在无 GPU 环境执行全部 Notebook；`python scripts/course-quality/check_notebooks.py` 检查结构与双语代码一致性。
-- 学生分析记录必须显式授权，写入 `runs/notebook-student/`；引用数据重算不能冒充新的 GPU 实测。
-
-**环境：** Python 3.10+，推荐 3.12；数据分析只依赖标准库。可在单独的 Notebook 环境选择性安装 `requirements-notebooks.txt`，不要重装 ROCm torch。
-
-教师说明：[中文](INSTRUCTOR_GUIDE.zh-CN.md) · [English](INSTRUCTOR_GUIDE.md)。
+讲师指南：[English](INSTRUCTOR_GUIDE.md) · [中文](INSTRUCTOR_GUIDE.zh-CN.md)。

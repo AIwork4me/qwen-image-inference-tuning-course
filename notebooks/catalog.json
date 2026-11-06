@@ -1,6 +1,6 @@
 {
-  "schema_version": "1.0",
-  "policy": "Evidence-only default; opt-in bounded physical smoke; immutable reference data",
+  "schema_version": "1.1",
+  "policy": "Three declared modes: REFERENCE (CPU-only frozen evidence, CI default) | GPU_CLASSROOM (bounded physical W7900 exercises) | GPU_RESEARCH (full-protocol physical A/B). Student measurements land under runs/; evidence/ stays immutable.",
   "modules": [
     {
       "id": "00",
