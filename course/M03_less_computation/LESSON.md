@@ -1,5 +1,13 @@
 # M3 — Less Computation
 
+**Learning objectives (you will be able to):**
+1. Separate "less computation" (M3) from "faster computation" (M4) using the per-step-cost criterion;
+2. Derive the 40→8-step Amdahl ceiling (≈4.6×) from the DiT fraction BEFORE reading the measured number, and explain why 4.55× is not 5×;
+3. Show from L1 vs L1O data that schedule (sigmas) choice is a quality decision, not a speed decision;
+4. State the correct semantics for a speedup that changes the output (difference, not degradation) and name who judges it.
+
+中文版：[LESSON.zh-CN.md](LESSON.zh-CN.md)
+
 **Problem.** Everything so far kept the workload identical and asked "how
 do we run it faster?" The bigger question: *does the workload itself need
 to be this big?* The 40-step sampling schedule is a quality choice, not a
@@ -105,6 +113,22 @@ vs
    passing the explicit sigma list. KSampler only takes a scheduler
    *name* and synthesizes sigmas from step count — it cannot accept an
    arbitrary 9-value list (8 steps + terminal 0).</details>
+
+**Student exercise (tiered).**
+- Beginner: reproduce the 5-row table from your (or the provided) records, recomputing the
+  Δ column yourself. Acceptance: numbers match; Δ recomputed.
+- Intermediate: write the 8-step Amdahl ceiling derivation before reading the measured
+  number, then compare and explain the residual. Submit: derivation + comparison + error
+  attribution paragraph.
+- Advanced: LPIPS semantics — using this lesson's paired images and M6's quality grids,
+  explain why "distance 0.23" cannot imply "worse quality", and design an experiment that
+  separates difference from degradation. Submit: a 200-word argument.
+
+**Research extension (testable hypothesis).** Hypothesis: an intermediate 12–16-step
+distilled schedule exists (between turbo and 40-step) that pushes LPIPS distance below 0.10
+on the poster-typography prompt at ≤2× latency cost (~18–24 s warm). Design the experiment
+(model, schedule source, quality criterion, n), writing the Amdahl prediction first, then
+the quality prediction.
 
 **Acceptance.**
 - [ ] Your L1 (and ideally L1O) records in `runs/` — smoke acceptable for

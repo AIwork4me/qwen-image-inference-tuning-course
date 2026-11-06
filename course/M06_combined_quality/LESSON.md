@@ -1,5 +1,13 @@
 # M6 — Combined Optimization & the Quality Gate
 
+**Learning objectives (you will be able to):**
+1. Interpret LPIPS under fidelity vs distance semantics and label given quality claims VALID or FORBIDDEN;
+2. State what each automated artifact (paired grids, native-resolution crops, noise floor) prepares — and why the binding verdict must stay human;
+3. Assemble the full config × latency × VRAM × quality evidence matrix and present a two-row recommendation (fastest-pending vs fastest-fidelity-approved);
+4. Explain why the M5.1 owner acceptance cannot propagate to this module's BEST verdict.
+
+中文版：[LESSON.zh-CN.md](LESSON.zh-CN.md)
+
 **Problem.** You now have a fast configuration (BEST, 6.12×). Engineering
 is not done: *is it acceptable?* — and "acceptable" is not a number an
 automation can print. This module assembles the full evidence matrix,
@@ -98,6 +106,13 @@ typography, the fastest **fidelity-approved** config in the data is F2
 (9.02 s, verdict pending). "Which should we ship?" is a product decision
 the engineer arms with evidence — both rows of it.
 
+**Scope discipline (course-v2):** the M5.1 owner acceptance (2026-11-05)
+covers only the "C1b OpenVINO deployment vs G native" quality question (see
+[`PR2_OWNER_QUALITY_VERDICT.md`](../../docs/release-closure/PR2_OWNER_QUALITY_VERDICT.md)).
+This module's BEST (turbo INT8, 6.12×) is a **separate, earlier quality
+gate** (`runs/quality/BEST/quality.md`) and stays `PENDING_HUMAN_REVIEW` —
+it must not be inferred from the M5.1 acceptance or vice versa.
+
 **Think (answer keys in `<details>`).**
 
 1. Label each claim VALID or FORBIDDEN, with one sentence why:
@@ -127,6 +142,22 @@ the engineer arms with evidence — both rows of it.
    baseline contract* (does the 8-step output remain acceptable for the
    intended use, typography included?). It does make it a useful data
    point for the human reviewer.</details>
+
+**Student exercise (tiered).**
+- Beginner: complete the VALID/FORBIDDEN labeling with reasons. Acceptance: 4 correct labels
+  + 4 reason sentences.
+- Intermediate: open `evidence/quality/BEST/quality_crops_poster.png` and cast a *practice*
+  three-tier verdict (无感/略降/不可接受) — clearly labeled as an exercise; the official
+  verdict stays PENDING_HUMAN_REVIEW until the owner casts it. Submit: verdict + 3 reasons.
+- Advanced: write the two-row recommendation table for your team (fastest-pending vs
+  fastest-fidelity-approved), each with a conditional action "if the owner rejects
+  turbo…". Submit: table + conditional actions.
+
+**Research extension (testable hypothesis).** Hypothesis: a typography-specific automated
+metric (e.g., OCR character confidence or edge sharpness over the poster-title region) can
+triage p3-style degradation from "full human review" to "human spot-checks", agreeing with
+the three-tier verdict ≥90% of the time. Design the metric, the verdict protocol, and the
+validation set — and explain why it still cannot replace the binding human gate.
 
 **Acceptance.**
 - [ ] The VALID/FORBIDDEN answers with reasons

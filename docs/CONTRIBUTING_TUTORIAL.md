@@ -1,5 +1,7 @@
 # Contributing Tutorial — Fork → Edit → Test → PR
 
+中文版：[CONTRIBUTING_TUTORIAL.zh-CN.md](CONTRIBUTING_TUTORIAL.zh-CN.md) · English version: this file
+
 *A complete walkthrough for first-time contributors. Estimated time:
 30–60 minutes (mostly the test cycle; the PR itself takes 5 minutes).*
 

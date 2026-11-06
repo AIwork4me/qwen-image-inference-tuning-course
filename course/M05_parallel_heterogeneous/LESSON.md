@@ -1,6 +1,14 @@
 # M5.0 — PyTorch CPU Text Encoding & Pipelining (on ONE GPU)
 
-**Next:** [M5.1 — CPU Text Encoder accelerated by OpenVINO](M5_1_OPENVINO_CPU_TE.md) treats this PyTorch CPU implementation as the baseline. **Same-stack W7900 measurements are now COMPLETED (2026-11-05):** encoder 331–480× faster, E2E only ~3–8% faster, 17.26 GB full-pipeline peak saved. See [the measured lesson](M5_1_OPENVINO_CPU_TE.md) and [M51_RESULTS](../../docs/M51_RESULTS.md).
+**Learning objectives (you will be able to):**
+1. Derive the pipelining break-even CPU-encode time t\* from the H2 measurements and state how far the reference host is from it;
+2. Prove overlap exists from per-request timestamps while explaining why the pipeline still loses 14× (slowest-stage gating + contention cost);
+3. Separate throughput from latency notions and demand a noun in "parallel is faster — faster what?";
+4. Argue that a negative result with complete evidence is first-class science, citing exactly where the evidence lives.
+
+中文版：[LESSON.zh-CN.md](LESSON.zh-CN.md)
+
+**Next:** [M5.1 — CPU Text Encoder accelerated by OpenVINO](M5_1_OPENVINO_CPU_TE.md) treats this PyTorch CPU implementation as the baseline. **Same-stack W7900 measurements are now COMPLETED (2026-11-05):** encoder 331–480× faster on positive prompts (328× on the empty negative), warm E2E service latency 1.081× / actual 4-request batch throughput 1.029× better, 17.26 GB full-pipeline peak saved. See [the measured lesson](M5_1_OPENVINO_CPU_TE.md) and [M51_RESULTS](../../docs/M51_RESULTS.md).
 
 **Problem.** Marketing parallelism is easy: "just move work to the CPU and
 overlap!" Engineering parallelism is measured. This module takes the two
@@ -118,6 +126,21 @@ single denoise (batch_size > 1) — see the M7 challenges.
    (152–391× slower). Caveat: it *frees 16.8 GB of VRAM* — on a
    memory-constrained card that trade can still be right, at a latency
    cost stated up front.</details>
+
+**Student exercise (tiered).**
+- Beginner: write the break-even derivation (cycle formula → t\*) with each number's source
+  field cited. Acceptance: complete derivation citing specific paths in `H2_RESULTS.json`.
+- Intermediate: restate the three H2 lessons in one sentence each, attaching the exact
+  evidence number from the table. Submit: three sentences + three numbers.
+- Advanced: substitute M5.1's OpenVINO BF16 CPU encode (0.44 s/request) into arm B's cycle
+  model, recompute the 4-request total, compare with M5.1's measured arm C (50.05 s), and
+  attribute the difference (fill, contention, handoff). Submit: recomputed table +
+  attribution paragraph.
+
+**Research extension (testable hypothesis).** Hypothesis: on a cloud instance with 2× CPU
+quota (32 threads), arm B's CPU encode time roughly halves but GPU contention raises
+generation time ≥15%, so pipelining still does not break even. Write the prediction
+formulas and design a minimal A/B (fixed prompts and seeds) testing both predictions.
 
 **Acceptance.**
 - [ ] The break-even derivation written out with the H2 numbers cited

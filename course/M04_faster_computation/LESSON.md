@@ -1,5 +1,13 @@
 # M4 — Faster Computation
 
+**Learning objectives (you will be able to):**
+1. Run clean A/Bs for an attention-kernel swap and an INT8 weight quantization against the same baseline, proving the active backend from server logs;
+2. Explain measured / measured / derived-estimate provenance using the F1×M2 cross-check table;
+3. Explain why INT8 yields only 1.08× here while saving −6.7 GB VRAM (dequantize-on-use; capacity vs bandwidth);
+4. Use the LF2 vs LF3 tie to argue that independent gains never multiply, levers interact, and bottlenecks migrate.
+
+中文版：[LESSON.zh-CN.md](LESSON.zh-CN.md)
+
 **Problem.** The workload is now minimal (8 steps), but each step still
 executes the same arithmetic. Two independent levers remain: *choose
 better kernels* (attention backend) and *shrink the numbers themselves*
@@ -146,6 +154,21 @@ which one it is.
    mislabeled: the record would claim "ck vs pytorch" while both arms ran
    the same path. `attention_evidence` (scraped log lines, per record)
    is the difference between measuring and storytelling.</details>
+
+**Student exercise (tiered).**
+- Beginner: rebuild the three A/B tables from your F1/F2 records and quote the
+  `attention_evidence` log line. Acceptance: tables match records; log line attached.
+- Intermediate: write the 150-word INT8 reply (Think Q2) and add one sentence of your own
+  on why "2× on paper" did not materialize. Submit: reply + mechanism sentence.
+- Advanced: derive the Amdahl ceiling for "GEMM 2× faster" from M2's by-class data,
+  compare it with F1's 1.22×, and explain why the two levers rank differently. Submit:
+  derivation + ranking argument.
+
+**Research extension (testable hypothesis).** Hypothesis: at 2048×2048 (4× sequence
+length), INT8's dequantize-on-use share shrinks while its memory-traffic benefit grows,
+lifting the speedup from 1.08× to ≥1.3×. Write down what share structure must hold for
+the hypothesis to be true, then design a bounded experiment (noting 2048² is BLOCKED
+behind the 1024² quality verdict — state the dependency).
 
 **Acceptance.**
 - [ ] F1/F2 smoke or formal records in `runs/`, with `attention_evidence`

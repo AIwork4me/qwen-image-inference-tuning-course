@@ -1,5 +1,7 @@
 # Classroom Workflows — smoke vs formal, concretely
 
+中文版：[CLASSROOM_WORKFLOWS.zh-CN.md](CLASSROOM_WORKFLOWS.zh-CN.md) · English version: this file
+
 *One page, no ambiguity: what to run in class (bounded, cheap, safe to
 interrupt) and what to run for quotable results (full protocol, budgeted).
 Everything here matches the CLI exactly (`python -m lab <cmd> --help`).*

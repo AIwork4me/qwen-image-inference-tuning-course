@@ -1,5 +1,13 @@
 # M1 — Measure First: The Frozen Baseline
 
+**Learning objectives (you will be able to):**
+1. Design and run a reproducible baseline protocol and explain the purpose of each of its four phases (cold / warmup / measured / fresh);
+2. Compute your own warm median and spread from your records and compare them against the reference campaign;
+3. Decompose fresh − warm = 0.90 s precisely (TE 0.56 s + scheduling variance ~0.34 s) and refuse to over-explain it;
+4. Argue, with two-session data, that reproducibility is a measured property, not an assumption.
+
+中文版：[LESSON.zh-CN.md](LESSON.zh-CN.md)
+
 **Problem.** "It feels slow" is not an engineering statement. Before any
 optimization you need one number that is (a) defined precisely enough to
 re-measure, (b) reproducible, and (c) honest about what "fast" means for a
@@ -135,6 +143,23 @@ which writes `runs/SUMMARY.md` — the frozen campaign's SUMMARY under
    workload, server flags change the thing measured. Frozen protocol =
    comparable A/Bs; changes go in a NEW experiment with its own
    records.</details>
+
+**Student exercise (tiered).**
+- Beginner: run the smoke session, locate one of your records under `runs/`, and point at
+  `total_s`, `steady_step_median_s`, `attention_evidence`, `vram_peak_mb`. Acceptance: one
+  sentence per field (and why step[0] is excluded — it carries TE + weight-restore costs).
+- Intermediate: aggregate your numbers with `report --scope student --write` and write a
+  paragraph comparing your median/spread vs the reference 55.21 s / 1.336–1.367 s; decide
+  whether your host belongs to the same measurement population. Submit: the paragraph plus
+  the SUMMARY excerpt.
+- Advanced: using only your own records, reproduce the three-way decomposition of
+  fresh − warm = 0.90 s (TE, scheduling residual, uncertainty) and state which part cannot
+  be separated on your host. Submit: the decomposition table + method note.
+
+**Research extension (testable hypothesis).** Hypothesis: on this stack, lowering the
+measurement poll interval to 50 ms would push measurement bias on warm totals below 0.05 s,
+making <1% real improvements detectable. Derive the quantization-error bound of the current
+interval first, then design an n≥9 experiment, and predict the new noise floor.
 
 **Acceptance.**
 - [ ] Your B0 smoke or formal session completed with schema-valid records

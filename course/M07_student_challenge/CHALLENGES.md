@@ -1,5 +1,12 @@
 # M7 — Student Challenge: Radeon AI Inference Speed Challenge
 
+**Learning objectives (you will be able to):**
+1. Pick a real repository gap matched to your resources (CPU-only / GPU / advanced) and submit it through the Fork → Edit → Test → PR workflow;
+2. Attach verifiable evidence to every submission (before/after outputs, run records, tables) so claims stay ≤ evidence;
+3. Report negative results and unverified items honestly in the PR, and pass the owner's review.
+
+中文版：[CHALLENGES.zh-CN.md](CHALLENGES.zh-CN.md)
+
 **Problem.** You have finished the course — now contribute something real
 to an open-source project. The tasks below are genuine gaps in THIS
 repository: each one is independently testable, ships acceptance criteria
@@ -156,6 +163,13 @@ The mission gates 2048² behind stable 1024² + quality approval. On a
 not run this until the human verdict lands.
 
 ---
+
+**Course-v2 pointer:** the post-M5.1 orchestration-overhead direction (the gap between
+warm service 1.081× and actual batch 1.029×) received its first instrumented profiling
+in the course-v2 overhead study
+([docs/quality-v2/PIPELINE_OVERHEAD_STUDY.md](../../docs/quality-v2/PIPELINE_OVERHEAD_STUDY.md)) —
+its "Research extension" section still lists untested follow-up hypotheses, usable as a
+mixed CPU/GPU task alongside Tasks 4/6.
 
 **Submission:** PRs to `main`, conventional commits, CPU tests green
 (`pytest tests/ -v`), GPU evidence attached as run-record directories
