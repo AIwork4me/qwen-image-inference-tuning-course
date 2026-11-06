@@ -14,7 +14,7 @@ README, complete the GPU-first loop on a provisioned W7900 without touching
 6. **M0:** sync-vs-async demo measured on the student's own GPU; model digests verified.
 7. **M1:** their own B0 bounded run (~5 min): `run_id` printed, median/spread/VRAM, deviation vs the 55.206 s reference computed and discussed.
 8. **M2/M3/M4/M5/M6:** physical exercises per module (see FULL_18_NOTEBOOK_VALIDATION.md), each ending in a compact table + plot from measured records.
-9. **M7:** capstone collects their records into `runs/notebook-student/capstone-<ts>.json` + a PR draft with an honest evidence class.
+9. **M7:** capstone collects their records into an append-only capstone record under `runs/` + a PR draft with an honest evidence class.
 
 A full fresh-clone rehearsal (file-transport clone, day-2 student reusing
 staged weights, no re-downloads) executed M0 → M1 → M3 → M7 in real kernels;
