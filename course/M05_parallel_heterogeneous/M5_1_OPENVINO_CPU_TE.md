@@ -206,6 +206,47 @@ Implementation files: `lab/ov_export.py`, `lab/ov_compress.py`, `lab/ov_quantize
 
 **Acceptance:** the student can explain the conditioning bridge, compute a fair ratio, reproduce the break-even, and refuse to call the 331× encoder gain a 331× image-generation gain.
 
+### Reproduce the fairness experiment yourself (verified commands)
+
+Requirements: a physical W7900-class gfx1100 host with the campaign cgroup
+budget (16 CPUs / 55 GiB), the pinned stack (`.venv-lab`, `.venv-ov`,
+OpenVINO 2026.4.1, ComfyUI checkout), and provisioned OpenVINO artifacts
+(§the OV provisioning panel above; `M51_OV_ARTIFACTS` is **your** artifact
+root — `/opt/m51-artifacts` is just this course host's example location).
+
+```bash
+# 1) verified artifact admission (streams every file against the pinned
+#    digests/sizes/identity in conversion_manifest.json; no download,
+#    no modification). Do NOT pass the JSON manifest to sha256sum -c —
+#    it is not a GNU checksum list:
+export M51_OV_ARTIFACTS=/opt/m51-artifacts
+bash scripts/m51/provision_ov.sh --check-only        # -> ARTIFACTS_VERIFIED
+
+# 2) clean-worktree check — the run records its exact source identity:
+git status --porcelain                                # should print nothing
+
+# 3) the 2x2 factorial (same frozen prompts/seed/latent everywhere):
+M51_OV_ARTIFACTS=$M51_OV_ARTIFACTS .venv-lab/bin/python -m lab.m51_pipeline_fair_ab \
+  --run runs/<new-unique-run-id> --port 8213 --pairs 3 --blocks 2
+```
+
+- Expected output: `<run>/pipeline_profile/pipeline_profile.json` — per-cell
+  batch walls (n=6 per cell), per-request timelines, conditioning SHA256 per
+  prompt, VRAM/RSS, and a `source_provenance` manifest (per-module SHA256 +
+  `EXACT_SOURCE_VERIFIED` only when the worktree was clean).
+- Budget: ~25 min GPU (full 96-request design); `--pairs 1 --blocks 2` ≈ 15 min
+  bounded regression (2 batches/cell) — a smoke like that checks direction,
+  never statistical equivalence.
+- Verify your rerun: compare `analysis.views` cells with
+  `docs/publication-closure/P6_P4_INDEPENDENT_REDERIVATION.md` and check the
+  per-prompt conditioning SHA256 entries match this study's digests
+  byte-for-byte.
+- Limits: single host/session scope; descriptive statistics (non-overlapping
+  batch ranges, no p-values); provenance of the original campaign is
+  `SOURCE_RECONSTRUCTED_WITH_EVIDENCE` (see
+  `docs/publication-closure/P6_SOURCE_PROVENANCE_AUDIT.md`) — which is
+  exactly why the runner now snapshots source identity.
+
 ---
 
 ## 6. Think — with measured answers

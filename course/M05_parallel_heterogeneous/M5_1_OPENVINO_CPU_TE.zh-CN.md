@@ -210,6 +210,42 @@ CLI 检查隔离的 `.venv-ov`、工件清单、磁盘/内存预算，并写出�
 **验收：** 学生能解释条件桥接、计算公平比值、复现盈亏平衡，并拒绝把 331× 编码器
 增益说成 331× 出图增益。
 
+### 亲手复现公平性实验（已验证命令）
+
+环境要求：物理 W7900 级 gfx1100 主机、战役级 cgroup 预算（16 CPU / 55 GiB）、
+固定技术栈（`.venv-lab`、`.venv-ov`、OpenVINO 2026.4.1、ComfyUI 固定检出）、
+以及已制备的 OpenVINO 工件（见上文 OV 制备小节；`M51_OV_ARTIFACTS` 是**你的**
+工件根目录——`/opt/m51-artifacts` 只是本课程主机的示例位置）。
+
+```bash
+# 1) 工件校验准入（按 conversion_manifest.json 中钉住的摘要/大小/身份逐文件
+#    流式校验；不下载、不修改）。不要把 JSON 清单直接喂给 sha256sum -c ——
+#    它不是 GNU 校验清单格式：
+export M51_OV_ARTIFACTS=/opt/m51-artifacts
+bash scripts/m51/provision_ov.sh --check-only        # -> ARTIFACTS_VERIFIED
+
+# 2) 干净工作区检查 —— 运行会记录精确的源码身份：
+git status --porcelain                                # 应无任何输出
+
+# 3) 2x2 因子实验（全程相同的冻结提示词/种子/初始 latent）：
+M51_OV_ARTIFACTS=$M51_OV_ARTIFACTS .venv-lab/bin/python -m lab.m51_pipeline_fair_ab \
+  --run runs/<new-unique-run-id> --port 8213 --pairs 3 --blocks 2
+```
+
+- 预期输出：`<run>/pipeline_profile/pipeline_profile.json` —— 每格批次墙
+  （每格 n=6）、每请求时间线、每提示词条件 SHA256、VRAM/RSS，以及
+  `source_provenance` 源码清单（逐模块 SHA256；仅当工作区干净时才标记
+  `EXACT_SOURCE_VERIFIED`）。
+- 预算：完整 96 请求设计约 25 分钟 GPU；`--pairs 1 --blocks 2` 约 15 分钟
+  （每格 2 批）的有界回归——这种小样本只能验证方向，绝不能确立统计等价。
+- 复核你的重跑：将 `analysis.views` 各格与
+  `docs/publication-closure/P6_P4_INDEPENDENT_REDERIVATION.md` 对比，并核对
+  每提示词条件 SHA256 与本研究记录逐字节一致。
+- 局限：单主机、单会话范围；描述性统计（批次区间不重叠，不报 p 值）；原战役
+  的源码溯源为 `SOURCE_RECONSTRUCTED_WITH_EVIDENCE`（见
+  `docs/publication-closure/P6_SOURCE_PROVENANCE_AUDIT.md`）——这正是运行器
+  现在快照源码身份的原因。
+
 ---
 
 ## 6. 思考——带实测答案
