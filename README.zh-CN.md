@@ -106,7 +106,8 @@ int8-turbo 路径上无可测收益：LF2 与 LF3 中位数 9.023 vs 9.022 s，
 | [M2 剖析](course/M02_profiling/LESSON.md) | 流水线+内核追踪、Amdahl | GEMM 61.3% / 注意力 32.4%（GPU 忙时） |
 | [M3 更少计算](course/M03_less_computation/LESSON.md) | 步数蒸馏、归因 | 4.55× —— 以及为什么不是 5× |
 | [M4 更快计算](course/M04_faster_computation/LESSON.md) | 注意力后端、INT8、组合 | ck 1.22×；INT8 1.08× + 省显存；LF2=LF3 |
-| [M5 并行与异构](course/M05_parallel_heterogeneous/LESSON.md) | 单 GPU + 单 CPU 做不到什么 | 重叠可证、吞吐反而差 14× |
+| [M5.0 PyTorch CPU 基线](course/M05_parallel_heterogeneous/LESSON.md) | CPU 编码和流水线为什么反而变慢 | 实测吞吐下降 14× |
+| [M5.1 OpenVINO CPU 编码器](course/M05_parallel_heterogeneous/M5_1_OPENVINO_CPU_TE.md) | 同机 BF16 对照、INT8 精度与真实端到端收益 | **2026-11-05 已完成，见 [M51_RESULTS](docs/M51_RESULTS.md)** |
 | [M6 组合与质量门禁](course/M06_combined_quality/LESSON.md) | BEST 选取、LPIPS 语义 | 6.12×；人工终审具有约束力 |
 | [M7 学生挑战](course/M07_student_challenge/CHALLENGES.md) | 开源贡献实践 | 分级任务 + Fork→PR 教程 |
 

@@ -1,0 +1,143 @@
+{
+  "generated": "2026-11-05T12:52:00+0000",
+  "full_resolution_sources": [
+    {
+      "path": "runs/m51-20261105-cleanroom-01/e2e/raw/G_native__p1-zh-scene__cfg1.png",
+      "committed_in_git": true,
+      "sha256": "c7ee733186d8df944c3b4f439cfa30b0a29e449294043430823febfe974457f2",
+      "git_blob": "65676395765b163a73ccd94d25ac5515cfa70325",
+      "provenance_note": "force-added 2026-11-05 by the course-v2 audit: the original INDEX claimed committed_in_git=true while .gitignore (runs/**/raw/) excluded these files; the exact digest-verified bytes are now committed, making the claim true. See docs/quality-v2/IMAGE_EVIDENCE_AUDIT.md."
+    },
+    {
+      "path": "runs/m51-20261105-cleanroom-01/e2e/raw/C1b_OV_BF16__p1-zh-scene__cfg1.png",
+      "committed_in_git": true,
+      "sha256": "2e9223016a6f06db0a06a44c996738245c604be8ef08acd80feba0241732d723",
+      "git_blob": "dacd27048c5319d49cb6e89c5eadc34715dc7c0c",
+      "provenance_note": "force-added 2026-11-05 by the course-v2 audit: the original INDEX claimed committed_in_git=true while .gitignore (runs/**/raw/) excluded these files; the exact digest-verified bytes are now committed, making the claim true. See docs/quality-v2/IMAGE_EVIDENCE_AUDIT.md."
+    },
+    {
+      "path": "runs/m51-20261105-cleanroom-01/e2e/raw/G_native__p2-en-scene__cfg1.png",
+      "committed_in_git": true,
+      "sha256": "f456d05c1945a0f07ad39a11aad8ff2389e4a0f5d8d9ed22ee5d137917216bdc",
+      "git_blob": "48a71df79b84d69da53a9108caef1e59825e531f",
+      "provenance_note": "force-added 2026-11-05 by the course-v2 audit: the original INDEX claimed committed_in_git=true while .gitignore (runs/**/raw/) excluded these files; the exact digest-verified bytes are now committed, making the claim true. See docs/quality-v2/IMAGE_EVIDENCE_AUDIT.md."
+    },
+    {
+      "path": "runs/m51-20261105-cleanroom-01/e2e/raw/C1b_OV_BF16__p2-en-scene__cfg1.png",
+      "committed_in_git": true,
+      "sha256": "50e0424a6668d448832e9c58cc4bf6e60754759500464f000003f64991d9f446",
+      "git_blob": "e6316b7a66c0048e88e660f7adaf570a1a7d5f30",
+      "provenance_note": "force-added 2026-11-05 by the course-v2 audit: the original INDEX claimed committed_in_git=true while .gitignore (runs/**/raw/) excluded these files; the exact digest-verified bytes are now committed, making the claim true. See docs/quality-v2/IMAGE_EVIDENCE_AUDIT.md."
+    },
+    {
+      "path": "runs/m51-20261105-cleanroom-01/e2e/raw/G_native__p3-poster-text__cfg1.png",
+      "committed_in_git": true,
+      "sha256": "cac599c5843f12d4daa2dfbe18fb0ecac1f67f818fe7859fa713b0d88fa5719c",
+      "git_blob": "c538f20e935e6ed72a1b7a8659849c3c1f17f5df",
+      "provenance_note": "force-added 2026-11-05 by the course-v2 audit: the original INDEX claimed committed_in_git=true while .gitignore (runs/**/raw/) excluded these files; the exact digest-verified bytes are now committed, making the claim true. See docs/quality-v2/IMAGE_EVIDENCE_AUDIT.md."
+    },
+    {
+      "path": "runs/m51-20261105-cleanroom-01/e2e/raw/C1b_OV_BF16__p3-poster-text__cfg1.png",
+      "committed_in_git": true,
+      "sha256": "003cb5601eec1bf84a9714840857b278e45b43cc42b0502ef47683168b6d50b7",
+      "git_blob": "6ef0a4cb420694e80f0b9de0c977618039bc7520",
+      "provenance_note": "force-added 2026-11-05 by the course-v2 audit: the original INDEX claimed committed_in_git=true while .gitignore (runs/**/raw/) excluded these files; the exact digest-verified bytes are now committed, making the claim true. See docs/quality-v2/IMAGE_EVIDENCE_AUDIT.md."
+    },
+    {
+      "path": "runs/pr2-p4-pipewarm-120822/pipeline_warm/raw/A1__req1__cfg1.png",
+      "committed_in_git": false,
+      "sha256": "971c05e80bd90198452d660fbe5d7c9037da91ca67f0f2e1c8cd56f939da04d6",
+      "note": "audit host only; regenerate via lab.m51_pipeline_warm"
+    },
+    {
+      "path": "runs/pr2-p4-pipewarm-120822/pipeline_warm/raw/C1__req1__cfg1.png",
+      "committed_in_git": false,
+      "sha256": "c0cfcbaac59fa4b7f2bf431a06751961d3ee6375375379099cba87fdea469eb8",
+      "note": "audit host only; regenerate via lab.m51_pipeline_warm"
+    },
+    {
+      "path": "runs/pr2-p4-pipewarm-120822/pipeline_warm/raw/A2__req2__cfg1.png",
+      "committed_in_git": false,
+      "sha256": "fe44f5946e033cc20d447cffbbd14e719e9061f975a740809de39bc08321bf0a",
+      "note": "audit host only; regenerate via lab.m51_pipeline_warm"
+    },
+    {
+      "path": "runs/pr2-p4-pipewarm-120822/pipeline_warm/raw/C2__req2__cfg1.png",
+      "committed_in_git": false,
+      "sha256": "954a415a874fcaf4b840fc8490e4279109ee9648c8824f736eb510f94e27e7c8",
+      "note": "audit host only; regenerate via lab.m51_pipeline_warm"
+    },
+    {
+      "path": "runs/pr2-p4-pipewarm-120822/pipeline_warm/raw/A2__req3__cfg1.png",
+      "committed_in_git": false,
+      "sha256": "9fed41df6b2406fbf6ac0bcf789abb687f7af05e4b4eca71b204e310f2ce871c",
+      "note": "audit host only; regenerate via lab.m51_pipeline_warm"
+    },
+    {
+      "path": "runs/pr2-p4-pipewarm-120822/pipeline_warm/raw/C1__req3__cfg1.png",
+      "committed_in_git": false,
+      "sha256": "b281eee5c742497973a9d92c30bfb1694b883b8c3e6f1fcd0c9fdb54b963da5f",
+      "note": "audit host only; regenerate via lab.m51_pipeline_warm"
+    },
+    {
+      "path": "runs/pr2-p4-pipewarm-120822/pipeline_warm/raw/A1__req4__cfg1.png",
+      "committed_in_git": false,
+      "sha256": "dc03f7a8f954bd984de09ea62a6bb50df95f8c031c64965d97922b89d1c010b1",
+      "note": "audit host only; regenerate via lab.m51_pipeline_warm"
+    },
+    {
+      "path": "runs/pr2-p4-pipewarm-120822/pipeline_warm/raw/C1__req4__cfg1.png",
+      "committed_in_git": false,
+      "sha256": "dad27167fb8255442bcca3ef8346b9954782719236a9eec88a208b8f9504e9ab",
+      "note": "audit host only; regenerate via lab.m51_pipeline_warm"
+    }
+  ],
+  "sheets": [
+    {
+      "file": "campaign_p1-zh-scene_G_vs_C1b.jpg",
+      "comparison": "G_native vs C1b",
+      "prompt": "p1-zh-scene"
+    },
+    {
+      "file": "campaign_p2-en-scene_G_vs_C1b.jpg",
+      "comparison": "G_native vs C1b",
+      "prompt": "p2-en-scene"
+    },
+    {
+      "file": "campaign_p3-poster-text_G_vs_C1b.jpg",
+      "comparison": "G_native vs C1b",
+      "prompt": "p3-poster-text"
+    },
+    {
+      "file": "crop_poster_title_G_native.jpg",
+      "comparison": "typography 100% crop",
+      "prompt": "p3-poster-text"
+    },
+    {
+      "file": "crop_poster_title_C1b.jpg",
+      "comparison": "typography 100% crop",
+      "prompt": "p3-poster-text"
+    },
+    {
+      "file": "warmsteady_req1_A_vs_C.jpg",
+      "comparison": "warm A vs C",
+      "prompt": "req1"
+    },
+    {
+      "file": "warmsteady_req2_A_vs_C.jpg",
+      "comparison": "warm A vs C",
+      "prompt": "req2"
+    },
+    {
+      "file": "warmsteady_req3_A_vs_C.jpg",
+      "comparison": "warm A vs C",
+      "prompt": "req3"
+    },
+    {
+      "file": "warmsteady_req4_A_vs_C.jpg",
+      "comparison": "warm A vs C",
+      "prompt": "req4"
+    }
+  ],
+  "remediated": "2026-11-05 course-v2 audit (see docs/quality-v2/IMAGE_EVIDENCE_AUDIT.md)"
+}

@@ -1,0 +1,113 @@
+{
+  "run_id": "m51-20261105-cleanroom-01",
+  "created_at": "2026-11-05T10:34:22+0000",
+  "admission": "GO_WITH_DEVIATIONS",
+  "host": {
+    "os": "Linux-6.8.0-79-generic-x86_64-with-glibc2.39",
+    "kernel": "6.8.0-79-generic",
+    "cpu": "AMD EPYC 9334 32-Core Processor",
+    "sockets": "2",
+    "physical_cores": "32",
+    "logical_threads": 128,
+    "cgroup_cpu_max": "1600000 100000",
+    "cgroup_memory_max_bytes": 59055800320,
+    "mem_total_kb": 528023932,
+    "numa_nodes": "2",
+    "isa_flags": {
+      "avx2": true,
+      "avx512f": true,
+      "avx512_bf16": true,
+      "avx512_vnni": true
+    }
+  },
+  "gpu": {
+    "rocm_smi": "============================ ROCm System Management Interface ============================\n================================== Memory Usage (Bytes) ==================================\nGPU[0]\t\t: VRAM Total Memory (B): 51522830336\nGPU[0]\t\t: VRAM Total Used Memory (B): 1298841600\n==========================================================================================\n====================================== Product Info ======================================\nGPU[0]\t\t: Card Series: \t\tAMD Radeon Graphics\nGPU[0]\t\t: Card Model: \t\t0x744b\nGPU[0]\t\t: Card Vendor: \t\tAdvanced Micro Devices, Inc. [AMD/ATI]\nGPU[0]\t\t: Card SKU: \t\tD7070910\nGPU[0]\t\t: Subsystem ID: \t0x0e0c\nGPU[0]\t\t: Device Rev: \t\t0x00\nGPU[0]\t\t: Node ID: \t\t5\nGPU[0]\t\t: GUID: \t\t13037\nGPU[0]\t\t: GFX Version: \t\tgfx1100\n==========================================================================================\n================================== End of ROCm SMI Log ===================================",
+    "rocminfo_gfx": "gfx1100",
+    "torch_device_name": "AMD Radeon Graphics",
+    "torch_gcn_arch": "gfx1100",
+    "vram_mib": 49136,
+    "rocm_version_file": "7.2.1"
+  },
+  "python": {
+    "executable": "/workspace/m51/qwen-image-inference-tuning-course/.venv-ov/bin/python",
+    "version": "3.12.3"
+  },
+  "torch": {
+    "version": "2.9.1+gitff65f5b",
+    "hip": "7.2.53211-e1a6bc5663",
+    "cuda_available": true
+  },
+  "openvino_env": {
+    "openvino": "2026.4.1-22982-e213a147257-releases/2026/4",
+    "nncf": "3.4.0",
+    "transformers": "4.57.6",
+    "venv": "/workspace/m51/qwen-image-inference-tuning-course/.venv-ov",
+    "isolation": "separate venv; read-only .pth bridge to the preinstalled ROCm PyTorch"
+  },
+  "weights": {
+    "diffusion_models/qwen_image_2.1_bf16.safetensors": {
+      "expected_bytes": 14230280616,
+      "expected_sha256": "89f4158d066cc33906a199fca85634f766892dd78f49b6698dabf187ac86c4bc",
+      "present": false,
+      "actual_bytes": null,
+      "verified_via": "lab.weights.verify_weight"
+    },
+    "diffusion_models/qwen_image_2.1_int8_convrot.safetensors": {
+      "expected_bytes": 7256783064,
+      "expected_sha256": "cb74113cb03faecd79611b01fd7fd642f0aa60d6f0b95086abee214d75eaa57d",
+      "present": false,
+      "actual_bytes": null,
+      "verified_via": "lab.weights.verify_weight"
+    },
+    "diffusion_models/qwen_image_2.1_turbo_bf16.safetensors": {
+      "expected_bytes": 14230280616,
+      "expected_sha256": "8b74237a7f505773e2c66726fa696444b4c704585c93a347cff9044937f7914a",
+      "present": true,
+      "actual_bytes": 14230280616,
+      "verified_via": "lab.weights.verify_weight"
+    },
+    "diffusion_models/qwen_image_2.1_turbo_int8_convrot.safetensors": {
+      "expected_bytes": 7256787829,
+      "expected_sha256": "8144a0182964aa8403ad6dbc011db837304167d235161b9aabaa8532e967314c",
+      "present": true,
+      "actual_bytes": 7256787829,
+      "verified_via": "lab.weights.verify_weight"
+    },
+    "text_encoders/qwen3vl_8b_bf16.safetensors": {
+      "expected_bytes": 17534334616,
+      "expected_sha256": "68bdc82bc1b66851162ae656225e7e2068166b603db19bd5d5a3b90eb12669a9",
+      "present": true,
+      "actual_bytes": 17534334616,
+      "verified_via": "lab.weights.verify_weight"
+    },
+    "vae/qwen_image_2.1_vae_bf16.safetensors": {
+      "expected_bytes": 675509688,
+      "expected_sha256": "bb21f7473051e1ac368515dd3f2e15cd44d7a11748ee8823e1ddca3e4876b7c9",
+      "present": true,
+      "actual_bytes": 675509688,
+      "verified_via": "lab.weights.verify_weight"
+    }
+  },
+  "comfyui": {
+    "version": "__version__ = \"0.43.0\"",
+    "pinned_commit": "b5a432157de6b8884f81104cd02926adf4d597e4",
+    "marker": "b5a432157de6b8884f81104cd02926adf4d597e4"
+  },
+  "git": {
+    "head": "20a7f7e5afcb078b3899470365464f4922db10cb",
+    "branch": "feat/m5-1-openvino-cpu-te-course"
+  },
+  "disk": {
+    "workspace": "Filesystem      Size  Used Avail Use% Mounted on\n/dev/loop4       98G   47G   47G  50% /workspace",
+    "root": "Filesystem      Size  Used Avail Use% Mounted on\noverlay         3.5T  1.7T  1.6T  52% /"
+  },
+  "deviations": [
+    "Container cgroup exposes 16 CPU quota and 55 GiB memory of a 128-thread / 503 GiB host; benchmarks use 16 threads and are not host-wide.",
+    "GPU reports as 'AMD Radeon Graphics' gfx1100 48 GiB (VBIOS D7070910); compute architecture matches W7900, product string is not 'Radeon PRO W7900'.",
+    "ComfyUI v0.43.0 was staged from the codeload tarball at the pinned commit because git-over-proxy intermittently returned HTTP 503; the tree marker and version were verified.",
+    "ComfyUI requirements install: comfyui-workflow-templates==0.11.100 installed --no-deps (its optional media-assets-02==0.1.26 is absent from PyPI); runtime imports otherwise verified.",
+    "OpenVINO 2026.4.1 lives in .venv-ov with a read-only .pth bridge to the preinstalled ROCm PyTorch; the working ROCm environment was not replaced.",
+    "Large OpenVINO IRs (FP32 26 GB, BF16-compressed 13 GB, INT8 6.5 GB) live on /opt/m51-artifacts (root overlay) and are symlinked into runs/ because /workspace is a 98 GB volume.",
+    "Model downloads used hf-mirror ranged transfers; every artifact was verified against the in-repo SHA256 pins and the TE checkpoint hash was recomputed independently."
+  ]
+}

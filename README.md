@@ -111,7 +111,8 @@ more than an optimistic guess.
 | [M2 Profiling](course/M02_profiling/LESSON.md) | pipeline + kernel tracing, Amdahl | GEMM 61.3% / attention 32.4% of busy |
 | [M3 Less computation](course/M03_less_computation/LESSON.md) | step distillation, attribution | 4.55× — and why it isn't 5× |
 | [M4 Faster computation](course/M04_faster_computation/LESSON.md) | attention backends, INT8, combinations | ck 1.22×; INT8 1.08× + memory win; LF2=LF3 |
-| [M5 Parallel & heterogeneous](course/M05_parallel_heterogeneous/LESSON.md) | what one GPU + one CPU can't do | overlap proven, 14× throughput loss |
+| [M5.0 CPU PyTorch baseline](course/M05_parallel_heterogeneous/LESSON.md) | why CPU TE offload/pipelining can lose | measured 14× throughput loss |
+| [M5.1 OpenVINO CPU TE](course/M05_parallel_heterogeneous/M5_1_OPENVINO_CPU_TE.md) | compare CPU PyTorch BF16 vs OV BF16/INT8; same-host W7900 validation | **COMPLETED 2026-11-05 — see [M51_RESULTS](docs/M51_RESULTS.md)** |
 | [M6 Combined & quality gate](course/M06_combined_quality/LESSON.md) | BEST selection, LPIPS semantics | 6.12×; human verdict binding |
 | [M7 Student challenge](course/M07_student_challenge/CHALLENGES.md) | open-source contribution practice | graded tasks + Fork→PR tutorial |
 

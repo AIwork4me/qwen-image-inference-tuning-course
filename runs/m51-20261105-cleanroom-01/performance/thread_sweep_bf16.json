@@ -1,0 +1,82 @@
+{
+  "model_dir": "/opt/m51-artifacts/bf16",
+  "xml": "language_model_bf16.xml",
+  "results": {
+    "4": {
+      "compile_s": 1.196,
+      "prompts": {
+        "p1-zh-scene": {
+          "samples": [
+            8.6615,
+            1.587
+          ],
+          "min": 1.587
+        },
+        "p3-poster-text": {
+          "samples": [
+            1.7113,
+            1.6924
+          ],
+          "min": 1.6924
+        }
+      }
+    },
+    "8": {
+      "compile_s": 1.109,
+      "prompts": {
+        "p1-zh-scene": {
+          "samples": [
+            2.5911,
+            0.5751
+          ],
+          "min": 0.5751
+        },
+        "p3-poster-text": {
+          "samples": [
+            0.6808,
+            0.66
+          ],
+          "min": 0.66
+        }
+      }
+    },
+    "16": {
+      "compile_s": 1.106,
+      "prompts": {
+        "p1-zh-scene": {
+          "samples": [
+            1.7186,
+            0.514
+          ],
+          "min": 0.514
+        },
+        "p3-poster-text": {
+          "samples": [
+            0.5736,
+            0.5616
+          ],
+          "min": 0.5616
+        }
+      }
+    },
+    "32": {
+      "compile_s": 1.088,
+      "prompts": {
+        "p1-zh-scene": {
+          "samples": [
+            2.1679,
+            0.6444
+          ],
+          "min": 0.6444
+        },
+        "p3-poster-text": {
+          "samples": [
+            0.7678,
+            0.773
+          ],
+          "min": 0.7678
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "arm": "C2_OV_INT8",
+  "meta": {
+    "openvino": "2026.4.1-22982-e213a147257-releases/2026/4",
+    "device": "CPU",
+    "execution_devices": [
+      "CPU"
+    ],
+    "inference_precision": "<Type: 'float32'>",
+    "performance_hint": "LATENCY",
+    "execution_mode": "ExecutionMode.PERFORMANCE",
+    "threads": 16,
+    "num_streams": 1,
+    "read_s": 0.252,
+    "compile_s": 1.723,
+    "embed_table_load_s": 0.356,
+    "tokenizer_load_s": 0.15,
+    "model_dir": "/opt/m51-artifacts/int8",
+    "model_xml": "language_model_int8.xml",
+    "dynamic_quant_group": null
+  },
+  "cases": {
+    "zh_long": {
+      "status": "PASS",
+      "n_tokens_full": 244,
+      "n_tokens_kept": 230,
+      "encode_s": 1.85,
+      "finite": true,
+      "shape": [
+        1,
+        230,
+        4096
+      ]
+    },
+    "en_long": {
+      "status": "PASS",
+      "n_tokens_full": 194,
+      "n_tokens_kept": 180,
+      "encode_s": 1.08,
+      "finite": true,
+      "shape": [
+        1,
+        180,
+        4096
+      ]
+    },
+    "zh_xlong": {
+      "status": "PASS",
+      "n_tokens_full": 540,
+      "n_tokens_kept": 526,
+      "encode_s": 2.545,
+      "finite": true,
+      "shape": [
+        1,
+        526,
+        4096
+      ]
+    },
+    "en_xlong": {
+      "status": "PASS",
+      "n_tokens_full": 422,
+      "n_tokens_kept": 408,
+      "encode_s": 1.892,
+      "finite": true,
+      "shape": [
+        1,
+        408,
+        4096
+      ]
+    }
+  }
+}

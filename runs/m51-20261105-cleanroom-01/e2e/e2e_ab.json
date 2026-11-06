@@ -1,0 +1,1214 @@
+{
+  "run": "runs/m51-20261105-cleanroom-01",
+  "arms": {
+    "G_native": {
+      "G_native|p1-zh-scene|cfg1": {
+        "text_encode_s": 1.467,
+        "vae_decode_s": 1.082,
+        "ksampler_s": 13.33,
+        "step_times_s": [
+          2.673,
+          1.337,
+          1.34,
+          1.343,
+          1.336,
+          1.331,
+          1.327,
+          1.326
+        ],
+        "node_timings_s": {
+          "VAELoader#vae_9692032b": 0.734,
+          "EmptyLatentImage#latent_149ef794": 0.004,
+          "CLIPLoader#clip_e0a9157e": 10.559,
+          "CLIPTextEncode#neg_24fb3844": 0.894,
+          "CLIPTextEncode#pos_f0eba5a0": 0.572,
+          "UNETLoader#unet_fffd188e": 14.9,
+          "KSampler#ks_d310df50": 13.33,
+          "VAEDecode#dec_9e16311e": 1.082,
+          "SaveImage#save_14e18844": 0.512
+        },
+        "cached_nodes": [],
+        "vram_peak_mb": 33679.9,
+        "vram_residency_mb": 33087.7,
+        "monitor_error": null,
+        "tag": "G_native|p1-zh-scene|cfg1",
+        "wall_s": 43.141,
+        "image": "runs/m51-20261105-cleanroom-01/e2e/raw/G_native__p1-zh-scene__cfg1.png",
+        "image_sha256": "2a99298cc2fad71342e5526ed209bfc47c6ffba833d1a77805bdd24ac1c59689",
+        "bytes": 1908492
+      },
+      "G_native|p2-en-scene|cfg1": {
+        "text_encode_s": 0.318,
+        "vae_decode_s": 0.877,
+        "ksampler_s": 10.691,
+        "step_times_s": [
+          0.059,
+          1.35,
+          1.328,
+          1.328,
+          1.334,
+          1.328,
+          1.326,
+          1.328
+        ],
+        "node_timings_s": {
+          "CLIPTextEncode#pos_2ec95b7b": 0.318,
+          "KSampler#ks_5a220311": 10.691,
+          "VAEDecode#dec_242001ab": 0.877,
+          "SaveImage#save_81c6c61d": 0.161
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_24e0cf81",
+          "CLIPLoader#clip_d966ec28",
+          "VAELoader#vae_240e6505",
+          "CLIPTextEncode#neg_b69d0822",
+          "EmptyLatentImage#latent_86704dd4"
+        ],
+        "vram_peak_mb": 34152.2,
+        "vram_residency_mb": 33093.7,
+        "monitor_error": null,
+        "tag": "G_native|p2-en-scene|cfg1",
+        "wall_s": 13.029,
+        "image": "runs/m51-20261105-cleanroom-01/e2e/raw/G_native__p2-en-scene__cfg1.png",
+        "image_sha256": "3caf615227c897d25ccd40aabf7c5a95ac648cb4921e6c45b90b398815eb8501",
+        "bytes": 1536194
+      },
+      "G_native|p3-poster-text|cfg1": {
+        "text_encode_s": 0.602,
+        "vae_decode_s": 0.875,
+        "ksampler_s": 10.803,
+        "step_times_s": [
+          0.061,
+          1.435,
+          1.332,
+          1.331,
+          1.332,
+          1.333,
+          1.331,
+          1.331
+        ],
+        "node_timings_s": {
+          "CLIPTextEncode#pos_2ce5fab3": 0.602,
+          "KSampler#ks_c4b99ed1": 10.803,
+          "VAEDecode#dec_bc652aae": 0.875,
+          "SaveImage#save_0dab46ae": 0.444
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_37b033b3",
+          "CLIPLoader#clip_411554be",
+          "VAELoader#vae_d36fed81",
+          "CLIPTextEncode#neg_75eee9d3",
+          "EmptyLatentImage#latent_705d1ba2"
+        ],
+        "vram_peak_mb": 34645.8,
+        "vram_residency_mb": 33093.7,
+        "monitor_error": null,
+        "tag": "G_native|p3-poster-text|cfg1",
+        "wall_s": 13.031,
+        "image": "runs/m51-20261105-cleanroom-01/e2e/raw/G_native__p3-poster-text__cfg1.png",
+        "image_sha256": "29bcb4c2a3c184bfd2d1de05dd325bb98da34bf0c53c48399fe210a0fb8fb530",
+        "bytes": 1548809
+      },
+      "G_native|p1-zh-scene|cfg2": {
+        "text_encode_s": 0.548,
+        "vae_decode_s": 0.877,
+        "ksampler_s": 21.426,
+        "step_times_s": [
+          1.439,
+          2.705,
+          2.676,
+          2.654,
+          2.655,
+          2.655,
+          2.664,
+          2.67
+        ],
+        "node_timings_s": {
+          "CLIPTextEncode#pos_805e0e1c": 0.548,
+          "KSampler#ks_74694cbb": 21.426,
+          "VAEDecode#dec_5f68ebf7": 0.877,
+          "SaveImage#save_eb1f413e": 0.431
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_85687cf6",
+          "CLIPLoader#clip_f4adfb96",
+          "VAELoader#vae_1894a35f",
+          "CLIPTextEncode#neg_7d669aae",
+          "EmptyLatentImage#latent_feb6f32c"
+        ],
+        "vram_peak_mb": 34349.3,
+        "vram_residency_mb": 33095.7,
+        "monitor_error": null,
+        "tag": "G_native|p1-zh-scene|cfg2",
+        "wall_s": 23.288,
+        "image": "runs/m51-20261105-cleanroom-01/e2e/raw/G_native__p1-zh-scene__cfg2.png",
+        "image_sha256": "a6f6c16173093fa0230abbf2bf82023c62c6ee06be5a61c2b3301492f0cb33e1",
+        "bytes": 1455540
+      }
+    },
+    "C0_native": {
+      "C0_native|p1-zh-scene|cfg1": {
+        "text_encode_s": 238.144,
+        "vae_decode_s": 0.878,
+        "ksampler_s": 11.068,
+        "step_times_s": [
+          0.348,
+          1.35,
+          1.332,
+          1.327,
+          1.328,
+          1.327,
+          1.409,
+          1.323
+        ],
+        "node_timings_s": {
+          "CLIPLoader#clip_bde2c4c5": 13.726,
+          "CLIPTextEncode#neg_481e3004": 61.717,
+          "CLIPTextEncode#pos_b9840ed7": 176.427,
+          "KSampler#ks_07992f0f": 11.068,
+          "VAEDecode#dec_c8500351": 0.878,
+          "SaveImage#save_0ab6ed1c": 0.455
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_f315ea6f",
+          "VAELoader#vae_e390692c",
+          "EmptyLatentImage#latent_259ef5c7"
+        ],
+        "vram_peak_mb": 33095.7,
+        "vram_residency_mb": 16360.6,
+        "monitor_error": null,
+        "tag": "C0_native|p1-zh-scene|cfg1",
+        "wall_s": 264.485,
+        "image": "runs/m51-20261105-cleanroom-01/e2e/raw/C0_native__p1-zh-scene__cfg1.png",
+        "image_sha256": "eb84a0c5b5b1200b02ba0b4bedd100aeed8c14330af4ad5bb4e3fd12b8b8af32",
+        "bytes": 1907171
+      },
+      "C0_native|p1-zh-scene|cfg2": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.877,
+        "ksampler_s": 21.479,
+        "step_times_s": [
+          1.515,
+          2.689,
+          2.65,
+          2.651,
+          2.651,
+          2.651,
+          2.713,
+          2.652
+        ],
+        "node_timings_s": {
+          "KSampler#ks_6564c7e2": 21.479,
+          "VAEDecode#dec_f58453ee": 0.877,
+          "SaveImage#save_ec02998a": 0.417
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_8fb4749e",
+          "VAELoader#vae_9ade7924",
+          "CLIPTextEncode#pos_974950fd",
+          "CLIPTextEncode#neg_c5d090dc",
+          "EmptyLatentImage#latent_03d6747c"
+        ],
+        "vram_peak_mb": 17613.2,
+        "vram_residency_mb": 16360.6,
+        "monitor_error": null,
+        "tag": "C0_native|p1-zh-scene|cfg2",
+        "wall_s": 23.041,
+        "image": "runs/m51-20261105-cleanroom-01/e2e/raw/C0_native__p1-zh-scene__cfg2.png",
+        "image_sha256": "db39407f5b7bdf7d3351e43c3820749c85c327a2ec1a7e4337277610d5200daf",
+        "bytes": 1459297
+      }
+    },
+    "G_precomputed": {
+      "G_precomputed|p1-zh-scene|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 1.086,
+        "ksampler_s": 14.003,
+        "step_times_s": [
+          3.343,
+          1.359,
+          1.332,
+          1.334,
+          1.33,
+          1.332,
+          1.332,
+          1.331
+        ],
+        "node_timings_s": {
+          "VAELoader#vae_aded6289": 0.738,
+          "EmptyLatentImage#latent_3c8cd1d0": 0.003,
+          "LinuxLabCondSafetensors#neg_b00ea4ca": 0.008,
+          "LinuxLabCondSafetensors#pos_58e99c92": 0.047,
+          "UNETLoader#unet_386ce0ea": 4.093,
+          "KSampler#ks_9b8bfb6b": 14.003,
+          "VAEDecode#dec_0276d336": 1.086,
+          "SaveImage#save_6ec78935": 0.46
+        },
+        "cached_nodes": [],
+        "vram_peak_mb": 16772.9,
+        "vram_residency_mb": 16283.6,
+        "monitor_error": null,
+        "tag": "G_precomputed|p1-zh-scene|cfg1",
+        "wall_s": 21.067,
+        "image": "runs/m51-20261105-cleanroom-01/e2e/raw/G_precomputed__p1-zh-scene__cfg1.png",
+        "image_sha256": "8433521a93534de4d19adff5a077d702baca2cb3b621d108ec8bf8a1e927ce06",
+        "bytes": 1908220
+      },
+      "G_precomputed|p2-en-scene|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.885,
+        "ksampler_s": 10.776,
+        "step_times_s": [
+          0.058,
+          1.355,
+          1.332,
+          1.332,
+          1.331,
+          1.333,
+          1.362,
+          1.364
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#pos_6b23c49c": 0.003,
+          "KSampler#ks_dbe020e8": 10.776,
+          "VAEDecode#dec_c31c6b4b": 0.885,
+          "SaveImage#save_df4df656": 0.431
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_f3e835f6",
+          "VAELoader#vae_1cd4f154",
+          "LinuxLabCondSafetensors#neg_bee25f5e",
+          "EmptyLatentImage#latent_4763c9ca"
+        ],
+        "vram_peak_mb": 16875.6,
+        "vram_residency_mb": 16283.4,
+        "monitor_error": null,
+        "tag": "G_precomputed|p2-en-scene|cfg1",
+        "wall_s": 12.102,
+        "image": "runs/m51-20261105-cleanroom-01/e2e/raw/G_precomputed__p2-en-scene__cfg1.png",
+        "image_sha256": "a490a846ba33f4cbad2aac5da1b07c9b258e3316e33fdf8ec22d46ac481e7bc1",
+        "bytes": 1536123
+      },
+      "G_precomputed|p3-poster-text|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.878,
+        "ksampler_s": 10.973,
+        "step_times_s": [
+          0.057,
+          1.662,
+          1.323,
+          1.325,
+          1.325,
+          1.326,
+          1.325,
+          1.326
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#pos_074ac969": 0.008,
+          "KSampler#ks_4c3579cf": 10.973,
+          "VAEDecode#dec_57d55f92": 0.878,
+          "SaveImage#save_fd390f33": 0.159
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_581fa745",
+          "VAELoader#vae_75bea7ac",
+          "LinuxLabCondSafetensors#neg_b96511bd",
+          "EmptyLatentImage#latent_e054b1b3"
+        ],
+        "vram_peak_mb": 17823.5,
+        "vram_residency_mb": 16283.8,
+        "monitor_error": null,
+        "tag": "G_precomputed|p3-poster-text|cfg1",
+        "wall_s": 12.264,
+        "image": "runs/m51-20261105-cleanroom-01/e2e/raw/G_precomputed__p3-poster-text__cfg1.png",
+        "image_sha256": "55218a3e61800554de497c37acb55f89b33d8ddc4c9aad9fb344a56b8945f03b",
+        "bytes": 1548489
+      },
+      "G_precomputed|p1-zh-scene|cfg2": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.894,
+        "ksampler_s": 21.684,
+        "step_times_s": [
+          1.441,
+          2.74,
+          2.709,
+          2.712,
+          2.694,
+          2.704,
+          2.692,
+          2.674
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#neg_2b4baf6e": 0.003,
+          "LinuxLabCondSafetensors#pos_230ee506": 0.003,
+          "KSampler#ks_01ffb68a": 21.684,
+          "VAEDecode#dec_b517ea64": 0.894,
+          "SaveImage#save_6e235cd4": 0.396
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_a75e0fff",
+          "VAELoader#vae_bfd961e6",
+          "EmptyLatentImage#latent_5bd9e562"
+        ],
+        "vram_peak_mb": 17043.5,
+        "vram_residency_mb": 16285.6,
+        "monitor_error": null,
+        "tag": "G_precomputed|p1-zh-scene|cfg2",
+        "wall_s": 23.051,
+        "image": "runs/m51-20261105-cleanroom-01/e2e/raw/G_precomputed__p1-zh-scene__cfg2.png",
+        "image_sha256": "d2cd4d365aaa3d9b0c1afac8e03da207be13919c92be049307ac0a63bfebee32",
+        "bytes": 1455268
+      }
+    },
+    "C1a_OV_FP32": {
+      "C1a_OV_FP32|p1-zh-scene|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.881,
+        "ksampler_s": 10.722,
+        "step_times_s": [
+          0.058,
+          1.355,
+          1.331,
+          1.334,
+          1.333,
+          1.333,
+          1.332,
+          1.334
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#neg_afb9f521": 0.002,
+          "LinuxLabCondSafetensors#pos_ac925a08": 0.005,
+          "KSampler#ks_c108433e": 10.722,
+          "VAEDecode#dec_aaa9c057": 0.881,
+          "SaveImage#save_fbd28904": 0.419
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_18e188d5",
+          "VAELoader#vae_be91c7f9",
+          "EmptyLatentImage#latent_4d1cfdd6"
+        ],
+        "vram_peak_mb": 16837.3,
+        "vram_residency_mb": 16292.1,
+        "monitor_error": null,
+        "tag": "C1a_OV_FP32|p1-zh-scene|cfg1",
+        "wall_s": 12.037,
+        "image": "runs/m51-20261105-cleanroom-01/e2e/raw/C1a_OV_FP32__p1-zh-scene__cfg1.png",
+        "image_sha256": "a1e125c3cbf89599f165bb59ff55afa712bc824a0f44f5380742318302d060fc",
+        "bytes": 1909804
+      },
+      "C1a_OV_FP32|p2-en-scene|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.887,
+        "ksampler_s": 10.727,
+        "step_times_s": [
+          0.06,
+          1.355,
+          1.333,
+          1.333,
+          1.334,
+          1.333,
+          1.333,
+          1.334
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#pos_7b872e67": 0.011,
+          "KSampler#ks_9f8bc1c6": 10.727,
+          "VAEDecode#dec_a0612075": 0.887,
+          "SaveImage#save_75e39a4c": 0.38
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_a316d663",
+          "VAELoader#vae_aa852331",
+          "LinuxLabCondSafetensors#neg_78699c8d",
+          "EmptyLatentImage#latent_55243ce7"
+        ],
+        "vram_peak_mb": 17094.4,
+        "vram_residency_mb": 16291.9,
+        "monitor_error": null,
+        "tag": "C1a_OV_FP32|p2-en-scene|cfg1",
+        "wall_s": 12.03,
+        "image": "runs/m51-20261105-cleanroom-01/e2e/raw/C1a_OV_FP32__p2-en-scene__cfg1.png",
+        "image_sha256": "84a4d02959c78bb1c21432988df7aa06499c7ada2685ac63905b78ddd92b2c0e",
+        "bytes": 1537038
+      },
+      "C1a_OV_FP32|p3-poster-text|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.881,
+        "ksampler_s": 10.678,
+        "step_times_s": [
+          0.058,
+          1.352,
+          1.328,
+          1.327,
+          1.327,
+          1.327,
+          1.331,
+          1.323
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#pos_0b1872ec": 0.004,
+          "KSampler#ks_2de47754": 10.678,
+          "VAEDecode#dec_0810d3e6": 0.881,
+          "SaveImage#save_2413086b": 0.157
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_72bb578e",
+          "VAELoader#vae_6776ef09",
+          "LinuxLabCondSafetensors#neg_8d65de8b",
+          "EmptyLatentImage#latent_fc2031be"
+        ],
+        "vram_peak_mb": 16951.1,
+        "vram_residency_mb": 16283.8,
+        "monitor_error": null,
+        "tag": "C1a_OV_FP32|p3-poster-text|cfg1",
+        "wall_s": 12.03,
+        "image": "runs/m51-20261105-cleanroom-01/e2e/raw/C1a_OV_FP32__p3-poster-text__cfg1.png",
+        "image_sha256": "d5215568edc13db980f996b7a9d9a9062fabc24aeb990f177b4454a4ea2cbcfe",
+        "bytes": 1545059
+      }
+    },
+    "C1b_OV_BF16": {
+      "C1b_OV_BF16|p1-zh-scene|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.886,
+        "ksampler_s": 10.733,
+        "step_times_s": [
+          0.059,
+          1.356,
+          1.334,
+          1.336,
+          1.334,
+          1.335,
+          1.333,
+          1.334
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#neg_943b5737": 0.003,
+          "LinuxLabCondSafetensors#pos_b9e86d0b": 0.006,
+          "KSampler#ks_898b772b": 10.733,
+          "VAEDecode#dec_00fdca43": 0.886,
+          "SaveImage#save_dbddac07": 0.182
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_cfbb7b8f",
+          "VAELoader#vae_1ca8fcdd",
+          "EmptyLatentImage#latent_160746fc"
+        ],
+        "vram_peak_mb": 16733.8,
+        "vram_residency_mb": 16292.1,
+        "monitor_error": null,
+        "tag": "C1b_OV_BF16|p1-zh-scene|cfg1",
+        "wall_s": 12.036,
+        "image": "runs/m51-20261105-cleanroom-01/e2e/raw/C1b_OV_BF16__p1-zh-scene__cfg1.png",
+        "image_sha256": "2e9223016a6f06db0a06a44c996738245c604be8ef08acd80feba0241732d723",
+        "bytes": 1908194
+      },
+      "C1b_OV_BF16|p2-en-scene|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.88,
+        "ksampler_s": 10.732,
+        "step_times_s": [
+          0.058,
+          1.357,
+          1.335,
+          1.335,
+          1.334,
+          1.335,
+          1.334,
+          1.334
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#pos_50a70983": 0.005,
+          "KSampler#ks_0b2c3bcc": 10.732,
+          "VAEDecode#dec_87024395": 0.88,
+          "SaveImage#save_f7d3f13d": 0.163
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_98b2dc68",
+          "VAELoader#vae_ce4ffa0a",
+          "LinuxLabCondSafetensors#neg_bcf63656",
+          "EmptyLatentImage#latent_64d95911"
+        ],
+        "vram_peak_mb": 16767.9,
+        "vram_residency_mb": 16291.9,
+        "monitor_error": null,
+        "tag": "C1b_OV_BF16|p2-en-scene|cfg1",
+        "wall_s": 12.028,
+        "image": "runs/m51-20261105-cleanroom-01/e2e/raw/C1b_OV_BF16__p2-en-scene__cfg1.png",
+        "image_sha256": "50e0424a6668d448832e9c58cc4bf6e60754759500464f000003f64991d9f446",
+        "bytes": 1539241
+      },
+      "C1b_OV_BF16|p3-poster-text|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.876,
+        "ksampler_s": 10.677,
+        "step_times_s": [
+          0.058,
+          1.353,
+          1.326,
+          1.327,
+          1.327,
+          1.328,
+          1.329,
+          1.324
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#pos_253adf9f": 0.004,
+          "KSampler#ks_15e57ca4": 10.677,
+          "VAEDecode#dec_b57a585f": 0.876,
+          "SaveImage#save_27e97ee1": 0.161
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_1083abff",
+          "VAELoader#vae_5d01e7c9",
+          "LinuxLabCondSafetensors#neg_857e24e9",
+          "EmptyLatentImage#latent_8d5e49b5"
+        ],
+        "vram_peak_mb": 17221.9,
+        "vram_residency_mb": 16283.8,
+        "monitor_error": null,
+        "tag": "C1b_OV_BF16|p3-poster-text|cfg1",
+        "wall_s": 12.029,
+        "image": "runs/m51-20261105-cleanroom-01/e2e/raw/C1b_OV_BF16__p3-poster-text__cfg1.png",
+        "image_sha256": "003cb5601eec1bf84a9714840857b278e45b43cc42b0502ef47683168b6d50b7",
+        "bytes": 1545327
+      },
+      "C1b_OV_BF16|p1-zh-scene|cfg2": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.878,
+        "ksampler_s": 21.47,
+        "step_times_s": [
+          1.473,
+          2.688,
+          2.666,
+          2.666,
+          2.666,
+          2.667,
+          2.667,
+          2.667
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#neg_cb5239de": 0.003,
+          "LinuxLabCondSafetensors#pos_004ec40b": 0.019,
+          "KSampler#ks_40ac69d0": 21.47,
+          "VAEDecode#dec_5c9995e0": 0.878,
+          "SaveImage#save_aee21347": 0.376
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_3abba261",
+          "VAELoader#vae_728aff3f",
+          "EmptyLatentImage#latent_46b8e75f"
+        ],
+        "vram_peak_mb": 17837.9,
+        "vram_residency_mb": 16285.6,
+        "monitor_error": null,
+        "tag": "C1b_OV_BF16|p1-zh-scene|cfg2",
+        "wall_s": 23.049,
+        "image": "runs/m51-20261105-cleanroom-01/e2e/raw/C1b_OV_BF16__p1-zh-scene__cfg2.png",
+        "image_sha256": "99af969491b538f06d38d50800c6f16eeb4eab1e04ae2053fbd2acd997dcdaff",
+        "bytes": 1460109
+      }
+    },
+    "C2_OV_INT8": {
+      "C2_OV_INT8|p1-zh-scene|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.882,
+        "ksampler_s": 10.744,
+        "step_times_s": [
+          0.056,
+          1.358,
+          1.343,
+          1.335,
+          1.335,
+          1.336,
+          1.335,
+          1.334
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#neg_639e0bf9": 0.006,
+          "LinuxLabCondSafetensors#pos_d5acf748": 0.0,
+          "KSampler#ks_8ba00733": 10.744,
+          "VAEDecode#dec_08c280c5": 0.882,
+          "SaveImage#save_1a961da8": 0.182
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_9d4e344a",
+          "VAELoader#vae_d14c3085",
+          "EmptyLatentImage#latent_3344d63b"
+        ],
+        "vram_peak_mb": 16923.1,
+        "vram_residency_mb": 16292.1,
+        "monitor_error": null,
+        "tag": "C2_OV_INT8|p1-zh-scene|cfg1",
+        "wall_s": 12.041,
+        "image": "runs/m51-20261105-cleanroom-01/e2e/raw/C2_OV_INT8__p1-zh-scene__cfg1.png",
+        "image_sha256": "007e7f985954035a103841572816bbe884f89a9de3fdd899f1ab98bc9e3dd24a",
+        "bytes": 1922804
+      },
+      "C2_OV_INT8|p2-en-scene|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.899,
+        "ksampler_s": 10.745,
+        "step_times_s": [
+          0.058,
+          1.368,
+          1.334,
+          1.333,
+          1.335,
+          1.335,
+          1.334,
+          1.335
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#pos_3bc6faa6": 0.001,
+          "KSampler#ks_f594550e": 10.745,
+          "VAEDecode#dec_5398a70a": 0.899,
+          "SaveImage#save_898ea03c": 0.445
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_756ba306",
+          "VAELoader#vae_216a03ec",
+          "LinuxLabCondSafetensors#neg_986615fc",
+          "EmptyLatentImage#latent_4f4cc110"
+        ],
+        "vram_peak_mb": 16922.9,
+        "vram_residency_mb": 16283.4,
+        "monitor_error": null,
+        "tag": "C2_OV_INT8|p2-en-scene|cfg1",
+        "wall_s": 12.097,
+        "image": "runs/m51-20261105-cleanroom-01/e2e/raw/C2_OV_INT8__p2-en-scene__cfg1.png",
+        "image_sha256": "37895ecff2303b96f3c053f188e2e886716cf94f4204aa6c5c74d13434174d9e",
+        "bytes": 1539552
+      },
+      "C2_OV_INT8|p3-poster-text|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.877,
+        "ksampler_s": 10.677,
+        "step_times_s": [
+          0.058,
+          1.353,
+          1.326,
+          1.327,
+          1.327,
+          1.327,
+          1.328,
+          1.326
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#pos_e184f56a": 0.002,
+          "KSampler#ks_74625e9a": 10.677,
+          "VAEDecode#dec_4e4c0505": 0.877,
+          "SaveImage#save_953335f0": 0.383
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_a75de940",
+          "VAELoader#vae_7ea0cf3c",
+          "LinuxLabCondSafetensors#neg_fd3ffc45",
+          "EmptyLatentImage#latent_44f2e97f"
+        ],
+        "vram_peak_mb": 16920.4,
+        "vram_residency_mb": 16283.8,
+        "monitor_error": null,
+        "tag": "C2_OV_INT8|p3-poster-text|cfg1",
+        "wall_s": 12.027,
+        "image": "runs/m51-20261105-cleanroom-01/e2e/raw/C2_OV_INT8__p3-poster-text__cfg1.png",
+        "image_sha256": "cbfa49dcc854aa6bb93669170bb32ad973818a103f92e69c4a6d747634c5f7b3",
+        "bytes": 1546710
+      },
+      "C2_OV_INT8|p1-zh-scene|cfg2": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.878,
+        "ksampler_s": 21.583,
+        "step_times_s": [
+          1.442,
+          2.688,
+          2.665,
+          2.674,
+          2.678,
+          2.686,
+          2.69,
+          2.727
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#neg_e0bb43a3": 0.003,
+          "LinuxLabCondSafetensors#pos_13a8df01": 0.002,
+          "KSampler#ks_320b1a6f": 21.583,
+          "VAEDecode#dec_6aab26e6": 0.878,
+          "SaveImage#save_a64472a4": 0.152
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_e0df5440",
+          "VAELoader#vae_0da4b87a",
+          "EmptyLatentImage#latent_0a471fd0"
+        ],
+        "vram_peak_mb": 17344.1,
+        "vram_residency_mb": 16285.6,
+        "monitor_error": null,
+        "tag": "C2_OV_INT8|p1-zh-scene|cfg2",
+        "wall_s": 23.049,
+        "image": "runs/m51-20261105-cleanroom-01/e2e/raw/C2_OV_INT8__p1-zh-scene__cfg2.png",
+        "image_sha256": "71ee52868ebc1fec691f929aa409d7301e511b74b1037b337db95b50eb79882d",
+        "bytes": 1480246
+      }
+    },
+    "C0_precomputed": {
+      "C0_precomputed|p1-zh-scene|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.902,
+        "ksampler_s": 11.055,
+        "step_times_s": [
+          0.058,
+          1.516,
+          1.36,
+          1.356,
+          1.376,
+          1.346,
+          1.366,
+          1.357
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#neg_b4f0835b": 0.003,
+          "LinuxLabCondSafetensors#pos_6b167ebd": 0.008,
+          "KSampler#ks_efd9c2ae": 11.055,
+          "VAEDecode#dec_ea49c314": 0.902,
+          "SaveImage#save_81f43532": 0.44
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_97e803a3",
+          "VAELoader#vae_9720c231",
+          "EmptyLatentImage#latent_f8152c5d"
+        ],
+        "vram_peak_mb": 17183.7,
+        "vram_residency_mb": 16283.6,
+        "monitor_error": null,
+        "tag": "C0_precomputed|p1-zh-scene|cfg1",
+        "wall_s": 13.037,
+        "image": "runs/m51-20261105-cleanroom-01/e2e/raw/C0_precomputed__p1-zh-scene__cfg1.png",
+        "image_sha256": "061f224f8929f58c104d616c3733b42ef1b9742f15270f908f677be0947221be",
+        "bytes": 1907360
+      },
+      "C0_precomputed|p2-en-scene|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.879,
+        "ksampler_s": 10.759,
+        "step_times_s": [
+          0.059,
+          1.357,
+          1.336,
+          1.334,
+          1.334,
+          1.334,
+          1.334,
+          1.357
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#pos_afdd28ce": 0.004,
+          "KSampler#ks_97cbe8c0": 10.759,
+          "VAEDecode#dec_ca500f26": 0.879,
+          "SaveImage#save_e121b457": 0.163
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_1fe7d7d7",
+          "VAELoader#vae_ef9ed889",
+          "LinuxLabCondSafetensors#neg_6af3bce8",
+          "EmptyLatentImage#latent_8189f6de"
+        ],
+        "vram_peak_mb": 16836.5,
+        "vram_residency_mb": 16291.9,
+        "monitor_error": null,
+        "tag": "C0_precomputed|p2-en-scene|cfg1",
+        "wall_s": 12.062,
+        "image": "runs/m51-20261105-cleanroom-01/e2e/raw/C0_precomputed__p2-en-scene__cfg1.png",
+        "image_sha256": "6042eb6903b3e6b9770cf0f16181b0e57b942867e94b852ab963b5b0a9ff8652",
+        "bytes": 1537208
+      },
+      "C0_precomputed|p3-poster-text|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.877,
+        "ksampler_s": 10.677,
+        "step_times_s": [
+          0.058,
+          1.353,
+          1.327,
+          1.328,
+          1.325,
+          1.328,
+          1.33,
+          1.324
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#pos_3236eaff": 0.012,
+          "KSampler#ks_17b0127d": 10.677,
+          "VAEDecode#dec_20998a9c": 0.877,
+          "SaveImage#save_498da547": 0.387
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_a59a6787",
+          "VAELoader#vae_1b0bec3a",
+          "LinuxLabCondSafetensors#neg_a8396317",
+          "EmptyLatentImage#latent_0d8b8e36"
+        ],
+        "vram_peak_mb": 17221.9,
+        "vram_residency_mb": 16283.8,
+        "monitor_error": null,
+        "tag": "C0_precomputed|p3-poster-text|cfg1",
+        "wall_s": 12.028,
+        "image": "runs/m51-20261105-cleanroom-01/e2e/raw/C0_precomputed__p3-poster-text__cfg1.png",
+        "image_sha256": "1c33f85de333a1ff4236d25dc0972f484a01bffa9fdc7092c37eb0597e1e670d",
+        "bytes": 1545186
+      },
+      "C0_precomputed|p1-zh-scene|cfg2": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.879,
+        "ksampler_s": 21.451,
+        "step_times_s": [
+          1.443,
+          2.708,
+          2.663,
+          2.663,
+          2.665,
+          2.666,
+          2.665,
+          2.671
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#neg_b03b2b89": 0.003,
+          "LinuxLabCondSafetensors#pos_78cf0449": 0.001,
+          "KSampler#ks_b5058b91": 21.451,
+          "VAEDecode#dec_a4d8b76f": 0.879,
+          "SaveImage#save_bc3ce2fc": 0.427
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_8889eddd",
+          "VAELoader#vae_042f94b8",
+          "EmptyLatentImage#latent_f2929bbd"
+        ],
+        "vram_peak_mb": 17825.3,
+        "vram_residency_mb": 16285.6,
+        "monitor_error": null,
+        "tag": "C0_precomputed|p1-zh-scene|cfg2",
+        "wall_s": 23.045,
+        "image": "runs/m51-20261105-cleanroom-01/e2e/raw/C0_precomputed__p1-zh-scene__cfg2.png",
+        "image_sha256": "309e9f0d95c6941e6b287fd5bc02ea2996f63545a4120c54455c8a279f176639",
+        "bytes": 1457607
+      }
+    }
+  },
+  "sessions": {
+    "native": {
+      "log": "runs/m51-20261105-cleanroom-01/e2e/server_native.log",
+      "boot_s": 6.04823043756187,
+      "server_rss_before_mb": 1228.1,
+      "server_rss_after_mb": 1903.6,
+      "attention": {
+        "Using pytorch attention": [
+          "\u001b[32m[INFO]\u001b[0m Using pytorch attention"
+        ],
+        "Using .* attention": [
+          "\u001b[32m[INFO]\u001b[0m Using split attention in VAE",
+          "\u001b[32m[INFO]\u001b[0m Using split attention in VAE",
+          "/workspace/m51/qwen-image-inference-tuning-course/ComfyUI/comfy/ops.py:105: UserWarning: Using AOTriton backend for Efficient Attention forward... (Triggered internally at /app/pytorch/aten/src/ATen/native/transformers/hip/attention.hip:1452.)"
+        ],
+        "attention": [
+          "\u001b[32m[INFO]\u001b[0m Using split attention in VAE",
+          "/workspace/m51/qwen-image-inference-tuning-course/ComfyUI/comfy/ops.py:105: UserWarning: Using AOTriton backend for Efficient Attention forward... (Triggered internally at /app/pytorch/aten/src/ATen/native/transformers/hip/attention.hip:1452.)",
+          "  return torch.nn.functional.scaled_dot_product_attention(q, k, v, *args, **kwargs)"
+        ],
+        "Set: torch\\.backends\\.cudnn": [
+          "\u001b[32m[INFO]\u001b[0m Set: torch.backends.cudnn.enabled = False for better AMD performance."
+        ],
+        "AMD arch": [
+          "\u001b[32m[INFO]\u001b[0m AMD arch: gfx1100"
+        ],
+        "ROCm version": [
+          "\u001b[32m[INFO]\u001b[0m ROCm version: (7, 2)"
+        ]
+      }
+    },
+    "precomputed": {
+      "log": "runs/m51-20261105-cleanroom-01/e2e/server_precomputed.log",
+      "boot_s": 7.018689427524805,
+      "server_rss_before_mb": 1226.1,
+      "server_rss_after_mb": 1891.9,
+      "attention": {
+        "Using pytorch attention": [
+          "\u001b[32m[INFO]\u001b[0m Using pytorch attention"
+        ],
+        "Using .* attention": [
+          "\u001b[32m[INFO]\u001b[0m Using split attention in VAE",
+          "\u001b[32m[INFO]\u001b[0m Using split attention in VAE",
+          "  0%|                                                                                                                              | 0/8 [00:00<?, ?it/s]/workspace/m51/qwen-image-inference-tuning-course/ComfyUI/comfy/ops.py:105: UserWarning: Using AOTriton backend for Efficient Attention forward... (Triggered internally at /app/pytorch/aten/src/ATen/native/transformers/hip/attention.hip:1452.)"
+        ],
+        "attention": [
+          "\u001b[32m[INFO]\u001b[0m Using split attention in VAE",
+          "  0%|                                                                                                                              | 0/8 [00:00<?, ?it/s]/workspace/m51/qwen-image-inference-tuning-course/ComfyUI/comfy/ops.py:105: UserWarning: Using AOTriton backend for Efficient Attention forward... (Triggered internally at /app/pytorch/aten/src/ATen/native/transformers/hip/attention.hip:1452.)",
+          "  return torch.nn.functional.scaled_dot_product_attention(q, k, v, *args, **kwargs)"
+        ],
+        "Set: torch\\.backends\\.cudnn": [
+          "\u001b[32m[INFO]\u001b[0m Set: torch.backends.cudnn.enabled = False for better AMD performance."
+        ],
+        "AMD arch": [
+          "\u001b[32m[INFO]\u001b[0m AMD arch: gfx1100"
+        ],
+        "ROCm version": [
+          "\u001b[32m[INFO]\u001b[0m ROCm version: (7, 2)"
+        ]
+      }
+    }
+  },
+  "quality": {
+    "G_native|p1-zh-scene|cfg1": {
+      "psnr_db": Infinity,
+      "ssim": 1.0,
+      "mae": 0.0,
+      "max_abs": 0.0,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.0
+    },
+    "G_native|p2-en-scene|cfg1": {
+      "psnr_db": Infinity,
+      "ssim": 1.0,
+      "mae": 0.0,
+      "max_abs": 0.0,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.0
+    },
+    "G_native|p3-poster-text|cfg1": {
+      "psnr_db": Infinity,
+      "ssim": 1.0,
+      "mae": 0.0,
+      "max_abs": 0.0,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.0
+    },
+    "G_native|p1-zh-scene|cfg2": {
+      "psnr_db": Infinity,
+      "ssim": 1.0,
+      "mae": 0.0,
+      "max_abs": 0.0,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.0
+    },
+    "C0_native|p1-zh-scene|cfg1": {
+      "psnr_db": 34.97459107532823,
+      "ssim": 0.9887441147983657,
+      "mae": 0.0050824121712080015,
+      "max_abs": 0.8705882352941176,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.009027221240103245
+    },
+    "C0_native|p1-zh-scene|cfg2": {
+      "psnr_db": 39.98739322291114,
+      "ssim": 0.9907011783548915,
+      "mae": 0.003242156084846048,
+      "max_abs": 0.8627450980392156,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.004744494799524546
+    },
+    "G_precomputed|p1-zh-scene|cfg1": {
+      "psnr_db": Infinity,
+      "ssim": 1.0,
+      "mae": 0.0,
+      "max_abs": 0.0,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.0
+    },
+    "G_precomputed|p2-en-scene|cfg1": {
+      "psnr_db": Infinity,
+      "ssim": 1.0,
+      "mae": 0.0,
+      "max_abs": 0.0,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.0
+    },
+    "G_precomputed|p3-poster-text|cfg1": {
+      "psnr_db": Infinity,
+      "ssim": 1.0,
+      "mae": 0.0,
+      "max_abs": 0.0,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.0
+    },
+    "G_precomputed|p1-zh-scene|cfg2": {
+      "psnr_db": Infinity,
+      "ssim": 1.0,
+      "mae": 0.0,
+      "max_abs": 0.0,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.0
+    },
+    "C1a_OV_FP32|p1-zh-scene|cfg1": {
+      "psnr_db": 34.744555153945406,
+      "ssim": 0.9884659275941634,
+      "mae": 0.005559049868116191,
+      "max_abs": 0.8745098039215686,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.010572236031293869
+    },
+    "C1a_OV_FP32|p2-en-scene|cfg1": {
+      "psnr_db": 48.617594946551506,
+      "ssim": 0.9974177272421887,
+      "mae": 0.001837964774736393,
+      "max_abs": 0.2392156862745098,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.0015047156484797597
+    },
+    "C1a_OV_FP32|p3-poster-text|cfg1": {
+      "psnr_db": 34.86547229200025,
+      "ssim": 0.9948382892442176,
+      "mae": 0.002624864515915416,
+      "max_abs": 0.9529411764705882,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.0027482910081744194
+    },
+    "C1b_OV_BF16|p1-zh-scene|cfg1": {
+      "psnr_db": 36.260058088423136,
+      "ssim": 0.9875724226448627,
+      "mae": 0.005711514342064954,
+      "max_abs": 0.8431372549019608,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.007951319217681885
+    },
+    "C1b_OV_BF16|p2-en-scene|cfg1": {
+      "psnr_db": 47.028073502022714,
+      "ssim": 0.9972148372131309,
+      "mae": 0.002050209045410156,
+      "max_abs": 0.3411764705882353,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.002160684671252966
+    },
+    "C1b_OV_BF16|p3-poster-text|cfg1": {
+      "psnr_db": 35.568402087689506,
+      "ssim": 0.9950903501308855,
+      "mae": 0.0026072358773424737,
+      "max_abs": 0.9254901960784314,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.0019256288651376963
+    },
+    "C1b_OV_BF16|p1-zh-scene|cfg2": {
+      "psnr_db": 37.51293117831678,
+      "ssim": 0.9881811122461635,
+      "mae": 0.0040463029948714525,
+      "max_abs": 0.9803921568627451,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.006830069236457348
+    },
+    "C2_OV_INT8|p1-zh-scene|cfg1": {
+      "psnr_db": 27.36850617684743,
+      "ssim": 0.9483198861357582,
+      "mae": 0.015621782439986083,
+      "max_abs": 0.9725490196078431,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.03778969496488571
+    },
+    "C2_OV_INT8|p2-en-scene|cfg1": {
+      "psnr_db": 38.771227383666265,
+      "ssim": 0.9941014629724912,
+      "mae": 0.00480573442247179,
+      "max_abs": 0.4588235294117647,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.008100341074168682
+    },
+    "C2_OV_INT8|p3-poster-text|cfg1": {
+      "psnr_db": 31.518263659596748,
+      "ssim": 0.9906479796850299,
+      "mae": 0.003926986494874641,
+      "max_abs": 1.0,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.004616830963641405
+    },
+    "C2_OV_INT8|p1-zh-scene|cfg2": {
+      "psnr_db": 28.393891989970204,
+      "ssim": 0.9667508271841979,
+      "mae": 0.00993147083357269,
+      "max_abs": 1.0,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.028160374611616135
+    },
+    "C0_precomputed|p1-zh-scene|cfg1": {
+      "psnr_db": 33.01492396834038,
+      "ssim": 0.9822021207617846,
+      "mae": 0.006784961426180173,
+      "max_abs": 0.8862745098039215,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.013118207454681396
+    },
+    "C0_precomputed|p2-en-scene|cfg1": {
+      "psnr_db": 50.067985634222,
+      "ssim": 0.9978254506616314,
+      "mae": 0.0013702641904743673,
+      "max_abs": 0.2784313725490196,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.0009990615071728826
+    },
+    "C0_precomputed|p3-poster-text|cfg1": {
+      "psnr_db": 40.17199769200864,
+      "ssim": 0.9969325872070188,
+      "mae": 0.0018786685918670831,
+      "max_abs": 0.9294117647058824,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.0012950783129781485
+    },
+    "C0_precomputed|p1-zh-scene|cfg2": {
+      "psnr_db": 38.63212581041688,
+      "ssim": 0.9899301888523939,
+      "mae": 0.0036135405496834187,
+      "max_abs": 0.9137254901960784,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.005631668493151665
+    }
+  },
+  "status": {},
+  "human_verdict": "PENDING_HUMAN_REVIEW",
+  "lpips_available": true
+}

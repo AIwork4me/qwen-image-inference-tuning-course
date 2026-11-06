@@ -32,7 +32,7 @@ OPTIONAL_DEFAULTS = {
     "enabled": True,
 }
 
-KNOWN_IDS = ("B0", "L1", "L1O", "F1", "F2", "LF1", "LF2", "LF3", "H1", "H2", "BEST")
+KNOWN_IDS = ("B0", "L1", "L1O", "F1", "F2", "LF1", "LF2", "LF3", "H1", "H2", "H3_OV_FP32", "H3_OV_BF16", "H3_OV_INT8", "BEST")
 
 
 def validate_manifest(m: dict) -> None:

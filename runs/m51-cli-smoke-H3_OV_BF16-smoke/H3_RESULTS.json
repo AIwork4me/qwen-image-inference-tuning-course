@@ -1,0 +1,45 @@
+{
+  "experiment": "H3_OV_BF16",
+  "status": "PASS",
+  "timestamp": "2026-11-05T10:33:02+0000",
+  "source_head": "20a7f7e5afcb078b3899470365464f4922db10cb",
+  "artifact_digest": "62eee98599e0e004f6b8a29bfea1f61e7c7bf2c9d0b9ed505cdf2a0e2eb380ce",
+  "artifact_manifest": {
+    "source": "/opt/m51-artifacts/fp32/language_model_fp32.xml",
+    "tool": "ov.save_model compress_to_fp16=True",
+    "storage": "FP16",
+    "runtime_precision": "bf16",
+    "bin_bytes": 13892143718,
+    "source_xml_sha256": "9fbbc226be2ba66b00f7e8c801ec7e6491e3f0fead7b62a091a55577fe47a2ce",
+    "output_bin_sha256": "62eee98599e0e004f6b8a29bfea1f61e7c7bf2c9d0b9ed505cdf2a0e2eb380ce"
+  },
+  "environment": {
+    "openvino": "2026.4.1-22982-e213a147257-releases/2026/4",
+    "admission": "GO",
+    "admission_reasons": []
+  },
+  "measurements": {
+    "encode_s": [
+      2.068516
+    ],
+    "load_s": 4.746,
+    "rss_peak_mb": 30018.7,
+    "shape": [
+      [
+        1,
+        52,
+        4096
+      ]
+    ],
+    "n_tokens_full": [
+      66
+    ]
+  },
+  "evidence_paths": [
+    "/workspace/m51/qwen-image-inference-tuning-course/runs/m51-cli-smoke-H3_OV_BF16-smoke/probe_H3_OV_BF16.json",
+    "/workspace/m51/qwen-image-inference-tuning-course/runs/m51-cli-smoke-H3_OV_BF16-smoke/stdout.log",
+    "/workspace/m51/qwen-image-inference-tuning-course/runs/m51-cli-smoke-H3_OV_BF16-smoke/stderr.log"
+  ],
+  "mode": "smoke",
+  "runtime_s": 10.64
+}

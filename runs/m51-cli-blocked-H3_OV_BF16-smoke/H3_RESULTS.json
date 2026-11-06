@@ -1,0 +1,26 @@
+{
+  "experiment": "H3_OV_BF16",
+  "status": "BLOCKED",
+  "timestamp": "2026-11-05T10:33:16+0000",
+  "source_head": "20a7f7e5afcb078b3899470365464f4922db10cb",
+  "artifact_digest": null,
+  "environment": {
+    "python": "/workspace/m51/qwen-image-inference-tuning-course/.venv-ov/bin/python"
+  },
+  "measurements": {},
+  "evidence_paths": [
+    "/workspace/m51/qwen-image-inference-tuning-course/runs/m51-cli-blocked-H3_OV_BF16-smoke"
+  ],
+  "blocker": {
+    "reason": "missing_artifacts",
+    "detail": {
+      "status": "BLOCKED",
+      "reason": "missing_artifacts",
+      "missing": [
+        "language_model_bf16.xml",
+        "language_model_bf16.bin"
+      ]
+    },
+    "next_action": "run: bash scripts/m51/provision_ov.sh"
+  }
+}

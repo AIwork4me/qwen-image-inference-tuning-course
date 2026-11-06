@@ -1,0 +1,1071 @@
+{
+  "run": "runs/m51-20261105-cleanroom-01",
+  "thresholds": {
+    "C1a_OV_FP32": {
+      "kind": "fp32",
+      "rel_l2": 0.0001,
+      "cosine": 0.99999
+    },
+    "C1b_OV_BF16": {
+      "kind": "bf16",
+      "rel_l2": 0.02,
+      "cosine": 0.999
+    },
+    "C1b_OV_BF16_COMPRESSED": {
+      "kind": "bf16",
+      "rel_l2": 0.02,
+      "cosine": 0.999
+    },
+    "C2_OV_INT8": {
+      "kind": "int8",
+      "rel_l2": 0.08,
+      "cosine": 0.995
+    }
+  },
+  "arms": {
+    "G": {
+      "probe": "runs/m51-20261105-cleanroom-01/baseline/probe_cuda.json",
+      "load_s": 9.788,
+      "rss_peak_mb": 17874.7,
+      "meta": null,
+      "token_ids_self_consistent": false,
+      "determinism": {
+        "p1-zh-scene": {
+          "runs": 3,
+          "unique_hashes": 1,
+          "deterministic": true
+        },
+        "p2-en-scene": {
+          "runs": 3,
+          "unique_hashes": 1,
+          "deterministic": true
+        },
+        "p3-poster-text": {
+          "runs": 3,
+          "unique_hashes": 1,
+          "deterministic": true
+        },
+        "negative": {
+          "runs": 3,
+          "unique_hashes": 1,
+          "deterministic": true
+        }
+      }
+    },
+    "C0": {
+      "probe": "runs/m51-20261105-cleanroom-01/baseline/probe_cpu.json",
+      "load_s": 3.848,
+      "rss_peak_mb": 34518.2,
+      "meta": null,
+      "token_ids_self_consistent": false,
+      "determinism": {
+        "p1-zh-scene": {
+          "runs": 2,
+          "unique_hashes": 1,
+          "deterministic": true
+        },
+        "p2-en-scene": {
+          "runs": 2,
+          "unique_hashes": 1,
+          "deterministic": true
+        },
+        "p3-poster-text": {
+          "runs": 2,
+          "unique_hashes": 1,
+          "deterministic": true
+        },
+        "negative": {
+          "runs": 2,
+          "unique_hashes": 1,
+          "deterministic": true
+        }
+      }
+    },
+    "C1a": {
+      "probe": "runs/m51-20261105-cleanroom-01/ov/run_fp32/probe_C1a_OV_FP32.json",
+      "load_s": 89.232,
+      "rss_peak_mb": 50539.9,
+      "meta": {
+        "openvino": "2026.4.1-22982-e213a147257-releases/2026/4",
+        "device": "CPU",
+        "execution_devices": [
+          "CPU"
+        ],
+        "inference_precision": "<Type: 'float32'>",
+        "performance_hint": "LATENCY",
+        "execution_mode": "ExecutionMode.PERFORMANCE",
+        "threads": 16,
+        "num_streams": 1,
+        "read_s": 0.222,
+        "compile_s": 84.614,
+        "embed_table_load_s": 2.216,
+        "tokenizer_load_s": 0.142,
+        "model_dir": "runs/m51-20261105-cleanroom-01/ov/fp32"
+      },
+      "token_ids_self_consistent": true,
+      "determinism": {
+        "p1-zh-scene": {
+          "runs": 3,
+          "unique_hashes": 1,
+          "deterministic": true
+        },
+        "p2-en-scene": {
+          "runs": 3,
+          "unique_hashes": 1,
+          "deterministic": true
+        },
+        "p3-poster-text": {
+          "runs": 3,
+          "unique_hashes": 1,
+          "deterministic": true
+        },
+        "negative": {
+          "runs": 3,
+          "unique_hashes": 1,
+          "deterministic": true
+        }
+      }
+    },
+    "C1b": {
+      "probe": "runs/m51-20261105-cleanroom-01/ov/run_bf16/probe_C1b_OV_BF16.json",
+      "load_s": 18.372,
+      "rss_peak_mb": 42801.5,
+      "meta": {
+        "openvino": "2026.4.1-22982-e213a147257-releases/2026/4",
+        "device": "CPU",
+        "execution_devices": [
+          "CPU"
+        ],
+        "inference_precision": "<Type: 'bfloat16'>",
+        "performance_hint": "LATENCY",
+        "execution_mode": "ExecutionMode.PERFORMANCE",
+        "threads": 16,
+        "num_streams": 1,
+        "read_s": 0.237,
+        "compile_s": 15.221,
+        "embed_table_load_s": 0.355,
+        "tokenizer_load_s": 0.145,
+        "model_dir": "runs/m51-20261105-cleanroom-01/ov/fp32"
+      },
+      "token_ids_self_consistent": true,
+      "determinism": {
+        "p1-zh-scene": {
+          "runs": 3,
+          "unique_hashes": 1,
+          "deterministic": true
+        },
+        "p2-en-scene": {
+          "runs": 3,
+          "unique_hashes": 1,
+          "deterministic": true
+        },
+        "p3-poster-text": {
+          "runs": 3,
+          "unique_hashes": 1,
+          "deterministic": true
+        },
+        "negative": {
+          "runs": 3,
+          "unique_hashes": 1,
+          "deterministic": true
+        }
+      }
+    },
+    "C1b_compressed": {
+      "probe": "runs/m51-20261105-cleanroom-01/ov/run_bf16_compressed/probe_C1b_OV_BF16_COMPRESSED.json",
+      "load_s": 3.822,
+      "rss_peak_mb": 30036.2,
+      "meta": {
+        "openvino": "2026.4.1-22982-e213a147257-releases/2026/4",
+        "device": "CPU",
+        "execution_devices": [
+          "CPU"
+        ],
+        "inference_precision": "<Type: 'bfloat16'>",
+        "performance_hint": "LATENCY",
+        "execution_mode": "ExecutionMode.PERFORMANCE",
+        "threads": 16,
+        "num_streams": 1,
+        "read_s": 0.231,
+        "compile_s": 1.218,
+        "embed_table_load_s": 0.356,
+        "tokenizer_load_s": 0.141,
+        "model_dir": "/opt/m51-artifacts/bf16",
+        "model_xml": "language_model_bf16.xml",
+        "dynamic_quant_group": null
+      },
+      "token_ids_self_consistent": true,
+      "determinism": {
+        "p1-zh-scene": {
+          "runs": 3,
+          "unique_hashes": 1,
+          "deterministic": true
+        },
+        "p2-en-scene": {
+          "runs": 3,
+          "unique_hashes": 1,
+          "deterministic": true
+        },
+        "p3-poster-text": {
+          "runs": 3,
+          "unique_hashes": 1,
+          "deterministic": true
+        },
+        "negative": {
+          "runs": 3,
+          "unique_hashes": 1,
+          "deterministic": true
+        }
+      }
+    },
+    "C2": {
+      "probe": "runs/m51-20261105-cleanroom-01/ov/run_int8/probe_C2_OV_INT8.json",
+      "load_s": 5.04,
+      "rss_peak_mb": 16760.6,
+      "meta": {
+        "openvino": "2026.4.1-22982-e213a147257-releases/2026/4",
+        "device": "CPU",
+        "execution_devices": [
+          "CPU"
+        ],
+        "inference_precision": "<Type: 'float32'>",
+        "performance_hint": "LATENCY",
+        "execution_mode": "ExecutionMode.PERFORMANCE",
+        "threads": 16,
+        "num_streams": 1,
+        "read_s": 0.246,
+        "compile_s": 1.558,
+        "embed_table_load_s": 0.965,
+        "tokenizer_load_s": 0.145,
+        "model_dir": "runs/m51-20261105-cleanroom-01/ov/int8",
+        "model_xml": "language_model_int8.xml",
+        "dynamic_quant_group": 32
+      },
+      "token_ids_self_consistent": true,
+      "determinism": {
+        "p1-zh-scene": {
+          "runs": 3,
+          "unique_hashes": 1,
+          "deterministic": true
+        },
+        "p2-en-scene": {
+          "runs": 3,
+          "unique_hashes": 1,
+          "deterministic": true
+        },
+        "p3-poster-text": {
+          "runs": 3,
+          "unique_hashes": 1,
+          "deterministic": true
+        },
+        "negative": {
+          "runs": 3,
+          "unique_hashes": 1,
+          "deterministic": true
+        }
+      }
+    }
+  },
+  "pairs": {
+    "G_vs_C0": {
+      "p1-zh-scene": {
+        "token_ids_equal": true,
+        "n_tokens_full": 66,
+        "n_tokens_kept": 52,
+        "shape": [
+          1,
+          52,
+          4096
+        ],
+        "rel_l2": 7.37524519693235e-06,
+        "cosine": 0.9999999999728503,
+        "max_abs": 0.0143890380859375,
+        "mean_abs": 4.298980885463467e-05,
+        "median_abs": 3.24249267578125e-05,
+        "rmse": 8.111073968225714e-05,
+        "per_token_cosine": {
+          "min": 0.9999999998039629,
+          "p5": 0.9999999999527485,
+          "median": 0.9999999999837403,
+          "p95": 0.9999999999912662,
+          "max": 0.9999999999923446
+        },
+        "finite_b": true
+      },
+      "p2-en-scene": {
+        "token_ids_equal": true,
+        "n_tokens_full": 51,
+        "n_tokens_kept": 37,
+        "shape": [
+          1,
+          37,
+          4096
+        ],
+        "rel_l2": 6.926929945429226e-06,
+        "cosine": 0.9999999999760097,
+        "max_abs": 0.0107421875,
+        "mean_abs": 4.80974375612867e-05,
+        "median_abs": 3.4809112548828125e-05,
+        "rmse": 8.555731671925021e-05,
+        "per_token_cosine": {
+          "min": 0.9999999998680881,
+          "p5": 0.9999999999330283,
+          "median": 0.9999999999867311,
+          "p95": 0.9999999999932823,
+          "max": 0.9999999999940534
+        },
+        "finite_b": true
+      },
+      "p3-poster-text": {
+        "token_ids_equal": true,
+        "n_tokens_full": 78,
+        "n_tokens_kept": 64,
+        "shape": [
+          1,
+          64,
+          4096
+        ],
+        "rel_l2": 6.675697292106925e-06,
+        "cosine": 0.9999999999777872,
+        "max_abs": 0.0143890380859375,
+        "mean_abs": 4.301759702940444e-05,
+        "median_abs": 3.24249267578125e-05,
+        "rmse": 8.322899068231908e-05,
+        "per_token_cosine": {
+          "min": 0.9999999998039629,
+          "p5": 0.9999999999615499,
+          "median": 0.9999999999857061,
+          "p95": 0.9999999999947701,
+          "max": 0.9999999999964132
+        },
+        "finite_b": true
+      },
+      "negative": {
+        "token_ids_equal": true,
+        "n_tokens_full": 22,
+        "n_tokens_kept": 8,
+        "shape": [
+          1,
+          8,
+          4096
+        ],
+        "rel_l2": 3.103599844030196e-05,
+        "cosine": 0.9999999995331188,
+        "max_abs": 0.00457763671875,
+        "mean_abs": 0.00016568744820233405,
+        "median_abs": 6.4849853515625e-05,
+        "rmse": 0.0003722498897164106,
+        "per_token_cosine": {
+          "min": 0.9999999975668605,
+          "p5": 0.9999999983869055,
+          "median": 0.9999999999643052,
+          "p95": 0.9999999999819749,
+          "max": 0.9999999999828569
+        },
+        "finite_b": true
+      }
+    },
+    "C1a_vs_C0": {
+      "p1-zh-scene": {
+        "token_ids_equal": true,
+        "n_tokens_full": 66,
+        "n_tokens_kept": 52,
+        "shape": [
+          1,
+          52,
+          4096
+        ],
+        "rel_l2": 3.5206187811915595e-06,
+        "cosine": 0.999999999993803,
+        "max_abs": 0.00457763671875,
+        "mean_abs": 2.2956777054507536e-05,
+        "median_abs": 1.71661376953125e-05,
+        "rmse": 3.8718723813970685e-05,
+        "per_token_cosine": {
+          "min": 0.9999999999650532,
+          "p5": 0.9999999999892896,
+          "median": 0.9999999999965574,
+          "p95": 0.9999999999975326,
+          "max": 0.9999999999977417
+        },
+        "finite_b": true
+      },
+      "p2-en-scene": {
+        "token_ids_equal": true,
+        "n_tokens_full": 51,
+        "n_tokens_kept": 37,
+        "shape": [
+          1,
+          37,
+          4096
+        ],
+        "rel_l2": 3.4442120296661947e-06,
+        "cosine": 0.9999999999940691,
+        "max_abs": 0.00457763671875,
+        "mean_abs": 2.45136785402743e-05,
+        "median_abs": 1.811981201171875e-05,
+        "rmse": 4.2540854368659495e-05,
+        "per_token_cosine": {
+          "min": 0.9999999999650532,
+          "p5": 0.9999999999864552,
+          "median": 0.9999999999969993,
+          "p95": 0.9999999999980959,
+          "max": 0.9999999999983884
+        },
+        "finite_b": true
+      },
+      "p3-poster-text": {
+        "token_ids_equal": true,
+        "n_tokens_full": 78,
+        "n_tokens_kept": 64,
+        "shape": [
+          1,
+          64,
+          4096
+        ],
+        "rel_l2": 3.029409574766754e-06,
+        "cosine": 0.9999999999954503,
+        "max_abs": 0.00457763671875,
+        "mean_abs": 2.2483262370087687e-05,
+        "median_abs": 1.71661376953125e-05,
+        "rmse": 3.7769039967549395e-05,
+        "per_token_cosine": {
+          "min": 0.9999999999650532,
+          "p5": 0.9999999999924446,
+          "median": 0.9999999999970501,
+          "p95": 0.9999999999985131,
+          "max": 0.9999999999990643
+        },
+        "finite_b": true
+      },
+      "negative": {
+        "token_ids_equal": true,
+        "n_tokens_full": 22,
+        "n_tokens_kept": 8,
+        "shape": [
+          1,
+          8,
+          4096
+        ],
+        "rel_l2": 5.4309212486847405e-06,
+        "cosine": 0.9999999999853364,
+        "max_abs": 0.004425048828125,
+        "mean_abs": 4.274623802302813e-05,
+        "median_abs": 3.0517578125e-05,
+        "rmse": 6.513951805396029e-05,
+        "per_token_cosine": {
+          "min": 0.9999999999604883,
+          "p5": 0.9999999999670566,
+          "median": 0.9999999999908302,
+          "p95": 0.9999999999955181,
+          "max": 0.9999999999967766
+        },
+        "finite_b": true
+      }
+    },
+    "C1b_vs_C0": {
+      "p1-zh-scene": {
+        "token_ids_equal": true,
+        "n_tokens_full": 66,
+        "n_tokens_kept": 52,
+        "shape": [
+          1,
+          52,
+          4096
+        ],
+        "rel_l2": 0.01315435945811075,
+        "cosine": 0.9999134902444607,
+        "max_abs": 17.84716796875,
+        "mean_abs": 0.08774956545553672,
+        "median_abs": 0.06760156154632568,
+        "rmse": 0.1446573285868055,
+        "per_token_cosine": {
+          "min": 0.999476495377719,
+          "p5": 0.9998603688555461,
+          "median": 0.9999384169885787,
+          "p95": 0.9999582917062811,
+          "max": 0.9999647215390928
+        },
+        "finite_b": true
+      },
+      "p2-en-scene": {
+        "token_ids_equal": true,
+        "n_tokens_full": 51,
+        "n_tokens_kept": 37,
+        "shape": [
+          1,
+          37,
+          4096
+        ],
+        "rel_l2": 0.012380724219803374,
+        "cosine": 0.9999233592296306,
+        "max_abs": 17.84716796875,
+        "mean_abs": 0.0953285019100263,
+        "median_abs": 0.0716012716293335,
+        "rmse": 0.15291856596759262,
+        "per_token_cosine": {
+          "min": 0.999476495377719,
+          "p5": 0.9998464064009341,
+          "median": 0.9999427456813443,
+          "p95": 0.9999736915895933,
+          "max": 0.9999790341360808
+        },
+        "finite_b": true
+      },
+      "p3-poster-text": {
+        "token_ids_equal": true,
+        "n_tokens_full": 78,
+        "n_tokens_kept": 64,
+        "shape": [
+          1,
+          64,
+          4096
+        ],
+        "rel_l2": 0.011577017454900832,
+        "cosine": 0.9999334188545244,
+        "max_abs": 17.84716796875,
+        "mean_abs": 0.08705221336703062,
+        "median_abs": 0.06582784652709961,
+        "rmse": 0.14421108239593336,
+        "per_token_cosine": {
+          "min": 0.999476495377719,
+          "p5": 0.9997895455122243,
+          "median": 0.9999469561489133,
+          "p95": 0.9999743306025115,
+          "max": 0.9999919342078271
+        },
+        "finite_b": true
+      },
+      "negative": {
+        "token_ids_equal": true,
+        "n_tokens_full": 22,
+        "n_tokens_kept": 8,
+        "shape": [
+          1,
+          8,
+          4096
+        ],
+        "rel_l2": 0.06634203454960629,
+        "cosine": 0.9977969543047025,
+        "max_abs": 24.6611328125,
+        "mean_abs": 0.34685525041891196,
+        "median_abs": 0.13733148574829102,
+        "rmse": 0.7973436950140069,
+        "per_token_cosine": {
+          "min": 0.9875618341720693,
+          "p5": 0.9917319543398693,
+          "median": 0.9997758632414546,
+          "p95": 0.9999258894480614,
+          "max": 0.999926105313251
+        },
+        "finite_b": true
+      }
+    },
+    "C1b_compressed_vs_C0": {
+      "p1-zh-scene": {
+        "token_ids_equal": true,
+        "n_tokens_full": 66,
+        "n_tokens_kept": 52,
+        "shape": [
+          1,
+          52,
+          4096
+        ],
+        "rel_l2": 0.012528144406608436,
+        "cosine": 0.9999215221104851,
+        "max_abs": 14.82177734375,
+        "mean_abs": 0.08477574699110427,
+        "median_abs": 0.06543731689453125,
+        "rmse": 0.13780116890701727,
+        "per_token_cosine": {
+          "min": 0.999479192304679,
+          "p5": 0.9998614434665852,
+          "median": 0.9999402414325167,
+          "p95": 0.9999605593468154,
+          "max": 0.9999682763171066
+        },
+        "finite_b": true
+      },
+      "p2-en-scene": {
+        "token_ids_equal": true,
+        "n_tokens_full": 51,
+        "n_tokens_kept": 37,
+        "shape": [
+          1,
+          37,
+          4096
+        ],
+        "rel_l2": 0.011517150368610245,
+        "cosine": 0.9999337364158037,
+        "max_abs": 14.82177734375,
+        "mean_abs": 0.09188886331646023,
+        "median_abs": 0.06882834434509277,
+        "rmse": 0.14231211333838273,
+        "per_token_cosine": {
+          "min": 0.999479192304679,
+          "p5": 0.9998506477335951,
+          "median": 0.999954531250728,
+          "p95": 0.9999746694840029,
+          "max": 0.9999769518781155
+        },
+        "finite_b": true
+      },
+      "p3-poster-text": {
+        "token_ids_equal": true,
+        "n_tokens_full": 78,
+        "n_tokens_kept": 64,
+        "shape": [
+          1,
+          64,
+          4096
+        ],
+        "rel_l2": 0.010910671652695676,
+        "cosine": 0.9999409986196616,
+        "max_abs": 14.82177734375,
+        "mean_abs": 0.08459682711458072,
+        "median_abs": 0.06478500366210938,
+        "rmse": 0.13589751240778214,
+        "per_token_cosine": {
+          "min": 0.999479192304679,
+          "p5": 0.999854600253193,
+          "median": 0.9999561940832551,
+          "p95": 0.9999748957846367,
+          "max": 0.9999911596638932
+        },
+        "finite_b": true
+      },
+      "negative": {
+        "token_ids_equal": true,
+        "n_tokens_full": 22,
+        "n_tokens_kept": 8,
+        "shape": [
+          1,
+          8,
+          4096
+        ],
+        "rel_l2": 0.019147162291016567,
+        "cosine": 0.9998166781949215,
+        "max_abs": 14.822174072265625,
+        "mean_abs": 0.1532051326300916,
+        "median_abs": 0.11550402641296387,
+        "rmse": 0.22968276473044025,
+        "per_token_cosine": {
+          "min": 0.9994791508684083,
+          "p5": 0.9995825232371102,
+          "median": 0.9998545313787719,
+          "p95": 0.9999292876033005,
+          "max": 0.9999430599848635
+        },
+        "finite_b": true
+      }
+    },
+    "C1b_vs_C1a": {
+      "p1-zh-scene": {
+        "token_ids_equal": true,
+        "n_tokens_full": 66,
+        "n_tokens_kept": 52,
+        "shape": [
+          1,
+          52,
+          4096
+        ],
+        "rel_l2": 0.013154478195921181,
+        "cosine": 0.9999134886832675,
+        "max_abs": 17.8486328125,
+        "mean_abs": 0.08774834030390803,
+        "median_abs": 0.06759834289550781,
+        "rmse": 0.1446586343360147,
+        "per_token_cosine": {
+          "min": 0.9994764728690775,
+          "p5": 0.9998603916563671,
+          "median": 0.9999384192658556,
+          "p95": 0.9999582916128946,
+          "max": 0.9999647237160787
+        },
+        "finite_b": true
+      },
+      "p2-en-scene": {
+        "token_ids_equal": true,
+        "n_tokens_full": 51,
+        "n_tokens_kept": 37,
+        "shape": [
+          1,
+          37,
+          4096
+        ],
+        "rel_l2": 0.01238092203208305,
+        "cosine": 0.9999233567786943,
+        "max_abs": 17.8486328125,
+        "mean_abs": 0.0953282608234322,
+        "median_abs": 0.0716085433959961,
+        "rmse": 0.15292100921482124,
+        "per_token_cosine": {
+          "min": 0.9994764728690775,
+          "p5": 0.9998464181104517,
+          "median": 0.9999427449738603,
+          "p95": 0.9999736910732003,
+          "max": 0.9999790348970008
+        },
+        "finite_b": true
+      },
+      "p3-poster-text": {
+        "token_ids_equal": true,
+        "n_tokens_full": 78,
+        "n_tokens_kept": 64,
+        "shape": [
+          1,
+          64,
+          4096
+        ],
+        "rel_l2": 0.011577221837334345,
+        "cosine": 0.9999334167513183,
+        "max_abs": 17.8486328125,
+        "mean_abs": 0.0870519196664361,
+        "median_abs": 0.065826416015625,
+        "rmse": 0.14421362832039747,
+        "per_token_cosine": {
+          "min": 0.9994764728690775,
+          "p5": 0.999789550323476,
+          "median": 0.9999469528666461,
+          "p95": 0.9999743314458579,
+          "max": 0.999991934743475
+        },
+        "finite_b": true
+      },
+      "negative": {
+        "token_ids_equal": true,
+        "n_tokens_full": 22,
+        "n_tokens_kept": 8,
+        "shape": [
+          1,
+          8,
+          4096
+        ],
+        "rel_l2": 0.06634298857474615,
+        "cosine": 0.9977968908150275,
+        "max_abs": 24.66143798828125,
+        "mean_abs": 0.34685368909686076,
+        "median_abs": 0.13734352588653564,
+        "rmse": 0.7973551611370363,
+        "per_token_cosine": {
+          "min": 0.9875613646352831,
+          "p5": 0.9917316525171112,
+          "median": 0.9997758736237825,
+          "p95": 0.9999258935024181,
+          "max": 0.9999261105485717
+        },
+        "finite_b": true
+      }
+    },
+    "C2_vs_C1a": {
+      "p1-zh-scene": {
+        "token_ids_equal": true,
+        "n_tokens_full": 66,
+        "n_tokens_kept": 52,
+        "shape": [
+          1,
+          52,
+          4096
+        ],
+        "rel_l2": 0.06381866680513847,
+        "cosine": 0.9979628738983781,
+        "max_abs": 67.9835205078125,
+        "mean_abs": 0.46444948682123,
+        "median_abs": 0.3536818027496338,
+        "rmse": 0.7021311813937052,
+        "per_token_cosine": {
+          "min": 0.9686697253247799,
+          "p5": 0.997806838082494,
+          "median": 0.9987203766073233,
+          "p95": 0.9990668489645944,
+          "max": 0.9992039163806106
+        },
+        "finite_b": true
+      },
+      "p2-en-scene": {
+        "token_ids_equal": true,
+        "n_tokens_full": 51,
+        "n_tokens_kept": 37,
+        "shape": [
+          1,
+          37,
+          4096
+        ],
+        "rel_l2": 0.063614091104522,
+        "cosine": 0.9979747109407066,
+        "max_abs": 67.9835205078125,
+        "mean_abs": 0.5100888080096656,
+        "median_abs": 0.37371206283569336,
+        "rmse": 0.7869034455400296,
+        "per_token_cosine": {
+          "min": 0.9686697253247799,
+          "p5": 0.9969132459013943,
+          "median": 0.9987810000575602,
+          "p95": 0.9991886188964783,
+          "max": 0.9993363452650537
+        },
+        "finite_b": true
+      },
+      "p3-poster-text": {
+        "token_ids_equal": true,
+        "n_tokens_full": 78,
+        "n_tokens_kept": 64,
+        "shape": [
+          1,
+          64,
+          4096
+        ],
+        "rel_l2": 0.056247362353870026,
+        "cosine": 0.9984279054054743,
+        "max_abs": 67.9835205078125,
+        "mean_abs": 0.4546237348099851,
+        "median_abs": 0.3452712297439575,
+        "rmse": 0.6990781594731227,
+        "per_token_cosine": {
+          "min": 0.9686697253247799,
+          "p5": 0.9977488264015826,
+          "median": 0.9988947581671441,
+          "p95": 0.9993774546325066,
+          "max": 0.9996752910979027
+        },
+        "finite_b": true
+      },
+      "negative": {
+        "token_ids_equal": true,
+        "n_tokens_full": 22,
+        "n_tokens_kept": 8,
+        "shape": [
+          1,
+          8,
+          4096
+        ],
+        "rel_l2": 0.28254618429835726,
+        "cosine": 0.9608219835946948,
+        "max_abs": 193.7603759765625,
+        "mean_abs": 1.5754293428583424,
+        "median_abs": 0.696518063545227,
+        "rmse": 3.3365409302523856,
+        "per_token_cosine": {
+          "min": 0.7757588152974066,
+          "p5": 0.8432776338069873,
+          "median": 0.9963664637539098,
+          "p95": 0.9983967989769671,
+          "max": 0.998518315315321
+        },
+        "finite_b": true
+      }
+    },
+    "C2_vs_C0": {
+      "p1-zh-scene": {
+        "token_ids_equal": true,
+        "n_tokens_full": 66,
+        "n_tokens_kept": 52,
+        "shape": [
+          1,
+          52,
+          4096
+        ],
+        "rel_l2": 0.06381865451462077,
+        "cosine": 0.9979628746765924,
+        "max_abs": 67.9849853515625,
+        "mean_abs": 0.4644490127521539,
+        "median_abs": 0.35367584228515625,
+        "rmse": 0.7021310461737743,
+        "per_token_cosine": {
+          "min": 0.9686697262857326,
+          "p5": 0.9978068413671679,
+          "median": 0.9987203771170323,
+          "p95": 0.9990668519376041,
+          "max": 0.9992039012329919
+        },
+        "finite_b": true
+      },
+      "p2-en-scene": {
+        "token_ids_equal": true,
+        "n_tokens_full": 51,
+        "n_tokens_kept": 37,
+        "shape": [
+          1,
+          37,
+          4096
+        ],
+        "rel_l2": 0.06361398332883371,
+        "cosine": 0.9979747178190896,
+        "max_abs": 67.9849853515625,
+        "mean_abs": 0.5100877453754259,
+        "median_abs": 0.3737053871154785,
+        "rmse": 0.7869021123596133,
+        "per_token_cosine": {
+          "min": 0.9686697262857326,
+          "p5": 0.9969132317070717,
+          "median": 0.9987809952522738,
+          "p95": 0.9991886515485652,
+          "max": 0.999336352919536
+        },
+        "finite_b": true
+      },
+      "p3-poster-text": {
+        "token_ids_equal": true,
+        "n_tokens_full": 78,
+        "n_tokens_kept": 64,
+        "shape": [
+          1,
+          64,
+          4096
+        ],
+        "rel_l2": 0.056247237594527204,
+        "cosine": 0.9984279110874035,
+        "max_abs": 67.9849853515625,
+        "mean_abs": 0.45462313938884336,
+        "median_abs": 0.34526515007019043,
+        "rmse": 0.6990766088842932,
+        "per_token_cosine": {
+          "min": 0.9686697262857326,
+          "p5": 0.9977488360262425,
+          "median": 0.9988947712701053,
+          "p95": 0.9993774567168142,
+          "max": 0.9996752957842251
+        },
+        "finite_b": true
+      },
+      "negative": {
+        "token_ids_equal": true,
+        "n_tokens_full": 22,
+        "n_tokens_kept": 8,
+        "shape": [
+          1,
+          8,
+          4096
+        ],
+        "rel_l2": 0.28254644420809105,
+        "cosine": 0.9608219338063838,
+        "max_abs": 193.76007080078125,
+        "mean_abs": 1.5754297116927773,
+        "median_abs": 0.6965396404266357,
+        "rmse": 3.3365439994832338,
+        "per_token_cosine": {
+          "min": 0.7757585114356479,
+          "p5": 0.8432775063929655,
+          "median": 0.9963664893386053,
+          "p95": 0.9983967983303,
+          "max": 0.9985183065431427
+        },
+        "finite_b": true
+      }
+    }
+  },
+  "verdict": {
+    "C1a": {
+      "status": "PASS",
+      "threshold": {
+        "kind": "fp32",
+        "rel_l2": 0.0001,
+        "cosine": 0.99999
+      },
+      "worst_rel_l2": 5.4309212486847405e-06
+    },
+    "C1b": {
+      "status": "FAIL",
+      "threshold": {
+        "kind": "bf16",
+        "rel_l2": 0.02,
+        "cosine": 0.999
+      },
+      "worst_rel_l2": 0.06634203454960629
+    },
+    "C1b_compressed": {
+      "status": "PASS",
+      "threshold": {
+        "kind": "bf16",
+        "rel_l2": 0.02,
+        "cosine": 0.999
+      },
+      "worst_rel_l2": 0.019147162291016567
+    },
+    "C2": {
+      "status": "FAIL",
+      "threshold": {
+        "kind": "int8",
+        "rel_l2": 0.08,
+        "cosine": 0.995
+      },
+      "worst_rel_l2": 0.28254618429835726
+    }
+  },
+  "long_sequence_stress": {
+    "status": "PASS_ALL_ARMS_RAN",
+    "cases": {
+      "zh_long": {
+        "shape": [
+          1,
+          230,
+          4096
+        ],
+        "n_tokens_kept": 230,
+        "C1b_OV_BF16": {
+          "rel_l2": 0.03191298786543845,
+          "cosine": 0.9994909625193177
+        },
+        "C2_OV_INT8": {
+          "rel_l2": 0.11289167012493549,
+          "cosine": 0.9936834204614363
+        }
+      },
+      "en_long": {
+        "shape": [
+          1,
+          180,
+          4096
+        ],
+        "n_tokens_kept": 180,
+        "C1b_OV_BF16": {
+          "rel_l2": 0.021796107107346443,
+          "cosine": 0.9997630466570293
+        },
+        "C2_OV_INT8": {
+          "rel_l2": 0.07532057091127028,
+          "cosine": 0.9971674778017806
+        }
+      },
+      "zh_xlong": {
+        "shape": [
+          1,
+          526,
+          4096
+        ],
+        "n_tokens_kept": 526,
+        "C1b_OV_BF16": {
+          "rel_l2": 0.10787195697633502,
+          "cosine": 0.9941906637722868
+        },
+        "C2_OV_INT8": {
+          "rel_l2": 0.18399193190483945,
+          "cosine": 0.9831786468208776
+        }
+      },
+      "en_xlong": {
+        "shape": [
+          1,
+          408,
+          4096
+        ],
+        "n_tokens_kept": 408,
+        "C1b_OV_BF16": {
+          "rel_l2": 0.07227586600538312,
+          "cosine": 0.997395718706736
+        },
+        "C2_OV_INT8": {
+          "rel_l2": 0.1460837340326151,
+          "cosine": 0.9893815899404359
+        }
+      }
+    },
+    "note": "Clean FP32/BF16/INT8 IRs all encoded 180-526 kept tokens without the historical Zen4 visual-branch shape error; no runtime graph patch was applied. Precision error grows with sequence length (descriptive, not a product-length acceptance gate)."
+  },
+  "notes": {
+    "C2": "Positive prompts pass the declared INT8 gate (relL2 0.056-0.064, cos>=0.9979), but the 8-token empty-negative path fails it (relL2 0.283, cos 0.9608). C2 is therefore exploratory for cfg>1 and not the production recommendation.",
+    "C0_vs_C1a": "C1a FP32 is a backend comparison against the course's FP32-manual-cast ComfyUI CPU path, not against a generic PyTorch BF16 CPU implementation.",
+    "C1b_uncompressed": "FP32-stored IR with BF16 execution hint passes all positive prompts (1.16-1.32%) but fails the 2% gate on the 8-token empty negative (6.63%); it is retained as a precision reference. The FP16-stored/BF16-runtime deployment IR passes every path (max 1.91%) and is the production BF16 candidate.",
+    "thresholds_policy": "Thresholds follow the upstream precision envelope and were fixed before E2E quality runs: FP32 <=1e-4, BF16 <=2e-2/cos>=0.999, INT8 <=8e-2/cos>=0.995. Long-sequence stress (>180 tokens) is descriptive, not a product gate."
+  }
+}

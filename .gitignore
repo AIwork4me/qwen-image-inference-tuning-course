@@ -18,3 +18,18 @@ runs/**/rocprof-*/**/*.csv
 runs/**/rocprof-*/**/*.dat
 runs/**/cond-*.pt*
 runs/**/_*.py
+runs/m51-ov-artifacts
+# M5.1 local run artifacts (provenance JSONs stay; large tensors/images do not)
+.venv-ov/
+logs/
+tmp/
+runs/env/
+runs/m51-ov-artifacts
+runs/**/cache/
+runs/**/*.safetensors
+runs/**/*.bin
+runs/**/raw/
+runs/m51-*/ov/fp32
+runs/m51-*/ov/bf16
+runs/m51-*/ov/int8
+runs/**/*.npz

@@ -1,0 +1,102 @@
+{
+  "experiment": "H3_OV_BF16",
+  "status": "PASS",
+  "gates": {
+    "environment": "PASS",
+    "artifact_integrity": "PASS",
+    "encoder_runtime": "PASS",
+    "token_contract": "PASS",
+    "conditioning_alignment": "PASS",
+    "e2e_gpu": "NOT_RUN",
+    "performance": "PASS",
+    "human_quality": "PENDING"
+  },
+  "release_status": "PENDING_HUMAN_REVIEW",
+  "timestamp": "2026-11-05T11:40:57+0000",
+  "source_head": "6aacd6f502ed37bfac77ff42ae0c04d056c387de",
+  "artifact_digest": "62eee98599e0e004f6b8a29bfea1f61e7c7bf2c9d0b9ed505cdf2a0e2eb380ce",
+  "artifact_verification": {
+    "status": "PASS_WITH_WARNINGS",
+    "warnings": [
+      "language_model_bf16.xml: manifest pins no digest (computed 28bd053ab3b1e3a83733da8023840e421d4e97b56c99558da7d9e509f537458d); re-provision to pin it"
+    ],
+    "manifest": {
+      "source": "/opt/m51-artifacts/fp32/language_model_fp32.xml",
+      "tool": "ov.save_model compress_to_fp16=True",
+      "storage": "FP16",
+      "runtime_precision": "bf16",
+      "bin_bytes": 13892143718,
+      "source_xml_sha256": "9fbbc226be2ba66b00f7e8c801ec7e6491e3f0fead7b62a091a55577fe47a2ce",
+      "output_bin_sha256": "62eee98599e0e004f6b8a29bfea1f61e7c7bf2c9d0b9ed505cdf2a0e2eb380ce"
+    },
+    "files": {
+      "language_model_bf16.bin": {
+        "sha256": "62eee98599e0e004f6b8a29bfea1f61e7c7bf2c9d0b9ed505cdf2a0e2eb380ce",
+        "pinned_via": "output_bin_sha256"
+      },
+      "language_model_bf16.xml": {
+        "sha256": "28bd053ab3b1e3a83733da8023840e421d4e97b56c99558da7d9e509f537458d",
+        "unpinned": true
+      }
+    }
+  },
+  "artifact_manifest": {
+    "source": "/opt/m51-artifacts/fp32/language_model_fp32.xml",
+    "tool": "ov.save_model compress_to_fp16=True",
+    "storage": "FP16",
+    "runtime_precision": "bf16",
+    "bin_bytes": 13892143718,
+    "source_xml_sha256": "9fbbc226be2ba66b00f7e8c801ec7e6491e3f0fead7b62a091a55577fe47a2ce",
+    "output_bin_sha256": "62eee98599e0e004f6b8a29bfea1f61e7c7bf2c9d0b9ed505cdf2a0e2eb380ce"
+  },
+  "environment": {
+    "openvino": "2026.4.1-22982-e213a147257-releases/2026/4",
+    "admission": "GO",
+    "admission_reasons": [],
+    "ram_gate": {
+      "status": "PASS",
+      "reason": null,
+      "basis": "cgroup_limit_minus_anon",
+      "available_bytes": 55605805056,
+      "usable_bytes": 53458321408,
+      "required_bytes": 36507222016,
+      "safety_bytes": 2147483648,
+      "concurrent_reserve_bytes": 0,
+      "cgroup": {
+        "limit_bytes": 59055800320,
+        "current_bytes": 59002806272,
+        "anon_bytes": 3449995264
+      }
+    }
+  },
+  "measurements": {
+    "encode_s": [
+      3.624845
+    ],
+    "load_s": 4.798,
+    "rss_peak_mb": 30014.7,
+    "shape": [
+      [
+        1,
+        52,
+        4096
+      ]
+    ],
+    "n_tokens_full": [
+      66
+    ]
+  },
+  "token_contract_detail": {
+    "checked": [
+      "p1-zh-scene"
+    ]
+  },
+  "conditioning_alignment_detail": "reproduced byte-identical vs runs/m51-20261105-cleanroom-01",
+  "evidence_paths": [
+    "/workspace/m51/qwen-image-inference-tuning-course/runs/pr2audit-114034-H3_OV_BF16-smoke/probe_H3_OV_BF16.json",
+    "/workspace/m51/qwen-image-inference-tuning-course/runs/pr2audit-114034-H3_OV_BF16-smoke/stdout.log",
+    "/workspace/m51/qwen-image-inference-tuning-course/runs/pr2audit-114034-H3_OV_BF16-smoke/stderr.log"
+  ],
+  "mode": "smoke",
+  "runtime_s": 12.1
+}
