@@ -49,6 +49,13 @@ MEASURED_TAG = '''def _stamp(kind: str, value: str) -> None:
 MEASURED_TODAY = "measured on THIS GPU in THIS session (physical)"
 HISTORICAL   = "frozen reference evidence from the committed campaign"
 ESTIMATE     = "analytical estimate or simulation - NOT a measurement"
+
+from lab import student_provenance as prov
+
+def _origin_stamp(category: str) -> str:
+    """Stamp text for a provenance category; reuse is NEVER labelled as
+    measured-today (fail-closed student provenance contract)."""
+    return prov.stamp_text(category)
 '''
 
 GPU_OR_SKIP = '''def gpu_cell(fn):
@@ -376,17 +383,19 @@ _stamp(HISTORICAL, f"B0 reference median {observed:.3f}s "
            "`GPU_CLASSROOM` 运行有界练习（1 个提示词 × cold+warmup+2 次测量，约 5 分钟）。"
            "`GPU_RESEARCH` 运行完整冻结协议（3 提示词 × 3 种子 × warmup+3 次测量 + "
            "fresh-prompt 臂）。两者都以只追加方式把记录写入 `runs/<run-id>/`。"),
-        code('''def run_own_b0():
+         code('''def run_own_b0():
     profile = "classroom" if session.mode == "GPU_CLASSROOM" else "research"
     bundle = session.run("B0", profile=profile)
     return bundle
 
 b0 = gpu_cell(run_own_b0) if want_own_arms() else None
+b0_origin = "CURRENT_SESSION_PHYSICAL"
 if b0 is None:
     shared = session.latest_campaign_run("B0")
     if shared:
-        b0 = session.consume(shared, why="latest physical B0 record (shared, "
-                                        "not double-counted as a new measurement)")'''),
+        b0 = session.consume(shared, why="explicit reuse of an existing B0 run "
+                                        "(shown run_id; not a new measurement)")
+        b0_origin = session.consumed[-1].get("category", "COMMITTED_PHYSICAL_REFERENCE")'''),
         md("## 3 · Your numbers, your statistics\n"
            "Median, spread, per-step time, and peak VRAM — computed from the "
            "records of the run above (or, in REFERENCE mode, still from the "
@@ -394,12 +403,14 @@ if b0 is None:
            "## 3 · 你的数字，你的统计\n"
            "中位数、离散度、每步时间与 VRAM 峰值——全部由上面那次运行的记录计算"
            "（REFERENCE 模式下仍来自冻结实验数据，并明确标注）。"),
-        code('''if b0 is None:
+         code('''if b0 is None:
     vals, origin, steps_hint = raw, HISTORICAL, 40
     cold = None
 else:
     st = b0.stats()
-    vals, origin, steps_hint = b0.warm_totals(), MEASURED_TODAY, st["steps"]
+    vals = b0.warm_totals()
+    origin = _origin_stamp(b0_origin)
+    steps_hint = st["steps"]
     cold = b0.cold_total()
 
 med = statistics.median(vals)
@@ -510,27 +521,41 @@ print("  method note:", pb.get("method", {}).get(
            "永远不是性能结论**——只用于构成分析。课堂上通常*消费*资格认证实验的"
            "轨迹；设置 `RUN_KERNEL_TRACE = True`（GPU 模式）可启动你自己的有界窗口"
            "（约 10 分钟）。"),
-        code('''RUN_KERNEL_TRACE = False  # opt-in: ~10 min of physical GPU tracing
+         code('''RUN_KERNEL_TRACE = False  # opt-in: ~10 min of physical GPU tracing
 
 FROZEN_TRACE = ROOT / "evidence/results/p2-profile-profile/rocprof-dit/analysis.json"
 
+_USABLE_TRACE = ("CURRENT_SESSION_PHYSICAL", "SAME_STUDENT_PRIOR_PHYSICAL",
+                 "SHARED_CAMPAIGN_PHYSICAL", "COMMITTED_PHYSICAL_REFERENCE")
+
 def load_kernel_analysis():
+    """Explicit, provenance-scoped trace selection (no latest-file-wins):
+    only traces this session produced, an earlier verified session of this
+    workspace produced, or a declared campaign / committed reference."""
     cands = sorted((ROOT / "runs").glob("*-profile/rocprof-dit/analysis.json"))
-    if cands:
-        return json.loads(cands[-1].read_text()), MEASURED_TODAY
+    for p in reversed(cands):
+        rid = p.parent.parent.name
+        try:
+            cat = prov.classify_run(rid, session_id=session.session_id)["category"]
+        except prov.ProvenanceError:
+            continue
+        if cat in _USABLE_TRACE:
+            print(f"trace source: run_id={rid}")
+            return json.loads(p.read_text()), _origin_stamp(cat), rid
     if FROZEN_TRACE.is_file():
-        return json.loads(FROZEN_TRACE.read_text()), HISTORICAL
-    return None, None
+        return json.loads(FROZEN_TRACE.read_text()), HISTORICAL, "evidence/results/p2-profile-profile"
+    return None, None, None
 
 loaded = gpu_cell(load_kernel_analysis)
 ka = loaded[0] if loaded else None
 ka_origin = loaded[1] if loaded else None
+ka_rid = loaded[2] if loaded else None
 if ka is None and RUN_KERNEL_TRACE and session.mode != "REFERENCE":
     session.run_profile(layers="pipeline,kernel")
     loaded = load_kernel_analysis()
-    ka, ka_origin = (loaded[0], loaded[1]) if loaded else (None, None)
+    ka, ka_origin, ka_rid = (loaded[0], loaded[1], loaded[2]) if loaded else (None, None, None)
 if ka is not None:
-    _stamp(ka_origin, "kernel trace analysis (traced run; composition only)")
+    _stamp(ka_origin, f"kernel trace analysis ({ka_rid}; traced run; composition only)")
     print("mode:", ka.get("mode"), "| kernels:", ka.get("n_kernels"),
           "| gpu_busy_s:", ka.get("gpu_busy_s"), f"({ka.get('gpu_busy_pct')}%)")
     by = ka.get("by_class", {})
@@ -638,12 +663,14 @@ for k in ("B0", "L1"):
     return b0, l1
 
 pair = gpu_cell(run_less_pair) if want_own_arms() else None
+pair_origin = "CURRENT_SESSION_PHYSICAL"
 if pair is None:
     b0_id = session.latest_campaign_run("B0")
     l1_id = session.latest_campaign_run("L1")
     if b0_id and l1_id:
-        pair = (session.consume(b0_id, why="campaign B0"),
-                session.consume(l1_id, why="campaign L1"))
+        pair = (session.consume(b0_id, why="explicit reuse (shown run_id): B0"),
+                session.consume(l1_id, why="explicit reuse (shown run_id): L1"))
+        pair_origin = session.consumed[-1].get("category", "COMMITTED_PHYSICAL_REFERENCE")
 if pair is not None:
     b0b, l1b = pair
     ab = rt.ab_compare(b0b, l1b, label="B0 (40 steps) vs L1 (Turbo 8 steps)")
@@ -670,7 +697,8 @@ if pair is not None:
     print(f"predicted (Amdahl, d={d}): {predicted:.2f}x   measured: {measured:.2f}x")
     print(f"per-step: B0 {per_step_b0:.3f}s  L1 {per_step_l1:.3f}s "
           f"(ratio {per_step_b0/per_step_l1:.2f}x)")
-    _stamp(MEASURED_TODAY, f"measured speedup {measured:.2f}x [{ab['classification']}]")
+    _stamp(_origin_stamp(pair_origin),
+           f"measured speedup {measured:.2f}x [{ab['classification']}]")
     _stamp(ESTIMATE, f"Amdahl prediction {predicted:.2f}x (derived from model share)")
     print("limitation: Turbo changes the model too; per-step costs differ; "
           "quality is NOT addressed by this comparison (see section 4)")'''),
@@ -747,11 +775,13 @@ def m04() -> list:
     return b0, f1, f2
 
 arms = gpu_cell(run_faster_arms) if want_own_arms() else None
+arms_origin = "CURRENT_SESSION_PHYSICAL"
 if arms is None:
     ids = [session.latest_campaign_run(x) for x in ("B0", "F1", "F2")]
     if all(ids):
-        arms = tuple(session.consume(i, why=f"campaign {x}")
+        arms = tuple(session.consume(i, why=f"explicit reuse (shown run_id): {x}")
                      for i, x in zip(ids, ("B0", "F1", "F2")))
+        arms_origin = session.consumed[-1].get("category", "COMMITTED_PHYSICAL_REFERENCE")
 if arms is not None:
     ab_f1 = rt.ab_compare(arms[0], arms[1], label="B0 vs F1 (ck attention)")
     ab_f2 = rt.ab_compare(arms[0], arms[2], label="B0 vs F2 (int8 weights)")
@@ -803,7 +833,7 @@ if arms is not None:
           (b0s['vram_device_peak_mb'] or b0s['vram_peak_mb'])
           - (f2s['vram_device_peak_mb'] or f2s['vram_peak_mb']))
     for ab, nm in ((ab_f1, "F1"), (ab_f2, "F2")):
-        _stamp(MEASURED_TODAY,
+        _stamp(_origin_stamp(arms_origin),
                f"{nm} speedup {ab['speedup_median']}x [{ab['classification']}]")
     print("reminder: do NOT report F1*F2 as a combined measured gain")'''),
         md("## 4 · Fidelity semantics for the quality gate\n"
@@ -890,7 +920,7 @@ _stamp(HISTORICAL, "frozen cleanroom campaign: PyTorch CPU TE is ~2 orders "
            "每个设备一次隔离探针、一个提示词、一次 warm 重复——这是**有界试点**，"
            "明确声明不是完整协议结论。CPU 臂可能要花几分钟；这个“慢”本身就是测量"
            "结果。"),
-        code('''def run_te_pilots():
+         code('''def run_te_pilots():
     gpu = session.run_m51_baseline("cuda", repeats=1)
     cpu = session.run_m51_baseline("cpu", repeats=1)
     return gpu, cpu
@@ -907,47 +937,71 @@ if pilots is not None:
     own = {"gpu_warm_s": g_warm[-1],
            "cpu_warm_s": c_warm[-1],
            "cpu_rss_mb": cpr.get("rss_peak_mb"),
-           "gpu_rss_mb": gpr.get("rss_peak_mb")}
+           "gpu_rss_mb": gpr.get("rss_peak_mb"),
+           "provenance": "CURRENT_SESSION_PHYSICAL",
+           "run_ids": [pilots[0].name, pilots[1].name]}
     _stamp(MEASURED_TODAY,
            f"pilot: GPU TE {own['gpu_warm_s']:.2f}s vs CPU TE "
            f"{own['cpu_warm_s']:.1f}s -> {own['cpu_warm_s']/own['gpu_warm_s']:.0f}x "
-           f"slower (n=1, bounded pilot, single prompt)")'''),
-        md("## 3 · The pipeline view — where the GPU sits idle\n"
-           "H1 runs the CPU encoder inside ComfyUI (the integrated arm); H2 "
-           "runs four requests sequentially (GPU TE) vs pipelined (CPU TE "
-           "overlapping GPU denoise). Consume the qualification-campaign "
-           "records below (GPU modes fetch the latest; REFERENCE shows the "
-           "historical picture).",
-           "## 3 · 流水线视角 —— GPU 在哪里空转\n"
-           "H1 在 ComfyUI 内部运行 CPU 编码器（集成臂）；H2 用四种请求比较顺序执行"
-           "（GPU TE）与流水线执行（CPU TE 与 GPU 去噪重叠）。下面消费资格认证实验的"
-           "记录（GPU 模式取最新；REFERENCE 展示历史图景）。"),
-        code('''def latest_record(pattern, fname):
-    cands = sorted((ROOT / "runs").glob(f"{pattern}/{fname}"))
-    if not cands:
-        return None, None
-    import json as _j
-    return _j.loads(cands[-1].read_text()), cands[-1].parent.name
-
-h1, h1_id = gpu_cell(lambda: latest_record("*H1-cpu-te", "H1_RESULTS.json")) or (None, None)
-if h1 is not None and "integrated" in h1:
-    session.note_consumed(h1_id, why="current-campaign H1 record")
-    for tag, row in h1["integrated"].items():
-        print(f"H1 integrated {tag:9s} total={row.get('total_s')}s "
-              f"te={row.get('text_encode_s')}s vram_peak={row.get('vram_peak_mb')}MB")
-    _stamp(MEASURED_TODAY, "H1 integrated CPU-TE arm from the current campaign")
+           f"slower (n=1, bounded pilot, single prompt) run_ids={own['run_ids']}")
 else:
-    print("no fresh H1 record on this host; the frozen study is section 1")
+    ref = enc["arms"]["G_PyTorch_GPU"]["prompts"]["p1-zh-scene"]["warm_median_s"]
+    refc = enc["arms"]["C0_PyTorch_CPU"]["prompts"]["p1-zh-scene"]["warm_median_s"]
+    own = {"gpu_warm_s": ref, "cpu_warm_s": refc, "cpu_rss_mb": None,
+           "gpu_rss_mb": None, "provenance": "COMMITTED_PHYSICAL_REFERENCE",
+           "run_ids": ["m51-20261105-cleanroom-01"]}
+    _stamp(_origin_stamp("COMMITTED_PHYSICAL_REFERENCE"),
+           "no own pilot executed; pilot numbers below are the committed "
+           "cleanroom reference (explicit source, NOT your measurement)")'''),
+         md("## 3 · The pipeline view — where the GPU sits idle\n"
+            "H1 runs the CPU encoder inside ComfyUI (the integrated arm); H2 "
+            "runs four requests sequentially (GPU TE) vs pipelined (CPU TE "
+            "overlapping GPU denoise). Evidence selection is EXPLICIT: the "
+            "committed qualification-campaign records are consumed by exact "
+            "run id (never a newest-file glob), and a fresh student clone "
+            "never mistakes them for its own measurement. GPU_RESEARCH "
+            "students may run the full H2 themselves.",
+            "## 3 · 流水线视角 —— GPU 在哪里空转\n"
+            "H1 在 ComfyUI 内部运行 CPU 编码器（集成臂）；H2 用四种请求比较顺序执行"
+            "（GPU TE）与流水线执行（CPU TE 与 GPU 去噪重叠）。证据选择是**显式的**："
+            "按精确 run id 消费已提交的资格认证实验记录（绝不使用“最新文件”通配）；"
+            "全新克隆的学生绝不会把它们误认为自己的测量。GPU_RESEARCH 学生可以自己"
+            "运行完整 H2。"),
+         code('''# Explicit evidence ids — no glob, no "newest file wins".
+H1_REFERENCE_RUN = "q1-075553-H1-cpu-te"
+H2_REFERENCE_RUN = "q1-075553-H2-pipeline"
+RUN_OWN_H2 = False  # True + GPU_RESEARCH: execute the full H2 pipeline yourself
 
-h2, h2_id = gpu_cell(lambda: latest_record("*H2-*", "H2_RESULTS.json")) or (None, None)
-if h2 is not None:
-    session.note_consumed(h2_id, why="current-campaign H2 record")
+def load_module_record(run_id, fname, why):
+    session.note_consumed(run_id, why=why)
+    return json.loads((ROOT / "runs" / run_id / fname).read_text())
+
+h1 = load_module_record(H1_REFERENCE_RUN, "H1_RESULTS.json",
+                        "committed campaign H1 (explicit run id)")
+for tag, row in h1["integrated"].items():
+    print(f"H1 integrated {tag:9s} total={row.get('total_s')}s "
+          f"te={row.get('text_encode_s')}s vram_peak={row.get('vram_peak_mb')}MB")
+_stamp(_origin_stamp(session.consumed[-1]["category"]),
+       f"H1 record runs/{H1_REFERENCE_RUN}/H1_RESULTS.json")
+
+h2 = None
+h2_origin = None
+if RUN_OWN_H2 and session.mode == "GPU_RESEARCH" and want_own_arms():
+    bundle = session.run("H2", profile="research")
+    h2 = json.loads((ROOT / "runs" / bundle.run_id / "H2_RESULTS.json").read_text())
+    h2_origin = "CURRENT_SESSION_PHYSICAL"
+    _stamp(MEASURED_TODAY, f"own H2 pipeline run_id={bundle.run_id}")
+else:
+    h2 = load_module_record(H2_REFERENCE_RUN, "H2_RESULTS.json",
+                            "committed campaign H2 (explicit run id)")
+    h2_origin = session.consumed[-1]["category"]
     for k, v in h2.items():
         if isinstance(v, (int, float)):
             print(f"H2 {k}: {v}")
-    _stamp(MEASURED_TODAY, "H2 sequential-vs-pipelined record from this campaign")
-else:
-    print("no fresh H2 record; pipelining recovery is taught from the frozen study")'''),
+    _stamp(_origin_stamp(h2_origin),
+           f"H2 record runs/{H2_REFERENCE_RUN}/H2_RESULTS.json — classroom "
+           "scope keeps the H2 comparison reference-only (no fresh pipeline "
+           "claim is made from it)")'''),
         md("## 4 · The scheduler simulator — clearly labelled\n"
            "The Gantt-style simulation below illustrates *why* overlap helps "
            "once the CPU encoder is fast enough (M5.1's OpenVINO). Its "
@@ -955,11 +1009,12 @@ else:
            "## 4 · 调度器模拟 —— 明确标注\n"
            "下面的甘特图式模拟演示：当 CPU 编码器足够快（M5.1 的 OpenVINO）时，"
            "重叠为什么有效。其数字是**模拟值**，绝非实测。"),
-        code('''_stamp(ESTIMATE, "SIMULATED pipeline schedule - illustrative only")
+         code('''_stamp(ESTIMATE, "SIMULATED pipeline schedule - illustrative only "
+      f"(inputs: {own['provenance']})")
 
-gpu_t = own["gpu_warm_s"] if own else 0.55     # TE on GPU (s)
-dit_t = 12.0                                   # DiT+VAE per request (s, order of M1/B0)
-cpu_t = own["cpu_warm_s"] if own else 120.0    # TE on CPU (s)
+gpu_t = own["gpu_warm_s"]    # TE on GPU (s)
+dit_t = 12.0                 # DiT+VAE per request (s, order of M1/B0)
+cpu_t = own["cpu_warm_s"]    # TE on CPU (s)
 seq_gpu = 4 * (gpu_t + dit_t)                  # 4 requests, GPU TE
 seq_cpu = 4 * (cpu_t + dit_t)                  # 4 requests, naive CPU offload
 pipelined = max(4 * cpu_t, gpu_t + 4 * dit_t)  # CPU TE overlapped with GPU work
@@ -980,7 +1035,59 @@ print("naive offload LOSES unless CPU encode overlaps GPU denoise")'''),
            "这是正确的权衡？\n"
            "3. 举一个理由：你这台主机的 CPU/GPU 比值为什么会与冻结实验的两个"
            "数量级不同？"),
-        code(CLOSE_CELL),
+        code('''m50_result = {
+    "experiment_id": "M50",
+    "session_id": session.session_id,
+    "course_mode": session.mode,
+    "run_ids": list(own.get("run_ids", [])),
+    "provenance": own["provenance"],
+    "execution_status": ("MEASURED"
+                         if own["provenance"] == "CURRENT_SESSION_PHYSICAL"
+                         else "REUSED"),
+    "gpu": {"arch": (session.admission.detail.get("gfx_arch")
+                    if session.admission and session.admission.detail else None),
+            "model": (session.admission.detail.get("device_name")
+                      if session.admission and session.admission.detail else None)},
+    "source_head": session.source.get("head"),
+    "source_dirty": session.source.get("dirty"),
+    "workload": {"experiment": "te-pilot", "prompt": "p1-zh-scene",
+                 "repeats": 1, "h2_record": H2_REFERENCE_RUN},
+    "populations": {"warmup_count": 1, "measured_count": 1,
+                    "cold_warm": "warm pilot sample"},
+    "measurements": {"gpu_te_warm_s": own["gpu_warm_s"],
+                     "cpu_te_warm_s": own["cpu_warm_s"],
+                     "cpu_rss_mb": own.get("cpu_rss_mb")},
+    "throughput": None,
+    "memory": {"cpu_rss_mb": own.get("cpu_rss_mb"), "gpu_vram_peak_mb": None},
+    "numerical_status": "NOT_ASSESSED",
+    "human_quality_status": "NOT_ASSESSED",
+    "classification": ("BOUNDED_PHYSICAL_COMPARISON"
+                       if own["provenance"] == "CURRENT_SESSION_PHYSICAL"
+                       else "REFERENCE_ONLY"),
+    "ac_pair": None,
+    "result_status": "PASS",
+    "source_paths": [f"runs/{r}" for r in own.get("run_ids", [])],
+    "reproduce_command": ("python -u lab/m51_baseline.py --device cuda|cpu "
+                          "--out <fresh-tag> --repeats 1"),
+}
+prov.validate_or_raise(m50_result, session_id=session.session_id)
+print("[STUDENT RESULT VALIDATED]",
+      m50_result["experiment_id"], m50_result["provenance"],
+      m50_result["classification"])
+
+summary = {
+    "mode": session.mode,
+    "notebook": session.notebook,
+    "session_id": session.session_id,
+    "executions": [e.get("run_id") or e.get("kind") for e in session.executions],
+    "consumed": [c.get("run_id") for c in session.consumed],
+    "physical_experiment_status": ("MEASURED"
+                                   if own["provenance"] == "CURRENT_SESSION_PHYSICAL"
+                                   else "REFERENCE_ONLY"),
+    "student_result": m50_result,
+    "note": "append-only session record; physical evidence lives under runs/",
+}
+session.finish(summary)'''),
         md(acceptance_md("en"), acceptance_md("zh")),
         md(repro_md("en", "H1"), repro_md("zh", "H1") + "\n\n"
            "```bash\npython -m lab run --experiment H2 --date <your-tag>  # pipelined arm\n```"),
@@ -1008,116 +1115,301 @@ def m06() -> list:
            "参考讲义：[M5.1 讲义](../course/M05_parallel_heterogeneous/M5_1_OPENVINO_CPU_TE.zh-CN.md) · "
            "[English](./06_openvino_and_fair_ab.ipynb)"),
         code(header("06") + "\n" + MEASURED_TAG + "\n" + GPU_OR_SKIP),
-        md("## 0 · Artifact admission — PASS vs PASS_WITH_WARNINGS\n"
-           "The OV IRs are verified byte-level against their conversion "
-           "manifests (streaming SHA256, source-model digest chain). An "
-           "unpinned field keeps the verdict at `PASS_WITH_WARNINGS` — that "
-           "distinction is preserved, never rounded up to PASS.",
-           "## 0 · 工件准入 —— PASS 与 PASS_WITH_WARNINGS\n"
-           "OV IR 会对照其转换清单做字节级校验（流式 SHA256、源模型摘要链）。"
-           "存在未锁定字段时结论保持 `PASS_WITH_WARNINGS`——这一区别要保留，"
-           "绝不允许四舍五入成 PASS。"),
-        code('''def ov_verify():
-    import subprocess, sys
-    r = subprocess.run([sys.executable, "-c",
-        "import os,sys; sys.path.insert(0,'.');"
-        "from lab.m51_contract import verify_artifact;"
-        "root=os.environ.get('M51_OV_ARTIFACTS', 'runs/m51-ov-artifacts');"
-        "print(verify_artifact(root+'/bf16',"
-        "['language_model_bf16.xml','language_model_bf16.bin'],"
-        "expected_identity={'storage':'FP16','runtime_precision':'bf16'}))"],
-        cwd=str(ROOT), capture_output=True, text=True, timeout=300)
-    print(r.stdout or r.stderr)
-    return r.returncode
+         md("## 0 · Artifact admission — PASS / PASS_WITH_WARNINGS / FAIL / BLOCKED\n"
+            "The OV IRs are verified byte-level against their conversion "
+            "manifests (streaming SHA256, source-model digest chain, identity "
+            "fields, conservative RAM admission). The status contract is "
+            "strict:\n\n"
+            "- `PASS` — every identity/integrity/resource check satisfied.\n"
+            "- `PASS_WITH_WARNINGS` — verified to the documented extent, but "
+            "a historical integrity field is unpinned; never rounded up to "
+            "PASS.\n"
+            "- `FAIL` — a present artifact failed a mandatory check "
+            "(digest/size/identity/manifest). Dependent inference MUST stop.\n"
+            "- `BLOCKED` — artifact or resource unavailable; the remediation "
+            "command is printed. Dependent phases are marked BLOCKED, never "
+            "silently skipped.\n\n"
+            "A failed admission STOPS this notebook's physical phases (fail "
+            "closed): no performance number may be produced from an "
+            "unverified artifact.",
+            "## 0 · 工件准入 —— PASS / PASS_WITH_WARNINGS / FAIL / BLOCKED\n"
+            "OV IR 会对照其转换清单做字节级校验（流式 SHA256、源模型摘要链、身份字段、"
+            "保守 RAM 准入）。状态契约是严格的：\n\n"
+            "- `PASS` —— 所有身份/完整性/资源检查全部满足。\n"
+            "- `PASS_WITH_WARNINGS` —— 在已声明的范围内验证通过，但存在未锁定的历史"
+            "完整性字段；绝不允许四舍五入成 PASS。\n"
+            "- `FAIL` —— 工件存在但未通过强制检查（摘要/大小/身份/清单）。依赖的推理"
+            "必须停止。\n"
+            "- `BLOCKED` —— 工件或资源不可用；会打印补救命令。受影响的阶段标记为 "
+            "BLOCKED，绝不静默跳过。\n\n"
+            "准入失败会**中止**本笔记本的物理阶段（fail closed）：绝不允许用未验证的"
+            "工件产生性能数字。"),
+         code('''def ov_admission():
+    from lab import m51_contract as contract
+    res = contract.admit_ov_bf16()
+    print("M5.1 OpenVINO BF16 artifact admission")
+    print(f"  artifact_root: {res['artifact_root']}  ({res['resolved_from']})")
+    for c in res["checks"]:
+        print(f"  [{c['status']}] {c['name']}")
+    for w in res.get("warnings", []):
+        print(f"  warning: {w}")
+    rg = res.get("ram_gate")
+    if rg:
+        print(f"  RAM: usable {rg.get('usable_bytes', 0)/2**30:.1f} GiB "
+              f"(basis {rg.get('basis')}) vs need {rg['required_bytes']/2**30:.0f} GiB "
+              f"-> {rg['status']}")
+    q = res.get("cpu_quota") or {}
+    print(f"  CPU quota: {q.get('cpus')} cores")
+    print(f"  ADMISSION STATUS: {res['status']}")
+    if res.get("remediation"):
+        print(f"  remediation: {res['remediation']}")
+    return res
 
-rc = gpu_cell(ov_verify)
-if rc is None:
-    print("REFERENCE mode: artifact verification runs on the measurement host; "
-          "campaign status recorded bf16 = PASS_WITH_WARNINGS (xml digest "
-          "computed but not pinned by the historical manifest)")'''),
-        md("## Part A · Local encoder: GPU PyTorch vs CPU PyTorch vs OpenVINO BF16\n"
-           "Frozen reference ratios (encoder only, same CPU): OV BF16 is "
-           "~331–480× faster than PyTorch CPU. **Do not blindly assert your "
-           "host reproduces this** — check the campaign/current records "
-           "below.",
-           "## A 部分 · 本地编码器：GPU PyTorch vs CPU PyTorch vs OpenVINO BF16\n"
-           "冻结参考比值（仅编码器、同一 CPU）：OV BF16 比 PyTorch CPU 快约 "
-           "331–480×。**不要盲目断言你的主机能复现**——请核对下面的当前记录。"),
-        code('''import json
-enc = ns.read_json("runs/m51-20261105-cleanroom-01/performance/encoder_ab.json")
+OV_ADMIT = gpu_cell(ov_admission)
+if OV_ADMIT is None:
+    print("REFERENCE mode: admission executes on the measurement host. The "
+          "qualification campaign recorded bf16 = PASS_WITH_WARNINGS (xml "
+          "digest computed, not pinned by the historical manifest).")
+elif OV_ADMIT["status"] not in ("PASS", "PASS_WITH_WARNINGS"):
+    session.finish({"mode": session.mode, "notebook": session.notebook,
+                    "session_id": session.session_id,
+                    "physical_experiment_status": "BLOCKED",
+                    "admission": {k: OV_ADMIT[k] for k in
+                                  ("status", "artifact_root", "resolved_from",
+                                   "remediation")}})
+    raise rt.AdmissionError(
+        f"M5.1 artifact admission {OV_ADMIT['status']}: the physical A/C "
+        f"phases are BLOCKED. Remediation: {OV_ADMIT['remediation']}")'''),
+         md("## Part A · Local encoder: GPU PyTorch vs CPU PyTorch vs OpenVINO BF16\n"
+            "Three encoders, one prompt family. With `RUN_OWN_GPU_ARMS=True` "
+            "(default) this notebook MEASURES all three on your host: a GPU "
+            "probe, a CPU PyTorch probe, and the H3 OpenVINO BF16 experiment "
+            "(full pinned admission + gates). With `RUN_OWN_GPU_ARMS=False` "
+            "the committed cleanroom reference is used and labelled as such. "
+            "Frozen reference ratios (encoder only, same CPU): OV BF16 is "
+            "~331–480× faster than PyTorch CPU — verify, don't assume.",
+            "## A 部分 · 本地编码器：GPU PyTorch vs CPU PyTorch vs OpenVINO BF16\n"
+            "三个编码器、同一组提示词。当 `RUN_OWN_GPU_ARMS=True`（默认）时，本笔记本"
+            "在**你的**主机上实测全部三个：GPU 探针、CPU PyTorch 探针，以及 H3 "
+            "OpenVINO BF16 实验（完整锁定准入 + 各道门）。当 "
+            "`RUN_OWN_GPU_ARMS=False` 时使用已提交的洁净室参考并如实标注。冻结参考"
+            "比值（仅编码器、同一 CPU）：OV BF16 比 PyTorch CPU 快约 331–480×——"
+            "请实测验证，不要想当然。"),
+         code('''enc = ns.read_json("runs/m51-20261105-cleanroom-01/performance/encoder_ab.json")
 for arm in ("G_PyTorch_GPU", "C0_PyTorch_CPU", "C1b_OV_BF16"):
     row = enc["arms"][arm]["prompts"]["p1-zh-scene"]
     print(f"{arm:16s} warm median {row['warm_median_s']:8.3f}s  n={row['n_warm']}")
-_stamp(HISTORICAL, "frozen encoder A/B (cleanroom campaign, 16-thread cgroup quota)")
+_pa = prov.classify_path("runs/m51-20261105-cleanroom-01/performance/encoder_ab.json")
+_stamp(_origin_stamp(_pa["category"]),
+       f"frozen encoder A/B (cleanroom campaign, 16-thread cgroup quota) "
+       f"[{_pa['category']}, explicit path]")
 
-def latest_h3():
-    cands = sorted((ROOT / "runs").glob("*H3_OV_BF16/H3_RESULTS.json"))
-    if not cands:
-        return None, None
-    return json.loads(cands[-1].read_text()), cands[-1].parent.name
+def run_own_te_arms():
+    te_gpu = session.run_m51_baseline("cuda", repeats=1)
+    te_cpu = session.run_m51_baseline("cpu", repeats=1)
+    h3_dir = session.run_h3("H3_OV_BF16")
+    return te_gpu, te_cpu, h3_dir
 
-h3, h3_id = gpu_cell(latest_h3) or (None, None)
-if h3 is not None:
-    session.note_consumed(h3_id, why="current-campaign OV encoder record")
-    print("gates:", json.dumps(h3.get("gates", {}), indent=1))
-    _stamp(MEASURED_TODAY, f"current-campaign H3_OV_BF16 gates above ({h3.get('mode')})")
-    print("release_status:", h3.get("release_status"))
+TE = None
+if OV_ADMIT is not None and want_own_arms():
+    TE = gpu_cell(run_own_te_arms)
+te = {"provenance": "COMMITTED_PHYSICAL_REFERENCE",
+      "run_ids": ["m51-20261105-cleanroom-01"]}
+if TE is not None:
+    gpr = json.loads((TE[0] / "probe_cuda.json").read_text())
+    cpr = json.loads((TE[1] / "probe_cpu.json").read_text())
+    h3 = json.loads((TE[2] / "H3_RESULTS.json").read_text())
+    gp = next(iter(gpr["prompts"].values()))
+    cp = next(iter(cpr["prompts"].values()))
+    g_w = gp["warm_samples_s"] if isinstance(gp, dict) else [r["encode_s"] for r in gp]
+    c_w = cp["warm_samples_s"] if isinstance(cp, dict) else [r["encode_s"] for r in cp]
+    ov = h3.get("measurements", {}).get("encode_s") or []
+    ov = [s for s in ov[1:]] or ov  # drop the first (load-adjacent) sample if others exist
+    te.update({"gpu_warm_s": g_w[-1], "cpu_warm_s": c_w[-1],
+               "ov_bf16_s": statistics.median(ov) if ov else None,
+               "cpu_rss_mb": cpr.get("rss_peak_mb"),
+               "ov_rss_mb": h3.get("measurements", {}).get("rss_peak_mb"),
+               "h3_status": h3.get("status"), "h3_gates": h3.get("gates", {}),
+               "h3_mode": h3.get("mode"),
+               "human_quality_reference": h3.get("human_quality_reference"),
+               "provenance": "CURRENT_SESSION_PHYSICAL",
+               "run_ids": [TE[0].name, TE[1].name, TE[2].name]})
+    print(json.dumps({k: te.get(k) for k in ("gpu_warm_s", "cpu_warm_s",
+                                             "ov_bf16_s", "cpu_rss_mb", "ov_rss_mb")},
+                     indent=1))
+    print("H3 gates:", json.dumps(te["h3_gates"], indent=1))
+    if te["ov_bf16_s"]:
+        _stamp(MEASURED_TODAY,
+               f"encoder-only: PyTorch CPU {te['cpu_warm_s']:.1f}s -> OV BF16 "
+               f"{te['ov_bf16_s']:.3f}s ({te['cpu_warm_s']/te['ov_bf16_s']:.0f}x) "
+               f"on THIS host [run_id={TE[2].name}, mode={te['h3_mode']}]")
 else:
-    print("no current-campaign OV encoder record on this host; Part A stays "
-          "reference-scoped here")'''),
-        md("## Part B · End-to-end: GPU-native (A) vs OpenVINO-CPU TE (C)\n"
-           "Same GPU, DiT, VAE, scheduler, resolution, prompts, seeds and "
-           "client policy; four real requests per arm. The honest metric is "
-           "**batch wall time / images per minute**, with service latency "
-           "reported separately.",
-           "## B 部分 · 端到端：GPU 原生（A）vs OpenVINO CPU TE（C）\n"
-           "相同的 GPU、DiT、VAE、调度器、分辨率、提示词、种子与客户端策略；每个臂"
-           "四个真实请求。诚实的指标是**批次墙钟时间 / 每分钟图像数**，服务延迟单独"
-           "报告。"),
-        code('''def latest_pipeline_ab():
-    cands = sorted((ROOT / "runs").glob("*m51pipe*/pipeline_ab.json")) + \\
-            sorted((ROOT / "runs").glob("m51-*/pipeline/pipeline_ab.json"))
-    if not cands:
-        return None
-    import json as _j
-    return _j.loads(cands[-1].read_text())
+    row_g = enc["arms"]["G_PyTorch_GPU"]["prompts"]["p1-zh-scene"]["warm_median_s"]
+    row_c = enc["arms"]["C0_PyTorch_CPU"]["prompts"]["p1-zh-scene"]["warm_median_s"]
+    row_o = enc["arms"]["C1b_OV_BF16"]["prompts"]["p1-zh-scene"]["warm_median_s"]
+    te.update({"gpu_warm_s": row_g, "cpu_warm_s": row_c, "ov_bf16_s": row_o})
+    _stamp(_origin_stamp(te["provenance"]),
+           "own TE arms not executed (RUN_OWN_GPU_ARMS=False or REFERENCE); "
+           "encoder numbers stay on the committed reference above")'''),
+         md("## Part B · End-to-end physical A/C — your own four-request batch\n"
+            "Same GPU, DiT, VAE, scheduler, resolution, prompts, seeds and "
+            "client policy; four real requests per arm. With "
+            "`RUN_OWN_GPU_ARMS=True` this notebook EXECUTES both arms on "
+            "your W7900 and loads exactly the records those calls produced "
+            "(by run id — never a newest-file glob):\n\n"
+            "- **A:** GPU-native PyTorch TE + GPU DiT/VAE, sequential.\n"
+            "- **C:** OpenVINO BF16 CPU TE overlapped with GPU DiT/VAE.\n\n"
+            "The honest metric is **batch wall time / images per minute**, "
+            "with service latency, CPU RSS and VRAM reported separately.",
+            "## B 部分 · 端到端物理 A/C —— 你自己的四请求批次\n"
+            "相同的 GPU、DiT、VAE、调度器、分辨率、提示词、种子与客户端策略；每个臂"
+            "四个真实请求。当 `RUN_OWN_GPU_ARMS=True` 时，本笔记本在**你的** W7900 上"
+            "**实际执行**两个臂，并按 run id 精确加载这些调用产生的记录（绝不使用"
+            "最新文件通配）：\n\n"
+            "- **A：** GPU 原生 PyTorch TE + GPU DiT/VAE，顺序执行。\n"
+            "- **C：** OpenVINO BF16 CPU TE 与 GPU DiT/VAE 重叠执行。\n\n"
+            "诚实的指标是**批次墙钟时间 / 每分钟图像数**；服务延迟、CPU RSS 与 VRAM "
+            "单独报告。"),
+         code('''PIPE = None
+if OV_ADMIT is not None and want_own_arms():
+    def run_own_ac():
+        return session.run_m51_pipeline(arms="A,C")
+    PIPE = gpu_cell(run_own_ac)
 
-pab = gpu_cell(latest_pipeline_ab)
+pab = None
+pab_origin = None
+pab_run_id = None
+if PIPE is not None:
+    pab = json.loads((PIPE / "pipeline" / "pipeline_ab.json").read_text())
+    pab_origin, pab_run_id = "CURRENT_SESSION_PHYSICAL", PIPE.name
+    A, C = pab["arms"]["A"], pab["arms"]["C"]
+    print(f"A (GPU-native TE) : batch wall {A['total_s']:.2f}s | "
+          f"{A['images_per_min']:.2f} img/min | warmup {A['server_warmup_s']:.1f}s | "
+          f"vram_peak {A['vram_peak_mb']:.0f}MB | server_rss {A['server_rss_after_mb']:.0f}MB")
+    print(f"C (OV BF16 CPU TE): batch wall {C['total_s']:.2f}s | "
+          f"{C['images_per_min']:.2f} img/min | worker_load {C['worker_load_s']:.1f}s | "
+          f"fill {C['fill_s']:.1f}s | worker_rss {C['worker_rss_after_mb']:.0f}MB | "
+          f"server_rss {C['server_rss_after_mb']:.0f}MB")
+    print(f"C overlap proven: {C['overlap_proven']} "
+          f"(total overlap {C['overlap_s_total']:.2f}s of CPU encode under GPU work)")
+    _stamp(MEASURED_TODAY,
+           f"physical A/C pipeline executed in THIS session [run_id={PIPE.name}]")
+else:
+    ppath = "runs/m51-20261105-cleanroom-01/pipeline/pipeline_ab.json"
+    pab = ns.read_json(ppath)
+    pc2 = prov.classify_path(ppath)
+    pab_origin, pab_run_id = pc2["category"], "m51-20261105-cleanroom-01"
+    for arm in pab["arms"]:
+        print("reference", arm, str(pab["arms"][arm])[:160])
+    _stamp(_origin_stamp(pab_origin),
+           f"committed cleanroom pipeline A/B (explicit path; no own arms "
+           f"executed here)")'''),
+         md("## Part E · Evidence-aware reading of the A/C result\n"
+            "Workload identity first (matched arms are a precondition, not an "
+            "assumption), then the five evidence views — each citing the "
+            "exact run id. Encoder-only acceleration and system acceleration "
+            "are reported as two DIFFERENT numbers.",
+            "## E 部分 · 用证据解读 A/C 结果\n"
+            "先看工作负载身份（臂匹配是前提，不是假设），然后是五个证据视图——每个"
+            "都引用精确的 run id。仅编码器加速与系统加速是两个**不同**的数字。"),
+         code('''wl = prov.workload_identity(pab) if pab else None
 if pab is not None:
-    for arm, row in pab["arms"].items():
-        if isinstance(row, dict) and "batch_wall_s" in json.dumps(row)[:400]:
-            print(arm, {k: row.get(k) for k in ("batch_wall_s", "images_per_min",
-                                                "gpu_total_s", "cpu_encode_s")
-                        if k in row})
-    _stamp(MEASURED_TODAY, "pipeline A/C arms from the current campaign")
+    A, C = pab["arms"]["A"], pab["arms"]["C"]
+    print(f"workload identity [{pab_run_id}]: {wl['n_requests']} requests, "
+          f"seed {wl['seed']}, prompt_digest {wl['prompt_digest']}")
+    a_srv = statistics.median([r["wall_s"] for r in A["requests"]])
+    c_gen = statistics.median([r["gen_wall_s"] for r in C["requests"]])
+    c_enc = statistics.mean([r.get("cpu_encode_s", 0.0) for r in C["requests"]])
+    c_wait = sum(r.get("wait_after_gen_s", 0.0) for r in C["requests"])
+    print(f"service latency (median/request): A {a_srv:.2f}s | C {c_gen:.2f}s")
+    print(f"C CPU encode mean {c_enc:.3f}s/request; post-gen handoff wait "
+          f"{c_wait:.2f}s total")
+    e2e = A["total_s"] / C["total_s"]
+    print(f"system batch speedup (C vs A): {e2e:.3f}x  "
+          f"[{A['total_s']:.2f}s -> {C['total_s']:.2f}s]")
+    _stamp(_origin_stamp(pab_origin),
+           f"system batch speedup {e2e:.3f}x from run_id={pab_run_id}")
+    if te.get("ov_bf16_s") and te.get("cpu_warm_s"):
+        enc_only = te["cpu_warm_s"] / te["ov_bf16_s"]
+        where = ("this host" if te["provenance"] == "CURRENT_SESSION_PHYSICAL"
+                 else "committed reference")
+        print(f"encoder-only speedup ({where}): {enc_only:.0f}x  "
+              "<- NOT the system speedup; explain the difference")
+    if PIPE is not None:
+        try:
+            import matplotlib.pyplot as plt
+            fig, axes = plt.subplots(1, 5, figsize=(16, 2.7))
+            data = [
+                ("batch wall (s)", [A["total_s"], C["total_s"]], "AB"),
+                ("images / min", [A["images_per_min"], C["images_per_min"]], None),
+                ("CPU-side RSS (MB)", [C["worker_rss_after_mb"],
+                                       C["server_rss_after_mb"]], "CC"),
+                ("GPU VRAM peak (MB)", [A["vram_peak_mb"], 0], "A0"),
+                ("speedup: encoder vs system",
+                  [te["cpu_warm_s"] / te["ov_bf16_s"], e2e], "log"),
+            ]
+            for ax, (title, vals, note) in zip(axes, data):
+                ax.bar(["A", "C"] if len(vals) == 2 and note != "CC"
+                       else ["C-worker", "C-server"] if note == "CC"
+                       else ["A", "C"], vals, color=["#4477aa", "#ee6677"])
+                if note == "log":
+                    ax.set_yscale("log")
+                ax.set_title(f"{title}", fontsize=8)
+                for i, v in enumerate(vals):
+                    ax.text(i, v, f"{v:.3g}", ha="center", va="bottom", fontsize=7)
+            fig.suptitle(f"M5.1 physical A/C evidence | run_id={PIPE.name} | "
+                         f"CURRENT_SESSION_PHYSICAL", fontsize=9)
+            fig.tight_layout()
+            plt.show()
+        except Exception as e:
+            print("charts skipped:", e)
+        print("NOTE: arm C's peak GPU VRAM is not recorded by the pipeline "
+              "harness; the C bar above is 0 by absence of evidence, not a "
+              "measured zero. A-side peak is measured.")'''),
+         md("## Part C · The fair factorial — architecture × client monitoring\n"
+            "Comparing C-fast against A-original overstates the architecture "
+            "effect: A-original also pays per-request monitor teardown. The "
+            "2×2 factorial (A/C × original/fast) isolates both axes. The "
+            "classroom reads the committed clean-HEAD campaign (explicit "
+            "source, provenance-labelled); set `RUN_OWN_FAIR_AB = True` to "
+            "execute your own bounded factorial (pairs=1, blocks=1, ~20+ min). "
+            "The old study found a *small* architecture benefit under matched "
+            "clients and a larger client effect — treat as hypotheses.",
+            "## C 部分 · 公平因子实验 —— 架构 × 客户端监控\n"
+            "拿 C-fast 对比 A-original 会夸大架构效应：A-original 还要支付每请求的"
+            "监控器拆除成本。2×2 因子设计（A/C × original/fast）把两个轴分开。课堂"
+            "模式阅读已提交的 clean-HEAD 实验（显式来源、带来源标注）；设置 "
+            "`RUN_OWN_FAIR_AB = True` 可执行你自己的有界因子实验（pairs=1、"
+            "blocks=1，约 20+ 分钟）。旧研究发现：客户端匹配时架构收益*较小*，而"
+            "客户端效应更大——把它们当作假设。"),
+         code('''RUN_OWN_FAIR_AB = False  # True (advanced, ~20+ min): own bounded 2x2 factorial
+
+ff_source = None
+cells = None
+if RUN_OWN_FAIR_AB and OV_ADMIT is not None and session.mode != "REFERENCE":
+    fa_dir = session.run_fairab(pairs=1, blocks=1)
+    prof_own = json.loads((fa_dir / "pipeline_profile" /
+                           "pipeline_profile.json").read_text())
+    cells = prof_own["analysis"]["views"]["primary_all_batches"]
+    ff_source = ("CURRENT_SESSION_PHYSICAL", fa_dir.name)
 else:
-    frozen = ns.read_json("runs/m51-20261105-cleanroom-01/pipeline/pipeline_ab.json")
-    for arm in frozen["arms"]:
-        print("frozen", arm, str(frozen["arms"][arm])[:160])
-    _stamp(HISTORICAL, "frozen cleanroom pipeline A/B")'''),
-        md("## Part C · The fair factorial — architecture × client monitoring\n"
-           "Comparing C-fast against A-original overstates the architecture "
-           "effect: A-original also pays per-request monitor teardown. The "
-           "2×2 factorial (A/C × original/fast) isolates both axes. The old "
-           "study found a *small* architecture benefit under matched "
-           "clients and a larger client effect — treat as hypotheses.",
-           "## C 部分 · 公平因子实验 —— 架构 × 客户端监控\n"
-           "拿 C-fast 对比 A-original 会夸大架构效应：A-original 还要支付每请求的"
-           "监控器拆除成本。2×2 因子设计（A/C × original/fast）把两个轴分开。旧研究"
-           "发现：客户端匹配时架构收益*较小*，而客户端效应更大——把它们当作假设。"),
-        code('''ff = ns.fair_factorial(clean_head=False)
-cells = ff["cells"]
+    ff = ns.fair_factorial(clean_head=False)
+    cells = ff["cells"]
+    ff_source = ("COMMITTED_PHYSICAL_REFERENCE", ff["source"])
+print(f"fair factorial source: {ff_source[1]} [{ff_source[0]}]")
 print(f"{'cell':12s} {'n':>2s} {'median_s':>9s} {'img/min':>8s}")
 for k, v in cells.items():
-    print(f"{k:12s} {v['n']:2d} {v['median_s']:9.2f} {v['images_per_min']:8.2f}")
+    if not isinstance(v, dict) or "median_s" not in v:
+        continue
+    print(f"{k:12s} {v['n']:2d} {v['median_s']:9.2f} {v.get('images_per_min', v.get('img_per_min')):8.2f}")
 arch = cells["A_original"]["median_s"] / cells["C_original"]["median_s"]
 arch_fair = cells["A_fast"]["median_s"] / cells["C_fast"]["median_s"]
 client_a = cells["A_original"]["median_s"] / cells["A_fast"]["median_s"]
 client_c = cells["C_original"]["median_s"] / cells["C_fast"]["median_s"]
-_stamp(HISTORICAL,
-       f"fair factorial: architecture effect {arch:.3f}x (original clients) "
-       f"vs {arch_fair:.3f}x (matched fast clients); client effect "
-       f"A {client_a:.3f}x / C {client_c:.3f}x")
+_stamp(_origin_stamp(ff_source[0]),
+       f"fair factorial ({ff_source[1]}): architecture effect {arch:.3f}x "
+       f"(original clients) vs {arch_fair:.3f}x (matched fast clients); "
+       f"client effect A {client_a:.3f}x / C {client_c:.3f}x")
 print("never report C_fast vs A_original as a pure architecture effect")'''),
         md("## Correctness scope — what stays FAIL and what stays human\n"
            "1. The INT8 encoder arm's numerical **FAIL stays FAIL** — no "
@@ -1143,10 +1435,97 @@ print("never report C_fast vs A_original as a pure architecture effect")'''),
            "2. Part C 中你会给哪个格子加样以收紧架构效应估计？为什么？\n"
            "3. 在 55 GiB cgroup 上跑 PyTorch CPU 完整臂之前，你会做怎样的 RAM "
            "准入检查？"),
-        code(CLOSE_CELL),
-        md(acceptance_md("en"), acceptance_md("zh")),
-        md(repro_md("en", "H3_OV_BF16"), repro_md("zh", "H3_OV_BF16")),
-    ]
+        md("## Part G · Your conclusions — answer with your own evidence\n"
+           "Answer from the run ids and numbers above (cite them):\n"
+           "1. How much did the **encoder itself** accelerate (PyTorch CPU → "
+           "OV BF16)?\n2. How much did the **end-to-end system** accelerate "
+           "(A → C batch wall)?\n3. Why are the two gains different by orders "
+           "of magnitude?\n4. How much GPU memory does the C architecture "
+           "free, and what could you use it for?\n5. How much CPU memory does "
+           "the C worker consume, and what admission guarded it?\n6. Is the "
+           "optimized architecture demonstrably better under THIS measurement "
+           "protocol? With what scope (n, population)?\n7. What uncertainty "
+           "remains, and which experiment would you add next?",
+           "## G 部分 · 你的结论 —— 用你自己的证据回答\n"
+           "用上面的 run id 和数字作答（要引用它们）：\n"
+           "1. **编码器本身**加速了多少（PyTorch CPU → OV BF16）？\n"
+           "2. **端到端系统**加速了多少（A → C 批次墙钟）？\n"
+           "3. 为什么两个收益相差若干个数量级？\n"
+           "4. C 架构释放了多少 GPU 显存？你可以用它做什么？\n"
+           "5. C worker 消耗了多少 CPU 内存？是哪道准入检查在保护它？\n"
+           "6. 在**这套测量协议**下，优化后的架构确实更好吗？范围如何（n、样本"
+           "总体）？\n7. 还有哪些不确定性？下一个你会补做什么实验？"),
+        code('''m51_result = {
+    "experiment_id": "M51",
+    "session_id": session.session_id,
+    "course_mode": session.mode,
+    "run_ids": ([PIPE.name] if PIPE is not None else list(te.get("run_ids", []))),
+    "provenance": ("CURRENT_SESSION_PHYSICAL" if PIPE is not None
+                   else te.get("provenance", "COMMITTED_PHYSICAL_REFERENCE")),
+    "execution_status": "MEASURED" if PIPE is not None else "REUSED",
+    "gpu": {"arch": (session.admission.detail.get("gfx_arch")
+                    if session.admission and session.admission.detail else None),
+            "model": (session.admission.detail.get("device_name")
+                      if session.admission and session.admission.detail else None)},
+    "source_head": session.source.get("head"),
+    "source_dirty": session.source.get("dirty"),
+    "workload": prov.workload_identity(pab) if pab else {"note": "no record loaded"},
+    "populations": {"warmup_count": 1, "measured_count": 4,
+                    "cold_warm": "warm-resident batch"},
+    "measurements": ({ "a_batch_wall_s": pab["arms"]["A"]["total_s"],
+                       "c_batch_wall_s": pab["arms"]["C"]["total_s"],
+                       "a_img_per_min": pab["arms"]["A"]["images_per_min"],
+                       "c_img_per_min": pab["arms"]["C"]["images_per_min"],
+                       "encoder_gpu_warm_s": te.get("gpu_warm_s"),
+                       "encoder_cpu_warm_s": te.get("cpu_warm_s"),
+                       "encoder_ov_bf16_s": te.get("ov_bf16_s")}
+                      if pab else {"note": "reference-only session"}),
+    "throughput": ({"numerator": 4, "denominator": pab["arms"]["C"]["total_s"],
+                    "unit": "images/s (C arm)"}
+                   if pab and PIPE is not None else None),
+    "speedup": (round(pab["arms"]["A"]["total_s"] / pab["arms"]["C"]["total_s"], 3)
+                if pab and PIPE is not None else None),
+    "memory": ({"cpu_worker_rss_mb": pab["arms"]["C"].get("worker_rss_after_mb"),
+                "cpu_server_rss_mb": pab["arms"]["C"].get("server_rss_after_mb"),
+                "gpu_vram_peak_mb": pab["arms"]["A"].get("vram_peak_mb"),
+                "encoder_cpu_rss_mb": te.get("cpu_rss_mb")}
+               if pab else {"note": "reference-only session"}),
+    "numerical_status": (te.get("h3_gates", {}).get("conditioning_alignment")
+                         or "NOT_ASSESSED"),
+    "human_quality_status": "PENDING_HUMAN_REVIEW",
+    "classification": ("BOUNDED_PHYSICAL_COMPARISON" if PIPE is not None
+                       else "REFERENCE_ONLY"),
+    "ac_pair": ({"a_run_id": PIPE.name, "c_run_id": PIPE.name,
+                 "a_workload": prov.workload_identity(pab),
+                 "c_workload": prov.workload_identity(pab)}
+                if PIPE is not None else None),
+    "result_status": "PASS",
+    "source_paths": ([f"runs/{PIPE.name}/pipeline/pipeline_ab.json"]
+                     if PIPE is not None else
+                     ["runs/m51-20261105-cleanroom-01/pipeline/pipeline_ab.json"]),
+    "reproduce_command": ("python -u lab/m51_pipeline.py --run <fresh-tag> "
+                          "--arms A,C"),
+}
+prov.validate_or_raise(m51_result, session_id=session.session_id)
+print("[STUDENT RESULT VALIDATED]",
+      m51_result["experiment_id"], m51_result["provenance"],
+      m51_result["classification"])
+
+summary = {
+    "mode": session.mode,
+    "notebook": session.notebook,
+    "session_id": session.session_id,
+    "executions": [e.get("run_id") or e.get("kind") for e in session.executions],
+    "consumed": [c.get("run_id") for c in session.consumed],
+    "physical_experiment_status": ("MEASURED" if PIPE is not None else
+                                   "REFERENCE_ONLY"),
+    "student_result": m51_result,
+    "note": "append-only session record; physical evidence lives under runs/",
+}
+session.finish(summary)'''),
+         md(acceptance_md("en"), acceptance_md("zh")),
+         md(repro_md("en", "H3_OV_BF16"), repro_md("zh", "H3_OV_BF16")),
+     ]
 
 
 def m07() -> list:
@@ -1180,16 +1559,18 @@ def m07() -> list:
     return b0, best
 
 m6 = gpu_cell(run_m6_pair) if want_own_arms() else None
+m6_origin = "CURRENT_SESSION_PHYSICAL"
 if m6 is None:
     ids = [session.latest_campaign_run("B0"), session.latest_campaign_run("BEST")]
     if all(ids):
-        m6 = (session.consume(ids[0], why="campaign B0"),
-              session.consume(ids[1], why="campaign BEST"))
+        m6 = (session.consume(ids[0], why="explicit reuse (shown run_id): B0"),
+              session.consume(ids[1], why="explicit reuse (shown run_id): BEST"))
+        m6_origin = session.consumed[-1].get("category", "COMMITTED_PHYSICAL_REFERENCE")
 if m6 is not None:
     ab = rt.ab_compare(m6[0], m6[1], label="B0 vs BEST (turbo+int8)")
     print({k: ab[k] for k in ("classification", "speedup_median",
                               "latency_delta_s", "vram_delta_mb")})
-    _stamp(MEASURED_TODAY, f"B0/BEST speedup {ab['speedup_median']}x "
+    _stamp(_origin_stamp(m6_origin), f"B0/BEST speedup {ab['speedup_median']}x "
           f"[{ab['classification']}] vs frozen reference 6.12x")
     fig = rt.plot_ab(ab) or rt.plot_ab(ab, metric="vram")
     if fig: fig.show()'''),
