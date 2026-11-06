@@ -1,0 +1,179 @@
+{
+  "run": "q1-075553-m51pipe",
+  "prompts": [
+    {
+      "id": "req1",
+      "text": "\u5915\u9633\u4e0b\u7684\u6c5f\u5357\u6c34\u4e61\u5c0f\u9547\uff0c\u77f3\u6865\u6a2a\u8de8\u6cb3\u9053\uff0c\u4e4c\u7bf7\u8239\u7f13\u7f13\u9a76\u8fc7\uff0c\u767d\u5899\u9edb\u74e6\u7684\u6c11\u5c45\u5012\u6620\u5728\u91d1\u8272\u7684\u6cb3\u9762\u4e0a\uff0c\u8fdc\u5904\u708a\u70df\u8885\u8885\uff0c\u8d85\u9ad8\u6e05\u6444\u5f71\u8d28\u611f",
+      "seed": 42
+    },
+    {
+      "id": "req2",
+      "text": "A lone hiker standing on a mountain ridge at dawn, a sea of clouds below, first light hitting the peaks, ultra-detailed landscape photography",
+      "seed": 42
+    },
+    {
+      "id": "req3",
+      "text": "\u7535\u5f71\u6d77\u62a5\u8bbe\u8ba1\uff0c\u4e3b\u6807\u9898\u6587\u5b57\u300c\u661f\u9645\u8fdc\u822a\u300d\uff0c\u526f\u6807\u9898\u6587\u5b57\u300c2026\u5e7410\u670830\u65e5 \u5168\u7403\u4e0a\u6620\u300d\uff0c\u753b\u9762\u662f\u6df1\u7a7a\u4e2d\u7684\u5de8\u578b\u98de\u8239\u4e0e\u7eda\u4e3d\u661f\u4e91\uff0c\u6807\u9898\u6587\u5b57\u6e05\u6670\u9510\u5229\u3001\u6392\u7248\u5c45\u4e2d",
+      "seed": 42
+    },
+    {
+      "id": "req4",
+      "text": "\u6e05\u6668\u7684\u7af9\u6797\u5c0f\u5f84\uff0c\u8584\u96fe\u5f25\u6f2b\uff0c\u9633\u5149\u900f\u8fc7\u7af9\u53f6\u6d12\u4e0b\u6591\u9a73\u5149\u5f71\uff0c\u4e00\u6761\u5c0f\u6eaa\u873f\u8712\u6d41\u8fc7\uff0c\u8d85\u9ad8\u6e05\u6444\u5f71\u8d28\u611f",
+      "seed": 42
+    }
+  ],
+  "arms": {
+    "A": {
+      "server_warmup_s": 37.464,
+      "requests": [
+        {
+          "req": "req1",
+          "wall_s": 25.279,
+          "text_encode_s": 0.602,
+          "ksampler_s": 11.41,
+          "vae_s": 0.941,
+          "vram_peak_mb": 34013.4,
+          "vram_residency_mb": 33090.7,
+          "t_end": 1793959075.5492053
+        },
+        {
+          "req": "req2",
+          "wall_s": 13.027,
+          "text_encode_s": 0.317,
+          "ksampler_s": 11.23,
+          "vae_s": 0.894,
+          "vram_peak_mb": 34030.4,
+          "vram_residency_mb": 33096.7,
+          "t_end": 1793959089.4748406
+        },
+        {
+          "req": "req3",
+          "wall_s": 13.027,
+          "text_encode_s": 0.599,
+          "ksampler_s": 10.807,
+          "vae_s": 0.894,
+          "vram_peak_mb": 34648.2,
+          "vram_residency_mb": 33096.7,
+          "t_end": 1793959103.2493687
+        },
+        {
+          "req": "req4",
+          "wall_s": 13.028,
+          "text_encode_s": 0.315,
+          "ksampler_s": 10.776,
+          "vae_s": 0.894,
+          "vram_peak_mb": 33732.6,
+          "vram_residency_mb": 33096.7,
+          "t_end": 1793959116.4645472
+        }
+      ],
+      "total_s": 67.204,
+      "images_per_min": 3.57,
+      "server_rss_after_mb": 2469.8,
+      "server_rss_before_mb": 1225.7,
+      "vram_residency_mb": 33096.7,
+      "vram_peak_mb": 34648.2
+    },
+    "C": {
+      "worker_ready": {
+        "ready": true,
+        "load_s": 3.91,
+        "meta": {
+          "openvino": "2026.4.1-22982-e213a147257-releases/2026/4",
+          "device": "CPU",
+          "execution_devices": [
+            "CPU"
+          ],
+          "inference_precision": "<Type: 'bfloat16'>",
+          "performance_hint": "LATENCY",
+          "execution_mode": "ExecutionMode.PERFORMANCE",
+          "threads": 16,
+          "num_streams": 1,
+          "read_s": 0.247,
+          "compile_s": 1.217,
+          "embed_table_load_s": 0.312,
+          "tokenizer_load_s": 0.15,
+          "model_dir": "/opt/m51-artifacts/bf16",
+          "model_xml": "language_model_bf16.xml",
+          "dynamic_quant_group": null
+        }
+      },
+      "server_warmup_s": 35.54,
+      "fill_s": 0.6,
+      "requests": [
+        {
+          "req": "req1",
+          "gen_start": 1793959170.8466823,
+          "gen_end": 1793959183.8755577,
+          "gen_wall_s": 13.029,
+          "cpu_encode_start": 1793959170.849659,
+          "cpu_encode_end": 1793959171.2446768,
+          "cpu_encode_s": 0.392,
+          "overlap_s": 0.395,
+          "wait_after_gen_s": 0.0
+        },
+        {
+          "req": "req2",
+          "gen_start": 1793959183.8757036,
+          "gen_end": 1793959196.9056902,
+          "gen_wall_s": 13.03,
+          "cpu_encode_start": 1793959183.8776796,
+          "cpu_encode_end": 1793959184.5889046,
+          "cpu_encode_s": 0.7061,
+          "overlap_s": 0.711,
+          "wait_after_gen_s": 0.0
+        },
+        {
+          "req": "req3",
+          "gen_start": 1793959196.9058027,
+          "gen_end": 1793959208.9306438,
+          "gen_wall_s": 12.025,
+          "cpu_encode_start": 1793959196.9075632,
+          "cpu_encode_end": 1793959197.338715,
+          "cpu_encode_s": 0.428,
+          "overlap_s": 0.431,
+          "wait_after_gen_s": 0.0
+        },
+        {
+          "req": "req4",
+          "gen_start": 1793959208.9307582,
+          "gen_end": 1793959221.0843384,
+          "gen_wall_s": 12.154
+        }
+      ],
+      "total_s": 50.838,
+      "steady_total_s": 50.238,
+      "images_per_min": 4.72,
+      "overlap_s_total": 1.537,
+      "overlap_proven": true,
+      "worker_rss_after_mb": 30023.6,
+      "server_rss_after_mb": 1937.6,
+      "worker_load_s": 3.91,
+      "worker_meta": {
+        "openvino": "2026.4.1-22982-e213a147257-releases/2026/4",
+        "device": "CPU",
+        "execution_devices": [
+          "CPU"
+        ],
+        "inference_precision": "<Type: 'bfloat16'>",
+        "performance_hint": "LATENCY",
+        "execution_mode": "ExecutionMode.PERFORMANCE",
+        "threads": 16,
+        "num_streams": 1,
+        "read_s": 0.247,
+        "compile_s": 1.217,
+        "embed_table_load_s": 0.312,
+        "tokenizer_load_s": 0.15,
+        "model_dir": "/opt/m51-artifacts/bf16",
+        "model_xml": "language_model_bf16.xml",
+        "dynamic_quant_group": null
+      }
+    }
+  },
+  "definitions": {
+    "A": "GPU native TE + GPU denoise, sequential",
+    "B": "persistent PyTorch CPU BF16-storage/FP32-manual-cast TE overlapped with GPU denoise",
+    "C": "persistent OpenVINO BF16 CPU TE overlapped with GPU denoise",
+    "D": "persistent OpenVINO INT8 CPU TE overlapped with GPU denoise"
+  }
+}

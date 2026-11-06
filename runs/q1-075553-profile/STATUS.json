@@ -1,0 +1,9 @@
+{
+  "statuses": {
+    "pipeline": "PASS",
+    "kernel-dit": "PASS",
+    "kernel-te": "PASS"
+  },
+  "output": "/workspace/pr4/runs/q1-075553-profile",
+  "verdict": "PASS"
+}

@@ -1,0 +1,135 @@
+{
+  "experiment": "F1",
+  "phase": 4,
+  "framework": "comfyui",
+  "precision": "bf16",
+  "width": 1024,
+  "height": 1024,
+  "steps": 40,
+  "seed": 2000042,
+  "prompt_id": "p3-poster-text",
+  "protocol_version": "course-lab-v1 (protocol v1.3 timing semantics)",
+  "runs": [
+    {
+      "kind": "warm",
+      "total_s": 44.092,
+      "text_encode_s": 0.599,
+      "denoise_s": 43.607,
+      "vae_decode_s": 0.884,
+      "step_times_s": [
+        0.066,
+        1.059,
+        1.045,
+        1.043,
+        1.047,
+        1.048,
+        1.042,
+        1.047,
+        1.043,
+        1.046,
+        1.042,
+        1.049,
+        1.054,
+        1.047,
+        1.05,
+        1.044,
+        1.051,
+        1.052,
+        1.055,
+        1.061,
+        1.046,
+        1.045,
+        1.044,
+        1.046,
+        1.043,
+        1.045,
+        1.043,
+        1.048,
+        1.042,
+        1.047,
+        1.044,
+        1.048,
+        1.049,
+        1.054,
+        1.043,
+        1.044,
+        1.048,
+        1.046,
+        1.047,
+        1.047
+      ]
+    }
+  ],
+  "vram_peak_mb": 33687.9,
+  "env_ref": "snapshot-20261106-081542.json",
+  "created_at": "2026-11-06T08:23:50+00:00",
+  "run_kind": "warmup",
+  "attention_backend": "ck",
+  "execution_time_s": 43.607,
+  "sampler": "euler",
+  "scheduler": "simple",
+  "cfg": 1.0,
+  "ksampler_s": 41.941,
+  "node_timings_s": {
+    "CLIPTextEncode#pos_f24f0040": 0.599,
+    "KSampler#ks_8aba2d70": 41.941,
+    "VAEDecode#dec_5270b4cf": 0.884,
+    "SaveImage#save_f8c768d7": 0.452
+  },
+  "cached_nodes": [
+    "UNETLoader#unet_a1053353",
+    "CLIPLoader#clip_c177a11f",
+    "VAELoader#vae_a1baa24f",
+    "CLIPTextEncode#neg_d6b3ef93",
+    "EmptyLatentImage#latent_dacd7a47"
+  ],
+  "vram_residency_mb": 33095.7,
+  "unet": "qwen_image_2.1_bf16.safetensors",
+  "clip": "qwen3vl_8b_bf16.safetensors",
+  "vae": "qwen_image_2.1_vae_bf16.safetensors",
+  "weight_dtype": "default",
+  "tiled_vae": false,
+  "session_id": "q1-075553-F1",
+  "restart_idx": 0,
+  "lab": "qwen-image-inference-tuning-course",
+  "run_id": "q1-075553-F1",
+  "category": "faster-computation",
+  "steady_step_median_s": 1.047,
+  "server_boot_s": null,
+  "attention_evidence": {
+    "Using pytorch attention": [
+      "\u001b[32m[INFO]\u001b[0m Using pytorch attention"
+    ],
+    "Using Comfy Kitchen attention": [
+      "\u001b[32m[INFO]\u001b[0m Using Comfy Kitchen attention"
+    ],
+    "Using .* attention": [
+      "\u001b[32m[INFO]\u001b[0m Using split attention in VAE",
+      "\u001b[32m[INFO]\u001b[0m Using split attention in VAE",
+      "/workspace/pr4/ComfyUI/comfy/ops.py:105: UserWarning: Using AOTriton backend for Efficient Attention forward... (Triggered internally at /app/pytorch/aten/src/ATen/native/transformers/hip/attention.hip:1452.)"
+    ],
+    "attention": [
+      "\u001b[32m[INFO]\u001b[0m Using split attention in VAE",
+      "/workspace/pr4/ComfyUI/comfy/ops.py:105: UserWarning: Using AOTriton backend for Efficient Attention forward... (Triggered internally at /app/pytorch/aten/src/ATen/native/transformers/hip/attention.hip:1452.)",
+      "  return torch.nn.functional.scaled_dot_product_attention(q, k, v, *args, **kwargs)"
+    ],
+    "Set: torch\\.backends\\.cudnn": [
+      "\u001b[32m[INFO]\u001b[0m Set: torch.backends.cudnn.enabled = False for better AMD performance."
+    ],
+    "AMD arch": [
+      "\u001b[32m[INFO]\u001b[0m AMD arch: gfx1100"
+    ],
+    "ROCm version": [
+      "\u001b[32m[INFO]\u001b[0m ROCm version: (7, 2)"
+    ]
+  },
+  "vram_device_peak_mb": 35332.9,
+  "gpu_util_pct_p50": 100.0,
+  "gpu_util_pct_max": 100.0,
+  "host_mem": {
+    "host_mem_available_mib": 442.8,
+    "host_swap_used_mib": 0.0
+  },
+  "image_sha256": "f4534bb44a6e9def7b132e9d3cb36a075c9915cc2d02bc14e87dac3c5dde81a8",
+  "image_path": "runs/raw/q1-075553-F1/p3-poster-text-2000042-warmup.png"
+}

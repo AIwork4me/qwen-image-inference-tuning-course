@@ -1,0 +1,176 @@
+{
+  "mode": "GPU_CLASSROOM",
+  "campaign": "runs/notebook-gpu-qualification/w7900-20261106-073429",
+  "kernel": {
+    "python": "3.12.3",
+    "ipykernel": "7.2.0",
+    "jupyter_client": "8.8.0",
+    "executable": "/workspace/pr4/.venv-lab/bin/python"
+  },
+  "finished_at": "2026-11-06T12:00:33+00:00",
+  "rows": [
+    {
+      "notebook": "00_experimental_discipline.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T10:45:26+00:00",
+      "status": "PASSED",
+      "wall_s": 2.9,
+      "finished": "2026-11-06T10:45:29+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/00_experimental_discipline.ipynb"
+    },
+    {
+      "notebook": "00_experimental_discipline.zh-CN.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T10:45:29+00:00",
+      "status": "PASSED",
+      "wall_s": 2.8,
+      "finished": "2026-11-06T10:45:32+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/00_experimental_discipline.zh-CN.ipynb"
+    },
+    {
+      "notebook": "01_baseline_and_uncertainty.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T10:45:32+00:00",
+      "status": "PASSED",
+      "wall_s": 382.9,
+      "finished": "2026-11-06T10:51:55+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/01_baseline_and_uncertainty.ipynb"
+    },
+    {
+      "notebook": "01_baseline_and_uncertainty.zh-CN.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T10:51:55+00:00",
+      "status": "PASSED",
+      "wall_s": 333.5,
+      "finished": "2026-11-06T10:57:28+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/01_baseline_and_uncertainty.zh-CN.ipynb"
+    },
+    {
+      "notebook": "02_profile_and_bottlenecks.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T10:57:29+00:00",
+      "status": "PASSED",
+      "wall_s": 2.7,
+      "finished": "2026-11-06T10:57:31+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/02_profile_and_bottlenecks.ipynb"
+    },
+    {
+      "notebook": "02_profile_and_bottlenecks.zh-CN.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T10:57:31+00:00",
+      "status": "PASSED",
+      "wall_s": 2.6,
+      "finished": "2026-11-06T10:57:34+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/02_profile_and_bottlenecks.zh-CN.ipynb"
+    },
+    {
+      "notebook": "03_less_computation.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T10:57:34+00:00",
+      "status": "PASSED",
+      "wall_s": 423.8,
+      "finished": "2026-11-06T11:04:38+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/03_less_computation.ipynb"
+    },
+    {
+      "notebook": "03_less_computation.zh-CN.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T11:04:38+00:00",
+      "status": "PASSED",
+      "wall_s": 473.3,
+      "finished": "2026-11-06T11:12:31+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/03_less_computation.zh-CN.ipynb"
+    },
+    {
+      "notebook": "04_faster_computation.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T11:12:31+00:00",
+      "status": "PASSED",
+      "wall_s": 775.4,
+      "finished": "2026-11-06T11:25:27+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/04_faster_computation.ipynb"
+    },
+    {
+      "notebook": "04_faster_computation.zh-CN.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T11:25:27+00:00",
+      "status": "PASSED",
+      "wall_s": 788.8,
+      "finished": "2026-11-06T11:38:36+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/04_faster_computation.zh-CN.ipynb"
+    },
+    {
+      "notebook": "05_cpu_offload_negative.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T12:07:52+00:00",
+      "status": "PASSED",
+      "wall_s": 217.6,
+      "finished": "2026-11-06T12:11:29+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/05_cpu_offload_negative.ipynb"
+    },
+    {
+      "notebook": "05_cpu_offload_negative.zh-CN.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T12:11:29+00:00",
+      "status": "PASSED",
+      "wall_s": 203.1,
+      "finished": "2026-11-06T12:14:52+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/05_cpu_offload_negative.zh-CN.ipynb"
+    },
+    {
+      "notebook": "06_openvino_and_fair_ab.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T11:45:38+00:00",
+      "status": "PASSED",
+      "wall_s": 15.5,
+      "finished": "2026-11-06T11:45:53+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/06_openvino_and_fair_ab.ipynb"
+    },
+    {
+      "notebook": "06_openvino_and_fair_ab.zh-CN.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T11:45:53+00:00",
+      "status": "PASSED",
+      "wall_s": 11.8,
+      "finished": "2026-11-06T11:46:05+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/06_openvino_and_fair_ab.zh-CN.ipynb"
+    },
+    {
+      "notebook": "07_combined_and_quality.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T11:46:05+00:00",
+      "status": "PASSED",
+      "wall_s": 422.2,
+      "finished": "2026-11-06T11:53:07+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/07_combined_and_quality.ipynb"
+    },
+    {
+      "notebook": "07_combined_and_quality.zh-CN.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T11:53:07+00:00",
+      "status": "PASSED",
+      "wall_s": 440.0,
+      "finished": "2026-11-06T12:00:27+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/07_combined_and_quality.zh-CN.ipynb"
+    },
+    {
+      "notebook": "08_capstone_and_pr.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T12:00:28+00:00",
+      "status": "PASSED",
+      "wall_s": 2.4,
+      "finished": "2026-11-06T12:00:30+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/08_capstone_and_pr.ipynb"
+    },
+    {
+      "notebook": "08_capstone_and_pr.zh-CN.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T12:00:30+00:00",
+      "status": "PASSED",
+      "wall_s": 2.4,
+      "finished": "2026-11-06T12:00:33+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/08_capstone_and_pr.zh-CN.ipynb"
+    }
+  ],
+  "rerun_note": "05 EN/ZH re-executed after the m51 --out directory-semantics fix; their rows come from the second invocation"
+}

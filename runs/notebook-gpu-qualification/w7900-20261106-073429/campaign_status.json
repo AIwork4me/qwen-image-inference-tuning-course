@@ -1,0 +1,288 @@
+{
+  "steps": [
+    {
+      "name": "B0-research",
+      "cmd": [
+        "/workspace/pr4/.venv-lab/bin/python",
+        "-m",
+        "lab",
+        "run",
+        "--experiment",
+        "B0",
+        "--date",
+        "q1-075553"
+      ],
+      "rc": 0,
+      "wall_s": 928.6,
+      "finished": "2026-11-06T08:11:21+00:00",
+      "output_tail": "[B0] starting fresh server (flags=[], sdp=none) ...\n  cold          p1-zh-scene seed=1000042 total=79.271s ks=56.241s te=1.432s vae=1.148s steps=40 vrampeak=34072.8MB dev=38583.2MB\n  warmup        p1-zh-scene seed=2000042 total=55.093s ks=53.313s te=0s vae=0.899s steps=40 vrampeak=34038.5MB dev=38770.5MB\n  measure       p1-zh-scene seed=42 total=55.105s ks=53.463s te=0s vae=0.896s steps=40 vrampeak=34025.3MB dev=38769.9MB\n  measure       p1-zh-scene seed=1337 total=55.097s ks=53.57s te=0s vae=0.897s steps=40 vrampeak=33679.9MB dev=36177.9MB\n  measure       p1-zh-scene seed=20261030 total=55.091s ks=53.381s te=0s vae=0.895s steps=40 vrampeak=34004.2MB dev=38769.9MB\n  warmup        p2-en-scene seed=2000042 total=55.181s ks=53.535s te=0.324s vae=0.896s steps=40 vrampeak=34031.9MB dev=36194.2MB\n  measure       p2-en-scene seed=42 total=55.094s ks=53.527s te=0s vae=0.895s steps=40 vrampeak=33685.9MB dev=38886.2MB\n  measure       p2-en-scene seed=1337 total=55.09s ks=53.367s te=0s vae=0.899s steps=40 vrampeak=34016.4MB dev=38886.2MB\n  measure       p2-en-scene seed=20261030 total=55.093s ks=53.368s te=0s vae=0.9s steps=40 vrampeak=33851.6MB dev=38886.2MB\n  warmup        p3-poster-text seed=2000042 total=56.117s ks=53.498s te=0.595s vae=0.904s steps=40 vrampeak=33685.9MB dev=34882.2MB\n  measure       p3-poster-text seed=42 total=55.098s ks=53.17s te=0s vae=0.896s steps=40 vrampeak=34646.1MB dev=38898.2MB\n  measure       p3-poster-text seed=1337 total=55.096s ks=53.307s te=0s vae=0.894s steps=40 vrampeak=34164.6MB dev=38898.2MB\n  measure       p3-poster-text seed=20261030 total=55.097s ks=53.143s te=0s vae=0.893s steps=40 vrampeak=34647.4MB dev=38898.2MB\n  fresh_prompt  p1-zh-scene seed=42 total=55.337s ks=53.435s te=0.547s vae=0.897s steps=40 vrampeak=33578.2MB dev=35330.2MB\n  fresh_prompt  p2-en-scene seed=42 total=55.098s ks=53.378s te=0.319s vae=0.899s steps=40 vrampeak=34633.4MB dev=35894.2MB\n  fresh_prompt  p3-poster-text seed=42 total=56.106s ks=53.517s te=0.594s vae=0.899s steps=40 vrampeak=33583.0MB dev=35298.2MB\n[B0] results: /workspace/pr4/runs/q1-075553-B0\nRUN_DONE /workspace/pr4/runs/q1-075553-B0\n"
+    },
+    {
+      "name": "L1-research",
+      "cmd": [
+        "/workspace/pr4/.venv-lab/bin/python",
+        "-m",
+        "lab",
+        "run",
+        "--experiment",
+        "L1",
+        "--date",
+        "q1-075553"
+      ],
+      "rc": 0,
+      "wall_s": 257.9,
+      "finished": "2026-11-06T08:15:39+00:00",
+      "output_tail": "[L1] starting fresh server (flags=[], sdp=none) ...\n  cold          p1-zh-scene seed=1000042 total=46.338s ks=13.38s te=1.371s vae=1.416s steps=8 vrampeak=33897.6MB dev=38583.2MB\n  warmup        p1-zh-scene seed=2000042 total=12.137s ks=10.806s te=0s vae=0.88s steps=8 vrampeak=33668.1MB dev=38770.5MB\n  measure       p1-zh-scene seed=42 total=12.027s ks=10.695s te=0s vae=0.88s steps=8 vrampeak=33845.6MB dev=38770.4MB\n  measure       p1-zh-scene seed=1337 total=14.033s ks=12.239s te=0s vae=1.226s steps=8 vrampeak=34627.4MB dev=35878.4MB\n  measure       p1-zh-scene seed=20261030 total=13.027s ks=11.101s te=0s vae=0.997s steps=8 vrampeak=33589.4MB dev=35302.4MB\n  warmup        p2-en-scene seed=2000042 total=13.031s ks=10.893s te=0.326s vae=0.879s steps=8 vrampeak=33646.8MB dev=35318.7MB\n  measure       p2-en-scene seed=42 total=12.045s ks=10.73s te=0s vae=0.88s steps=8 vrampeak=33646.8MB dev=38886.7MB\n  measure       p2-en-scene seed=1337 total=12.098s ks=10.786s te=0s vae=0.88s steps=8 vrampeak=33674.1MB dev=38886.7MB\n  measure       p2-en-scene seed=20261030 total=12.029s ks=10.713s te=0s vae=0.879s steps=8 vrampeak=33904.2MB dev=38886.7MB\n  warmup        p3-poster-text seed=2000042 total=13.034s ks=10.734s te=0.599s vae=0.88s steps=8 vrampeak=33685.9MB dev=35330.7MB\n  measure       p3-poster-text seed=42 total=12.027s ks=10.658s te=0s vae=0.882s steps=8 vrampeak=34016.4MB dev=38898.7MB\n  measure       p3-poster-text seed=1337 total=12.028s ks=10.654s te=0s vae=0.877s steps=8 vrampeak=34016.4MB dev=38898.7MB\n  measure       p3-poster-text seed=20261030 total=12.028s ks=10.652s te=0s vae=0.876s steps=8 vrampeak=34016.4MB dev=38898.7MB\n  fresh_prompt  p1-zh-scene seed=42 total=13.031s ks=10.696s te=0.552s vae=0.879s steps=8 vrampeak=33904.2MB dev=35330.7MB\n  fresh_prompt  p2-en-scene seed=42 total=13.03s ks=10.694s te=0.322s vae=0.88s steps=8 vrampeak=34010.2MB dev=35894.7MB\n  fresh_prompt  p3-poster-text seed=42 total=13.03s ks=10.736s te=0.598s vae=0.879s steps=8 vrampeak=33685.9MB dev=35298.7MB\n[L1] results: /workspace/pr4/runs/q1-075553-L1\nRUN_DONE /workspace/pr4/runs/q1-075553-L1\n"
+    },
+    {
+      "name": "F1-research",
+      "cmd": [
+        "/workspace/pr4/.venv-lab/bin/python",
+        "-m",
+        "lab",
+        "run",
+        "--experiment",
+        "F1",
+        "--date",
+        "q1-075553"
+      ],
+      "rc": 0,
+      "wall_s": 625.1,
+      "finished": "2026-11-06T08:26:04+00:00",
+      "output_tail": "[F1] starting fresh server (flags=['--use-ck-attention'], sdp=none) ...\n  cold          p1-zh-scene seed=1000042 total=82.157s ks=44.253s te=1.463s vae=1.581s steps=40 vrampeak=33478.3MB dev=35694.0MB\n  warmup        p1-zh-scene seed=2000042 total=43.272s ks=41.879s te=0s vae=0.881s steps=40 vrampeak=34027.3MB dev=38772.8MB\n  measure       p1-zh-scene seed=42 total=43.251s ks=41.862s te=0s vae=0.879s steps=40 vrampeak=34012.4MB dev=38772.7MB\n  measure       p1-zh-scene seed=1337 total=43.289s ks=41.933s te=0s vae=0.879s steps=40 vrampeak=33728.6MB dev=38772.7MB\n  measure       p1-zh-scene seed=20261030 total=43.246s ks=41.889s te=0s vae=0.881s steps=40 vrampeak=34027.3MB dev=38772.7MB\n  warmup        p2-en-scene seed=2000042 total=44.086s ks=41.887s te=0.325s vae=0.879s steps=40 vrampeak=34647.8MB dev=38789.0MB\n  measure       p2-en-scene seed=42 total=43.199s ks=41.856s te=0s vae=0.879s steps=40 vrampeak=34018.4MB dev=38888.9MB\n  measure       p2-en-scene seed=1337 total=43.247s ks=41.907s te=0s vae=0.879s steps=40 vrampeak=33597.4MB dev=38888.9MB\n  measure       p2-en-scene seed=20261030 total=43.207s ks=41.878s te=0s vae=0.88s steps=40 vrampeak=34018.4MB dev=38888.9MB\n  warmup        p3-poster-text seed=2000042 total=44.092s ks=41.941s te=0.599s vae=0.884s steps=40 vrampeak=33687.9MB dev=35332.9MB\n  measure       p3-poster-text seed=42 total=44.083s ks=42.035s te=0s vae=0.879s steps=40 vrampeak=33687.9MB dev=38900.9MB\n  measure       p3-poster-text seed=1337 total=43.332s ks=41.985s te=0s vae=0.88s steps=40 vrampeak=33531.7MB dev=38900.9MB\n  measure       p3-poster-text seed=20261030 total=43.237s ks=41.874s te=0s vae=0.888s steps=40 vrampeak=34018.4MB dev=38900.9MB\n[F1] results: /workspace/pr4/runs/q1-075553-F1\nRUN_DONE /workspace/pr4/runs/q1-075553-F1\n"
+    },
+    {
+      "name": "F2-research",
+      "cmd": [
+        "/workspace/pr4/.venv-lab/bin/python",
+        "-m",
+        "lab",
+        "run",
+        "--experiment",
+        "F2",
+        "--date",
+        "q1-075553"
+      ],
+      "rc": 0,
+      "wall_s": 700.2,
+      "finished": "2026-11-06T08:37:44+00:00",
+      "output_tail": "[F2] starting fresh server (flags=[], sdp=none) ...\n  cold          p1-zh-scene seed=1000042 total=74.501s ks=55.347s te=1.366s vae=1.592s steps=40 vrampeak=27993.6MB dev=31958.9MB\n  warmup        p1-zh-scene seed=2000042 total=50.319s ks=48.89s te=0s vae=0.88s steps=40 vrampeak=27365.0MB dev=28640.9MB\n  measure       p1-zh-scene seed=42 total=50.147s ks=48.718s te=0s vae=0.879s steps=40 vrampeak=27996.1MB dev=29216.3MB\n  measure       p1-zh-scene seed=1337 total=50.397s ks=48.981s te=0s vae=0.879s steps=40 vrampeak=26926.9MB dev=28640.3MB\n  measure       p1-zh-scene seed=20261030 total=50.104s ks=48.677s te=0s vae=0.879s steps=40 vrampeak=27994.7MB dev=29216.3MB\n  warmup        p2-en-scene seed=2000042 total=50.387s ks=48.664s te=0.317s vae=0.879s steps=40 vrampeak=26950.0MB dev=28654.6MB\n  measure       p2-en-scene seed=42 total=50.092s ks=48.62s te=0s vae=0.878s steps=40 vrampeak=26757.9MB dev=29632.6MB\n  measure       p2-en-scene seed=1337 total=50.1s ks=48.61s te=0s vae=0.878s steps=40 vrampeak=27040.6MB dev=29632.6MB\n  measure       p2-en-scene seed=20261030 total=50.086s ks=48.63s te=0s vae=0.878s steps=40 vrampeak=28002.1MB dev=32224.6MB\n  warmup        p3-poster-text seed=2000042 total=51.09s ks=48.775s te=0.599s vae=0.877s steps=40 vrampeak=27371.0MB dev=32134.6MB\n  measure       p3-poster-text seed=42 total=50.089s ks=48.662s te=0s vae=0.878s steps=40 vrampeak=27988.1MB dev=29644.6MB\n  measure       p3-poster-text seed=1337 total=51.093s ks=49.217s te=0s vae=0.883s steps=40 vrampeak=27988.1MB dev=32236.5MB\n  measure       p3-poster-text seed=20261030 total=50.136s ks=48.706s te=0s vae=0.881s steps=40 vrampeak=27988.1MB dev=32236.5MB\n[F2] results: /workspace/pr4/runs/q1-075553-F2\nRUN_DONE /workspace/pr4/runs/q1-075553-F2\n"
+    },
+    {
+      "name": "BEST-research",
+      "cmd": [
+        "/workspace/pr4/.venv-lab/bin/python",
+        "-m",
+        "lab",
+        "run",
+        "--experiment",
+        "BEST",
+        "--date",
+        "q1-075553"
+      ],
+      "rc": 0,
+      "wall_s": 195.8,
+      "finished": "2026-11-06T08:41:00+00:00",
+      "output_tail": "[BEST] starting fresh server (flags=[], sdp=none) ...\n  cold          p1-zh-scene seed=1000042 total=38.075s ks=14.647s te=1.477s vae=1.155s steps=8 vrampeak=27999.6MB dev=29077.1MB\n  warmup        p1-zh-scene seed=2000042 total=9.055s ks=7.677s te=0s vae=0.894s steps=8 vrampeak=26996.4MB dev=28984.9MB\n  measure       p1-zh-scene seed=42 total=9.026s ks=7.39s te=0s vae=0.902s steps=8 vrampeak=27634.5MB dev=28644.8MB\n  measure       p1-zh-scene seed=1337 total=9.02s ks=7.785s te=0s vae=0.9s steps=8 vrampeak=26835.3MB dev=32112.8MB\n  measure       p1-zh-scene seed=20261030 total=9.024s ks=7.386s te=0s vae=0.893s steps=8 vrampeak=28000.7MB dev=32112.8MB\n  warmup        p2-en-scene seed=2000042 total=9.023s ks=7.375s te=0.314s vae=0.893s steps=8 vrampeak=27093.3MB dev=32127.1MB\n  measure       p2-en-scene seed=42 total=9.021s ks=7.441s te=0s vae=0.893s steps=8 vrampeak=27994.1MB dev=32229.1MB\n  measure       p2-en-scene seed=1337 total=9.023s ks=7.473s te=0s vae=0.893s steps=8 vrampeak=27708.0MB dev=28761.1MB\n  measure       p2-en-scene seed=20261030 total=9.025s ks=7.397s te=0s vae=0.902s steps=8 vrampeak=27994.1MB dev=29101.1MB\n  warmup        p3-poster-text seed=2000042 total=10.026s ks=7.38s te=0.598s vae=0.895s steps=8 vrampeak=27512.9MB dev=32139.1MB\n  measure       p3-poster-text seed=42 total=9.022s ks=7.364s te=0s vae=0.895s steps=8 vrampeak=28008.1MB dev=32241.0MB\n  measure       p3-poster-text seed=1337 total=9.02s ks=7.425s te=0s vae=0.891s steps=8 vrampeak=27994.1MB dev=32241.0MB\n  measure       p3-poster-text seed=20261030 total=9.02s ks=7.455s te=0s vae=0.893s steps=8 vrampeak=28008.1MB dev=28773.0MB\n  fresh_prompt  p1-zh-scene seed=42 total=9.255s ks=7.38s te=0.551s vae=0.897s steps=8 vrampeak=27993.3MB dev=32139.0MB\n  fresh_prompt  p2-en-scene seed=42 total=9.022s ks=7.372s te=0.313s vae=0.894s steps=8 vrampeak=27093.3MB dev=29101.0MB\n  fresh_prompt  p3-poster-text seed=42 total=10.025s ks=7.419s te=0.593s vae=0.896s steps=8 vrampeak=27388.0MB dev=32107.0MB\n[BEST] results: /workspace/pr4/runs/q1-075553-BEST\nRUN_DONE /workspace/pr4/runs/q1-075553-BEST\n"
+    },
+    {
+      "name": "profile",
+      "cmd": [
+        "/workspace/pr4/.venv-lab/bin/python",
+        "-m",
+        "lab",
+        "profile",
+        "--layers",
+        "pipeline,kernel",
+        "--date",
+        "q1-075553"
+      ],
+      "rc": 0,
+      "wall_s": 1192.6,
+      "finished": "2026-11-06T09:00:53+00:00",
+      "output_tail": "pipeline: {\n \"n_warm\": 21,\n \"T_total_warm_s\": 55.096,\n \"T_dit_denoise_s\": 53.463,\n \"T_vae_decode_s\": 0.897,\n \"T_text_encoder_cached_s\": 0,\n \"T_text_encoder_fresh_s\": 0.554,\n \"T_other_warm_s\": 0.736,\n \"T_total_fresh_s\": 56.106,\n \"T_total_cold_s\": 75.21,\n \"step_median_s\": 1.333,\n \"method\": {\n  \"T_total_warm_s\": \"measured (median of warm run records)\",\n  \"T_dit_denoise_s\": \"measured (KSampler node timing, websocket events)\",\n  \"T_vae_decode_s\": \"measured (VAEDecode node timing)\",\n  \"T_text_encoder_cached_s\": \"measured (warm runs: TE node-cache hit)\",\n  \"T_text_encoder_fresh_s\": \"measured (fresh-prompt arm)\",\n  \"T_other_warm_s\": \"DERIVED by subtraction (T_total - T_dit - T_vae - T_te), never measured\",\n  \"T_total_cold_s\": \"measured (single cold run)\"\n },\n \"note\": \"T_other = T_total - T_dit - T_vae - T_te; warm runs have TE cached (node-cache hit), fresh runs pay TE\"\n}\n[dit] server healthy in 7.0s (collection window 230.0s+90.0s)\n[dit] kernels=95600 busy=52.635s (97.9%) classes={'gemm': 32.1877, 'attention': 17.1273, 'elementwise/activation': 2.4763, 'norm': 0.6993, 'other': 0.1439, 'copy': 0.0005}\n[te] server healthy in 7.0s (collection window 230.0s+90.0s)\n[te] kernels=99445 busy=54.754s (81.7%) classes={'gemm': 33.6562, 'attention': 17.61, 'elementwise/activation': 2.5936, 'norm': 0.7462, 'other': 0.1436, 'copy': 0.0043}\n{\"statuses\": {\"pipeline\": \"PASS\", \"kernel-dit\": \"PASS\", \"kernel-te\": \"PASS\"}, \"output\": \"/workspace/pr4/runs/q1-075553-profile\", \"verdict\": \"PASS\"}\n"
+    },
+    {
+      "name": "quality-F2",
+      "cmd": [
+        "/workspace/pr4/.venv-lab/bin/python",
+        "-m",
+        "lab",
+        "quality",
+        "--experiment",
+        "F2"
+      ],
+      "rc": 0,
+      "wall_s": 9.2,
+      "finished": "2026-11-06T09:01:02+00:00",
+      "output_tail": "paired grid: 9 pairs -> /workspace/pr4/runs/quality/F2/quality_grid.png\nnative-res poster crops -> /workspace/pr4/runs/quality/F2/quality_crops_poster.png\nSetting up [LPIPS] perceptual loss: trunk [alex], v[0.1], spatial [off]\nLoading model from: /workspace/pr4/.venv-lab/lib/python3.12/site-packages/lpips/weights/v0.1/alex.pth\nLPIPS p1-zh-scene: median=0.0207 max=0.0302 n=3\nLPIPS p2-en-scene: median=0.0093 max=0.0104 n=3\nLPIPS p3-poster-text: median=0.0049 max=0.0311 n=3\nquality.md -> /workspace/pr4/runs/quality/F2/quality.md\n/opt/venv/lib/python3.12/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.\n  warnings.warn(\n/opt/venv/lib/python3.12/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=AlexNet_Weights.IMAGENET1K_V1`. You can also use `weights=AlexNet_Weights.DEFAULT` to get the most up-to-date weights.\n  warnings.warn(msg)\n"
+    },
+    {
+      "name": "quality-L1",
+      "cmd": [
+        "/workspace/pr4/.venv-lab/bin/python",
+        "-m",
+        "lab",
+        "quality",
+        "--experiment",
+        "L1"
+      ],
+      "rc": 0,
+      "wall_s": 9.4,
+      "finished": "2026-11-06T09:01:12+00:00",
+      "output_tail": "paired grid: 9 pairs -> /workspace/pr4/runs/quality/L1/quality_grid.png\nnative-res poster crops -> /workspace/pr4/runs/quality/L1/quality_crops_poster.png\nSetting up [LPIPS] perceptual loss: trunk [alex], v[0.1], spatial [off]\nLoading model from: /workspace/pr4/.venv-lab/lib/python3.12/site-packages/lpips/weights/v0.1/alex.pth\nLPIPS p1-zh-scene: median=0.2984 max=0.3438 n=3\nLPIPS p2-en-scene: median=0.1865 max=0.2031 n=3\nLPIPS p3-poster-text: median=0.2124 max=0.2676 n=3\nquality.md -> /workspace/pr4/runs/quality/L1/quality.md\n/opt/venv/lib/python3.12/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.\n  warnings.warn(\n/opt/venv/lib/python3.12/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=AlexNet_Weights.IMAGENET1K_V1`. You can also use `weights=AlexNet_Weights.DEFAULT` to get the most up-to-date weights.\n  warnings.warn(msg)\n"
+    },
+    {
+      "name": "quality-BEST",
+      "cmd": [
+        "/workspace/pr4/.venv-lab/bin/python",
+        "-m",
+        "lab",
+        "quality",
+        "--experiment",
+        "BEST"
+      ],
+      "rc": 0,
+      "wall_s": 9.5,
+      "finished": "2026-11-06T09:01:21+00:00",
+      "output_tail": "paired grid: 9 pairs -> /workspace/pr4/runs/quality/BEST/quality_grid.png\nnative-res poster crops -> /workspace/pr4/runs/quality/BEST/quality_crops_poster.png\nSetting up [LPIPS] perceptual loss: trunk [alex], v[0.1], spatial [off]\nLoading model from: /workspace/pr4/.venv-lab/lib/python3.12/site-packages/lpips/weights/v0.1/alex.pth\nLPIPS p1-zh-scene: median=0.3016 max=0.3425 n=3\nLPIPS p2-en-scene: median=0.1900 max=0.2048 n=3\nLPIPS p3-poster-text: median=0.2094 max=0.2691 n=3\nquality.md -> /workspace/pr4/runs/quality/BEST/quality.md\n\nnote: BEST also declares a deeper isolating check vs L1 (same schedule, one lever): re-run with --baseline <raw-dir-of-L1>\n/opt/venv/lib/python3.12/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.\n  warnings.warn(\n/opt/venv/lib/python3.12/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=AlexNet_Weights.IMAGENET1K_V1`. You can also use `weights=AlexNet_Weights.DEFAULT` to get the most up-to-date weights.\n  warnings.warn(msg)\n"
+    },
+    {
+      "name": "H1-cpu-te",
+      "cmd": [
+        "/workspace/pr4/.venv-lab/bin/python",
+        "-m",
+        "lab",
+        "run",
+        "--experiment",
+        "H1",
+        "--date",
+        "q1-075553"
+      ],
+      "rc": 0,
+      "wall_s": 861.9,
+      "finished": "2026-11-06T09:15:43+00:00",
+      "output_tail": "{\n \"gpu\": {\n  \"load_s\": 9.15,\n  \"encode\": {\n   \"p1-zh-scene\": {\n    \"tokenize_s\": 0.0052,\n    \"encode_s\": 1.09,\n    \"shape\": [\n     1,\n     52,\n     4096\n    ],\n    \"dtype\": \"torch.float32\"\n   },\n   \"p2-en-scene\": {\n    \"tokenize_s\": 0.0014,\n    \"encode_s\": 0.321,\n    \"shape\": [\n     1,\n     37,\n     4096\n    ],\n    \"dtype\": \"torch.float32\"\n   },\n   \"p3-poster-text\": {\n    \"tokenize_s\": 0.0022,\n    \"encode_s\": 0.602,\n    \"shape\": [\n     1,\n     64,\n     4096\n    ],\n    \"dtype\": \"torch.float32\"\n   }\n  },\n  \"vram_allocated_mb\": 16811.1\n },\n \"cpu\": {\n  \"load_s\": 3.83,\n  \"encode\": {\n   \"p1-zh-scene\": {\n    \"tokenize_s\": 0.0024,\n    \"encode_s\": 174.968,\n    \"shape\": [\n     1,\n     52,\n     4096\n    ],\n    \"dtype\": \"torch.float32\"\n   },\n   \"p2-en-scene\": {\n    \"tokenize_s\": 0.0016,\n    \"encode_s\": 136.323,\n    \"shape\": [\n     1,\n     37,\n     4096\n    ],\n    \"dtype\": \"torch.float32\"\n   },\n   \"p3-poster-text\": {\n    \"tokenize_s\": 0.003,\n    \"encode_s\": 207.056,\n    \"shape\": [\n     1,\n     64,\n     4096\n    ],\n    \"dtype\": \"torch.float32\"\n   }\n  }\n },\n \"agreement_gpu_vs_cpu\": {\n  \"p1-zh-scene\": {\n   \"max_abs_diff\": 0.0067,\n   \"mean_abs_diff\": 4.2e-05,\n   \"cosine\": 1.000003\n  },\n  \"p2-en-scene\": {\n   \"max_abs_diff\": 0.00641,\n   \"mean_abs_diff\": 4.8e-05,\n   \"cosine\": 1.000001\n  },\n  \"p3-poster-text\": {\n   \"max_abs_diff\": 0.0074,\n   \"mean_abs_diff\": 4.2e-05,\n   \"cosine\": 1.000003\n  }\n }\n}\n\nH1 results: /workspace/pr4/runs/q1-075553-H1-cpu-te/H1_RESULTS.json\n"
+    },
+    {
+      "name": "H2-pipeline",
+      "cmd": [
+        "/workspace/pr4/.venv-lab/bin/python",
+        "-m",
+        "lab",
+        "run",
+        "--experiment",
+        "H2",
+        "--date",
+        "q1-075553"
+      ],
+      "rc": 0,
+      "wall_s": 826.4,
+      "finished": "2026-11-06T09:29:29+00:00",
+      "output_tail": "{\n \"experiment\": \"H2\",\n \"date\": \"q1-075553\",\n \"warmup_s\": 43.158,\n \"A_sequential\": {\n  \"events\": [\n   {\n    \"req\": \"req1\",\n    \"wall_s\": 12.126\n   },\n   {\n    \"req\": \"req2\",\n    \"wall_s\": 25.053\n   },\n   {\n    \"req\": \"req3\",\n    \"wall_s\": 13.025\n   },\n   {\n    \"req\": \"req4\",\n    \"wall_s\": 13.025\n   }\n  ],\n  \"total_s\": 63.229,\n  \"images_per_min\": 3.8\n },\n \"B_pipelined\": {\n  \"events\": [\n   {\n    \"req\": \"req1\",\n    \"cpu_te_s\": 188.307,\n    \"encode_s\": 176.57\n   },\n   {\n    \"req\": \"req1\",\n    \"gen_wall_s\": 12.117,\n    \"cpu_te_next_s\": 148.124,\n    \"cpu_te_next_encode_s\": 137.874,\n    \"actual_overlap_s\": 12.115\n   },\n   {\n    \"req\": \"req2\",\n    \"gen_wall_s\": 1.005,\n    \"cpu_te_next_s\": 216.106,\n    \"cpu_te_next_encode_s\": 206.555,\n    \"actual_overlap_s\": 1.003\n   },\n   {\n    \"req\": \"req3\",\n    \"gen_wall_s\": 1.005,\n    \"cpu_te_next_s\": 157.801,\n    \"cpu_te_next_encode_s\": 147.67,\n    \"actual_overlap_s\": 1.003\n   },\n   {\n    \"req\": \"req4\",\n    \"gen_wall_s\": 1.005\n   }\n  ],\n  \"total_s\": 711.352,\n  \"images_per_min\": 0.34,\n  \"overlap_s_total\": 14.121,\n  \"overlap_proven\": true\n }\n}\nH2 results: /workspace/pr4/runs/q1-075553-H2-pipeline/H2_RESULTS.json\n"
+    },
+    {
+      "name": "m51-te-gpu",
+      "cmd": [
+        "/workspace/pr4/.venv-lab/bin/python",
+        "-u",
+        "lab/m51_baseline.py",
+        "--device",
+        "cuda",
+        "--out",
+        "/workspace/pr4/runs/q1-075553-m51-te-cuda/probe.json",
+        "--repeats",
+        "2"
+      ],
+      "rc": 0,
+      "wall_s": 19.6,
+      "finished": "2026-11-06T09:29:49+00:00",
+      "output_tail": "00558,\n   \"encode_s\": 0.331082,\n   \"shape\": [\n    1,\n    8,\n    4096\n   ],\n   \"dtype\": \"torch.float32\",\n   \"ids_clip\": [\n    151644,\n    8948,\n    198,\n    1092,\n    30782,\n    408,\n    323,\n    23643,\n    279,\n    3897,\n    9934,\n    13,\n    151645,\n    198,\n    151644,\n    872,\n    198,\n    151645,\n    198,\n    151644,\n    77091,\n    198\n   ],\n   \"ids_manual\": [\n    151644,\n    8948,\n    198,\n    1092,\n    30782,\n    408,\n    323,\n    23643,\n    279,\n    3897,\n    9934,\n    13,\n    151645,\n    198,\n    151644,\n    872,\n    198,\n    151645,\n    198,\n    151644,\n    77091,\n    198\n   ],\n   \"ids_equal\": true,\n   \"ids_manual_fallback_preventTrue\": [\n    151644,\n    8948,\n    198,\n    1092,\n    30782,\n    408,\n    323,\n    23643,\n    279,\n    3897,\n    9934,\n    13,\n    151645,\n    198,\n    151644,\n    872,\n    198,\n    220,\n    151645,\n    198,\n    151644,\n    77091,\n    198\n   ],\n   \"ids_production_equal_fallback\": false,\n   \"n_tokens_full\": 22,\n   \"n_tokens_kept\": 8,\n   \"cond_sha256\": \"90a03194c3fc926dcd95cd2eaf5722a46f8815d2bc1a1bc3fd261d02d1b2d72e\",\n   \"finite\": true,\n   \"vram_allocated_mb\": 16811.1,\n   \"vram_reserved_mb\": 17242.0,\n   \"vram_peak_mb\": 17015.7\n  },\n  {\n   \"rep\": 1,\n   \"text\": \"\",\n   \"tokenize_s\": 0.000381,\n   \"encode_s\": 0.24159,\n   \"shape\": [\n    1,\n    8,\n    4096\n   ],\n   \"dtype\": \"torch.float32\",\n   \"ids_clip\": [\n    151644,\n    8948,\n    198,\n    1092,\n    30782,\n    408,\n    323,\n    23643,\n    279,\n    3897,\n    9934,\n    13,\n    151645,\n    198,\n    151644,\n    872,\n    198,\n    151645,\n    198,\n    151644,\n    77091,\n    198\n   ],\n   \"ids_manual\": [\n    151644,\n    8948,\n    198,\n    1092,\n    30782,\n    408,\n    323,\n    23643,\n    279,\n    3897,\n    9934,\n    13,\n    151645,\n    198,\n    151644,\n    872,\n    198,\n    151645,\n    198,\n    151644,\n    77091,\n    198\n   ],\n   \"ids_equal\": true,\n   \"ids_manual_fallback_preventTrue\": [\n    151644,\n    8948,\n    198,\n    1092,\n    30782,\n    408,\n    323,\n    23643,\n    279,\n    3897,\n    9934,\n    13,\n    151645,\n    198,\n    151644,\n    872,\n    198,\n    220,\n    151645,\n    198,\n    151644,\n    77091,\n    198\n   ],\n   \"ids_production_equal_fallback\": false,\n   \"n_tokens_full\": 22,\n   \"n_tokens_kept\": 8,\n   \"cond_sha256\": \"90a03194c3fc926dcd95cd2eaf5722a46f8815d2bc1a1bc3fd261d02d1b2d72e\",\n   \"finite\": true,\n   \"vram_allocated_mb\": 16811.1,\n   \"vram_reserved_mb\": 17242.0,\n   \"vram_peak_mb\": 17015.7\n  }\n ]\n}\nWROTE /workspace/pr4/runs/q1-075553-m51-te-cuda/probe.json/probe_cuda.json\n/opt/venv/lib/python3.12/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.\n  warnings.warn(\n/workspace/pr4/ComfyUI/comfy/ops.py:105: UserWarning: Using AOTriton backend for Efficient Attention forward... (Triggered internally at /app/pytorch/aten/src/ATen/native/transformers/hip/attention.hip:1452.)\n  return torch.nn.functional.scaled_dot_product_attention(q, k, v, *args, **kwargs)\n"
+    },
+    {
+      "name": "m51-te-cpu",
+      "cmd": [
+        "/workspace/pr4/.venv-lab/bin/python",
+        "-u",
+        "lab/m51_baseline.py",
+        "--device",
+        "cpu",
+        "--out",
+        "/workspace/pr4/runs/q1-075553-m51-te-cpu/probe.json",
+        "--repeats",
+        "2",
+        "--threads",
+        "16"
+      ],
+      "rc": 0,
+      "wall_s": 1185.1,
+      "finished": "2026-11-06T09:49:34+00:00",
+      "output_tail": "943,\n    77419,\n    99718,\n    3837,\n    60396,\n    87335,\n    104542,\n    102632,\n    59532,\n    5373,\n    59956,\n    40301,\n    99435,\n    15946,\n    151645,\n    198,\n    151644,\n    77091,\n    198\n   ],\n   \"ids_production_equal_fallback\": true,\n   \"n_tokens_full\": 78,\n   \"n_tokens_kept\": 64,\n   \"cond_sha256\": \"aca6db37837ee540d63913ba830831253bdc616e11257703357c91808fe527f7\",\n   \"finite\": true\n  }\n ]\n}\n{\n \"negative\": [\n  {\n   \"rep\": 0,\n   \"text\": \"\",\n   \"tokenize_s\": 0.001907,\n   \"encode_s\": 61.755874,\n   \"shape\": [\n    1,\n    8,\n    4096\n   ],\n   \"dtype\": \"torch.float32\",\n   \"ids_clip\": [\n    151644,\n    8948,\n    198,\n    1092,\n    30782,\n    408,\n    323,\n    23643,\n    279,\n    3897,\n    9934,\n    13,\n    151645,\n    198,\n    151644,\n    872,\n    198,\n    151645,\n    198,\n    151644,\n    77091,\n    198\n   ],\n   \"ids_manual\": [\n    151644,\n    8948,\n    198,\n    1092,\n    30782,\n    408,\n    323,\n    23643,\n    279,\n    3897,\n    9934,\n    13,\n    151645,\n    198,\n    151644,\n    872,\n    198,\n    151645,\n    198,\n    151644,\n    77091,\n    198\n   ],\n   \"ids_equal\": true,\n   \"ids_manual_fallback_preventTrue\": [\n    151644,\n    8948,\n    198,\n    1092,\n    30782,\n    408,\n    323,\n    23643,\n    279,\n    3897,\n    9934,\n    13,\n    151645,\n    198,\n    151644,\n    872,\n    198,\n    220,\n    151645,\n    198,\n    151644,\n    77091,\n    198\n   ],\n   \"ids_production_equal_fallback\": false,\n   \"n_tokens_full\": 22,\n   \"n_tokens_kept\": 8,\n   \"cond_sha256\": \"776306fe9e8ec4db7304b03c08115b736448850e7d2fb0c123f89c85165cd063\",\n   \"finite\": true\n  },\n  {\n   \"rep\": 1,\n   \"text\": \"\",\n   \"tokenize_s\": 0.001427,\n   \"encode_s\": 62.045779,\n   \"shape\": [\n    1,\n    8,\n    4096\n   ],\n   \"dtype\": \"torch.float32\",\n   \"ids_clip\": [\n    151644,\n    8948,\n    198,\n    1092,\n    30782,\n    408,\n    323,\n    23643,\n    279,\n    3897,\n    9934,\n    13,\n    151645,\n    198,\n    151644,\n    872,\n    198,\n    151645,\n    198,\n    151644,\n    77091,\n    198\n   ],\n   \"ids_manual\": [\n    151644,\n    8948,\n    198,\n    1092,\n    30782,\n    408,\n    323,\n    23643,\n    279,\n    3897,\n    9934,\n    13,\n    151645,\n    198,\n    151644,\n    872,\n    198,\n    151645,\n    198,\n    151644,\n    77091,\n    198\n   ],\n   \"ids_equal\": true,\n   \"ids_manual_fallback_preventTrue\": [\n    151644,\n    8948,\n    198,\n    1092,\n    30782,\n    408,\n    323,\n    23643,\n    279,\n    3897,\n    9934,\n    13,\n    151645,\n    198,\n    151644,\n    872,\n    198,\n    220,\n    151645,\n    198,\n    151644,\n    77091,\n    198\n   ],\n   \"ids_production_equal_fallback\": false,\n   \"n_tokens_full\": 22,\n   \"n_tokens_kept\": 8,\n   \"cond_sha256\": \"776306fe9e8ec4db7304b03c08115b736448850e7d2fb0c123f89c85165cd063\",\n   \"finite\": true\n  }\n ]\n}\nWROTE /workspace/pr4/runs/q1-075553-m51-te-cpu/probe.json/probe_cpu.json\n/opt/venv/lib/python3.12/site-packages/transformers/utils/hub.py:110: FutureWarning: Using `TRANSFORMERS_CACHE` is deprecated and will be removed in v5 of Transformers. Use `HF_HOME` instead.\n  warnings.warn(\n"
+    },
+    {
+      "name": "H3_OV_BF16-formal",
+      "cmd": [
+        "/workspace/pr4/.venv-lab/bin/python",
+        "-m",
+        "lab",
+        "run",
+        "--experiment",
+        "H3_OV_BF16",
+        "--date",
+        "q1-075553"
+      ],
+      "rc": 0,
+      "wall_s": 30.2,
+      "finished": "2026-11-06T09:50:04+00:00",
+      "output_tail": "{\n \"experiment\": \"H3_OV_BF16\",\n \"status\": \"PASS\",\n \"gates\": {\n  \"environment\": \"PASS\",\n  \"artifact_integrity\": \"PASS\",\n  \"encoder_runtime\": \"PASS\",\n  \"token_contract\": \"PASS\",\n  \"conditioning_alignment\": \"PASS\",\n  \"e2e_gpu\": \"NOT_RUN\",\n  \"performance\": \"PASS\",\n  \"human_quality\": \"PASS\"\n },\n \"release_status\": \"INCOMPLETE_SCOPE\",\n \"mode\": \"formal\",\n \"runtime_s\": 15.1\n}\nH3 results: /workspace/pr4/runs/q1-075553-H3_OV_BF16/H3_RESULTS.json\n"
+    },
+    {
+      "name": "m51-e2e",
+      "cmd": [
+        "/workspace/pr4/.venv-lab/bin/python",
+        "-u",
+        "lab/m51_e2e.py",
+        "--run",
+        "q1-075553-m51-e2e"
+      ],
+      "rc": 1,
+      "wall_s": 399.8,
+      "finished": "2026-11-06T09:56:44+00:00",
+      "output_tail": "[native] G_native|p1-zh-scene|cfg1\n  wall=49.472s te=1.354 ks=13.393 vae=1.2 vram=33898.2MB\n[native] G_native|p2-en-scene|cfg1\n  wall=13.029s te=0.315 ks=10.786 vae=0.88 vram=34016.4MB\n[native] G_native|p3-poster-text|cfg1\n  wall=13.04s te=0.588 ks=10.837 vae=0.879 vram=34313.4MB\n[native] G_native|p1-zh-scene|cfg2\n  wall=23.269s te=0.544 ks=21.43 vae=0.879 vram=34647.2MB\n[native] C0_native|p1-zh-scene|cfg1\n  wall=263.49s te=238.122 ks=10.983 vae=0.884 vram=33095.7MB\n[native] C0_native|p1-zh-scene|cfg2\n  wall=23.052s te=0 ks=21.366 vae=0.883 vram=16849.9MB\nTraceback (most recent call last):\n  File \"/workspace/pr4/lab/m51_e2e.py\", line 232, in <module>\n    main()\n  File \"/workspace/pr4/lab/m51_e2e.py\", line 182, in main\n    wf_precomputed(conds[arm][pid], conds[arm][\"negative\"], seed, 1.0)))\n                   ~~~~~~~~~~^^^^^\nKeyError: 'p1-zh-scene'\n"
+    },
+    {
+      "name": "m51-pipeline-AC",
+      "cmd": [
+        "/workspace/pr4/.venv-lab/bin/python",
+        "-u",
+        "lab/m51_pipeline.py",
+        "--run",
+        "q1-075553-m51pipe",
+        "--arms",
+        "A,C"
+      ],
+      "rc": 0,
+      "wall_s": 221.0,
+      "finished": "2026-11-06T10:00:25+00:00",
+      "output_tail": "req\": \"req3\",\n   \"wall_s\": 13.027,\n   \"text_encode_s\": 0.599,\n   \"ksampler_s\": 10.807,\n   \"vae_s\": 0.894,\n   \"vram_peak_mb\": 34648.2,\n   \"vram_residency_mb\": 33096.7,\n   \"t_end\": 1793959103.2493687\n  },\n  {\n   \"req\": \"req4\",\n   \"wall_s\": 13.028,\n   \"text_encode_s\": 0.315,\n   \"ksampler_s\": 10.776,\n   \"vae_s\": 0.894,\n   \"vram_peak_mb\": 33732.6,\n   \"vram_residency_mb\": 33096.7,\n   \"t_end\": 1793959116.4645472\n  }\n ],\n \"total_s\": 67.204,\n \"images_per_min\": 3.57,\n \"server_rss_after_mb\": 2469.8,\n \"server_rss_before_mb\": 1225.7,\n \"vram_residency_mb\": 33096.7,\n \"vram_peak_mb\": 34648.2\n}\n=== Arm C ===\n{\n \"worker_ready\": {\n  \"ready\": true,\n  \"load_s\": 3.91,\n  \"meta\": {\n   \"openvino\": \"2026.4.1-22982-e213a147257-releases/2026/4\",\n   \"device\": \"CPU\",\n   \"execution_devices\": [\n    \"CPU\"\n   ],\n   \"inference_precision\": \"<Type: 'bfloat16'>\",\n   \"performance_hint\": \"LATENCY\",\n   \"execution_mode\": \"ExecutionMode.PERFORMANCE\",\n   \"threads\": 16,\n   \"num_streams\": 1,\n   \"read_s\": 0.247,\n   \"compile_s\": 1.217,\n   \"embed_table_load_s\": 0.312,\n   \"tokenizer_load_s\": 0.15,\n   \"model_dir\": \"/opt/m51-artifacts/bf16\",\n   \"model_xml\": \"language_model_bf16.xml\",\n   \"dynamic_quant_group\": null\n  }\n },\n \"server_warmup_s\": 35.54,\n \"fill_s\": 0.6,\n \"requests\": [\n  {\n   \"req\": \"req1\",\n   \"gen_start\": 1793959170.8466823,\n   \"gen_end\": 1793959183.8755577,\n   \"gen_wall_s\": 13.029,\n   \"cpu_encode_start\": 1793959170.849659,\n   \"cpu_encode_end\": 1793959171.2446768,\n   \"cpu_encode_s\": 0.392,\n   \"overlap_s\": 0.395,\n   \"wait_after_gen_s\": 0.0\n  },\n  {\n   \"req\": \"req2\",\n   \"gen_start\": 1793959183.8757036,\n   \"gen_end\": 1793959196.9056902,\n   \"gen_wall_s\": 13.03,\n   \"cpu_encode_start\": 1793959183.8776796,\n   \"cpu_encode_end\": 1793959184.5889046,\n   \"cpu_encode_s\": 0.7061,\n   \"overlap_s\": 0.711,\n   \"wait_after_gen_s\": 0.0\n  },\n  {\n   \"req\": \"req3\",\n   \"gen_start\": 1793959196.9058027,\n   \"gen_end\": 1793959208.9306438,\n   \"gen_wall_s\": 12.025,\n   \"cpu_encode_start\": 1793959196.9075632,\n   \"cpu_encode_end\": 1793959197.338715,\n   \"cpu_encode_s\": 0.428,\n   \"overlap_s\": 0.431,\n   \"wait_after_gen_s\": 0.0\n  },\n  {\n   \"req\": \"req4\",\n   \"gen_start\": 1793959208.9307582,\n   \"gen_end\": 1793959221.0843384,\n   \"gen_wall_s\": 12.154\n  }\n ],\n \"total_s\": 50.838,\n \"steady_total_s\": 50.238,\n \"images_per_min\": 4.72,\n \"overlap_s_total\": 1.537,\n \"overlap_proven\": true,\n \"worker_rss_after_mb\": 30023.6,\n \"server_rss_after_mb\": 1937.6,\n \"worker_load_s\": 3.91,\n \"worker_meta\": {\n  \"openvino\": \"2026.4.1-22982-e213a147257-releases/2026/4\",\n  \"device\": \"CPU\",\n  \"execution_devices\": [\n   \"CPU\"\n  ],\n  \"inference_precision\": \"<Type: 'bfloat16'>\",\n  \"performance_hint\": \"LATENCY\",\n  \"execution_mode\": \"ExecutionMode.PERFORMANCE\",\n  \"threads\": 16,\n  \"num_streams\": 1,\n  \"read_s\": 0.247,\n  \"compile_s\": 1.217,\n  \"embed_table_load_s\": 0.312,\n  \"tokenizer_load_s\": 0.15,\n  \"model_dir\": \"/opt/m51-artifacts/bf16\",\n  \"model_xml\": \"language_model_bf16.xml\",\n  \"dynamic_quant_group\": null\n }\n}\nWROTE q1-075553-m51pipe/pipeline/pipeline_ab.json\n"
+    },
+    {
+      "name": "m51-fairab",
+      "cmd": [
+        "/workspace/pr4/.venv-lab/bin/python",
+        "-u",
+        "lab/m51_pipeline_fair_ab.py",
+        "--run",
+        "q1-075553-fairab",
+        "--pairs",
+        "2",
+        "--blocks",
+        "2"
+      ],
+      "rc": 1,
+      "wall_s": 0.0,
+      "finished": "2026-11-06T10:00:25+00:00",
+      "output_tail": "Traceback (most recent call last):\n  File \"/workspace/pr4/lab/m51_pipeline_fair_ab.py\", line 62, in <module>\n    from lab.lab_env import REPO\nModuleNotFoundError: No module named 'lab'\n"
+    }
+  ]
+}

@@ -1,0 +1,194 @@
+{
+  "experiment": "H3_OV_INT8",
+  "status": "PASS",
+  "gates": {
+    "environment": "PASS",
+    "artifact_integrity": "PASS",
+    "encoder_runtime": "PASS",
+    "token_contract": "PASS",
+    "conditioning_alignment": "FAIL",
+    "e2e_gpu": "NOT_RUN",
+    "performance": "PASS",
+    "human_quality": "PENDING"
+  },
+  "release_status": "RELEASE_FAIL",
+  "timestamp": "2026-11-06T10:07:30+0000",
+  "source_head": "2e89f80e8d83f9b9c1f3d684317adeb22229b208",
+  "artifact_digest": "330f3a533d661e7045e92626306aba76d109e3aa166224c6dd906d8702325059",
+  "artifact_verification": {
+    "status": "PASS",
+    "warnings": [],
+    "manifest": {
+      "source_dir": "runs/m51-20261105-cleanroom-01/ov/fp32",
+      "source_xml_sha256": "9fbbc226be2ba66b00f7e8c801ec7e6491e3f0fead7b62a091a55577fe47a2ce",
+      "source_bin_bytes": 27784287208,
+      "tool": "nncf 3.4.0 compress_weights",
+      "mode": "INT8_ASYM",
+      "ratio": 1.0,
+      "group_size": -1,
+      "embeddings": "BF16->FP32 runtime gather from pinned checkpoint (not int8)",
+      "output_xml_sha256": "511cb158365382ca2134966ba77c51a3be9c79b49fefac96f2fe3dcb271583c3",
+      "output_bin_bytes": 6951187432,
+      "output_bin_sha256": "330f3a533d661e7045e92626306aba76d109e3aa166224c6dd906d8702325059",
+      "output_gib": 6.474
+    },
+    "files": {
+      "language_model_int8.bin": {
+        "sha256": "330f3a533d661e7045e92626306aba76d109e3aa166224c6dd906d8702325059",
+        "pinned_via": "output_bin_sha256"
+      },
+      "language_model_int8.xml": {
+        "sha256": "511cb158365382ca2134966ba77c51a3be9c79b49fefac96f2fe3dcb271583c3",
+        "pinned_via": "output_xml_sha256"
+      }
+    }
+  },
+  "artifact_manifest": {
+    "source_dir": "runs/m51-20261105-cleanroom-01/ov/fp32",
+    "source_xml_sha256": "9fbbc226be2ba66b00f7e8c801ec7e6491e3f0fead7b62a091a55577fe47a2ce",
+    "source_bin_bytes": 27784287208,
+    "tool": "nncf 3.4.0 compress_weights",
+    "mode": "INT8_ASYM",
+    "ratio": 1.0,
+    "group_size": -1,
+    "embeddings": "BF16->FP32 runtime gather from pinned checkpoint (not int8)",
+    "output_xml_sha256": "511cb158365382ca2134966ba77c51a3be9c79b49fefac96f2fe3dcb271583c3",
+    "output_bin_bytes": 6951187432,
+    "output_bin_sha256": "330f3a533d661e7045e92626306aba76d109e3aa166224c6dd906d8702325059",
+    "output_gib": 6.474
+  },
+  "environment": {
+    "openvino": "2026.4.1-22982-e213a147257-releases/2026/4",
+    "admission": "GO",
+    "admission_reasons": [],
+    "ram_gate": {
+      "status": "PASS",
+      "reason": null,
+      "basis": "cgroup_limit_minus_anon",
+      "available_bytes": 55486832640,
+      "usable_bytes": 53339348992,
+      "required_bytes": 21474836480,
+      "safety_bytes": 2147483648,
+      "concurrent_reserve_bytes": 0,
+      "cgroup": {
+        "limit_bytes": 59055800320,
+        "current_bytes": 34921009152,
+        "anon_bytes": 3568967680
+      }
+    }
+  },
+  "measurements": {
+    "encode_s": [
+      1.018087,
+      0.353395,
+      0.346652,
+      0.251213,
+      0.241357,
+      0.245703,
+      0.418084,
+      0.410064,
+      0.412397,
+      0.133159,
+      0.117046,
+      0.11964
+    ],
+    "load_s": 4.257,
+    "rss_peak_mb": 16840.1,
+    "shape": [
+      [
+        1,
+        52,
+        4096
+      ],
+      [
+        1,
+        52,
+        4096
+      ],
+      [
+        1,
+        52,
+        4096
+      ],
+      [
+        1,
+        37,
+        4096
+      ],
+      [
+        1,
+        37,
+        4096
+      ],
+      [
+        1,
+        37,
+        4096
+      ],
+      [
+        1,
+        64,
+        4096
+      ],
+      [
+        1,
+        64,
+        4096
+      ],
+      [
+        1,
+        64,
+        4096
+      ],
+      [
+        1,
+        8,
+        4096
+      ],
+      [
+        1,
+        8,
+        4096
+      ],
+      [
+        1,
+        8,
+        4096
+      ]
+    ],
+    "n_tokens_full": [
+      66,
+      66,
+      66,
+      51,
+      51,
+      51,
+      78,
+      78,
+      78,
+      22,
+      22,
+      22
+    ]
+  },
+  "token_contract_detail": {
+    "checked": [
+      "negative",
+      "p1-zh-scene",
+      "p2-en-scene",
+      "p3-poster-text"
+    ]
+  },
+  "conditioning_alignment_detail": {
+    "hash_repro": "reproduced byte-identical vs runs/m51-20261105-cleanroom-01",
+    "committed_cleanroom_verdict": "FAIL",
+    "note": "hash-repro proves determinism; the numerical verdict comes from the cleanroom alignment vs C0 and is never overridden here"
+  },
+  "evidence_paths": [
+    "/workspace/pr4/runs/q1-ovint8-H3_OV_INT8/probe_H3_OV_INT8.json",
+    "/workspace/pr4/runs/q1-ovint8-H3_OV_INT8/stdout.log",
+    "/workspace/pr4/runs/q1-ovint8-H3_OV_INT8/stderr.log"
+  ],
+  "mode": "formal",
+  "runtime_s": 11.51
+}

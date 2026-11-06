@@ -1,0 +1,2531 @@
+{
+  "run": "runs/q1-fairab-campaign",
+  "module": "lab/m51_pipeline_fair_ab.py",
+  "preregistration": {
+    "question": "2x2 factorial: architecture (GPU-native TE vs OV BF16 CPU TE) x client (per-request RunMonitor vs persistent RunMonitor); primary endpoint = actual 4-request batch wall (images/min = 240/wall)",
+    "design": "warm sessions; interleaved poll,fast batches within each session; 2 block(s) of (A session + C session), block>=2 reversed",
+    "exclusion_rule": "fatal technical failure only (server error / worker crash); batch retained marked failed; never performance-based",
+    "reload_policy": "2 warmups in A sessions so the documented CLIP-eviction reload lands outside measured batches; any in-batch reload detected via node timings, reported in both primary and warm-resident views",
+    "frozen": "prompts/token IDs/seed/latent/DiT/VAE/scheduler/8 steps/cfg=1/1024px; workflows byte-identical to the P2 study (same helpers)"
+  },
+  "environment": {
+    "source_provenance": {
+      "recorded_at_utc": "2026-11-06T10:29:10Z",
+      "git": {
+        "head": "2e89f80e8d83f9b9c1f3d684317adeb22229b208",
+        "branch": "feat/bilingual-jupyter-optimization-labs",
+        "dirty": true,
+        "dirty_files": [
+          " M course/M00_setup_and_discipline/LESSON.md",
+          " M course/M00_setup_and_discipline/LESSON.zh-CN.md",
+          " M course/M01_baseline/LESSON.md",
+          " M course/M01_baseline/LESSON.zh-CN.md",
+          " M course/M02_profiling/LESSON.md",
+          " M course/M02_profiling/LESSON.zh-CN.md",
+          " M course/M03_less_computation/LESSON.md",
+          " M course/M03_less_computation/LESSON.zh-CN.md",
+          " M course/M04_faster_computation/LESSON.md",
+          " M course/M04_faster_computation/LESSON.zh-CN.md",
+          " M course/M05_parallel_heterogeneous/LESSON.md",
+          " M course/M05_parallel_heterogeneous/LESSON.zh-CN.md",
+          " M course/M05_parallel_heterogeneous/M5_1_OPENVINO_CPU_TE.md",
+          " M course/M05_parallel_heterogeneous/M5_1_OPENVINO_CPU_TE.zh-CN.md",
+          " M course/M06_combined_quality/LESSON.md",
+          " M course/M06_combined_quality/LESSON.zh-CN.md",
+          " M course/M07_student_challenge/CHALLENGES.md",
+          " M course/M07_student_challenge/CHALLENGES.zh-CN.md",
+          " M lab/m51_pipeline_fair_ab.py",
+          " M requirements-dev.txt",
+          " M runs/quality/BEST/quality.md",
+          " M runs/quality/F2/quality.md",
+          "?? docs/notebook-gpu-qualification/",
+          "?? q1-075553-m51-e2e/",
+          "?? q1-075553-m51pipe/",
+          "?? runs/114200-nbq-B0/",
+          "?? runs/doctor.json",
+          "?? runs/notebook-gpu-qualification/",
+          "?? runs/notebook-sessions/",
+          "?? runs/q1-075553-B0/",
+          "?? runs/q1-075553-BEST/",
+          "?? runs/q1-075553-F1/",
+          "?? runs/q1-075553-F2/",
+          "?? runs/q1-075553-H1-cpu-te/",
+          "?? runs/q1-075553-H2-pipeline/",
+          "?? runs/q1-075553-H3_OV_BF16/",
+          "?? runs/q1-075553-L1/",
+          "?? runs/q1-075553-m51-te-cpu/",
+          "?? runs/q1-075553-m51-te-cuda/",
+          "?? runs/q1-075553-m51full/",
+          "?? runs/q1-075553-profile/",
+          "?? runs/q1-ovfp32-H3_OV_FP32/",
+          "?? runs/q1-ovint8-H3_OV_INT8/",
+          "?? runs/quality/L1/"
+        ]
+      },
+      "tracked_diff_sha256": "c6a1c793af836dd535ac18d81714a89c3f8ed3786270bffa4db2c0a8b3536f9a",
+      "modules": [
+        {
+          "path": "lab/comfyui_client.py",
+          "sha256": "e3fcfaa255bcfee1423315a3456812614282149fd3688fb49d44efefa51e37b7",
+          "bytes": 13056,
+          "status": "COMMITTED_CLEAN"
+        },
+        {
+          "path": "lab/custom_nodes/linuxlab_cond_safetensors.py",
+          "sha256": "c6aaac121f82a3042254136d06163f621e84813a1079e2fda3fb2db79d343a92",
+          "bytes": 1405,
+          "status": "COMMITTED_CLEAN"
+        },
+        {
+          "path": "lab/lab_env.py",
+          "sha256": "774d77e7f1acb5deea6b6e362f3fc78bbe8b8b654390141ff21fcf353f0e2df3",
+          "bytes": 8029,
+          "status": "COMMITTED_CLEAN"
+        },
+        {
+          "path": "lab/m51_e2e.py",
+          "sha256": "294fca80f2ecdd10f5a2765276dabb013e88c6d0fbc326203d6d90e3640f0f5d",
+          "bytes": 10004,
+          "status": "COMMITTED_CLEAN"
+        },
+        {
+          "path": "lab/m51_pipeline.py",
+          "sha256": "564756ed6dd7b2af6e597009953183ca463da1edf439676e87df5c5ae9191026",
+          "bytes": 11379,
+          "status": "COMMITTED_CLEAN"
+        },
+        {
+          "path": "lab/m51_pipeline_fair_ab.py",
+          "sha256": "9940537634fe3053677449d969fed813a777767081fdc378521b60059b7bc8cb",
+          "bytes": 19173,
+          "status": "TRACKED_MODIFIED",
+          "snapshot": "lab/m51_pipeline_fair_ab.py"
+        },
+        {
+          "path": "lab/m51_pipeline_profile.py",
+          "sha256": "429ddc89d158b1e0aea48e3b025881457d9c9cd9a54190de319efb9fb2a58c49",
+          "bytes": 23060,
+          "status": "COMMITTED_CLEAN"
+        },
+        {
+          "path": "lab/ov_worker.py",
+          "sha256": "e59f6e052c16e4b0480cfc477880bbca67af12164a28ceed900ce0230248321b",
+          "bytes": 2232,
+          "status": "COMMITTED_CLEAN"
+        },
+        {
+          "path": "lab/server.py",
+          "sha256": "cb6e2076e7e5f9f694aedc87e5ce4ad0e425937877efdad89c5bc610feddedb9",
+          "bytes": 4900,
+          "status": "COMMITTED_CLEAN"
+        }
+      ],
+      "provenance_class": "EXACT_SOURCE_VERIFIED_WITH_SNAPSHOT"
+    },
+    "git": {
+      "head": "2e89f80e8d83f9b9c1f3d684317adeb22229b208",
+      "branch": "feat/bilingual-jupyter-optimization-labs",
+      "dirty": true,
+      "dirty_files": [
+        " M course/M00_setup_and_discipline/LESSON.md",
+        " M course/M00_setup_and_discipline/LESSON.zh-CN.md",
+        " M course/M01_baseline/LESSON.md",
+        " M course/M01_baseline/LESSON.zh-CN.md",
+        " M course/M02_profiling/LESSON.md",
+        " M course/M02_profiling/LESSON.zh-CN.md",
+        " M course/M03_less_computation/LESSON.md",
+        " M course/M03_less_computation/LESSON.zh-CN.md",
+        " M course/M04_faster_computation/LESSON.md",
+        " M course/M04_faster_computation/LESSON.zh-CN.md",
+        " M course/M05_parallel_heterogeneous/LESSON.md",
+        " M course/M05_parallel_heterogeneous/LESSON.zh-CN.md",
+        " M course/M05_parallel_heterogeneous/M5_1_OPENVINO_CPU_TE.md",
+        " M course/M05_parallel_heterogeneous/M5_1_OPENVINO_CPU_TE.zh-CN.md",
+        " M course/M06_combined_quality/LESSON.md",
+        " M course/M06_combined_quality/LESSON.zh-CN.md",
+        " M course/M07_student_challenge/CHALLENGES.md",
+        " M course/M07_student_challenge/CHALLENGES.zh-CN.md",
+        " M lab/m51_pipeline_fair_ab.py",
+        " M requirements-dev.txt",
+        " M runs/quality/BEST/quality.md",
+        " M runs/quality/F2/quality.md",
+        "?? docs/notebook-gpu-qualification/",
+        "?? q1-075553-m51-e2e/",
+        "?? q1-075553-m51pipe/",
+        "?? runs/114200-nbq-B0/",
+        "?? runs/doctor.json",
+        "?? runs/notebook-gpu-qualification/",
+        "?? runs/notebook-sessions/",
+        "?? runs/q1-075553-B0/",
+        "?? runs/q1-075553-BEST/",
+        "?? runs/q1-075553-F1/",
+        "?? runs/q1-075553-F2/",
+        "?? runs/q1-075553-H1-cpu-te/",
+        "?? runs/q1-075553-H2-pipeline/",
+        "?? runs/q1-075553-H3_OV_BF16/",
+        "?? runs/q1-075553-L1/",
+        "?? runs/q1-075553-m51-te-cpu/",
+        "?? runs/q1-075553-m51-te-cuda/",
+        "?? runs/q1-075553-m51full/",
+        "?? runs/q1-075553-profile/",
+        "?? runs/q1-ovfp32-H3_OV_FP32/",
+        "?? runs/q1-ovint8-H3_OV_INT8/",
+        "?? runs/quality/L1/"
+      ]
+    },
+    "argv": [
+      "lab/m51_pipeline_fair_ab.py",
+      "--run",
+      "runs/q1-fairab-campaign",
+      "--pairs",
+      "1",
+      "--blocks",
+      "2"
+    ],
+    "dependencies": {
+      "openvino_venv": {
+        "python": "3.12.3",
+        "openvino": "2026.4.1-22982-e213a147257-releases/2026/4",
+        "torch": "2.9.1+gitff65f5b"
+      },
+      "lab_venv": {
+        "python": "3.12.3",
+        "openvino": "None",
+        "torch": "2.9.1+gitff65f5b"
+      }
+    },
+    "cgroup_cpu_max": "1600000 100000",
+    "cgroup_memory_max": "59055800320",
+    "ov_artifacts_root": "/opt/m51-artifacts",
+    "bf16_manifest": {
+      "source": "/opt/m51-artifacts/fp32/language_model_fp32.xml",
+      "tool": "ov.save_model compress_to_fp16=True",
+      "storage": "FP16",
+      "runtime_precision": "bf16",
+      "bin_bytes": 13892143718,
+      "source_xml_sha256": "9fbbc226be2ba66b00f7e8c801ec7e6491e3f0fead7b62a091a55577fe47a2ce",
+      "output_bin_sha256": "62eee98599e0e004f6b8a29bfea1f61e7c7bf2c9d0b9ed505cdf2a0e2eb380ce"
+    }
+  },
+  "prompts": [
+    {
+      "id": "req1",
+      "text": "\u5915\u9633\u4e0b\u7684\u6c5f\u5357\u6c34\u4e61\u5c0f\u9547\uff0c\u77f3\u6865\u6a2a\u8de8\u6cb3\u9053\uff0c\u4e4c\u7bf7\u8239\u7f13\u7f13\u9a76\u8fc7\uff0c\u767d\u5899\u9edb\u74e6\u7684\u6c11\u5c45\u5012\u6620\u5728\u91d1\u8272\u7684\u6cb3\u9762\u4e0a\uff0c\u8fdc\u5904\u708a\u70df\u8885\u8885\uff0c\u8d85\u9ad8\u6e05\u6444\u5f71\u8d28\u611f",
+      "seed": 42
+    },
+    {
+      "id": "req2",
+      "text": "A lone hiker standing on a mountain ridge at dawn, a sea of clouds below, first light hitting the peaks, ultra-detailed landscape photography",
+      "seed": 42
+    },
+    {
+      "id": "req3",
+      "text": "\u7535\u5f71\u6d77\u62a5\u8bbe\u8ba1\uff0c\u4e3b\u6807\u9898\u6587\u5b57\u300c\u661f\u9645\u8fdc\u822a\u300d\uff0c\u526f\u6807\u9898\u6587\u5b57\u300c2026\u5e7410\u670830\u65e5 \u5168\u7403\u4e0a\u6620\u300d\uff0c\u753b\u9762\u662f\u6df1\u7a7a\u4e2d\u7684\u5de8\u578b\u98de\u8239\u4e0e\u7eda\u4e3d\u661f\u4e91\uff0c\u6807\u9898\u6587\u5b57\u6e05\u6670\u9510\u5229\u3001\u6392\u7248\u5c45\u4e2d",
+      "seed": 42
+    },
+    {
+      "id": "req4",
+      "text": "\u6e05\u6668\u7684\u7af9\u6797\u5c0f\u5f84\uff0c\u8584\u96fe\u5f25\u6f2b\uff0c\u9633\u5149\u900f\u8fc7\u7af9\u53f6\u6d12\u4e0b\u6591\u9a73\u5149\u5f71\uff0c\u4e00\u6761\u5c0f\u6eaa\u873f\u8712\u6d41\u8fc7\uff0c\u8d85\u9ad8\u6e05\u6444\u5f71\u8d28\u611f",
+      "seed": 42
+    }
+  ],
+  "arms": {
+    "A": {
+      "sessions": [
+        {
+          "warmups": [
+            "warmup__A_1",
+            "warmup__A_2"
+          ],
+          "batches": [
+            {
+              "batch": "A1_poll",
+              "mode": "poll",
+              "batch_wall_s": 54.371,
+              "requests": [
+                {
+                  "tag": "A1_poll|req1",
+                  "mode": "poll",
+                  "t_pre_post": 11241905.898376092,
+                  "t_post": 11241905.901513264,
+                  "prompt_id": "50035f81-df5c-4333-b053-572ca909607d",
+                  "history_polls": 14,
+                  "t_hist": 11241918.930752182,
+                  "t_fetched": 11241918.934608886,
+                  "t_written": 11241918.935889414,
+                  "t_wall_end": 11241918.935889414,
+                  "t_first_exec": 11241905.90829222,
+                  "t_ws_done": 11241918.542172419,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/A1_poll__req1__poll.png",
+                  "image_sha256": "a25117a8887a93dfed1b5455f894d87002006294440a31f485e78549f7fdb9a7",
+                  "image_bytes": 1908492,
+                  "summary": {
+                    "text_encode_s": 0.567,
+                    "vae_decode_s": 0.878,
+                    "ksampler_s": 10.701,
+                    "step_times_s": [
+                      0.063,
+                      1.352,
+                      1.329,
+                      1.329,
+                      1.33,
+                      1.329,
+                      1.33,
+                      1.329
+                    ],
+                    "node_timings_s": {
+                      "CLIPTextEncode#pos_672687f4": 0.567,
+                      "KSampler#ks_518f5b47": 10.701,
+                      "VAEDecode#dec_4efcfaa3": 0.878,
+                      "SaveImage#save_dbcafc82": 0.488
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_3d834e40",
+                      "CLIPLoader#clip_0d0daf25",
+                      "VAELoader#vae_73b8bb8c",
+                      "CLIPTextEncode#neg_5fbe0f00",
+                      "EmptyLatentImage#latent_cd53e2e4"
+                    ],
+                    "vram_peak_mb": 33729.9,
+                    "vram_residency_mb": 33090.7,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0031,
+                    "queue_to_first_node_s": 0.0068,
+                    "server_exec_s": 12.6339,
+                    "poll_wait_after_done_s": 0.3886,
+                    "fetch_image_s": 0.0039,
+                    "write_file_s": 0.0013,
+                    "client_tail_s": 0.0,
+                    "wall_s": 13.0375,
+                    "history_polls": 14,
+                    "mode": "poll"
+                  },
+                  "wf_build_s": 0.0001,
+                  "loop_head_s": 0.0
+                },
+                {
+                  "tag": "A1_poll|req2",
+                  "mode": "poll",
+                  "t_pre_post": 11241919.54560798,
+                  "t_post": 11241919.549979735,
+                  "prompt_id": "51ac4192-6914-48ff-9443-44ecfeedc9ea",
+                  "history_polls": 14,
+                  "t_hist": 11241932.578096053,
+                  "t_fetched": 11241932.581242964,
+                  "t_written": 11241932.582367152,
+                  "t_wall_end": 11241932.582367152,
+                  "t_first_exec": 11241919.553327916,
+                  "t_ws_done": 11241932.029064748,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/A1_poll__req2__poll.png",
+                  "image_sha256": "5eb5863c959f7bdc2d320ba71fb6e27da9845b7e8c64b924e57a752439ee1040",
+                  "image_bytes": 1536194,
+                  "summary": {
+                    "text_encode_s": 0.325,
+                    "vae_decode_s": 0.878,
+                    "ksampler_s": 10.782,
+                    "step_times_s": [
+                      0.069,
+                      1.342,
+                      1.327,
+                      1.422,
+                      1.326,
+                      1.328,
+                      1.328,
+                      1.328
+                    ],
+                    "node_timings_s": {
+                      "CLIPTextEncode#pos_a9bd6797": 0.325,
+                      "KSampler#ks_e4b47fe6": 10.782,
+                      "VAEDecode#dec_45879e39": 0.878,
+                      "SaveImage#save_6917f8c8": 0.49
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_f024ee1c",
+                      "CLIPLoader#clip_bdd67d77",
+                      "VAELoader#vae_ead062af",
+                      "CLIPTextEncode#neg_20e7eea0",
+                      "EmptyLatentImage#latent_304604d3"
+                    ],
+                    "vram_peak_mb": 34140.6,
+                    "vram_residency_mb": 33096.7,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0044,
+                    "queue_to_first_node_s": 0.0033,
+                    "server_exec_s": 12.4757,
+                    "poll_wait_after_done_s": 0.549,
+                    "fetch_image_s": 0.0031,
+                    "write_file_s": 0.0011,
+                    "client_tail_s": 0.0,
+                    "wall_s": 13.0368,
+                    "history_polls": 14,
+                    "mode": "poll"
+                  },
+                  "wf_build_s": 0.0001,
+                  "loop_head_s": 0.609
+                },
+                {
+                  "tag": "A1_poll|req3",
+                  "mode": "poll",
+                  "t_pre_post": 11241933.032507628,
+                  "t_post": 11241933.034719277,
+                  "prompt_id": "591a3f9c-b986-4104-ac3b-72113fdb479e",
+                  "history_polls": 14,
+                  "t_hist": 11241946.064092739,
+                  "t_fetched": 11241946.066735914,
+                  "t_written": 11241946.067809954,
+                  "t_wall_end": 11241946.067809954,
+                  "t_first_exec": 11241933.040354576,
+                  "t_ws_done": 11241945.804766798,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/A1_poll__req3__poll.png",
+                  "image_sha256": "8206d671d563295cdb3d1b97fab8dad5d4b822b3cd5c8a805da88d6ae83e0c6e",
+                  "image_bytes": 1548809,
+                  "summary": {
+                    "text_encode_s": 0.614,
+                    "vae_decode_s": 0.882,
+                    "ksampler_s": 10.792,
+                    "step_times_s": [
+                      0.058,
+                      1.365,
+                      1.333,
+                      1.35,
+                      1.335,
+                      1.338,
+                      1.355,
+                      1.334
+                    ],
+                    "node_timings_s": {
+                      "CLIPTextEncode#pos_6f4daa74": 0.614,
+                      "KSampler#ks_4d458959": 10.792,
+                      "VAEDecode#dec_29c3c0d0": 0.882,
+                      "SaveImage#save_22da18c5": 0.476
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_ca2a229e",
+                      "CLIPLoader#clip_c44d20a0",
+                      "VAELoader#vae_bb7bd191",
+                      "CLIPTextEncode#neg_1361d726",
+                      "EmptyLatentImage#latent_8ab37f70"
+                    ],
+                    "vram_peak_mb": 34648.8,
+                    "vram_residency_mb": 33096.7,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0022,
+                    "queue_to_first_node_s": 0.0056,
+                    "server_exec_s": 12.7644,
+                    "poll_wait_after_done_s": 0.2593,
+                    "fetch_image_s": 0.0026,
+                    "write_file_s": 0.0011,
+                    "client_tail_s": 0.0,
+                    "wall_s": 13.0353,
+                    "history_polls": 14,
+                    "mode": "poll"
+                  },
+                  "wf_build_s": 0.0001,
+                  "loop_head_s": 0.4491
+                },
+                {
+                  "tag": "A1_poll|req4",
+                  "mode": "poll",
+                  "t_pre_post": 11241946.808673784,
+                  "t_post": 11241946.812483948,
+                  "prompt_id": "5c1efb07-7247-4303-a3cd-9e1f3d4c9baf",
+                  "history_polls": 14,
+                  "t_hist": 11241959.840884583,
+                  "t_fetched": 11241959.846052947,
+                  "t_written": 11241959.847674651,
+                  "t_wall_end": 11241959.847674651,
+                  "t_first_exec": 11241946.816868408,
+                  "t_ws_done": 11241959.265669096,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/A1_poll__req4__poll.png",
+                  "image_sha256": "2895cbbaf4d9524642c595f405fea0afbd7dbbd36f29c17ea21c3f60d84c4b7c",
+                  "image_bytes": 2433251,
+                  "summary": {
+                    "text_encode_s": 0.322,
+                    "vae_decode_s": 0.878,
+                    "ksampler_s": 10.732,
+                    "step_times_s": [
+                      0.057,
+                      1.374,
+                      1.332,
+                      1.338,
+                      1.33,
+                      1.33,
+                      1.33,
+                      1.329
+                    ],
+                    "node_timings_s": {
+                      "CLIPTextEncode#pos_aa09df1b": 0.322,
+                      "KSampler#ks_9144c88e": 10.732,
+                      "VAEDecode#dec_fd60b33c": 0.878,
+                      "SaveImage#save_de63d168": 0.517
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_bdaf21eb",
+                      "CLIPLoader#clip_47285746",
+                      "VAELoader#vae_0ca3f70b",
+                      "CLIPTextEncode#neg_0051a6fd",
+                      "EmptyLatentImage#latent_b2bf9fa8"
+                    ],
+                    "vram_peak_mb": 34081.8,
+                    "vram_residency_mb": 33096.7,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0038,
+                    "queue_to_first_node_s": 0.0044,
+                    "server_exec_s": 12.4488,
+                    "poll_wait_after_done_s": 0.5752,
+                    "fetch_image_s": 0.0052,
+                    "write_file_s": 0.0016,
+                    "client_tail_s": 0.0,
+                    "wall_s": 13.039,
+                    "history_polls": 14,
+                    "mode": "poll"
+                  },
+                  "wf_build_s": 0.0001,
+                  "loop_head_s": 0.7395
+                }
+              ],
+              "server_rss_mb": 1967.2,
+              "model_reload_in_batch": false
+            },
+            {
+              "batch": "A1_fast",
+              "mode": "fast",
+              "batch_wall_s": 50.864,
+              "requests": [
+                {
+                  "tag": "A1_fast|req1",
+                  "mode": "fast",
+                  "t_pre_post": 11241960.270035109,
+                  "t_post": 11241960.27303665,
+                  "prompt_id": "3cc8430a-3da4-4b04-9cb7-135618377aab",
+                  "history_polls": 1,
+                  "t_ws_done": 11241972.606056767,
+                  "t_hist": 11241972.905525548,
+                  "t_fetched": 11241972.911954278,
+                  "t_written": 11241972.913245646,
+                  "t_wall_end": 11241972.913245646,
+                  "t_first_exec": 11241960.27831642,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/A1_fast__req1__fast.png",
+                  "image_sha256": "e6fd79aa3e0ce532310ba96308f057dc22b1a7bcd90f17072ff69b00ba68a6bf",
+                  "image_bytes": 1908492,
+                  "summary": {
+                    "text_encode_s": 0.555,
+                    "vae_decode_s": 0.878,
+                    "ksampler_s": 10.71,
+                    "step_times_s": [
+                      0.059,
+                      1.354,
+                      1.33,
+                      1.33,
+                      1.33,
+                      1.33,
+                      1.331,
+                      1.331
+                    ],
+                    "node_timings_s": {
+                      "CLIPTextEncode#pos_a176b446": 0.555,
+                      "KSampler#ks_5fa8f8f6": 10.71,
+                      "VAEDecode#dec_73c18c5b": 0.878,
+                      "SaveImage#save_edf39e35": 0.185
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_482d27fe",
+                      "CLIPLoader#clip_8cbb17b3",
+                      "VAELoader#vae_e27a435d",
+                      "CLIPTextEncode#neg_0027f508",
+                      "EmptyLatentImage#latent_1bbdb9a8"
+                    ],
+                    "vram_peak_mb": 33615.8,
+                    "vram_residency_mb": 33096.7,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.003,
+                    "queue_to_first_node_s": 0.0053,
+                    "server_exec_s": 12.3277,
+                    "poll_wait_after_done_s": 0.2995,
+                    "fetch_image_s": 0.0064,
+                    "write_file_s": 0.0013,
+                    "client_tail_s": 0.0,
+                    "wall_s": 12.6432,
+                    "history_polls": 1,
+                    "mode": "fast"
+                  },
+                  "wf_build_s": 0.0001,
+                  "loop_head_s": 0.0
+                },
+                {
+                  "tag": "A1_fast|req2",
+                  "mode": "fast",
+                  "t_pre_post": 11241972.914431583,
+                  "t_post": 11241972.915762642,
+                  "prompt_id": "6ce6c1c0-05d5-490d-bbd6-a46d3537036c",
+                  "history_polls": 1,
+                  "t_ws_done": 11241985.286401352,
+                  "t_hist": 11241985.295713594,
+                  "t_fetched": 11241985.298438108,
+                  "t_written": 11241985.299560077,
+                  "t_wall_end": 11241985.299560077,
+                  "t_first_exec": 11241972.917603016,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/A1_fast__req2__fast.png",
+                  "image_sha256": "851d089182d5fe15550de63af0bc62399e2ec123910834fc13cd868b46be33f8",
+                  "image_bytes": 1536194,
+                  "summary": {
+                    "text_encode_s": 0.323,
+                    "vae_decode_s": 0.878,
+                    "ksampler_s": 10.706,
+                    "step_times_s": [
+                      0.057,
+                      1.353,
+                      1.33,
+                      1.331,
+                      1.33,
+                      1.332,
+                      1.329,
+                      1.332
+                    ],
+                    "node_timings_s": {
+                      "CLIPTextEncode#pos_354664c4": 0.323,
+                      "KSampler#ks_18b16513": 10.706,
+                      "VAEDecode#dec_e3859c2a": 0.878,
+                      "SaveImage#save_3c69e980": 0.462
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_78169478",
+                      "CLIPLoader#clip_cfd904a5",
+                      "VAELoader#vae_e9643254",
+                      "CLIPTextEncode#neg_835cd1a6",
+                      "EmptyLatentImage#latent_e56ee266"
+                    ],
+                    "vram_peak_mb": 34167.6,
+                    "vram_residency_mb": 33096.7,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0013,
+                    "queue_to_first_node_s": 0.0018,
+                    "server_exec_s": 12.3688,
+                    "poll_wait_after_done_s": 0.0093,
+                    "fetch_image_s": 0.0027,
+                    "write_file_s": 0.0011,
+                    "client_tail_s": 0.0,
+                    "wall_s": 12.3851,
+                    "history_polls": 1,
+                    "mode": "fast"
+                  },
+                  "wf_build_s": 0.0001,
+                  "loop_head_s": 0.0011
+                },
+                {
+                  "tag": "A1_fast|req3",
+                  "mode": "fast",
+                  "t_pre_post": 11241985.300544288,
+                  "t_post": 11241985.301812569,
+                  "prompt_id": "a0f0c77d-2707-4bb1-959c-4efa4b16591c",
+                  "history_polls": 1,
+                  "t_ws_done": 11241997.984756136,
+                  "t_hist": 11241997.994839791,
+                  "t_fetched": 11241997.99807058,
+                  "t_written": 11241997.99918987,
+                  "t_wall_end": 11241997.99918987,
+                  "t_first_exec": 11241985.303255271,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/A1_fast__req3__fast.png",
+                  "image_sha256": "c137f9903d2b6b86abec13591b681ead9c95c086c4bb60d021b568dbd16edf30",
+                  "image_bytes": 1548809,
+                  "summary": {
+                    "text_encode_s": 0.604,
+                    "vae_decode_s": 0.88,
+                    "ksampler_s": 10.743,
+                    "step_times_s": [
+                      0.057,
+                      1.362,
+                      1.334,
+                      1.335,
+                      1.334,
+                      1.334,
+                      1.335,
+                      1.334
+                    ],
+                    "node_timings_s": {
+                      "CLIPTextEncode#pos_966c8ded": 0.604,
+                      "KSampler#ks_7572e588": 10.743,
+                      "VAEDecode#dec_19b5e9a1": 0.88,
+                      "SaveImage#save_dab963a0": 0.455
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_df9076a1",
+                      "CLIPLoader#clip_741a0182",
+                      "VAELoader#vae_a25fea55",
+                      "CLIPTextEncode#neg_3cdd3e0d",
+                      "EmptyLatentImage#latent_9bd54733"
+                    ],
+                    "vram_peak_mb": 34167.6,
+                    "vram_residency_mb": 33096.7,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0013,
+                    "queue_to_first_node_s": 0.0014,
+                    "server_exec_s": 12.6815,
+                    "poll_wait_after_done_s": 0.0101,
+                    "fetch_image_s": 0.0032,
+                    "write_file_s": 0.0011,
+                    "client_tail_s": 0.0,
+                    "wall_s": 12.6986,
+                    "history_polls": 1,
+                    "mode": "fast"
+                  },
+                  "wf_build_s": 0.0001,
+                  "loop_head_s": 0.0009
+                },
+                {
+                  "tag": "A1_fast|req4",
+                  "mode": "fast",
+                  "t_pre_post": 11241998.00021082,
+                  "t_post": 11241998.001896964,
+                  "prompt_id": "759f9936-23e2-44df-b84c-e90f92691244",
+                  "history_polls": 1,
+                  "t_ws_done": 11242010.132504787,
+                  "t_hist": 11242010.43404678,
+                  "t_fetched": 11242010.44154659,
+                  "t_written": 11242010.443235004,
+                  "t_wall_end": 11242010.443235004,
+                  "t_first_exec": 11241998.003830846,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/A1_fast__req4__fast.png",
+                  "image_sha256": "d3fb6dd744bff8bc9cc454a180af9fe2f957af1eb3435df681e302faba9af255",
+                  "image_bytes": 2433251,
+                  "summary": {
+                    "text_encode_s": 0.323,
+                    "vae_decode_s": 0.881,
+                    "ksampler_s": 10.713,
+                    "step_times_s": [
+                      0.058,
+                      1.353,
+                      1.33,
+                      1.336,
+                      1.331,
+                      1.331,
+                      1.331,
+                      1.33
+                    ],
+                    "node_timings_s": {
+                      "CLIPTextEncode#pos_1bed7866": 0.323,
+                      "KSampler#ks_d86a1c0f": 10.713,
+                      "VAEDecode#dec_8b4e5e3c": 0.881,
+                      "SaveImage#save_ec509cef": 0.212
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_714c6eab",
+                      "CLIPLoader#clip_277b5873",
+                      "VAELoader#vae_56f34654",
+                      "CLIPTextEncode#neg_4a245f66",
+                      "EmptyLatentImage#latent_c3e9378a"
+                    ],
+                    "vram_peak_mb": 34636.4,
+                    "vram_residency_mb": 33096.7,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0017,
+                    "queue_to_first_node_s": 0.0019,
+                    "server_exec_s": 12.1287,
+                    "poll_wait_after_done_s": 0.3015,
+                    "fetch_image_s": 0.0075,
+                    "write_file_s": 0.0017,
+                    "client_tail_s": 0.0,
+                    "wall_s": 12.443,
+                    "history_polls": 1,
+                    "mode": "fast"
+                  },
+                  "wf_build_s": 0.0001,
+                  "loop_head_s": 0.0009
+                }
+              ],
+              "note": "persistent monitor; GPU-native TE (arm A, fast client)",
+              "server_rss_mb": 1967.8,
+              "model_reload_in_batch": false
+            }
+          ],
+          "warmup_wall_s": 45.405,
+          "block": 1,
+          "started_at": "10:29:14"
+        },
+        {
+          "warmups": [
+            "warmup__A_1",
+            "warmup__A_2"
+          ],
+          "batches": [
+            {
+              "batch": "A1_poll",
+              "mode": "poll",
+              "batch_wall_s": 53.765,
+              "requests": [
+                {
+                  "tag": "A1_poll|req1",
+                  "mode": "poll",
+                  "t_pre_post": 11242409.724077309,
+                  "t_post": 11242409.72736082,
+                  "prompt_id": "631bf6de-6e09-48c4-a8af-7d76815fc4f2",
+                  "history_polls": 14,
+                  "t_hist": 11242422.75881275,
+                  "t_fetched": 11242422.762513716,
+                  "t_written": 11242422.76418251,
+                  "t_wall_end": 11242422.76418251,
+                  "t_first_exec": 11242409.735273303,
+                  "t_ws_done": 11242422.345098063,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/A1_poll__req1__poll.png",
+                  "image_sha256": "9ec1ea0eb35ec6d653676c124a1b0636f9d00f2d7d2a23e493210e3900c39f67",
+                  "image_bytes": 1908492,
+                  "summary": {
+                    "text_encode_s": 0.564,
+                    "vae_decode_s": 0.894,
+                    "ksampler_s": 10.741,
+                    "step_times_s": [
+                      0.069,
+                      1.347,
+                      1.329,
+                      1.361,
+                      1.333,
+                      1.335,
+                      1.327,
+                      1.329
+                    ],
+                    "node_timings_s": {
+                      "CLIPTextEncode#pos_64e0ca2f": 0.564,
+                      "KSampler#ks_714f6aff": 10.741,
+                      "VAEDecode#dec_ade755ec": 0.894,
+                      "SaveImage#save_df22625f": 0.411
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_7d25d677",
+                      "CLIPLoader#clip_f82a217f",
+                      "VAELoader#vae_ebf30a6b",
+                      "CLIPTextEncode#neg_64ea8091",
+                      "EmptyLatentImage#latent_19ce83b2"
+                    ],
+                    "vram_peak_mb": 33307.8,
+                    "vram_residency_mb": 33090.7,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0033,
+                    "queue_to_first_node_s": 0.0079,
+                    "server_exec_s": 12.6098,
+                    "poll_wait_after_done_s": 0.4137,
+                    "fetch_image_s": 0.0037,
+                    "write_file_s": 0.0017,
+                    "client_tail_s": 0.0,
+                    "wall_s": 13.0401,
+                    "history_polls": 14,
+                    "mode": "poll"
+                  },
+                  "wf_build_s": 0.0001,
+                  "loop_head_s": 0.0
+                },
+                {
+                  "tag": "A1_poll|req2",
+                  "mode": "poll",
+                  "t_pre_post": 11242423.34857382,
+                  "t_post": 11242423.353209484,
+                  "prompt_id": "acaf92a2-885f-453a-9b5a-29e691381d84",
+                  "history_polls": 14,
+                  "t_hist": 11242436.381498596,
+                  "t_fetched": 11242436.384907313,
+                  "t_written": 11242436.38639254,
+                  "t_wall_end": 11242436.38639254,
+                  "t_first_exec": 11242423.356625512,
+                  "t_ws_done": 11242435.707982063,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/A1_poll__req2__poll.png",
+                  "image_sha256": "770bd88847a171ee62356833a39c228eebd08eb0ca213b5dae944a102da319bf",
+                  "image_bytes": 1536194,
+                  "summary": {
+                    "text_encode_s": 0.321,
+                    "vae_decode_s": 0.898,
+                    "ksampler_s": 10.749,
+                    "step_times_s": [
+                      0.06,
+                      1.389,
+                      1.328,
+                      1.328,
+                      1.328,
+                      1.333,
+                      1.331,
+                      1.333
+                    ],
+                    "node_timings_s": {
+                      "CLIPTextEncode#pos_af1cbbfe": 0.321,
+                      "KSampler#ks_75b13f2b": 10.749,
+                      "VAEDecode#dec_757c51d0": 0.898,
+                      "SaveImage#save_a712a9c6": 0.383
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_a795f42f",
+                      "CLIPLoader#clip_f351acb3",
+                      "VAELoader#vae_f04739bb",
+                      "CLIPTextEncode#neg_95eebf86",
+                      "EmptyLatentImage#latent_da38f206"
+                    ],
+                    "vram_peak_mb": 34030.4,
+                    "vram_residency_mb": 33096.7,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0046,
+                    "queue_to_first_node_s": 0.0034,
+                    "server_exec_s": 12.3514,
+                    "poll_wait_after_done_s": 0.6735,
+                    "fetch_image_s": 0.0034,
+                    "write_file_s": 0.0015,
+                    "client_tail_s": 0.0,
+                    "wall_s": 13.0378,
+                    "history_polls": 14,
+                    "mode": "poll"
+                  },
+                  "wf_build_s": 0.0001,
+                  "loop_head_s": 0.5836
+                },
+                {
+                  "tag": "A1_poll|req3",
+                  "mode": "poll",
+                  "t_pre_post": 11242436.711758455,
+                  "t_post": 11242436.715243064,
+                  "prompt_id": "0339274c-abba-4710-a862-524d74455434",
+                  "history_polls": 14,
+                  "t_hist": 11242449.74266478,
+                  "t_fetched": 11242449.74598744,
+                  "t_written": 11242449.747370869,
+                  "t_wall_end": 11242449.747370869,
+                  "t_first_exec": 11242436.719710091,
+                  "t_ws_done": 11242449.340775754,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/A1_poll__req3__poll.png",
+                  "image_sha256": "d9dcfed138f06c3ac65f74274edede81236cc943ae4f8d0826307b285edc6d96",
+                  "image_bytes": 1548809,
+                  "summary": {
+                    "text_encode_s": 0.605,
+                    "vae_decode_s": 0.897,
+                    "ksampler_s": 10.733,
+                    "step_times_s": [
+                      0.055,
+                      1.367,
+                      1.331,
+                      1.334,
+                      1.333,
+                      1.332,
+                      1.332,
+                      1.335
+                    ],
+                    "node_timings_s": {
+                      "CLIPTextEncode#pos_c3752d2c": 0.605,
+                      "KSampler#ks_7005d8f4": 10.733,
+                      "VAEDecode#dec_86b9314f": 0.897,
+                      "SaveImage#save_3cc74577": 0.386
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_3a2d9fb5",
+                      "CLIPLoader#clip_4db13583",
+                      "VAELoader#vae_4046a078",
+                      "CLIPTextEncode#neg_7e8fe853",
+                      "EmptyLatentImage#latent_ce6384ec"
+                    ],
+                    "vram_peak_mb": 33688.9,
+                    "vram_residency_mb": 33096.7,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0035,
+                    "queue_to_first_node_s": 0.0045,
+                    "server_exec_s": 12.6211,
+                    "poll_wait_after_done_s": 0.4019,
+                    "fetch_image_s": 0.0033,
+                    "write_file_s": 0.0014,
+                    "client_tail_s": 0.0,
+                    "wall_s": 13.0356,
+                    "history_polls": 14,
+                    "mode": "poll"
+                  },
+                  "wf_build_s": 0.0001,
+                  "loop_head_s": 0.324
+                },
+                {
+                  "tag": "A1_poll|req4",
+                  "mode": "poll",
+                  "t_pre_post": 11242450.344394607,
+                  "t_post": 11242450.347504308,
+                  "prompt_id": "834bc1f8-9025-45a8-8728-c1a227319ccb",
+                  "history_polls": 14,
+                  "t_hist": 11242463.372497996,
+                  "t_fetched": 11242463.376956996,
+                  "t_written": 11242463.379064463,
+                  "t_wall_end": 11242463.379064463,
+                  "t_first_exec": 11242450.350357592,
+                  "t_ws_done": 11242462.48506676,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/A1_poll__req4__poll.png",
+                  "image_sha256": "e54d8d1844a11fd7069ab48d906b9a9c97881aaa575c002dfd21015457d2b525",
+                  "image_bytes": 2433251,
+                  "summary": {
+                    "text_encode_s": 0.318,
+                    "vae_decode_s": 0.9,
+                    "ksampler_s": 10.707,
+                    "step_times_s": [
+                      0.061,
+                      1.352,
+                      1.329,
+                      1.33,
+                      1.331,
+                      1.332,
+                      1.33,
+                      1.331
+                    ],
+                    "node_timings_s": {
+                      "CLIPTextEncode#pos_04a9106c": 0.318,
+                      "KSampler#ks_964156fe": 10.707,
+                      "VAEDecode#dec_2be48c1d": 0.9,
+                      "SaveImage#save_d6a150a0": 0.209
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_5b41e665",
+                      "CLIPLoader#clip_30a8d581",
+                      "VAELoader#vae_641a43ee",
+                      "CLIPTextEncode#neg_bd7bf12e",
+                      "EmptyLatentImage#latent_c5f7a06e"
+                    ],
+                    "vram_peak_mb": 34167.6,
+                    "vram_residency_mb": 33096.7,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0031,
+                    "queue_to_first_node_s": 0.0029,
+                    "server_exec_s": 12.1347,
+                    "poll_wait_after_done_s": 0.8874,
+                    "fetch_image_s": 0.0045,
+                    "write_file_s": 0.0021,
+                    "client_tail_s": 0.0,
+                    "wall_s": 13.0347,
+                    "history_polls": 14,
+                    "mode": "poll"
+                  },
+                  "wf_build_s": 0.0001,
+                  "loop_head_s": 0.596
+                }
+              ],
+              "server_rss_mb": 1951.5,
+              "model_reload_in_batch": false
+            },
+            {
+              "batch": "A1_fast",
+              "mode": "fast",
+              "batch_wall_s": 50.687,
+              "requests": [
+                {
+                  "tag": "A1_fast|req1",
+                  "mode": "fast",
+                  "t_pre_post": 11242463.49010358,
+                  "t_post": 11242463.492859473,
+                  "prompt_id": "58af214a-252a-4117-b2fd-17b25575eefd",
+                  "history_polls": 1,
+                  "t_ws_done": 11242476.062117672,
+                  "t_hist": 11242476.06657235,
+                  "t_fetched": 11242476.072199568,
+                  "t_written": 11242476.07395561,
+                  "t_wall_end": 11242476.07395561,
+                  "t_first_exec": 11242463.49531306,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/A1_fast__req1__fast.png",
+                  "image_sha256": "ab0747ce9a73cccac033c0b753b98085c28d9cc432e773936eb256f245b5995a",
+                  "image_bytes": 1908492,
+                  "summary": {
+                    "text_encode_s": 0.551,
+                    "vae_decode_s": 0.898,
+                    "ksampler_s": 10.709,
+                    "step_times_s": [
+                      0.061,
+                      1.354,
+                      1.33,
+                      1.332,
+                      1.331,
+                      1.331,
+                      1.33,
+                      1.33
+                    ],
+                    "node_timings_s": {
+                      "CLIPTextEncode#pos_973e4e96": 0.551,
+                      "KSampler#ks_4719f7be": 10.709,
+                      "VAEDecode#dec_462f14ae": 0.898,
+                      "SaveImage#save_847d2e05": 0.408
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_3788628f",
+                      "CLIPLoader#clip_b08efc21",
+                      "VAELoader#vae_1da1e4fd",
+                      "CLIPTextEncode#neg_56c1a5cd",
+                      "EmptyLatentImage#latent_8de5c7ae"
+                    ],
+                    "vram_peak_mb": 33735.0,
+                    "vram_residency_mb": 33096.7,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0028,
+                    "queue_to_first_node_s": 0.0025,
+                    "server_exec_s": 12.5668,
+                    "poll_wait_after_done_s": 0.0045,
+                    "fetch_image_s": 0.0056,
+                    "write_file_s": 0.0018,
+                    "client_tail_s": 0.0,
+                    "wall_s": 12.5839,
+                    "history_polls": 1,
+                    "mode": "fast"
+                  },
+                  "wf_build_s": 0.0001,
+                  "loop_head_s": 0.0
+                },
+                {
+                  "tag": "A1_fast|req2",
+                  "mode": "fast",
+                  "t_pre_post": 11242476.07510668,
+                  "t_post": 11242476.076304909,
+                  "prompt_id": "2e05ba94-6f70-4dfb-9689-2b6396ce6ca8",
+                  "history_polls": 1,
+                  "t_ws_done": 11242488.38361388,
+                  "t_hist": 11242488.390897771,
+                  "t_fetched": 11242488.39414696,
+                  "t_written": 11242488.395904724,
+                  "t_wall_end": 11242488.395904724,
+                  "t_first_exec": 11242476.078454858,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/A1_fast__req2__fast.png",
+                  "image_sha256": "ea5276c7f9925213400e78d1ad77f905c5a7f5fc368eb9107615a30b7663d41c",
+                  "image_bytes": 1536194,
+                  "summary": {
+                    "text_encode_s": 0.318,
+                    "vae_decode_s": 0.894,
+                    "ksampler_s": 10.704,
+                    "step_times_s": [
+                      0.061,
+                      1.353,
+                      1.33,
+                      1.33,
+                      1.329,
+                      1.332,
+                      1.327,
+                      1.331
+                    ],
+                    "node_timings_s": {
+                      "CLIPTextEncode#pos_ee7b3b75": 0.318,
+                      "KSampler#ks_38a7d6a5": 10.704,
+                      "VAEDecode#dec_7b562a80": 0.894,
+                      "SaveImage#save_068142bd": 0.389
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_74bd09ef",
+                      "CLIPLoader#clip_b3fe2056",
+                      "VAELoader#vae_e1f15f56",
+                      "CLIPTextEncode#neg_26e9ae78",
+                      "EmptyLatentImage#latent_b38bdeba"
+                    ],
+                    "vram_peak_mb": 34047.5,
+                    "vram_residency_mb": 33096.7,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0012,
+                    "queue_to_first_node_s": 0.0021,
+                    "server_exec_s": 12.3052,
+                    "poll_wait_after_done_s": 0.0073,
+                    "fetch_image_s": 0.0032,
+                    "write_file_s": 0.0018,
+                    "client_tail_s": 0.0,
+                    "wall_s": 12.3208,
+                    "history_polls": 1,
+                    "mode": "fast"
+                  },
+                  "wf_build_s": 0.0001,
+                  "loop_head_s": 0.0011
+                },
+                {
+                  "tag": "A1_fast|req3",
+                  "mode": "fast",
+                  "t_pre_post": 11242488.396951145,
+                  "t_post": 11242488.398275653,
+                  "prompt_id": "975a5f93-b61e-46df-8c1a-a8ab052d0f1b",
+                  "history_polls": 1,
+                  "t_ws_done": 11242500.796071023,
+                  "t_hist": 11242501.029838143,
+                  "t_fetched": 11242501.033486055,
+                  "t_written": 11242501.034877744,
+                  "t_wall_end": 11242501.034877744,
+                  "t_first_exec": 11242488.399768338,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/A1_fast__req3__fast.png",
+                  "image_sha256": "7097b0f3977c6511769201d112eb8d7d71f1593d405ad751f9433482b0585ed2",
+                  "image_bytes": 1548809,
+                  "summary": {
+                    "text_encode_s": 0.601,
+                    "vae_decode_s": 0.895,
+                    "ksampler_s": 10.74,
+                    "step_times_s": [
+                      0.062,
+                      1.358,
+                      1.334,
+                      1.334,
+                      1.334,
+                      1.334,
+                      1.334,
+                      1.334
+                    ],
+                    "node_timings_s": {
+                      "CLIPTextEncode#pos_772a5362": 0.601,
+                      "KSampler#ks_af71782c": 10.74,
+                      "VAEDecode#dec_40ac225c": 0.895,
+                      "SaveImage#save_4575533c": 0.161
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_70bd18a0",
+                      "CLIPLoader#clip_54701775",
+                      "VAELoader#vae_c58ad7c0",
+                      "CLIPTextEncode#neg_886c2356",
+                      "EmptyLatentImage#latent_cfbb3025"
+                    ],
+                    "vram_peak_mb": 34047.5,
+                    "vram_residency_mb": 33096.7,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0013,
+                    "queue_to_first_node_s": 0.0015,
+                    "server_exec_s": 12.3963,
+                    "poll_wait_after_done_s": 0.2338,
+                    "fetch_image_s": 0.0036,
+                    "write_file_s": 0.0014,
+                    "client_tail_s": 0.0,
+                    "wall_s": 12.6379,
+                    "history_polls": 1,
+                    "mode": "fast"
+                  },
+                  "wf_build_s": 0.0001,
+                  "loop_head_s": 0.0009
+                },
+                {
+                  "tag": "A1_fast|req4",
+                  "mode": "fast",
+                  "t_pre_post": 11242501.035892684,
+                  "t_post": 11242501.03741474,
+                  "prompt_id": "ff7fcc9f-35c6-4891-add6-678dfd375903",
+                  "history_polls": 1,
+                  "t_ws_done": 11242513.175029598,
+                  "t_hist": 11242513.403904134,
+                  "t_fetched": 11242513.410950478,
+                  "t_written": 11242513.413080918,
+                  "t_wall_end": 11242513.413080918,
+                  "t_first_exec": 11242501.03955398,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/A1_fast__req4__fast.png",
+                  "image_sha256": "028bd7f3ccae6a9fd32ad3a5a98ca968bb1696f32185ad81f08f4548c7353c5e",
+                  "image_bytes": 2433251,
+                  "summary": {
+                    "text_encode_s": 0.319,
+                    "vae_decode_s": 0.895,
+                    "ksampler_s": 10.711,
+                    "step_times_s": [
+                      0.061,
+                      1.352,
+                      1.331,
+                      1.332,
+                      1.331,
+                      1.329,
+                      1.331,
+                      1.331
+                    ],
+                    "node_timings_s": {
+                      "CLIPTextEncode#pos_a5336e11": 0.319,
+                      "KSampler#ks_cd052d26": 10.711,
+                      "VAEDecode#dec_00df841e": 0.895,
+                      "SaveImage#save_20570cfb": 0.21
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_358ec623",
+                      "CLIPLoader#clip_8a3e229a",
+                      "VAELoader#vae_09c55123",
+                      "CLIPTextEncode#neg_6860a30d",
+                      "EmptyLatentImage#latent_37944bb0"
+                    ],
+                    "vram_peak_mb": 34047.5,
+                    "vram_residency_mb": 33096.7,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0015,
+                    "queue_to_first_node_s": 0.0021,
+                    "server_exec_s": 12.1355,
+                    "poll_wait_after_done_s": 0.2289,
+                    "fetch_image_s": 0.007,
+                    "write_file_s": 0.0021,
+                    "client_tail_s": 0.0,
+                    "wall_s": 12.3772,
+                    "history_polls": 1,
+                    "mode": "fast"
+                  },
+                  "wf_build_s": 0.0001,
+                  "loop_head_s": 0.0009
+                }
+              ],
+              "note": "persistent monitor; GPU-native TE (arm A, fast client)",
+              "server_rss_mb": 1951.5,
+              "model_reload_in_batch": false
+            }
+          ],
+          "warmup_wall_s": 65.514,
+          "block": 2,
+          "started_at": "10:37:17"
+        }
+      ]
+    },
+    "C": {
+      "sessions": [
+        {
+          "worker_load_s": 3.859,
+          "warmups": [
+            "negative+cond warmup (worker)",
+            "warmup__C (server)"
+          ],
+          "batches": [
+            {
+              "batch": "C1_poll",
+              "mode": "poll",
+              "batch_wall_s": 52.579,
+              "requests": [
+                {
+                  "tag": "C1_poll|req1",
+                  "mode": "poll",
+                  "t_pre_post": 11242067.255445063,
+                  "t_post": 11242067.258408468,
+                  "prompt_id": "c54651a4-5b20-45cc-9c61-b27a5b4ea1b2",
+                  "history_polls": 13,
+                  "t_hist": 11242079.331990644,
+                  "t_fetched": 11242079.336511912,
+                  "t_written": 11242079.33785035,
+                  "t_wall_end": 11242079.33785035,
+                  "t_first_exec": 11242067.264869597,
+                  "t_ws_done": 11242079.331026984,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/C1_poll__req1__poll.png",
+                  "image_sha256": "456a043cc806e3b0ea3cd8918a7f295a8351340ec8297229a5873270e034457c",
+                  "image_bytes": 1908125,
+                  "summary": {
+                    "text_encode_s": 0,
+                    "vae_decode_s": 0.877,
+                    "ksampler_s": 10.76,
+                    "step_times_s": [
+                      0.169,
+                      1.291,
+                      1.332,
+                      1.331,
+                      1.332,
+                      1.332,
+                      1.331,
+                      1.333
+                    ],
+                    "node_timings_s": {
+                      "LinuxLabCondSafetensors#pos_d541d6a4": 0.002,
+                      "KSampler#ks_addd09cb": 10.76,
+                      "VAEDecode#dec_96ca12db": 0.877,
+                      "SaveImage#save_2918bcab": 0.427
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_a2a5fcc3",
+                      "VAELoader#vae_fab57b24",
+                      "LinuxLabCondSafetensors#neg_55abb851",
+                      "EmptyLatentImage#latent_bddb6f02"
+                    ],
+                    "vram_peak_mb": 16910.7,
+                    "vram_residency_mb": 16443.4,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.003,
+                    "queue_to_first_node_s": 0.0065,
+                    "server_exec_s": 12.0662,
+                    "poll_wait_after_done_s": 0.001,
+                    "fetch_image_s": 0.0045,
+                    "write_file_s": 0.0013,
+                    "client_tail_s": 0.0,
+                    "wall_s": 12.0824,
+                    "history_polls": 13,
+                    "mode": "poll"
+                  },
+                  "wf_build_s": 0.0002,
+                  "loop_head_s": 0.0004,
+                  "cpu_encode_s": 0.659,
+                  "cpu_encode_wall": {
+                    "t_start": 1793961167.1015255,
+                    "t_end": 1793961167.7728946
+                  }
+                },
+                {
+                  "tag": "C1_poll|req2",
+                  "mode": "poll",
+                  "t_pre_post": 11242080.335185546,
+                  "t_post": 11242080.33777488,
+                  "prompt_id": "77fa679c-4ccc-40aa-bb1d-8f083b47a4f5",
+                  "history_polls": 13,
+                  "t_hist": 11242092.36327193,
+                  "t_fetched": 11242092.365960773,
+                  "t_written": 11242092.366963755,
+                  "t_wall_end": 11242092.366963755,
+                  "t_first_exec": 11242080.342643077,
+                  "t_ws_done": 11242092.127100201,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/C1_poll__req2__poll.png",
+                  "image_sha256": "2e020b12252084110629a7a7aedd55d3cbc0bffa125ae40ab890d9fe6cbe78f1",
+                  "image_bytes": 1539172,
+                  "summary": {
+                    "text_encode_s": 0,
+                    "vae_decode_s": 0.877,
+                    "ksampler_s": 10.741,
+                    "step_times_s": [
+                      0.074,
+                      1.345,
+                      1.352,
+                      1.331,
+                      1.332,
+                      1.332,
+                      1.332,
+                      1.332
+                    ],
+                    "node_timings_s": {
+                      "LinuxLabCondSafetensors#pos_d8d4ee7b": 0.002,
+                      "KSampler#ks_ff5f36b0": 10.741,
+                      "VAEDecode#dec_132029ca": 0.877,
+                      "SaveImage#save_c88557b4": 0.165
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_9b5e54c4",
+                      "VAELoader#vae_c7d7c92b",
+                      "LinuxLabCondSafetensors#neg_08654468",
+                      "EmptyLatentImage#latent_42d0a04e"
+                    ],
+                    "vram_peak_mb": 16928.2,
+                    "vram_residency_mb": 16451.6,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0026,
+                    "queue_to_first_node_s": 0.0049,
+                    "server_exec_s": 11.7845,
+                    "poll_wait_after_done_s": 0.2362,
+                    "fetch_image_s": 0.0027,
+                    "write_file_s": 0.001,
+                    "client_tail_s": 0.0,
+                    "wall_s": 12.0318,
+                    "history_polls": 13,
+                    "mode": "poll"
+                  },
+                  "wf_build_s": 0.0003,
+                  "loop_head_s": 0.9961,
+                  "cpu_encode_s": 0.3978,
+                  "cpu_encode_wall": {
+                    "t_start": 1793961167.7736025,
+                    "t_end": 1793961168.1739755
+                  }
+                },
+                {
+                  "tag": "C1_poll|req3",
+                  "mode": "poll",
+                  "t_pre_post": 11242093.131320093,
+                  "t_post": 11242093.135319136,
+                  "prompt_id": "709e9f66-3fc3-4699-9064-2976219ac91b",
+                  "history_polls": 13,
+                  "t_hist": 11242105.16108278,
+                  "t_fetched": 11242105.164428355,
+                  "t_written": 11242105.165510988,
+                  "t_wall_end": 11242105.165510988,
+                  "t_first_exec": 11242093.137872392,
+                  "t_ws_done": 11242105.12588737,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/C1_poll__req3__poll.png",
+                  "image_sha256": "2db8628c8701168b1ce4c90ba5ef49e79ddacfd7e4273c44be0363c809ad2d5b",
+                  "image_bytes": 1545255,
+                  "summary": {
+                    "text_encode_s": 0,
+                    "vae_decode_s": 0.875,
+                    "ksampler_s": 10.729,
+                    "step_times_s": [
+                      0.105,
+                      1.318,
+                      1.374,
+                      1.331,
+                      1.324,
+                      1.325,
+                      1.323,
+                      1.326
+                    ],
+                    "node_timings_s": {
+                      "LinuxLabCondSafetensors#pos_e0a9d24b": 0.004,
+                      "KSampler#ks_61fed658": 10.729,
+                      "VAEDecode#dec_37180181": 0.875,
+                      "SaveImage#save_d6e5fde3": 0.38
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_b3f76433",
+                      "VAELoader#vae_30d49379",
+                      "LinuxLabCondSafetensors#neg_0b37356f",
+                      "EmptyLatentImage#latent_9f8da058"
+                    ],
+                    "vram_peak_mb": 16997.3,
+                    "vram_residency_mb": 16452.1,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.004,
+                    "queue_to_first_node_s": 0.0026,
+                    "server_exec_s": 11.988,
+                    "poll_wait_after_done_s": 0.0352,
+                    "fetch_image_s": 0.0033,
+                    "write_file_s": 0.0011,
+                    "client_tail_s": 0.0,
+                    "wall_s": 12.0342,
+                    "history_polls": 13,
+                    "mode": "poll"
+                  },
+                  "wf_build_s": 0.0001,
+                  "loop_head_s": 0.7626,
+                  "cpu_encode_s": 0.7297,
+                  "cpu_encode_wall": {
+                    "t_start": 1793961180.853464,
+                    "t_end": 1793961181.5877905
+                  }
+                },
+                {
+                  "tag": "C1_poll|req4",
+                  "mode": "poll",
+                  "t_pre_post": 11242106.129328538,
+                  "t_post": 11242106.131857835,
+                  "prompt_id": "24793eb5-c1d5-4a29-a1ea-9e7c40f76979",
+                  "history_polls": 13,
+                  "t_hist": 11242118.158899773,
+                  "t_fetched": 11242118.163341243,
+                  "t_written": 11242118.164937789,
+                  "t_wall_end": 11242118.164937789,
+                  "t_first_exec": 11242106.135689778,
+                  "t_ws_done": 11242118.157869332,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/C1_poll__req4__poll.png",
+                  "image_sha256": "aff2e187ad9265a1e64e80625243d74b9ccfd752415eae349bbdcc834bf9ddf4",
+                  "image_bytes": 2433069,
+                  "summary": {
+                    "text_encode_s": 0,
+                    "vae_decode_s": 0.876,
+                    "ksampler_s": 10.714,
+                    "step_times_s": [
+                      0.057,
+                      1.352,
+                      1.331,
+                      1.332,
+                      1.332,
+                      1.332,
+                      1.333,
+                      1.333
+                    ],
+                    "node_timings_s": {
+                      "LinuxLabCondSafetensors#pos_36ef7a22": 0.002,
+                      "KSampler#ks_52fccace": 10.714,
+                      "VAEDecode#dec_b936f079": 0.876,
+                      "SaveImage#save_a5f3c5d7": 0.431
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_7b4daffb",
+                      "VAELoader#vae_0966b485",
+                      "LinuxLabCondSafetensors#neg_a894afb9",
+                      "EmptyLatentImage#latent_e00d7723"
+                    ],
+                    "vram_peak_mb": 16911.1,
+                    "vram_residency_mb": 16451.7,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0025,
+                    "queue_to_first_node_s": 0.0038,
+                    "server_exec_s": 12.0222,
+                    "poll_wait_after_done_s": 0.001,
+                    "fetch_image_s": 0.0044,
+                    "write_file_s": 0.0016,
+                    "client_tail_s": 0.0,
+                    "wall_s": 12.0356,
+                    "history_polls": 13,
+                    "mode": "poll"
+                  },
+                  "wf_build_s": 0.0001,
+                  "loop_head_s": 0.963,
+                  "cpu_encode_s": 0.3961,
+                  "cpu_encode_wall": {
+                    "t_start": 1793961193.648929,
+                    "t_end": 1793961194.047775
+                  }
+                }
+              ],
+              "server_rss_mb": 1833.4,
+              "worker_rss_mb": 20645.0,
+              "model_reload_in_batch": false
+            },
+            {
+              "batch": "C1_fast",
+              "mode": "fast",
+              "batch_wall_s": 49.921,
+              "requests": [
+                {
+                  "tag": "C1_fast|req1",
+                  "mode": "fast",
+                  "t_pre_post": 11242119.786832403,
+                  "t_post": 11242119.789061164,
+                  "prompt_id": "87ffdf0e-1200-40ec-8a45-3f99c72894ff",
+                  "history_polls": 1,
+                  "t_ws_done": 11242131.605992028,
+                  "t_hist": 11242131.829952752,
+                  "t_fetched": 11242131.838842738,
+                  "t_written": 11242131.840226777,
+                  "t_wall_end": 11242131.840226777,
+                  "t_first_exec": 11242119.790082484,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/C1_fast__req1__fast.png",
+                  "image_sha256": "cf7a1d80d337063092f45a0ec2df3218d69258ef5a653703bae388f5c02236d0",
+                  "image_bytes": 1908125,
+                  "summary": {
+                    "text_encode_s": 0,
+                    "vae_decode_s": 0.877,
+                    "ksampler_s": 10.727,
+                    "step_times_s": [
+                      0.144,
+                      1.279,
+                      1.333,
+                      1.331,
+                      1.331,
+                      1.331,
+                      1.332,
+                      1.335
+                    ],
+                    "node_timings_s": {
+                      "LinuxLabCondSafetensors#pos_24c8f5cb": 0.024,
+                      "KSampler#ks_317e445c": 10.727,
+                      "VAEDecode#dec_85f1391b": 0.877,
+                      "SaveImage#save_7ce6819c": 0.187
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_53053288",
+                      "VAELoader#vae_0dcecd36",
+                      "LinuxLabCondSafetensors#neg_33a21908",
+                      "EmptyLatentImage#latent_2c5ed179"
+                    ],
+                    "vram_peak_mb": 16761.0,
+                    "vram_residency_mb": 16443.4,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0022,
+                    "queue_to_first_node_s": 0.001,
+                    "server_exec_s": 11.8159,
+                    "poll_wait_after_done_s": 0.224,
+                    "fetch_image_s": 0.0089,
+                    "write_file_s": 0.0014,
+                    "client_tail_s": 0.0,
+                    "wall_s": 12.0534,
+                    "history_polls": 1,
+                    "mode": "fast"
+                  },
+                  "wf_build_s": 0.0001,
+                  "loop_head_s": 0.0004,
+                  "cpu_encode_s": 0.6116,
+                  "cond_sha256": "3d1ea58baae65723a77c0a6346b9cc3dacf483cd12c46667eb6e694a4b580a97"
+                },
+                {
+                  "tag": "C1_fast|req2",
+                  "mode": "fast",
+                  "t_pre_post": 11242131.842493571,
+                  "t_post": 11242131.844765652,
+                  "prompt_id": "2d4f6b1b-5c75-4507-9ec6-b3fcb2799242",
+                  "history_polls": 1,
+                  "t_ws_done": 11242143.921694618,
+                  "t_hist": 11242143.927183049,
+                  "t_fetched": 11242143.930491896,
+                  "t_written": 11242143.931532186,
+                  "t_wall_end": 11242143.931532186,
+                  "t_first_exec": 11242131.84694172,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/C1_fast__req2__fast.png",
+                  "image_sha256": "b6bb2a2212393b28858c98db90ce232d689a921b6b4c7d53c5cca4984c15ee14",
+                  "image_bytes": 1539172,
+                  "summary": {
+                    "text_encode_s": 0,
+                    "vae_decode_s": 0.877,
+                    "ksampler_s": 10.728,
+                    "step_times_s": [
+                      0.114,
+                      1.305,
+                      1.333,
+                      1.333,
+                      1.333,
+                      1.332,
+                      1.332,
+                      1.333
+                    ],
+                    "node_timings_s": {
+                      "LinuxLabCondSafetensors#pos_3de05231": 0.075,
+                      "KSampler#ks_7359f486": 10.728,
+                      "VAEDecode#dec_6b46e9d1": 0.877,
+                      "SaveImage#save_a2887475": 0.395
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_17ab3b02",
+                      "VAELoader#vae_43e14de1",
+                      "LinuxLabCondSafetensors#neg_d27e7179",
+                      "EmptyLatentImage#latent_396d94fa"
+                    ],
+                    "vram_peak_mb": 17023.5,
+                    "vram_residency_mb": 16443.1,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0023,
+                    "queue_to_first_node_s": 0.0022,
+                    "server_exec_s": 12.0748,
+                    "poll_wait_after_done_s": 0.0055,
+                    "fetch_image_s": 0.0033,
+                    "write_file_s": 0.001,
+                    "client_tail_s": 0.0,
+                    "wall_s": 12.089,
+                    "history_polls": 1,
+                    "mode": "fast"
+                  },
+                  "wf_build_s": 0.0001,
+                  "loop_head_s": 0.0011,
+                  "cpu_encode_s": 0.4135,
+                  "cond_sha256": "d9c5a19467896d72812b01f5c5f60c0d95c2fc0630dbf107304a1dc035ce7ea4"
+                },
+                {
+                  "tag": "C1_fast|req3",
+                  "mode": "fast",
+                  "t_pre_post": 11242143.933706276,
+                  "t_post": 11242143.9351852,
+                  "prompt_id": "ea63f38e-7668-4da0-944e-17fddcb3c6ae",
+                  "history_polls": 1,
+                  "t_ws_done": 11242155.950295148,
+                  "t_hist": 11242155.954858275,
+                  "t_fetched": 11242155.958148714,
+                  "t_written": 11242155.9595524,
+                  "t_wall_end": 11242155.9595524,
+                  "t_first_exec": 11242143.936671788,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/C1_fast__req3__fast.png",
+                  "image_sha256": "939ad0951397a21ab16072c3c5417390340589ec75d767077964f36dc7c9a3da",
+                  "image_bytes": 1545255,
+                  "summary": {
+                    "text_encode_s": 0,
+                    "vae_decode_s": 0.874,
+                    "ksampler_s": 10.679,
+                    "step_times_s": [
+                      0.116,
+                      1.298,
+                      1.326,
+                      1.326,
+                      1.326,
+                      1.327,
+                      1.327,
+                      1.328
+                    ],
+                    "node_timings_s": {
+                      "LinuxLabCondSafetensors#pos_7d1999be": 0.077,
+                      "KSampler#ks_a8185623": 10.679,
+                      "VAEDecode#dec_ff009891": 0.874,
+                      "SaveImage#save_accc172c": 0.383
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_4b3d6f7d",
+                      "VAELoader#vae_ebf524b8",
+                      "LinuxLabCondSafetensors#neg_c60b692e",
+                      "EmptyLatentImage#latent_269d37eb"
+                    ],
+                    "vram_peak_mb": 17254.0,
+                    "vram_residency_mb": 16452.1,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0015,
+                    "queue_to_first_node_s": 0.0015,
+                    "server_exec_s": 12.0136,
+                    "poll_wait_after_done_s": 0.0046,
+                    "fetch_image_s": 0.0033,
+                    "write_file_s": 0.0014,
+                    "client_tail_s": 0.0,
+                    "wall_s": 12.0258,
+                    "history_polls": 1,
+                    "mode": "fast"
+                  },
+                  "wf_build_s": 0.0001,
+                  "loop_head_s": 0.0009,
+                  "cpu_encode_s": 0.738,
+                  "cond_sha256": "057396bbd4adaa2d8dd49470d18be85b2bb8664ed51a3333f951268b3a76f64e"
+                },
+                {
+                  "tag": "C1_fast|req4",
+                  "mode": "fast",
+                  "t_pre_post": 11242155.961164735,
+                  "t_post": 11242155.962504853,
+                  "prompt_id": "e5ad2b83-eb2f-4c09-9541-6bf1d71cf192",
+                  "history_polls": 1,
+                  "t_ws_done": 11242168.08271962,
+                  "t_hist": 11242168.094720986,
+                  "t_fetched": 11242168.099392872,
+                  "t_written": 11242168.100952908,
+                  "t_wall_end": 11242168.100952908,
+                  "t_first_exec": 11242155.96397708,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/C1_fast__req4__fast.png",
+                  "image_sha256": "248af1207914b54c0a44a96e0edca6408d218ae416ac6190cf9a0b3c95e7811b",
+                  "image_bytes": 2433069,
+                  "summary": {
+                    "text_encode_s": 0,
+                    "vae_decode_s": 0.878,
+                    "ksampler_s": 10.727,
+                    "step_times_s": [
+                      0.058,
+                      1.353,
+                      1.335,
+                      1.333,
+                      1.334,
+                      1.333,
+                      1.333,
+                      1.335
+                    ],
+                    "node_timings_s": {
+                      "LinuxLabCondSafetensors#pos_a49c3388": 0.077,
+                      "KSampler#ks_c6d10523": 10.727,
+                      "VAEDecode#dec_47e624ce": 0.878,
+                      "SaveImage#save_9a35bdb8": 0.436
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_1f0817db",
+                      "VAELoader#vae_45bb365d",
+                      "LinuxLabCondSafetensors#neg_9ec61bfc",
+                      "EmptyLatentImage#latent_4ce4a175"
+                    ],
+                    "vram_peak_mb": 17254.0,
+                    "vram_residency_mb": 16443.2,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0013,
+                    "queue_to_first_node_s": 0.0015,
+                    "server_exec_s": 12.1187,
+                    "poll_wait_after_done_s": 0.012,
+                    "fetch_image_s": 0.0047,
+                    "write_file_s": 0.0016,
+                    "client_tail_s": 0.0,
+                    "wall_s": 12.1398,
+                    "history_polls": 1,
+                    "mode": "fast"
+                  },
+                  "wf_build_s": 0.0001,
+                  "loop_head_s": 0.0009,
+                  "cpu_encode_s": 0.4015,
+                  "cond_sha256": "6363c76798ac9c96424b1bdedf63d93e05033687bc82bb74a2059a633dd78d68"
+                }
+              ],
+              "note": "persistent monitor; cond prefetch as in production arm C",
+              "server_rss_mb": 1836.1,
+              "worker_rss_mb": 20645.0,
+              "model_reload_in_batch": false
+            }
+          ],
+          "warmup_wall_s": 37.98,
+          "block": 1,
+          "started_at": "10:31:52"
+        },
+        {
+          "worker_load_s": 4.733,
+          "warmups": [
+            "negative+cond warmup (worker)",
+            "warmup__C (server)"
+          ],
+          "batches": [
+            {
+              "batch": "C1_poll",
+              "mode": "poll",
+              "batch_wall_s": 53.237,
+              "requests": [
+                {
+                  "tag": "C1_poll|req1",
+                  "mode": "poll",
+                  "t_pre_post": 11242230.568772905,
+                  "t_post": 11242230.573569588,
+                  "prompt_id": "d4dbaa2b-92c9-4f6d-95b8-4aeef110e51a",
+                  "history_polls": 13,
+                  "t_hist": 11242242.70288094,
+                  "t_fetched": 11242242.709749997,
+                  "t_written": 11242242.71137136,
+                  "t_wall_end": 11242242.71137136,
+                  "t_first_exec": 11242230.576214934,
+                  "t_ws_done": 11242242.427316984,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/C1_poll__req1__poll.png",
+                  "image_sha256": "84d4ea2bd8ae7a0d2f135b0b6ac6c87fb5195a0ea3ef6428ca138f6e8f9f199d",
+                  "image_bytes": 1908125,
+                  "summary": {
+                    "text_encode_s": 0,
+                    "vae_decode_s": 0.895,
+                    "ksampler_s": 10.737,
+                    "step_times_s": [
+                      0.115,
+                      1.303,
+                      1.334,
+                      1.333,
+                      1.342,
+                      1.333,
+                      1.333,
+                      1.334
+                    ],
+                    "node_timings_s": {
+                      "LinuxLabCondSafetensors#pos_539e5a50": 0.034,
+                      "KSampler#ks_69818d61": 10.737,
+                      "VAEDecode#dec_0542d7b2": 0.895,
+                      "SaveImage#save_3caa4611": 0.185
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_1933c577",
+                      "VAELoader#vae_d385d1a9",
+                      "LinuxLabCondSafetensors#neg_a7510273",
+                      "EmptyLatentImage#latent_bfc5c9dc"
+                    ],
+                    "vram_peak_mb": 17023.8,
+                    "vram_residency_mb": 16443.4,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0048,
+                    "queue_to_first_node_s": 0.0026,
+                    "server_exec_s": 11.8511,
+                    "poll_wait_after_done_s": 0.2756,
+                    "fetch_image_s": 0.0069,
+                    "write_file_s": 0.0016,
+                    "client_tail_s": 0.0,
+                    "wall_s": 12.1426,
+                    "history_polls": 13,
+                    "mode": "poll"
+                  },
+                  "wf_build_s": 0.0001,
+                  "loop_head_s": 0.0003,
+                  "cpu_encode_s": 0.5813,
+                  "cpu_encode_wall": {
+                    "t_start": 1793961330.4983904,
+                    "t_end": 1793961331.08651
+                  }
+                },
+                {
+                  "tag": "C1_poll|req2",
+                  "mode": "poll",
+                  "t_pre_post": 11242243.431491025,
+                  "t_post": 11242243.434658404,
+                  "prompt_id": "865e8eea-8ef8-4b7e-bfef-59b740c7daf3",
+                  "history_polls": 13,
+                  "t_hist": 11242255.74999468,
+                  "t_fetched": 11242255.75750784,
+                  "t_written": 11242255.758893969,
+                  "t_wall_end": 11242255.758893969,
+                  "t_first_exec": 11242243.436510185,
+                  "t_ws_done": 11242255.748609314,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/C1_poll__req2__poll.png",
+                  "image_sha256": "0a5da4d43d8800875608538df8d520a7b333c6248615c497cdef1777f38a9fc3",
+                  "image_bytes": 1539172,
+                  "summary": {
+                    "text_encode_s": 0,
+                    "vae_decode_s": 0.896,
+                    "ksampler_s": 10.897,
+                    "step_times_s": [
+                      0.072,
+                      1.343,
+                      1.333,
+                      1.333,
+                      1.333,
+                      1.45,
+                      1.339,
+                      1.361
+                    ],
+                    "node_timings_s": {
+                      "LinuxLabCondSafetensors#pos_7ba0286e": 0.005,
+                      "KSampler#ks_cd4a6610": 10.897,
+                      "VAEDecode#dec_18945fa4": 0.896,
+                      "SaveImage#save_62d4bca5": 0.514
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_a3756d03",
+                      "VAELoader#vae_aa6db864",
+                      "LinuxLabCondSafetensors#neg_1f68b98a",
+                      "EmptyLatentImage#latent_6c61ac30"
+                    ],
+                    "vram_peak_mb": 17996.8,
+                    "vram_residency_mb": 16443.1,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0032,
+                    "queue_to_first_node_s": 0.0019,
+                    "server_exec_s": 12.3121,
+                    "poll_wait_after_done_s": 0.0014,
+                    "fetch_image_s": 0.0075,
+                    "write_file_s": 0.0014,
+                    "client_tail_s": 0.0,
+                    "wall_s": 12.3274,
+                    "history_polls": 13,
+                    "mode": "poll"
+                  },
+                  "wf_build_s": 0.0004,
+                  "loop_head_s": 0.7184,
+                  "cpu_encode_s": 0.4042,
+                  "cpu_encode_wall": {
+                    "t_start": 1793961331.0875103,
+                    "t_end": 1793961331.496686
+                  }
+                },
+                {
+                  "tag": "C1_poll|req3",
+                  "mode": "poll",
+                  "t_pre_post": 11242256.752479387,
+                  "t_post": 11242256.7573193,
+                  "prompt_id": "a4122a53-d8b1-42ab-96a8-3ca00897fbe7",
+                  "history_polls": 13,
+                  "t_hist": 11242268.972715428,
+                  "t_fetched": 11242268.97990434,
+                  "t_written": 11242268.981272098,
+                  "t_wall_end": 11242268.981272098,
+                  "t_first_exec": 11242256.759240204,
+                  "t_ws_done": 11242268.971585847,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/C1_poll__req3__poll.png",
+                  "image_sha256": "4ffff7d5eaf8f38224efce6f99c2898e02ea8b8eaa1461618752b39cebf668b8",
+                  "image_bytes": 1545255,
+                  "summary": {
+                    "text_encode_s": 0,
+                    "vae_decode_s": 0.895,
+                    "ksampler_s": 10.835,
+                    "step_times_s": [
+                      0.065,
+                      1.378,
+                      1.354,
+                      1.35,
+                      1.351,
+                      1.351,
+                      1.326,
+                      1.356
+                    ],
+                    "node_timings_s": {
+                      "LinuxLabCondSafetensors#pos_486b08ad": 0.006,
+                      "KSampler#ks_16ac70a5": 10.835,
+                      "VAEDecode#dec_d9945f4c": 0.895,
+                      "SaveImage#save_905bd111": 0.476
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_e60e4a13",
+                      "VAELoader#vae_00c8f8e3",
+                      "LinuxLabCondSafetensors#neg_90ab73f2",
+                      "EmptyLatentImage#latent_949c1fd0"
+                    ],
+                    "vram_peak_mb": 17035.8,
+                    "vram_residency_mb": 16443.6,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0048,
+                    "queue_to_first_node_s": 0.0019,
+                    "server_exec_s": 12.2123,
+                    "poll_wait_after_done_s": 0.0011,
+                    "fetch_image_s": 0.0072,
+                    "write_file_s": 0.0014,
+                    "client_tail_s": 0.0,
+                    "wall_s": 12.2288,
+                    "history_polls": 13,
+                    "mode": "poll"
+                  },
+                  "wf_build_s": 0.0002,
+                  "loop_head_s": 0.9923,
+                  "cpu_encode_s": 0.7129,
+                  "cpu_encode_wall": {
+                    "t_start": 1793961343.949129,
+                    "t_end": 1793961344.6669214
+                  }
+                },
+                {
+                  "tag": "C1_poll|req4",
+                  "mode": "poll",
+                  "t_pre_post": 11242269.975364644,
+                  "t_post": 11242269.979139227,
+                  "prompt_id": "bf43b070-1f7f-47bd-8209-37e15b4fe92f",
+                  "history_polls": 13,
+                  "t_hist": 11242282.213368217,
+                  "t_fetched": 11242282.22247956,
+                  "t_written": 11242282.22456526,
+                  "t_wall_end": 11242282.22456526,
+                  "t_first_exec": 11242269.981201587,
+                  "t_ws_done": 11242282.212357236,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/C1_poll__req4__poll.png",
+                  "image_sha256": "b16531ac9cd1729e6171cc2a4ce81d505c0f82c4df4d91a03d4e5b0558f68747",
+                  "image_bytes": 2433069,
+                  "summary": {
+                    "text_encode_s": 0,
+                    "vae_decode_s": 0.9,
+                    "ksampler_s": 10.815,
+                    "step_times_s": [
+                      0.06,
+                      1.353,
+                      1.366,
+                      1.334,
+                      1.341,
+                      1.356,
+                      1.334,
+                      1.338
+                    ],
+                    "node_timings_s": {
+                      "LinuxLabCondSafetensors#pos_7250849d": 0.006,
+                      "KSampler#ks_338d8e3a": 10.815,
+                      "VAEDecode#dec_badd8a99": 0.9,
+                      "SaveImage#save_19f0340d": 0.511
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_c4508de6",
+                      "VAELoader#vae_9efcc4f1",
+                      "LinuxLabCondSafetensors#neg_699cd0f7",
+                      "EmptyLatentImage#latent_eb732b29"
+                    ],
+                    "vram_peak_mb": 17035.4,
+                    "vram_residency_mb": 16443.2,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0038,
+                    "queue_to_first_node_s": 0.0021,
+                    "server_exec_s": 12.2312,
+                    "poll_wait_after_done_s": 0.001,
+                    "fetch_image_s": 0.0091,
+                    "write_file_s": 0.0021,
+                    "client_tail_s": 0.0,
+                    "wall_s": 12.2492,
+                    "history_polls": 13,
+                    "mode": "poll"
+                  },
+                  "wf_build_s": 0.0002,
+                  "loop_head_s": 0.9929,
+                  "cpu_encode_s": 0.3832,
+                  "cpu_encode_wall": {
+                    "t_start": 1793961357.2708547,
+                    "t_end": 1793961357.6577575
+                  }
+                }
+              ],
+              "server_rss_mb": 1871.8,
+              "worker_rss_mb": 25683.3,
+              "model_reload_in_batch": false
+            },
+            {
+              "batch": "C1_fast",
+              "mode": "fast",
+              "batch_wall_s": 50.424,
+              "requests": [
+                {
+                  "tag": "C1_fast|req1",
+                  "mode": "fast",
+                  "t_pre_post": 11242283.82483268,
+                  "t_post": 11242283.827447755,
+                  "prompt_id": "557745ec-ab1a-47ed-98b5-90241a012d75",
+                  "history_polls": 1,
+                  "t_ws_done": 11242296.03424922,
+                  "t_hist": 11242296.040492691,
+                  "t_fetched": 11242296.04585246,
+                  "t_written": 11242296.047536386,
+                  "t_wall_end": 11242296.047536386,
+                  "t_first_exec": 11242283.82899526,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/C1_fast__req1__fast.png",
+                  "image_sha256": "e72efc71eb90f30a16ca1d1be6444a47ff106270dc859ae2cd76d532d901ed3d",
+                  "image_bytes": 1908125,
+                  "summary": {
+                    "text_encode_s": 0,
+                    "vae_decode_s": 0.895,
+                    "ksampler_s": 10.818,
+                    "step_times_s": [
+                      0.117,
+                      1.363,
+                      1.356,
+                      1.333,
+                      1.333,
+                      1.334,
+                      1.334,
+                      1.334
+                    ],
+                    "node_timings_s": {
+                      "LinuxLabCondSafetensors#pos_54882904": 0.009,
+                      "KSampler#ks_93177ca3": 10.818,
+                      "VAEDecode#dec_00d02698": 0.895,
+                      "SaveImage#save_027e30c3": 0.484
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_181ea9a5",
+                      "VAELoader#vae_cfe444ab",
+                      "LinuxLabCondSafetensors#neg_09fa187e",
+                      "EmptyLatentImage#latent_bbc9e1e2"
+                    ],
+                    "vram_peak_mb": 17983.1,
+                    "vram_residency_mb": 16443.4,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0026,
+                    "queue_to_first_node_s": 0.0015,
+                    "server_exec_s": 12.2053,
+                    "poll_wait_after_done_s": 0.0062,
+                    "fetch_image_s": 0.0054,
+                    "write_file_s": 0.0017,
+                    "client_tail_s": 0.0,
+                    "wall_s": 12.2227,
+                    "history_polls": 1,
+                    "mode": "fast"
+                  },
+                  "wf_build_s": 0.0001,
+                  "loop_head_s": 0.0002,
+                  "cpu_encode_s": 0.5984,
+                  "cond_sha256": "3d1ea58baae65723a77c0a6346b9cc3dacf483cd12c46667eb6e694a4b580a97"
+                },
+                {
+                  "tag": "C1_fast|req2",
+                  "mode": "fast",
+                  "t_pre_post": 11242296.049786985,
+                  "t_post": 11242296.052085811,
+                  "prompt_id": "55ecd1e1-d125-4c2b-a9d5-de83fb6d22c4",
+                  "history_polls": 1,
+                  "t_ws_done": 11242308.18738737,
+                  "t_hist": 11242308.193130037,
+                  "t_fetched": 11242308.196378984,
+                  "t_written": 11242308.197889293,
+                  "t_wall_end": 11242308.197889293,
+                  "t_first_exec": 11242296.05341591,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/C1_fast__req2__fast.png",
+                  "image_sha256": "c641f05d933a256e280efcc3f93c7d87545a24f87fd3175b96dc0a2427ba1fb1",
+                  "image_bytes": 1539172,
+                  "summary": {
+                    "text_encode_s": 0,
+                    "vae_decode_s": 0.896,
+                    "ksampler_s": 10.734,
+                    "step_times_s": [
+                      0.089,
+                      1.326,
+                      1.336,
+                      1.333,
+                      1.335,
+                      1.333,
+                      1.335,
+                      1.333
+                    ],
+                    "node_timings_s": {
+                      "LinuxLabCondSafetensors#pos_c3ca98f0": 0.074,
+                      "KSampler#ks_4c17480e": 10.734,
+                      "VAEDecode#dec_134321c6": 0.896,
+                      "SaveImage#save_cd9e7267": 0.43
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_6752d824",
+                      "VAELoader#vae_4d10d9fa",
+                      "LinuxLabCondSafetensors#neg_e54b9d5b",
+                      "EmptyLatentImage#latent_e26dc3c7"
+                    ],
+                    "vram_peak_mb": 17983.1,
+                    "vram_residency_mb": 16443.1,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0023,
+                    "queue_to_first_node_s": 0.0013,
+                    "server_exec_s": 12.134,
+                    "poll_wait_after_done_s": 0.0057,
+                    "fetch_image_s": 0.0032,
+                    "write_file_s": 0.0015,
+                    "client_tail_s": 0.0,
+                    "wall_s": 12.1481,
+                    "history_polls": 1,
+                    "mode": "fast"
+                  },
+                  "wf_build_s": 0.0001,
+                  "loop_head_s": 0.0012,
+                  "cpu_encode_s": 0.4126,
+                  "cond_sha256": "d9c5a19467896d72812b01f5c5f60c0d95c2fc0630dbf107304a1dc035ce7ea4"
+                },
+                {
+                  "tag": "C1_fast|req3",
+                  "mode": "fast",
+                  "t_pre_post": 11242308.20010773,
+                  "t_post": 11242308.201429078,
+                  "prompt_id": "3fba3dd4-0420-4d0e-b1e9-f60ed853f3b5",
+                  "history_polls": 1,
+                  "t_ws_done": 11242320.434750533,
+                  "t_hist": 11242320.440767605,
+                  "t_fetched": 11242320.444571028,
+                  "t_written": 11242320.445972266,
+                  "t_wall_end": 11242320.445972266,
+                  "t_first_exec": 11242308.202834684,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/C1_fast__req3__fast.png",
+                  "image_sha256": "837709c9349aa9e1e2bb3e6e312c8964dfa0af1aa48b859306c7462348b6f88b",
+                  "image_bytes": 1545255,
+                  "summary": {
+                    "text_encode_s": 0,
+                    "vae_decode_s": 0.893,
+                    "ksampler_s": 10.747,
+                    "step_times_s": [
+                      0.115,
+                      1.309,
+                      1.327,
+                      1.333,
+                      1.353,
+                      1.324,
+                      1.333,
+                      1.338
+                    ],
+                    "node_timings_s": {
+                      "LinuxLabCondSafetensors#pos_bb069e62": 0.095,
+                      "KSampler#ks_8fa81fcb": 10.747,
+                      "VAEDecode#dec_f4f5731d": 0.893,
+                      "SaveImage#save_c5db3983": 0.497
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_f028341d",
+                      "VAELoader#vae_06cf0fd8",
+                      "LinuxLabCondSafetensors#neg_ad33d172",
+                      "EmptyLatentImage#latent_a8c68a59"
+                    ],
+                    "vram_peak_mb": 17983.1,
+                    "vram_residency_mb": 16443.6,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0013,
+                    "queue_to_first_node_s": 0.0014,
+                    "server_exec_s": 12.2319,
+                    "poll_wait_after_done_s": 0.006,
+                    "fetch_image_s": 0.0038,
+                    "write_file_s": 0.0014,
+                    "client_tail_s": 0.0,
+                    "wall_s": 12.2459,
+                    "history_polls": 1,
+                    "mode": "fast"
+                  },
+                  "wf_build_s": 0.0001,
+                  "loop_head_s": 0.0009,
+                  "cpu_encode_s": 0.6818,
+                  "cond_sha256": "057396bbd4adaa2d8dd49470d18be85b2bb8664ed51a3333f951268b3a76f64e"
+                },
+                {
+                  "tag": "C1_fast|req4",
+                  "mode": "fast",
+                  "t_pre_post": 11242320.447549572,
+                  "t_post": 11242320.44989136,
+                  "prompt_id": "6e4873d9-53f6-496d-97c2-599089cf97f0",
+                  "history_polls": 1,
+                  "t_ws_done": 11242332.640375094,
+                  "t_hist": 11242332.65035358,
+                  "t_fetched": 11242332.655248715,
+                  "t_written": 11242332.657422764,
+                  "t_wall_end": 11242332.657422764,
+                  "t_first_exec": 11242320.451322636,
+                  "image": "runs/q1-fairab-campaign/pipeline_profile/raw/C1_fast__req4__fast.png",
+                  "image_sha256": "3cd5c68815b35af58d2bb536240e5dd1a21fb01772668eb385f4b66e8233bf5d",
+                  "image_bytes": 2433069,
+                  "summary": {
+                    "text_encode_s": 0,
+                    "vae_decode_s": 0.896,
+                    "ksampler_s": 10.741,
+                    "step_times_s": [
+                      0.058,
+                      1.36,
+                      1.335,
+                      1.335,
+                      1.337,
+                      1.334,
+                      1.335,
+                      1.336
+                    ],
+                    "node_timings_s": {
+                      "LinuxLabCondSafetensors#pos_9e403f20": 0.076,
+                      "KSampler#ks_1690f60a": 10.741,
+                      "VAEDecode#dec_b603633f": 0.896,
+                      "SaveImage#save_a8736b94": 0.476
+                    },
+                    "cached_nodes": [
+                      "UNETLoader#unet_dd6d9e86",
+                      "VAELoader#vae_5f5d01b3",
+                      "LinuxLabCondSafetensors#neg_0dd728d3",
+                      "EmptyLatentImage#latent_a01e482e"
+                    ],
+                    "vram_peak_mb": 17983.1,
+                    "vram_residency_mb": 16443.2,
+                    "monitor_error": null
+                  },
+                  "attrib": {
+                    "post_http_s": 0.0023,
+                    "queue_to_first_node_s": 0.0014,
+                    "server_exec_s": 12.1891,
+                    "poll_wait_after_done_s": 0.01,
+                    "fetch_image_s": 0.0049,
+                    "write_file_s": 0.0022,
+                    "client_tail_s": 0.0,
+                    "wall_s": 12.2099,
+                    "history_polls": 1,
+                    "mode": "fast"
+                  },
+                  "wf_build_s": 0.0001,
+                  "loop_head_s": 0.001,
+                  "cpu_encode_s": 0.4321,
+                  "cond_sha256": "6363c76798ac9c96424b1bdedf63d93e05033687bc82bb74a2059a633dd78d68"
+                }
+              ],
+              "note": "persistent monitor; cond prefetch as in production arm C",
+              "server_rss_mb": 1866.7,
+              "worker_rss_mb": 25685.3,
+              "model_reload_in_batch": false
+            }
+          ],
+          "warmup_wall_s": 41.671,
+          "block": 2,
+          "started_at": "10:34:32"
+        }
+      ]
+    }
+  },
+  "timeline": [
+    {
+      "block": 1,
+      "arm": "A",
+      "started_at": "10:29:14",
+      "batches": [
+        "A1_poll",
+        "A1_fast"
+      ]
+    },
+    {
+      "block": 1,
+      "arm": "C",
+      "started_at": "10:31:52",
+      "batches": [
+        "C1_poll",
+        "C1_fast"
+      ]
+    },
+    {
+      "block": 2,
+      "arm": "C",
+      "started_at": "10:34:32",
+      "batches": [
+        "C1_poll",
+        "C1_fast"
+      ]
+    },
+    {
+      "block": 2,
+      "arm": "A",
+      "started_at": "10:37:17",
+      "batches": [
+        "A1_poll",
+        "A1_fast"
+      ]
+    }
+  ],
+  "analysis": {
+    "views": {
+      "primary_all_batches": {
+        "A_original": {
+          "n": 2,
+          "mean": 54.068,
+          "median": 54.068,
+          "min": 53.765,
+          "max": 54.371,
+          "img_per_min": 4.439
+        },
+        "A_fast": {
+          "n": 2,
+          "mean": 50.775,
+          "median": 50.775,
+          "min": 50.687,
+          "max": 50.864,
+          "img_per_min": 4.727
+        },
+        "C_original": {
+          "n": 2,
+          "mean": 52.908,
+          "median": 52.908,
+          "min": 52.579,
+          "max": 53.237,
+          "img_per_min": 4.536
+        },
+        "C_fast": {
+          "n": 2,
+          "mean": 50.172,
+          "median": 50.172,
+          "min": 49.921,
+          "max": 50.424,
+          "img_per_min": 4.783
+        },
+        "architecture_gain_equivalent_original_clients_C_over_A": 1.0219,
+        "architecture_gain_equivalent_fast_clients_C_over_A": 1.012,
+        "monitor_gain_within_A": 1.0648,
+        "monitor_gain_within_C": 1.0545,
+        "interaction_effect_s": -0.557
+      },
+      "warm_resident": {
+        "A_original": {
+          "n": 2,
+          "mean": 54.068,
+          "median": 54.068,
+          "min": 53.765,
+          "max": 54.371,
+          "img_per_min": 4.439
+        },
+        "A_fast": {
+          "n": 2,
+          "mean": 50.775,
+          "median": 50.775,
+          "min": 50.687,
+          "max": 50.864,
+          "img_per_min": 4.727
+        },
+        "C_original": {
+          "n": 2,
+          "mean": 52.908,
+          "median": 52.908,
+          "min": 52.579,
+          "max": 53.237,
+          "img_per_min": 4.536
+        },
+        "C_fast": {
+          "n": 2,
+          "mean": 50.172,
+          "median": 50.172,
+          "min": 49.921,
+          "max": 50.424,
+          "img_per_min": 4.783
+        },
+        "architecture_gain_equivalent_original_clients_C_over_A": 1.0219,
+        "architecture_gain_equivalent_fast_clients_C_over_A": 1.012,
+        "monitor_gain_within_A": 1.0648,
+        "monitor_gain_within_C": 1.0545,
+        "interaction_effect_s": -0.557
+      }
+    }
+  },
+  "cond_sha256_stable_across_all_C_batches": {
+    "req1": {
+      "stable": true,
+      "n_distinct": 1
+    },
+    "req2": {
+      "stable": true,
+      "n_distinct": 1
+    },
+    "req3": {
+      "stable": true,
+      "n_distinct": 1
+    },
+    "req4": {
+      "stable": true,
+      "n_distinct": 1
+    }
+  },
+  "wall_clock_s": 660.9
+}

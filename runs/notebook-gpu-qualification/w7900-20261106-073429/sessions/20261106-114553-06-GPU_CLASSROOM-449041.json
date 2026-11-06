@@ -1,0 +1,36 @@
+{
+  "notebook": "06",
+  "mode": "GPU_CLASSROOM",
+  "started_at": "2026-11-06T11:45:38+00:00",
+  "finished_at": "2026-11-06T11:45:53+00:00",
+  "admission": {
+    "status": "PASS",
+    "detail": {
+      "device_name": "AMD Radeon Graphics",
+      "gfx_arch": "gfx1100",
+      "vram_total_mib": 49136,
+      "vram_used_mib": 1578,
+      "torch": "2.9.1+gitff65f5b",
+      "hip": "7.2.53211-e1a6bc5663",
+      "device_count": 1
+    },
+    "warnings": []
+  },
+  "executions": [],
+  "consumed": [
+    {
+      "run_id": "q1-075553-H3_OV_BF16",
+      "why": "current-campaign OV encoder record"
+    }
+  ],
+  "summary": {
+    "mode": "GPU_CLASSROOM",
+    "notebook": "06",
+    "executions": [],
+    "consumed": [
+      "q1-075553-H3_OV_BF16"
+    ],
+    "note": "append-only session record; physical evidence lives under runs/"
+  },
+  "kernel": "/workspace/pr4/.venv-lab/bin/python"
+}

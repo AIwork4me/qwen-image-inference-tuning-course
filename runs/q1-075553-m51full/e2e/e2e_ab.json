@@ -1,0 +1,1214 @@
+{
+  "run": "runs/q1-075553-m51full",
+  "arms": {
+    "G_native": {
+      "G_native|p1-zh-scene|cfg1": {
+        "text_encode_s": 1.442,
+        "vae_decode_s": 1.196,
+        "ksampler_s": 13.406,
+        "step_times_s": [
+          2.735,
+          1.343,
+          1.327,
+          1.338,
+          1.343,
+          1.327,
+          1.349,
+          1.335
+        ],
+        "node_timings_s": {
+          "VAELoader#vae_8c62a694": 2.034,
+          "EmptyLatentImage#latent_df8c45d0": 0.001,
+          "CLIPLoader#clip_b18ed658": 9.904,
+          "CLIPTextEncode#neg_96dea096": 0.872,
+          "CLIPTextEncode#pos_c5c08e07": 0.571,
+          "UNETLoader#unet_3fb311b0": 12.941,
+          "KSampler#ks_c2f5997f": 13.406,
+          "VAEDecode#dec_650b59a5": 1.196,
+          "SaveImage#save_f6a2732d": 0.521
+        },
+        "cached_nodes": [],
+        "vram_peak_mb": 34639.0,
+        "vram_residency_mb": 33087.7,
+        "monitor_error": null,
+        "tag": "G_native|p1-zh-scene|cfg1",
+        "wall_s": 41.459,
+        "image": "runs/q1-075553-m51full/e2e/raw/G_native__p1-zh-scene__cfg1.png",
+        "image_sha256": "4574ccee918e03c46c613c9a624030db6c11f1dede6f65a657e7ce11aaef5ee2",
+        "bytes": 1908492
+      },
+      "G_native|p2-en-scene|cfg1": {
+        "text_encode_s": 0.326,
+        "vae_decode_s": 0.878,
+        "ksampler_s": 10.765,
+        "step_times_s": [
+          0.064,
+          1.392,
+          1.327,
+          1.327,
+          1.329,
+          1.329,
+          1.359,
+          1.328
+        ],
+        "node_timings_s": {
+          "CLIPTextEncode#pos_1c2c9cc6": 0.326,
+          "KSampler#ks_190f0c80": 10.765,
+          "VAEDecode#dec_29363096": 0.878,
+          "SaveImage#save_f7710332": 0.424
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_9ae1ddf6",
+          "CLIPLoader#clip_10ba854c",
+          "VAELoader#vae_e07887f2",
+          "CLIPTextEncode#neg_88cd1976",
+          "EmptyLatentImage#latent_3922a7bf"
+        ],
+        "vram_peak_mb": 33704.7,
+        "vram_residency_mb": 33093.7,
+        "monitor_error": null,
+        "tag": "G_native|p2-en-scene|cfg1",
+        "wall_s": 13.031,
+        "image": "runs/q1-075553-m51full/e2e/raw/G_native__p2-en-scene__cfg1.png",
+        "image_sha256": "83d9429ec1d0097e339bf953a65a65f5785f7140ca62c0337bad913758275a0f",
+        "bytes": 1536194
+      },
+      "G_native|p3-poster-text|cfg1": {
+        "text_encode_s": 0.597,
+        "vae_decode_s": 0.877,
+        "ksampler_s": 10.722,
+        "step_times_s": [
+          0.063,
+          1.356,
+          1.329,
+          1.332,
+          1.332,
+          1.333,
+          1.332,
+          1.332
+        ],
+        "node_timings_s": {
+          "CLIPTextEncode#pos_52db37a8": 0.597,
+          "KSampler#ks_807c10ca": 10.722,
+          "VAEDecode#dec_6a306cad": 0.877,
+          "SaveImage#save_7f7d0a76": 0.4
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_f3104cbc",
+          "CLIPLoader#clip_1e19bbf0",
+          "VAELoader#vae_8fd6682d",
+          "CLIPTextEncode#neg_ef452050",
+          "EmptyLatentImage#latent_49d61b5f"
+        ],
+        "vram_peak_mb": 33685.9,
+        "vram_residency_mb": 33093.7,
+        "monitor_error": null,
+        "tag": "G_native|p3-poster-text|cfg1",
+        "wall_s": 13.029,
+        "image": "runs/q1-075553-m51full/e2e/raw/G_native__p3-poster-text__cfg1.png",
+        "image_sha256": "a1b38abbce6d83109b72af56ba69ff128e7574b238ac0531cfc6789781da439b",
+        "bytes": 1548809
+      },
+      "G_native|p1-zh-scene|cfg2": {
+        "text_encode_s": 0.544,
+        "vae_decode_s": 0.877,
+        "ksampler_s": 21.404,
+        "step_times_s": [
+          1.451,
+          2.691,
+          2.655,
+          2.653,
+          2.661,
+          2.656,
+          2.655,
+          2.657
+        ],
+        "node_timings_s": {
+          "CLIPTextEncode#pos_62b83171": 0.544,
+          "KSampler#ks_2a4e87a8": 21.404,
+          "VAEDecode#dec_891f9a0d": 0.877,
+          "SaveImage#save_7cd170b9": 0.408
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_3cbe2ffc",
+          "CLIPLoader#clip_dbd82ce9",
+          "VAELoader#vae_88b89b65",
+          "CLIPTextEncode#neg_af5e769c",
+          "EmptyLatentImage#latent_0122180b"
+        ],
+        "vram_peak_mb": 33501.7,
+        "vram_residency_mb": 33095.7,
+        "monitor_error": null,
+        "tag": "G_native|p1-zh-scene|cfg2",
+        "wall_s": 23.242,
+        "image": "runs/q1-075553-m51full/e2e/raw/G_native__p1-zh-scene__cfg2.png",
+        "image_sha256": "fc37262811012f270c24eb8bd754e08abdf1965eb951620c28c11fc88f18ffb3",
+        "bytes": 1455540
+      }
+    },
+    "C0_native": {
+      "C0_native|p1-zh-scene|cfg1": {
+        "text_encode_s": 237.776,
+        "vae_decode_s": 0.877,
+        "ksampler_s": 10.985,
+        "step_times_s": [
+          0.358,
+          1.348,
+          1.328,
+          1.329,
+          1.328,
+          1.328,
+          1.329,
+          1.327
+        ],
+        "node_timings_s": {
+          "CLIPLoader#clip_4c2ac06e": 6.689,
+          "CLIPTextEncode#neg_a10a9fe1": 61.213,
+          "CLIPTextEncode#pos_a9344a14": 176.563,
+          "KSampler#ks_ed09c802": 10.985,
+          "VAEDecode#dec_ff287874": 0.877,
+          "SaveImage#save_09da2d3c": 0.421
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_6e047edb",
+          "VAELoader#vae_dd33ecdc",
+          "EmptyLatentImage#latent_555dd980"
+        ],
+        "vram_peak_mb": 33095.7,
+        "vram_residency_mb": 16360.6,
+        "monitor_error": null,
+        "tag": "C0_native|p1-zh-scene|cfg1",
+        "wall_s": 256.768,
+        "image": "runs/q1-075553-m51full/e2e/raw/C0_native__p1-zh-scene__cfg1.png",
+        "image_sha256": "1993c82552549e7551b0eae673cac1d42a1504faf49f966735c3f4c5ee855e7c",
+        "bytes": 1907171
+      },
+      "C0_native|p1-zh-scene|cfg2": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.878,
+        "ksampler_s": 21.34,
+        "step_times_s": [
+          1.439,
+          2.677,
+          2.652,
+          2.654,
+          2.655,
+          2.65,
+          2.653,
+          2.653
+        ],
+        "node_timings_s": {
+          "KSampler#ks_a5d74036": 21.34,
+          "VAEDecode#dec_d8f3e88b": 0.878,
+          "SaveImage#save_89a6c1c9": 0.387
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_cb4234ca",
+          "VAELoader#vae_bfd04168",
+          "CLIPTextEncode#pos_f7db271b",
+          "CLIPTextEncode#neg_9ced633d",
+          "EmptyLatentImage#latent_a09d54a8"
+        ],
+        "vram_peak_mb": 16666.7,
+        "vram_residency_mb": 16360.6,
+        "monitor_error": null,
+        "tag": "C0_native|p1-zh-scene|cfg2",
+        "wall_s": 23.046,
+        "image": "runs/q1-075553-m51full/e2e/raw/C0_native__p1-zh-scene__cfg2.png",
+        "image_sha256": "0a414ce34bbd95e25762c03f64fa720f4c77b2471b6f9069cca3008520d2000c",
+        "bytes": 1459297
+      }
+    },
+    "G_precomputed": {
+      "G_precomputed|p1-zh-scene|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 1.259,
+        "ksampler_s": 14.285,
+        "step_times_s": [
+          3.531,
+          1.362,
+          1.342,
+          1.352,
+          1.366,
+          1.34,
+          1.343,
+          1.342
+        ],
+        "node_timings_s": {
+          "VAELoader#vae_1dd1e888": 1.592,
+          "EmptyLatentImage#latent_1f9672f1": 0.003,
+          "LinuxLabCondSafetensors#neg_bf062fe8": 0.009,
+          "LinuxLabCondSafetensors#pos_9e559f27": 0.014,
+          "UNETLoader#unet_4525ad85": 4.579,
+          "KSampler#ks_6ac74ee0": 14.285,
+          "VAEDecode#dec_bb808644": 1.259,
+          "SaveImage#save_7eda24e9": 0.525
+        },
+        "cached_nodes": [],
+        "vram_peak_mb": 16785.8,
+        "vram_residency_mb": 16283.6,
+        "monitor_error": null,
+        "tag": "G_precomputed|p1-zh-scene|cfg1",
+        "wall_s": 22.28,
+        "image": "runs/q1-075553-m51full/e2e/raw/G_precomputed__p1-zh-scene__cfg1.png",
+        "image_sha256": "3ecbd5cb98232654dc4929d08dfea827429fe211c35676f2887b0f6f20726153",
+        "bytes": 1908134
+      },
+      "G_precomputed|p2-en-scene|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.898,
+        "ksampler_s": 10.78,
+        "step_times_s": [
+          0.061,
+          1.388,
+          1.345,
+          1.345,
+          1.332,
+          1.333,
+          1.332,
+          1.332
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#pos_75dffead": 0.006,
+          "KSampler#ks_2d1ad396": 10.78,
+          "VAEDecode#dec_795fcae9": 0.898,
+          "SaveImage#save_ef144b5f": 0.453
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_76e3d571",
+          "VAELoader#vae_a233b905",
+          "LinuxLabCondSafetensors#neg_b614ee30",
+          "EmptyLatentImage#latent_79b17e25"
+        ],
+        "vram_peak_mb": 16622.5,
+        "vram_residency_mb": 16283.4,
+        "monitor_error": null,
+        "tag": "G_precomputed|p2-en-scene|cfg1",
+        "wall_s": 12.145,
+        "image": "runs/q1-075553-m51full/e2e/raw/G_precomputed__p2-en-scene__cfg1.png",
+        "image_sha256": "fa75f3b3c2be3f4ead7e51b16626bde4c64be200b795bfa221bb466c6d12cfa7",
+        "bytes": 1536037
+      },
+      "G_precomputed|p3-poster-text|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.894,
+        "ksampler_s": 10.713,
+        "step_times_s": [
+          0.059,
+          1.352,
+          1.357,
+          1.336,
+          1.327,
+          1.326,
+          1.327,
+          1.326
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#pos_60ead11f": 0.007,
+          "KSampler#ks_d74083ff": 10.713,
+          "VAEDecode#dec_cc5d08a4": 0.894,
+          "SaveImage#save_b5e1e004": 0.44
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_5d12279b",
+          "VAELoader#vae_f0fae3f8",
+          "LinuxLabCondSafetensors#neg_8330afd1",
+          "EmptyLatentImage#latent_cc13801d"
+        ],
+        "vram_peak_mb": 16923.3,
+        "vram_residency_mb": 16292.3,
+        "monitor_error": null,
+        "tag": "G_precomputed|p3-poster-text|cfg1",
+        "wall_s": 12.061,
+        "image": "runs/q1-075553-m51full/e2e/raw/G_precomputed__p3-poster-text__cfg1.png",
+        "image_sha256": "0d32552434fa45ccc066b825889a046f153e3bde7679610413ffac36c881f525",
+        "bytes": 1548403
+      },
+      "G_precomputed|p1-zh-scene|cfg2": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.896,
+        "ksampler_s": 21.451,
+        "step_times_s": [
+          1.445,
+          2.69,
+          2.672,
+          2.665,
+          2.664,
+          2.664,
+          2.665,
+          2.675
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#neg_f1fe9e1e": 0.006,
+          "LinuxLabCondSafetensors#pos_f49195cc": 0.001,
+          "KSampler#ks_fd3d8874": 21.451,
+          "VAEDecode#dec_04210f6a": 0.896,
+          "SaveImage#save_da11b642": 0.407
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_e7f4988f",
+          "VAELoader#vae_7e10e7cc",
+          "EmptyLatentImage#latent_5ca83ec1"
+        ],
+        "vram_peak_mb": 17506.9,
+        "vram_residency_mb": 16285.6,
+        "monitor_error": null,
+        "tag": "G_precomputed|p1-zh-scene|cfg2",
+        "wall_s": 23.046,
+        "image": "runs/q1-075553-m51full/e2e/raw/G_precomputed__p1-zh-scene__cfg2.png",
+        "image_sha256": "bb3e04878c9f8c583ac1a888324d0402760b04774f07ef4f80a51fbf7e2dff46",
+        "bytes": 1455182
+      }
+    },
+    "C1a_OV_FP32": {
+      "C1a_OV_FP32|p1-zh-scene|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.895,
+        "ksampler_s": 10.811,
+        "step_times_s": [
+          0.115,
+          1.373,
+          1.334,
+          1.334,
+          1.335,
+          1.335,
+          1.334,
+          1.335
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#neg_f48a8f32": 0.006,
+          "LinuxLabCondSafetensors#pos_a883227f": 0.002,
+          "KSampler#ks_69a4bdcc": 10.811,
+          "VAEDecode#dec_310a4412": 0.895,
+          "SaveImage#save_d47c1aab": 0.425
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_bded3650",
+          "VAELoader#vae_a24c55cb",
+          "EmptyLatentImage#latent_53bf5080"
+        ],
+        "vram_peak_mb": 16875.8,
+        "vram_residency_mb": 16283.6,
+        "monitor_error": null,
+        "tag": "C1a_OV_FP32|p1-zh-scene|cfg1",
+        "wall_s": 12.148,
+        "image": "runs/q1-075553-m51full/e2e/raw/C1a_OV_FP32__p1-zh-scene__cfg1.png",
+        "image_sha256": "2a47b4301ef137a6de4bef0547ff4bd10013f7cca316f98a928253f234b5023c",
+        "bytes": 1909718
+      },
+      "C1a_OV_FP32|p2-en-scene|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.896,
+        "ksampler_s": 10.741,
+        "step_times_s": [
+          0.058,
+          1.355,
+          1.339,
+          1.335,
+          1.34,
+          1.335,
+          1.334,
+          1.334
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#pos_523237d2": 0.008,
+          "KSampler#ks_0c2287e5": 10.741,
+          "VAEDecode#dec_d0f8564c": 0.896,
+          "SaveImage#save_c96ba910": 0.398
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_83d0e7a7",
+          "VAELoader#vae_1b6500d4",
+          "LinuxLabCondSafetensors#neg_9d965ef5",
+          "EmptyLatentImage#latent_b40bbc57"
+        ],
+        "vram_peak_mb": 16750.8,
+        "vram_residency_mb": 16291.9,
+        "monitor_error": null,
+        "tag": "C1a_OV_FP32|p2-en-scene|cfg1",
+        "wall_s": 12.051,
+        "image": "runs/q1-075553-m51full/e2e/raw/C1a_OV_FP32__p2-en-scene__cfg1.png",
+        "image_sha256": "1bffcb3c08a7aeed3dae16c1dd9372659db971a30a1e4c5a8d0a2b0419aeeb41",
+        "bytes": 1536952
+      },
+      "C1a_OV_FP32|p3-poster-text|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.893,
+        "ksampler_s": 10.681,
+        "step_times_s": [
+          0.059,
+          1.353,
+          1.326,
+          1.327,
+          1.328,
+          1.328,
+          1.329,
+          1.326
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#pos_02486aac": 0.009,
+          "KSampler#ks_b819f77a": 10.681,
+          "VAEDecode#dec_7e8a249d": 0.893,
+          "SaveImage#save_0eb55d6e": 0.396
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_25d4f6be",
+          "VAELoader#vae_93128472",
+          "LinuxLabCondSafetensors#neg_455dc2d0",
+          "EmptyLatentImage#latent_6d9795f8"
+        ],
+        "vram_peak_mb": 17041.7,
+        "vram_residency_mb": 16292.3,
+        "monitor_error": null,
+        "tag": "C1a_OV_FP32|p3-poster-text|cfg1",
+        "wall_s": 12.034,
+        "image": "runs/q1-075553-m51full/e2e/raw/C1a_OV_FP32__p3-poster-text__cfg1.png",
+        "image_sha256": "f0c137106b1d07f3f0b23b28c8d5c6fc32fc1d1286926d0f803bada5b39c2dd6",
+        "bytes": 1544973
+      }
+    },
+    "C1b_OV_BF16": {
+      "C1b_OV_BF16|p1-zh-scene|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.897,
+        "ksampler_s": 10.843,
+        "step_times_s": [
+          0.059,
+          1.357,
+          1.403,
+          1.335,
+          1.351,
+          1.345,
+          1.334,
+          1.335
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#neg_682d9370": 0.006,
+          "LinuxLabCondSafetensors#pos_11c650cf": 0.006,
+          "KSampler#ks_88513fbc": 10.843,
+          "VAEDecode#dec_fa9c57af": 0.897,
+          "SaveImage#save_362851eb": 0.443
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_c483ea18",
+          "VAELoader#vae_7a978d80",
+          "EmptyLatentImage#latent_be177bf7"
+        ],
+        "vram_peak_mb": 16875.8,
+        "vram_residency_mb": 16283.6,
+        "monitor_error": null,
+        "tag": "C1b_OV_BF16|p1-zh-scene|cfg1",
+        "wall_s": 12.202,
+        "image": "runs/q1-075553-m51full/e2e/raw/C1b_OV_BF16__p1-zh-scene__cfg1.png",
+        "image_sha256": "bdc6656c80adf3d03a4f945e349403da20e41c8d5334d2a7ca859e44f332404a",
+        "bytes": 1908108
+      },
+      "C1b_OV_BF16|p2-en-scene|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.896,
+        "ksampler_s": 10.749,
+        "step_times_s": [
+          0.064,
+          1.351,
+          1.336,
+          1.335,
+          1.337,
+          1.343,
+          1.335,
+          1.336
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#pos_2f9b7393": 0.006,
+          "KSampler#ks_ed7dc49b": 10.749,
+          "VAEDecode#dec_616c98e6": 0.896,
+          "SaveImage#save_62d75c10": 0.416
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_ad7b55eb",
+          "VAELoader#vae_cf7c454f",
+          "LinuxLabCondSafetensors#neg_9a274e27",
+          "EmptyLatentImage#latent_ab0a5795"
+        ],
+        "vram_peak_mb": 16922.3,
+        "vram_residency_mb": 16291.9,
+        "monitor_error": null,
+        "tag": "C1b_OV_BF16|p2-en-scene|cfg1",
+        "wall_s": 12.075,
+        "image": "runs/q1-075553-m51full/e2e/raw/C1b_OV_BF16__p2-en-scene__cfg1.png",
+        "image_sha256": "43f09f590e6e4d4b9453a13c2cc92f69b7f74a68cc9ee0b3be1719e2d9f3fafd",
+        "bytes": 1539155
+      },
+      "C1b_OV_BF16|p3-poster-text|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.893,
+        "ksampler_s": 10.706,
+        "step_times_s": [
+          0.06,
+          1.352,
+          1.336,
+          1.332,
+          1.328,
+          1.333,
+          1.332,
+          1.326
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#pos_b91ff09f": 0.017,
+          "KSampler#ks_2d0dff65": 10.706,
+          "VAEDecode#dec_4e66769c": 0.893,
+          "SaveImage#save_2c1be351": 0.395
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_cc68f207",
+          "VAELoader#vae_8336330f",
+          "LinuxLabCondSafetensors#neg_abf7c71e",
+          "EmptyLatentImage#latent_007baa4d"
+        ],
+        "vram_peak_mb": 16923.3,
+        "vram_residency_mb": 16292.3,
+        "monitor_error": null,
+        "tag": "C1b_OV_BF16|p3-poster-text|cfg1",
+        "wall_s": 12.027,
+        "image": "runs/q1-075553-m51full/e2e/raw/C1b_OV_BF16__p3-poster-text__cfg1.png",
+        "image_sha256": "33c09d4e7197263dd221cca09d617de8583d9948da1800aa5861d66e0fe75de5",
+        "bytes": 1545241
+      },
+      "C1b_OV_BF16|p1-zh-scene|cfg2": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.896,
+        "ksampler_s": 21.465,
+        "step_times_s": [
+          1.444,
+          2.69,
+          2.669,
+          2.669,
+          2.669,
+          2.671,
+          2.671,
+          2.669
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#neg_fa81da4d": 0.006,
+          "LinuxLabCondSafetensors#pos_64d3d9f6": 0.002,
+          "KSampler#ks_8a275374": 21.465,
+          "VAEDecode#dec_839882f7": 0.896,
+          "SaveImage#save_778340bb": 0.385
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_2158569d",
+          "VAELoader#vae_def3d7a4",
+          "EmptyLatentImage#latent_f6643487"
+        ],
+        "vram_peak_mb": 17837.9,
+        "vram_residency_mb": 16285.6,
+        "monitor_error": null,
+        "tag": "C1b_OV_BF16|p1-zh-scene|cfg2",
+        "wall_s": 23.048,
+        "image": "runs/q1-075553-m51full/e2e/raw/C1b_OV_BF16__p1-zh-scene__cfg2.png",
+        "image_sha256": "9c9b465cac00483e322c1b3376518c9ec610d9ee36a0ccb5da0f7783dbd97b90",
+        "bytes": 1460023
+      }
+    },
+    "C2_OV_INT8": {
+      "C2_OV_INT8|p1-zh-scene|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.896,
+        "ksampler_s": 10.734,
+        "step_times_s": [
+          0.059,
+          1.357,
+          1.334,
+          1.336,
+          1.335,
+          1.334,
+          1.333,
+          1.334
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#neg_1c2e0da4": 0.006,
+          "LinuxLabCondSafetensors#pos_69bb87c3": 0.002,
+          "KSampler#ks_93dfe681": 10.734,
+          "VAEDecode#dec_23dd11df": 0.896,
+          "SaveImage#save_932b2f92": 0.184
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_a3a64b14",
+          "VAELoader#vae_3aa7edf1",
+          "EmptyLatentImage#latent_787ebb70"
+        ],
+        "vram_peak_mb": 16785.8,
+        "vram_residency_mb": 16292.1,
+        "monitor_error": null,
+        "tag": "C2_OV_INT8|p1-zh-scene|cfg1",
+        "wall_s": 12.065,
+        "image": "runs/q1-075553-m51full/e2e/raw/C2_OV_INT8__p1-zh-scene__cfg1.png",
+        "image_sha256": "03fec732ff0cead574f95095eb822c4068d36f351a9236f66cdbb32bdfe439cb",
+        "bytes": 1922718
+      },
+      "C2_OV_INT8|p2-en-scene|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.896,
+        "ksampler_s": 10.736,
+        "step_times_s": [
+          0.062,
+          1.354,
+          1.335,
+          1.334,
+          1.335,
+          1.334,
+          1.335,
+          1.335
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#pos_15a2dc38": 0.006,
+          "KSampler#ks_a91daeb3": 10.736,
+          "VAEDecode#dec_e1ab0428": 0.896,
+          "SaveImage#save_2bc59a48": 0.162
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_20f4c2ad",
+          "VAELoader#vae_3d8b78ec",
+          "LinuxLabCondSafetensors#neg_3d7f9e72",
+          "EmptyLatentImage#latent_dad9f7cb"
+        ],
+        "vram_peak_mb": 16767.9,
+        "vram_residency_mb": 16291.9,
+        "monitor_error": null,
+        "tag": "C2_OV_INT8|p2-en-scene|cfg1",
+        "wall_s": 12.041,
+        "image": "runs/q1-075553-m51full/e2e/raw/C2_OV_INT8__p2-en-scene__cfg1.png",
+        "image_sha256": "8e32ff0f2b1d5af79078ddb2c737d39e29dc7203941fd91d7ec87af76e02801b",
+        "bytes": 1539466
+      },
+      "C2_OV_INT8|p3-poster-text|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.893,
+        "ksampler_s": 10.688,
+        "step_times_s": [
+          0.06,
+          1.352,
+          1.329,
+          1.327,
+          1.329,
+          1.33,
+          1.331,
+          1.325
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#pos_951f0c10": 0.008,
+          "KSampler#ks_7dda53f1": 10.688,
+          "VAEDecode#dec_012b77d0": 0.893,
+          "SaveImage#save_10de9668": 0.399
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_d81adacf",
+          "VAELoader#vae_da2a7034",
+          "LinuxLabCondSafetensors#neg_ee978aa6",
+          "EmptyLatentImage#latent_c2f2291a"
+        ],
+        "vram_peak_mb": 16837.5,
+        "vram_residency_mb": 16292.3,
+        "monitor_error": null,
+        "tag": "C2_OV_INT8|p3-poster-text|cfg1",
+        "wall_s": 12.028,
+        "image": "runs/q1-075553-m51full/e2e/raw/C2_OV_INT8__p3-poster-text__cfg1.png",
+        "image_sha256": "accb307e7dae3ae937a37069c2577967f9b40b569f38eebc2121551f92e5e3eb",
+        "bytes": 1546624
+      },
+      "C2_OV_INT8|p1-zh-scene|cfg2": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.896,
+        "ksampler_s": 21.473,
+        "step_times_s": [
+          1.442,
+          2.703,
+          2.668,
+          2.67,
+          2.671,
+          2.669,
+          2.67,
+          2.67
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#neg_5811fb6d": 0.006,
+          "LinuxLabCondSafetensors#pos_7f4cdbea": 0.001,
+          "KSampler#ks_99df3279": 21.473,
+          "VAEDecode#dec_20c426a0": 0.896,
+          "SaveImage#save_67855c65": 0.389
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_326d1baa",
+          "VAELoader#vae_b264c739",
+          "EmptyLatentImage#latent_45758f54"
+        ],
+        "vram_peak_mb": 17825.3,
+        "vram_residency_mb": 16285.6,
+        "monitor_error": null,
+        "tag": "C2_OV_INT8|p1-zh-scene|cfg2",
+        "wall_s": 23.045,
+        "image": "runs/q1-075553-m51full/e2e/raw/C2_OV_INT8__p1-zh-scene__cfg2.png",
+        "image_sha256": "234736f5325a1bda8b194993c62417491bdf9946e76fba31cbd61c756145b7ac",
+        "bytes": 1480160
+      }
+    },
+    "C0_precomputed": {
+      "C0_precomputed|p1-zh-scene|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.897,
+        "ksampler_s": 10.741,
+        "step_times_s": [
+          0.06,
+          1.358,
+          1.335,
+          1.335,
+          1.334,
+          1.335,
+          1.336,
+          1.335
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#neg_26027f79": 0.007,
+          "LinuxLabCondSafetensors#pos_a3373e42": 0.002,
+          "KSampler#ks_8a43b069": 10.741,
+          "VAEDecode#dec_58005326": 0.897,
+          "SaveImage#save_f2fdff41": 0.415
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_dfb7bd45",
+          "VAELoader#vae_613f933f",
+          "EmptyLatentImage#latent_0334f470"
+        ],
+        "vram_peak_mb": 16836.8,
+        "vram_residency_mb": 16292.1,
+        "monitor_error": null,
+        "tag": "C0_precomputed|p1-zh-scene|cfg1",
+        "wall_s": 12.068,
+        "image": "runs/q1-075553-m51full/e2e/raw/C0_precomputed__p1-zh-scene__cfg1.png",
+        "image_sha256": "f8e9dcc84d4c933a581750b44eac922d82c61df5f79c28621f30e76f107b400e",
+        "bytes": 1907274
+      },
+      "C0_precomputed|p2-en-scene|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.896,
+        "ksampler_s": 10.736,
+        "step_times_s": [
+          0.059,
+          1.356,
+          1.335,
+          1.334,
+          1.335,
+          1.334,
+          1.335,
+          1.334
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#pos_8893d5a3": 0.006,
+          "KSampler#ks_5fe97378": 10.736,
+          "VAEDecode#dec_4175c66a": 0.896,
+          "SaveImage#save_6b808296": 0.395
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_352e4a8f",
+          "VAELoader#vae_e819453c",
+          "LinuxLabCondSafetensors#neg_f887695a",
+          "EmptyLatentImage#latent_010bf3f9"
+        ],
+        "vram_peak_mb": 16922.9,
+        "vram_residency_mb": 16291.9,
+        "monitor_error": null,
+        "tag": "C0_precomputed|p2-en-scene|cfg1",
+        "wall_s": 12.04,
+        "image": "runs/q1-075553-m51full/e2e/raw/C0_precomputed__p2-en-scene__cfg1.png",
+        "image_sha256": "68b43e99480e69777977235f5d4d49667ba5b084b24ef109ee69d106d01e0130",
+        "bytes": 1537122
+      },
+      "C0_precomputed|p3-poster-text|cfg1": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.893,
+        "ksampler_s": 10.689,
+        "step_times_s": [
+          0.058,
+          1.353,
+          1.328,
+          1.329,
+          1.329,
+          1.328,
+          1.33,
+          1.327
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#pos_b178c91f": 0.006,
+          "KSampler#ks_229c3e3a": 10.689,
+          "VAEDecode#dec_ea5743f7": 0.893,
+          "SaveImage#save_4e9bba07": 0.391
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_76606d8b",
+          "VAELoader#vae_3655e59b",
+          "LinuxLabCondSafetensors#neg_42f58d92",
+          "EmptyLatentImage#latent_16d67811"
+        ],
+        "vram_peak_mb": 16831.8,
+        "vram_residency_mb": 16292.3,
+        "monitor_error": null,
+        "tag": "C0_precomputed|p3-poster-text|cfg1",
+        "wall_s": 12.027,
+        "image": "runs/q1-075553-m51full/e2e/raw/C0_precomputed__p3-poster-text__cfg1.png",
+        "image_sha256": "d0f404fcdd3f40c67d69da52bf5f2365c2679822b8210d9b20c157c7aad69213",
+        "bytes": 1545100
+      },
+      "C0_precomputed|p1-zh-scene|cfg2": {
+        "text_encode_s": 0,
+        "vae_decode_s": 0.897,
+        "ksampler_s": 21.46,
+        "step_times_s": [
+          1.44,
+          2.702,
+          2.667,
+          2.668,
+          2.666,
+          2.668,
+          2.669,
+          2.668
+        ],
+        "node_timings_s": {
+          "LinuxLabCondSafetensors#neg_15d832a7": 0.007,
+          "LinuxLabCondSafetensors#pos_2b02a2e3": 0.005,
+          "KSampler#ks_a81a02b7": 21.46,
+          "VAEDecode#dec_c10c216a": 0.897,
+          "SaveImage#save_af41b4ee": 0.412
+        },
+        "cached_nodes": [
+          "UNETLoader#unet_6f560e93",
+          "VAELoader#vae_34c4a0ca",
+          "EmptyLatentImage#latent_175ef125"
+        ],
+        "vram_peak_mb": 17837.9,
+        "vram_residency_mb": 16285.6,
+        "monitor_error": null,
+        "tag": "C0_precomputed|p1-zh-scene|cfg2",
+        "wall_s": 23.046,
+        "image": "runs/q1-075553-m51full/e2e/raw/C0_precomputed__p1-zh-scene__cfg2.png",
+        "image_sha256": "cb19d3d7e1c16fd41f8e32343a360f15c5fbd32603e40edf77d6fdaaa5c4ea37",
+        "bytes": 1457521
+      }
+    }
+  },
+  "sessions": {
+    "native": {
+      "log": "runs/q1-075553-m51full/e2e/server_native.log",
+      "boot_s": 7.0402543898671865,
+      "server_rss_before_mb": 1230.2,
+      "server_rss_after_mb": 1912.2,
+      "attention": {
+        "Using pytorch attention": [
+          "\u001b[32m[INFO]\u001b[0m Using pytorch attention"
+        ],
+        "Using .* attention": [
+          "\u001b[32m[INFO]\u001b[0m Using split attention in VAE",
+          "\u001b[32m[INFO]\u001b[0m Using split attention in VAE",
+          "/workspace/pr4/ComfyUI/comfy/ops.py:105: UserWarning: Using AOTriton backend for Efficient Attention forward... (Triggered internally at /app/pytorch/aten/src/ATen/native/transformers/hip/attention.hip:1452.)"
+        ],
+        "attention": [
+          "\u001b[32m[INFO]\u001b[0m Using split attention in VAE",
+          "/workspace/pr4/ComfyUI/comfy/ops.py:105: UserWarning: Using AOTriton backend for Efficient Attention forward... (Triggered internally at /app/pytorch/aten/src/ATen/native/transformers/hip/attention.hip:1452.)",
+          "  return torch.nn.functional.scaled_dot_product_attention(q, k, v, *args, **kwargs)"
+        ],
+        "Set: torch\\.backends\\.cudnn": [
+          "\u001b[32m[INFO]\u001b[0m Set: torch.backends.cudnn.enabled = False for better AMD performance."
+        ],
+        "AMD arch": [
+          "\u001b[32m[INFO]\u001b[0m AMD arch: gfx1100"
+        ],
+        "ROCm version": [
+          "\u001b[32m[INFO]\u001b[0m ROCm version: (7, 2)"
+        ]
+      }
+    },
+    "precomputed": {
+      "log": "runs/q1-075553-m51full/e2e/server_precomputed.log",
+      "boot_s": 7.015880163758993,
+      "server_rss_before_mb": 1225.7,
+      "server_rss_after_mb": 1872.0,
+      "attention": {
+        "Using pytorch attention": [
+          "\u001b[32m[INFO]\u001b[0m Using pytorch attention"
+        ],
+        "Using .* attention": [
+          "\u001b[32m[INFO]\u001b[0m Using split attention in VAE",
+          "\u001b[32m[INFO]\u001b[0m Using split attention in VAE",
+          "  0%|                                                                                                                 | 0/8 [00:00<?, ?it/s]/workspace/pr4/ComfyUI/comfy/ops.py:105: UserWarning: Using AOTriton backend for Efficient Attention forward... (Triggered internally at /app/pytorch/aten/src/ATen/native/transformers/hip/attention.hip:1452.)"
+        ],
+        "attention": [
+          "\u001b[32m[INFO]\u001b[0m Using split attention in VAE",
+          "  0%|                                                                                                                 | 0/8 [00:00<?, ?it/s]/workspace/pr4/ComfyUI/comfy/ops.py:105: UserWarning: Using AOTriton backend for Efficient Attention forward... (Triggered internally at /app/pytorch/aten/src/ATen/native/transformers/hip/attention.hip:1452.)",
+          "  return torch.nn.functional.scaled_dot_product_attention(q, k, v, *args, **kwargs)"
+        ],
+        "Set: torch\\.backends\\.cudnn": [
+          "\u001b[32m[INFO]\u001b[0m Set: torch.backends.cudnn.enabled = False for better AMD performance."
+        ],
+        "AMD arch": [
+          "\u001b[32m[INFO]\u001b[0m AMD arch: gfx1100"
+        ],
+        "ROCm version": [
+          "\u001b[32m[INFO]\u001b[0m ROCm version: (7, 2)"
+        ]
+      }
+    }
+  },
+  "quality": {
+    "G_native|p1-zh-scene|cfg1": {
+      "psnr_db": Infinity,
+      "ssim": 1.0,
+      "mae": 0.0,
+      "max_abs": 0.0,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.0
+    },
+    "G_native|p2-en-scene|cfg1": {
+      "psnr_db": Infinity,
+      "ssim": 1.0,
+      "mae": 0.0,
+      "max_abs": 0.0,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.0
+    },
+    "G_native|p3-poster-text|cfg1": {
+      "psnr_db": Infinity,
+      "ssim": 1.0,
+      "mae": 0.0,
+      "max_abs": 0.0,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.0
+    },
+    "G_native|p1-zh-scene|cfg2": {
+      "psnr_db": Infinity,
+      "ssim": 1.0,
+      "mae": 0.0,
+      "max_abs": 0.0,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.0
+    },
+    "C0_native|p1-zh-scene|cfg1": {
+      "psnr_db": 34.97459107532823,
+      "ssim": 0.9887441147983657,
+      "mae": 0.0050824121712080015,
+      "max_abs": 0.8705882352941176,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.009027221240103245
+    },
+    "C0_native|p1-zh-scene|cfg2": {
+      "psnr_db": 39.98739322291114,
+      "ssim": 0.9907011783548915,
+      "mae": 0.003242156084846048,
+      "max_abs": 0.8627450980392156,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.004744494799524546
+    },
+    "G_precomputed|p1-zh-scene|cfg1": {
+      "psnr_db": Infinity,
+      "ssim": 1.0,
+      "mae": 0.0,
+      "max_abs": 0.0,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.0
+    },
+    "G_precomputed|p2-en-scene|cfg1": {
+      "psnr_db": Infinity,
+      "ssim": 1.0,
+      "mae": 0.0,
+      "max_abs": 0.0,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.0
+    },
+    "G_precomputed|p3-poster-text|cfg1": {
+      "psnr_db": Infinity,
+      "ssim": 1.0,
+      "mae": 0.0,
+      "max_abs": 0.0,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.0
+    },
+    "G_precomputed|p1-zh-scene|cfg2": {
+      "psnr_db": Infinity,
+      "ssim": 1.0,
+      "mae": 0.0,
+      "max_abs": 0.0,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.0
+    },
+    "C1a_OV_FP32|p1-zh-scene|cfg1": {
+      "psnr_db": 34.744555153945406,
+      "ssim": 0.9884659275941634,
+      "mae": 0.005559049868116191,
+      "max_abs": 0.8745098039215686,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.010572236031293869
+    },
+    "C1a_OV_FP32|p2-en-scene|cfg1": {
+      "psnr_db": 48.617594946551506,
+      "ssim": 0.9974177272421887,
+      "mae": 0.001837964774736393,
+      "max_abs": 0.2392156862745098,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.0015047156484797597
+    },
+    "C1a_OV_FP32|p3-poster-text|cfg1": {
+      "psnr_db": 34.86547229200025,
+      "ssim": 0.9948382892442176,
+      "mae": 0.002624864515915416,
+      "max_abs": 0.9529411764705882,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.0027482910081744194
+    },
+    "C1b_OV_BF16|p1-zh-scene|cfg1": {
+      "psnr_db": 36.260058088423136,
+      "ssim": 0.9875724226448627,
+      "mae": 0.005711514342064954,
+      "max_abs": 0.8431372549019608,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.007951319217681885
+    },
+    "C1b_OV_BF16|p2-en-scene|cfg1": {
+      "psnr_db": 47.028073502022714,
+      "ssim": 0.9972148372131309,
+      "mae": 0.002050209045410156,
+      "max_abs": 0.3411764705882353,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.002160684671252966
+    },
+    "C1b_OV_BF16|p3-poster-text|cfg1": {
+      "psnr_db": 35.568402087689506,
+      "ssim": 0.9950903501308855,
+      "mae": 0.0026072358773424737,
+      "max_abs": 0.9254901960784314,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.0019256288651376963
+    },
+    "C1b_OV_BF16|p1-zh-scene|cfg2": {
+      "psnr_db": 37.51293117831678,
+      "ssim": 0.9881811122461635,
+      "mae": 0.0040463029948714525,
+      "max_abs": 0.9803921568627451,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.006830069236457348
+    },
+    "C2_OV_INT8|p1-zh-scene|cfg1": {
+      "psnr_db": 27.36850617684743,
+      "ssim": 0.9483198861357582,
+      "mae": 0.015621782439986083,
+      "max_abs": 0.9725490196078431,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.03778969496488571
+    },
+    "C2_OV_INT8|p2-en-scene|cfg1": {
+      "psnr_db": 38.771227383666265,
+      "ssim": 0.9941014629724912,
+      "mae": 0.00480573442247179,
+      "max_abs": 0.4588235294117647,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.008100341074168682
+    },
+    "C2_OV_INT8|p3-poster-text|cfg1": {
+      "psnr_db": 31.518263659596748,
+      "ssim": 0.9906479796850299,
+      "mae": 0.003926986494874641,
+      "max_abs": 1.0,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.004616830963641405
+    },
+    "C2_OV_INT8|p1-zh-scene|cfg2": {
+      "psnr_db": 28.393891989970204,
+      "ssim": 0.9667508271841979,
+      "mae": 0.00993147083357269,
+      "max_abs": 1.0,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.028160374611616135
+    },
+    "C0_precomputed|p1-zh-scene|cfg1": {
+      "psnr_db": 33.01492396834038,
+      "ssim": 0.9822021207617846,
+      "mae": 0.006784961426180173,
+      "max_abs": 0.8862745098039215,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.013118207454681396
+    },
+    "C0_precomputed|p2-en-scene|cfg1": {
+      "psnr_db": 50.067985634222,
+      "ssim": 0.9978254506616314,
+      "mae": 0.0013702641904743673,
+      "max_abs": 0.2784313725490196,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.0009990615071728826
+    },
+    "C0_precomputed|p3-poster-text|cfg1": {
+      "psnr_db": 40.17199769200864,
+      "ssim": 0.9969325872070188,
+      "mae": 0.0018786685918670831,
+      "max_abs": 0.9294117647058824,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.0012950783129781485
+    },
+    "C0_precomputed|p1-zh-scene|cfg2": {
+      "psnr_db": 38.63212581041688,
+      "ssim": 0.9899301888523939,
+      "mae": 0.0036135405496834187,
+      "max_abs": 0.9137254901960784,
+      "cond": {
+        "note": "tensor metrics are in alignment/conditioning_alignment.json"
+      },
+      "lpips_alex": 0.005631668493151665
+    }
+  },
+  "status": {},
+  "human_verdict": "PENDING_HUMAN_REVIEW",
+  "lpips_available": true
+}

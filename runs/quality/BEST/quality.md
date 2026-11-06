@@ -1,8 +1,13 @@
 # Quality gate — BEST
 
+## Review protocol (manifest-declared, never guessed)
+
+- Reference experiment: **B0**
 - Baseline: B0 frozen baseline
-- Experiment: `/workspace/qwen-image-inference-tuning-course/runs/raw/acceptance-BEST-BEST`
+- Experiment: `/workspace/pr4/runs/raw/q1-075553-BEST`
 - LPIPS semantics: DISTANCE, NOT QUALITY — a different model/schedule (Turbo) legitimately produces different images; a high score does not mean worse. The three-tier verdict is the user's 目检 call on the grid.
+- Quality-review status: **RECORDED_OR_PENDING_HUMAN_REVIEW** (the binding verdict is the owner's three-tier call below)
+
 
 | Prompt | median LPIPS | max LPIPS | n pairs |
 |---|---|---|---|

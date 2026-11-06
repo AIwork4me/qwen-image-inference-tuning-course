@@ -1,0 +1,532 @@
+{
+  "mode": "GPU_CLASSROOM",
+  "campaign": "runs/notebook-gpu-qualification/w7900-20261106-073429",
+  "kernel": {
+    "python": "3.12.3",
+    "ipykernel": "7.2.0",
+    "jupyter_client": "8.8.0",
+    "executable": "/workspace/pr4/.venv-lab/bin/python"
+  },
+  "finished_at": "2026-11-06T12:00:33+00:00",
+  "rows": [
+    {
+      "notebook": "00_experimental_discipline.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T10:45:26+00:00",
+      "status": "PASSED",
+      "wall_s": 2.9,
+      "finished": "2026-11-06T10:45:29+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/00_experimental_discipline.ipynb",
+      "language": "en",
+      "kernel_identity": {
+        "python": "3.12.3",
+        "ipykernel": "7.2.0",
+        "jupyter_client": "8.8.0",
+        "executable": "/workspace/pr4/.venv-lab/bin/python"
+      },
+      "gpu_admission": "PASS",
+      "gpu_run_ids": [],
+      "gpu_executions": [],
+      "consumed_physical_records": [],
+      "evidence_sources": [
+        "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/00_experimental_discipline.ipynb"
+      ],
+      "physical_experiment_verdict": "MEASURED",
+      "physical_performance_claim_justified": false
+    },
+    {
+      "notebook": "00_experimental_discipline.zh-CN.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T10:45:29+00:00",
+      "status": "PASSED",
+      "wall_s": 2.8,
+      "finished": "2026-11-06T10:45:32+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/00_experimental_discipline.zh-CN.ipynb",
+      "language": "zh-CN",
+      "kernel_identity": {
+        "python": "3.12.3",
+        "ipykernel": "7.2.0",
+        "jupyter_client": "8.8.0",
+        "executable": "/workspace/pr4/.venv-lab/bin/python"
+      },
+      "gpu_admission": "PASS",
+      "gpu_run_ids": [],
+      "gpu_executions": [],
+      "consumed_physical_records": [],
+      "evidence_sources": [
+        "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/00_experimental_discipline.zh-CN.ipynb"
+      ],
+      "physical_experiment_verdict": "MEASURED",
+      "physical_performance_claim_justified": false
+    },
+    {
+      "notebook": "01_baseline_and_uncertainty.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T10:45:32+00:00",
+      "status": "PASSED",
+      "wall_s": 382.9,
+      "finished": "2026-11-06T10:51:55+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/01_baseline_and_uncertainty.ipynb",
+      "language": "en",
+      "kernel_identity": {
+        "python": "3.12.3",
+        "ipykernel": "7.2.0",
+        "jupyter_client": "8.8.0",
+        "executable": "/workspace/pr4/.venv-lab/bin/python"
+      },
+      "gpu_admission": "PASS",
+      "gpu_run_ids": [
+        "104534-nbq-B0"
+      ],
+      "gpu_executions": [
+        "classroom-bounded"
+      ],
+      "consumed_physical_records": [],
+      "evidence_sources": [
+        "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/01_baseline_and_uncertainty.ipynb"
+      ],
+      "physical_experiment_verdict": "MEASURED",
+      "physical_performance_claim_justified": true
+    },
+    {
+      "notebook": "01_baseline_and_uncertainty.zh-CN.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T10:51:55+00:00",
+      "status": "PASSED",
+      "wall_s": 333.5,
+      "finished": "2026-11-06T10:57:28+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/01_baseline_and_uncertainty.zh-CN.ipynb",
+      "language": "zh-CN",
+      "kernel_identity": {
+        "python": "3.12.3",
+        "ipykernel": "7.2.0",
+        "jupyter_client": "8.8.0",
+        "executable": "/workspace/pr4/.venv-lab/bin/python"
+      },
+      "gpu_admission": "PASS",
+      "gpu_run_ids": [
+        "105157-nbq-B0"
+      ],
+      "gpu_executions": [
+        "classroom-bounded"
+      ],
+      "consumed_physical_records": [],
+      "evidence_sources": [
+        "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/01_baseline_and_uncertainty.zh-CN.ipynb"
+      ],
+      "physical_experiment_verdict": "MEASURED",
+      "physical_performance_claim_justified": true
+    },
+    {
+      "notebook": "02_profile_and_bottlenecks.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T10:57:29+00:00",
+      "status": "PASSED",
+      "wall_s": 2.7,
+      "finished": "2026-11-06T10:57:31+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/02_profile_and_bottlenecks.ipynb",
+      "language": "en",
+      "kernel_identity": {
+        "python": "3.12.3",
+        "ipykernel": "7.2.0",
+        "jupyter_client": "8.8.0",
+        "executable": "/workspace/pr4/.venv-lab/bin/python"
+      },
+      "gpu_admission": "PASS",
+      "gpu_run_ids": [],
+      "gpu_executions": [
+        "profile:pipeline"
+      ],
+      "consumed_physical_records": [],
+      "evidence_sources": [
+        "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/02_profile_and_bottlenecks.ipynb"
+      ],
+      "physical_experiment_verdict": "MEASURED",
+      "physical_performance_claim_justified": false
+    },
+    {
+      "notebook": "02_profile_and_bottlenecks.zh-CN.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T10:57:31+00:00",
+      "status": "PASSED",
+      "wall_s": 2.6,
+      "finished": "2026-11-06T10:57:34+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/02_profile_and_bottlenecks.zh-CN.ipynb",
+      "language": "zh-CN",
+      "kernel_identity": {
+        "python": "3.12.3",
+        "ipykernel": "7.2.0",
+        "jupyter_client": "8.8.0",
+        "executable": "/workspace/pr4/.venv-lab/bin/python"
+      },
+      "gpu_admission": "PASS",
+      "gpu_run_ids": [],
+      "gpu_executions": [
+        "profile:pipeline"
+      ],
+      "consumed_physical_records": [],
+      "evidence_sources": [
+        "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/02_profile_and_bottlenecks.zh-CN.ipynb"
+      ],
+      "physical_experiment_verdict": "MEASURED",
+      "physical_performance_claim_justified": false
+    },
+    {
+      "notebook": "03_less_computation.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T10:57:34+00:00",
+      "status": "PASSED",
+      "wall_s": 423.8,
+      "finished": "2026-11-06T11:04:38+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/03_less_computation.ipynb",
+      "language": "en",
+      "kernel_identity": {
+        "python": "3.12.3",
+        "ipykernel": "7.2.0",
+        "jupyter_client": "8.8.0",
+        "executable": "/workspace/pr4/.venv-lab/bin/python"
+      },
+      "gpu_admission": "PASS",
+      "gpu_run_ids": [
+        "105736-nbq-B0",
+        "110245-nbq-L1"
+      ],
+      "gpu_executions": [
+        "classroom-bounded",
+        "classroom-bounded"
+      ],
+      "consumed_physical_records": [],
+      "evidence_sources": [
+        "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/03_less_computation.ipynb"
+      ],
+      "physical_experiment_verdict": "MEASURED",
+      "physical_performance_claim_justified": true
+    },
+    {
+      "notebook": "03_less_computation.zh-CN.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T11:04:38+00:00",
+      "status": "PASSED",
+      "wall_s": 473.3,
+      "finished": "2026-11-06T11:12:31+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/03_less_computation.zh-CN.ipynb",
+      "language": "zh-CN",
+      "kernel_identity": {
+        "python": "3.12.3",
+        "ipykernel": "7.2.0",
+        "jupyter_client": "8.8.0",
+        "executable": "/workspace/pr4/.venv-lab/bin/python"
+      },
+      "gpu_admission": "PASS",
+      "gpu_run_ids": [
+        "110440-nbq-B0",
+        "111020-nbq-L1"
+      ],
+      "gpu_executions": [
+        "classroom-bounded",
+        "classroom-bounded"
+      ],
+      "consumed_physical_records": [],
+      "evidence_sources": [
+        "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/03_less_computation.zh-CN.ipynb"
+      ],
+      "physical_experiment_verdict": "MEASURED",
+      "physical_performance_claim_justified": true
+    },
+    {
+      "notebook": "04_faster_computation.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T11:12:31+00:00",
+      "status": "PASSED",
+      "wall_s": 775.4,
+      "finished": "2026-11-06T11:25:27+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/04_faster_computation.ipynb",
+      "language": "en",
+      "kernel_identity": {
+        "python": "3.12.3",
+        "ipykernel": "7.2.0",
+        "jupyter_client": "8.8.0",
+        "executable": "/workspace/pr4/.venv-lab/bin/python"
+      },
+      "gpu_admission": "PASS",
+      "gpu_run_ids": [
+        "111233-nbq-B0",
+        "111757-nbq-F1",
+        "112131-nbq-F2"
+      ],
+      "gpu_executions": [
+        "classroom-bounded",
+        "classroom-bounded",
+        "classroom-bounded"
+      ],
+      "consumed_physical_records": [],
+      "evidence_sources": [
+        "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/04_faster_computation.ipynb"
+      ],
+      "physical_experiment_verdict": "MEASURED",
+      "physical_performance_claim_justified": true
+    },
+    {
+      "notebook": "04_faster_computation.zh-CN.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T11:25:27+00:00",
+      "status": "PASSED",
+      "wall_s": 788.8,
+      "finished": "2026-11-06T11:38:36+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/04_faster_computation.zh-CN.ipynb",
+      "language": "zh-CN",
+      "kernel_identity": {
+        "python": "3.12.3",
+        "ipykernel": "7.2.0",
+        "jupyter_client": "8.8.0",
+        "executable": "/workspace/pr4/.venv-lab/bin/python"
+      },
+      "gpu_admission": "PASS",
+      "gpu_run_ids": [
+        "112529-nbq-B0",
+        "113104-nbq-F1",
+        "113440-nbq-F2"
+      ],
+      "gpu_executions": [
+        "classroom-bounded",
+        "classroom-bounded",
+        "classroom-bounded"
+      ],
+      "consumed_physical_records": [],
+      "evidence_sources": [
+        "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/04_faster_computation.zh-CN.ipynb"
+      ],
+      "physical_experiment_verdict": "MEASURED",
+      "physical_performance_claim_justified": true
+    },
+    {
+      "notebook": "05_cpu_offload_negative.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T12:07:52+00:00",
+      "status": "PASSED",
+      "wall_s": 217.6,
+      "finished": "2026-11-06T12:11:29+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/05_cpu_offload_negative.ipynb",
+      "language": "en",
+      "kernel_identity": {
+        "python": "3.12.3",
+        "ipykernel": "7.2.0",
+        "jupyter_client": "8.8.0",
+        "executable": "/workspace/pr4/.venv-lab/bin/python"
+      },
+      "gpu_admission": "PASS",
+      "gpu_run_ids": [],
+      "gpu_executions": [
+        "m51-te-cuda",
+        "m51-te-cpu"
+      ],
+      "consumed_physical_records": [
+        "q1-075553-H1-cpu-te",
+        "q1-075553-H2-pipeline"
+      ],
+      "evidence_sources": [
+        "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/05_cpu_offload_negative.ipynb"
+      ],
+      "physical_experiment_verdict": "MEASURED",
+      "physical_performance_claim_justified": true
+    },
+    {
+      "notebook": "05_cpu_offload_negative.zh-CN.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T12:11:29+00:00",
+      "status": "PASSED",
+      "wall_s": 203.1,
+      "finished": "2026-11-06T12:14:52+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/05_cpu_offload_negative.zh-CN.ipynb",
+      "language": "zh-CN",
+      "kernel_identity": {
+        "python": "3.12.3",
+        "ipykernel": "7.2.0",
+        "jupyter_client": "8.8.0",
+        "executable": "/workspace/pr4/.venv-lab/bin/python"
+      },
+      "gpu_admission": "PASS",
+      "gpu_run_ids": [],
+      "gpu_executions": [
+        "m51-te-cuda",
+        "m51-te-cpu"
+      ],
+      "consumed_physical_records": [
+        "q1-075553-H1-cpu-te",
+        "q1-075553-H2-pipeline"
+      ],
+      "evidence_sources": [
+        "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/05_cpu_offload_negative.zh-CN.ipynb"
+      ],
+      "physical_experiment_verdict": "MEASURED",
+      "physical_performance_claim_justified": true
+    },
+    {
+      "notebook": "06_openvino_and_fair_ab.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T11:45:38+00:00",
+      "status": "PASSED",
+      "wall_s": 15.5,
+      "finished": "2026-11-06T11:45:53+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/06_openvino_and_fair_ab.ipynb",
+      "language": "en",
+      "kernel_identity": {
+        "python": "3.12.3",
+        "ipykernel": "7.2.0",
+        "jupyter_client": "8.8.0",
+        "executable": "/workspace/pr4/.venv-lab/bin/python"
+      },
+      "gpu_admission": "PASS",
+      "gpu_run_ids": [],
+      "gpu_executions": [],
+      "consumed_physical_records": [
+        "q1-075553-H3_OV_BF16"
+      ],
+      "evidence_sources": [
+        "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/06_openvino_and_fair_ab.ipynb"
+      ],
+      "physical_experiment_verdict": "MEASURED",
+      "physical_performance_claim_justified": true
+    },
+    {
+      "notebook": "06_openvino_and_fair_ab.zh-CN.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T11:45:53+00:00",
+      "status": "PASSED",
+      "wall_s": 11.8,
+      "finished": "2026-11-06T11:46:05+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/06_openvino_and_fair_ab.zh-CN.ipynb",
+      "language": "zh-CN",
+      "kernel_identity": {
+        "python": "3.12.3",
+        "ipykernel": "7.2.0",
+        "jupyter_client": "8.8.0",
+        "executable": "/workspace/pr4/.venv-lab/bin/python"
+      },
+      "gpu_admission": "PASS",
+      "gpu_run_ids": [],
+      "gpu_executions": [],
+      "consumed_physical_records": [
+        "q1-075553-H3_OV_BF16"
+      ],
+      "evidence_sources": [
+        "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/06_openvino_and_fair_ab.zh-CN.ipynb"
+      ],
+      "physical_experiment_verdict": "MEASURED",
+      "physical_performance_claim_justified": true
+    },
+    {
+      "notebook": "07_combined_and_quality.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T11:46:05+00:00",
+      "status": "PASSED",
+      "wall_s": 422.2,
+      "finished": "2026-11-06T11:53:07+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/07_combined_and_quality.ipynb",
+      "language": "en",
+      "kernel_identity": {
+        "python": "3.12.3",
+        "ipykernel": "7.2.0",
+        "jupyter_client": "8.8.0",
+        "executable": "/workspace/pr4/.venv-lab/bin/python"
+      },
+      "gpu_admission": "PASS",
+      "gpu_run_ids": [
+        "114607-nbq-B0",
+        "115134-nbq-BEST"
+      ],
+      "gpu_executions": [
+        "classroom-bounded",
+        "classroom-bounded"
+      ],
+      "consumed_physical_records": [],
+      "evidence_sources": [
+        "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/07_combined_and_quality.ipynb"
+      ],
+      "physical_experiment_verdict": "MEASURED",
+      "physical_performance_claim_justified": true
+    },
+    {
+      "notebook": "07_combined_and_quality.zh-CN.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T11:53:07+00:00",
+      "status": "PASSED",
+      "wall_s": 440.0,
+      "finished": "2026-11-06T12:00:27+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/07_combined_and_quality.zh-CN.ipynb",
+      "language": "zh-CN",
+      "kernel_identity": {
+        "python": "3.12.3",
+        "ipykernel": "7.2.0",
+        "jupyter_client": "8.8.0",
+        "executable": "/workspace/pr4/.venv-lab/bin/python"
+      },
+      "gpu_admission": "PASS",
+      "gpu_run_ids": [
+        "115309-nbq-B0",
+        "115854-nbq-BEST"
+      ],
+      "gpu_executions": [
+        "classroom-bounded",
+        "classroom-bounded"
+      ],
+      "consumed_physical_records": [],
+      "evidence_sources": [
+        "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/07_combined_and_quality.zh-CN.ipynb"
+      ],
+      "physical_experiment_verdict": "MEASURED",
+      "physical_performance_claim_justified": true
+    },
+    {
+      "notebook": "08_capstone_and_pr.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T12:00:28+00:00",
+      "status": "PASSED",
+      "wall_s": 2.4,
+      "finished": "2026-11-06T12:00:30+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/08_capstone_and_pr.ipynb",
+      "language": "en",
+      "kernel_identity": {
+        "python": "3.12.3",
+        "ipykernel": "7.2.0",
+        "jupyter_client": "8.8.0",
+        "executable": "/workspace/pr4/.venv-lab/bin/python"
+      },
+      "gpu_admission": "PASS",
+      "gpu_run_ids": [],
+      "gpu_executions": [],
+      "consumed_physical_records": [],
+      "evidence_sources": [
+        "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/08_capstone_and_pr.ipynb"
+      ],
+      "physical_experiment_verdict": "NOT_APPLICABLE",
+      "physical_performance_claim_justified": false
+    },
+    {
+      "notebook": "08_capstone_and_pr.zh-CN.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T12:00:30+00:00",
+      "status": "PASSED",
+      "wall_s": 2.4,
+      "finished": "2026-11-06T12:00:33+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/08_capstone_and_pr.zh-CN.ipynb",
+      "language": "zh-CN",
+      "kernel_identity": {
+        "python": "3.12.3",
+        "ipykernel": "7.2.0",
+        "jupyter_client": "8.8.0",
+        "executable": "/workspace/pr4/.venv-lab/bin/python"
+      },
+      "gpu_admission": "PASS",
+      "gpu_run_ids": [],
+      "gpu_executions": [],
+      "consumed_physical_records": [],
+      "evidence_sources": [
+        "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/GPU_CLASSROOM/08_capstone_and_pr.zh-CN.ipynb"
+      ],
+      "physical_experiment_verdict": "NOT_APPLICABLE",
+      "physical_performance_claim_justified": false
+    }
+  ],
+  "rerun_note": "05 EN/ZH re-executed after the m51 --out directory-semantics fix; their rows come from the second invocation"
+}

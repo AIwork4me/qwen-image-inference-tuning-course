@@ -1,0 +1,66 @@
+{
+  "experiment": "H2",
+  "date": "q1-075553",
+  "design": "A: sequential server-side GPU TE + gen, one at a time. B: CPU TE worker (separate process) for upcoming requests overlapping GPU denoise; cond injected via LinuxLabCondLoader.",
+  "warmup_s": 43.158,
+  "A_sequential": {
+    "events": [
+      {
+        "req": "req1",
+        "wall_s": 12.126
+      },
+      {
+        "req": "req2",
+        "wall_s": 25.053
+      },
+      {
+        "req": "req3",
+        "wall_s": 13.025
+      },
+      {
+        "req": "req4",
+        "wall_s": 13.025
+      }
+    ],
+    "total_s": 63.229,
+    "images_per_min": 3.8
+  },
+  "B_pipelined": {
+    "events": [
+      {
+        "req": "req1",
+        "cpu_te_s": 188.307,
+        "encode_s": 176.57
+      },
+      {
+        "req": "req1",
+        "gen_wall_s": 12.117,
+        "cpu_te_next_s": 148.124,
+        "cpu_te_next_encode_s": 137.874,
+        "actual_overlap_s": 12.115
+      },
+      {
+        "req": "req2",
+        "gen_wall_s": 1.005,
+        "cpu_te_next_s": 216.106,
+        "cpu_te_next_encode_s": 206.555,
+        "actual_overlap_s": 1.003
+      },
+      {
+        "req": "req3",
+        "gen_wall_s": 1.005,
+        "cpu_te_next_s": 157.801,
+        "cpu_te_next_encode_s": 147.67,
+        "actual_overlap_s": 1.003
+      },
+      {
+        "req": "req4",
+        "gen_wall_s": 1.005
+      }
+    ],
+    "total_s": 711.352,
+    "images_per_min": 0.34,
+    "overlap_s_total": 14.121,
+    "overlap_proven": true
+  }
+}

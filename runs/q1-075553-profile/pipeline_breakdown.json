@@ -1,0 +1,22 @@
+{
+  "n_warm": 21,
+  "T_total_warm_s": 55.096,
+  "T_dit_denoise_s": 53.463,
+  "T_vae_decode_s": 0.897,
+  "T_text_encoder_cached_s": 0,
+  "T_text_encoder_fresh_s": 0.554,
+  "T_other_warm_s": 0.736,
+  "T_total_fresh_s": 56.106,
+  "T_total_cold_s": 75.21,
+  "step_median_s": 1.333,
+  "method": {
+    "T_total_warm_s": "measured (median of warm run records)",
+    "T_dit_denoise_s": "measured (KSampler node timing, websocket events)",
+    "T_vae_decode_s": "measured (VAEDecode node timing)",
+    "T_text_encoder_cached_s": "measured (warm runs: TE node-cache hit)",
+    "T_text_encoder_fresh_s": "measured (fresh-prompt arm)",
+    "T_other_warm_s": "DERIVED by subtraction (T_total - T_dit - T_vae - T_te), never measured",
+    "T_total_cold_s": "measured (single cold run)"
+  },
+  "note": "T_other = T_total - T_dit - T_vae - T_te; warm runs have TE cached (node-cache hit), fresh runs pay TE"
+}
