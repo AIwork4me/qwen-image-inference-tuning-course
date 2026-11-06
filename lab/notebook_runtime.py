@@ -614,11 +614,14 @@ class Session:
     def run_m51_baseline(self, device: str, *, repeats: int = 1,
                          prompt_ids: str = "p1-zh-scene",
                          threads: int = 8) -> Path:
-        """M5.0/M5.1 Part A: isolated text-encoder probe (cuda|cpu) per device."""
-        date = datetime.now().strftime("%H%M%S") + "-nbq"
-        out = lab_env.STUDENT_RUNS_ROOT / f"{date}-m51-te-{device}"
+        """M5.0/M5.1 Part A: isolated text-encoder probe (cuda|cpu) per device.
+
+        m51_baseline.py takes --out as a DIRECTORY and writes
+        probe_<device>.json + cond_<device>/ inside it.
+        """
+        out = lab_env.STUDENT_RUNS_ROOT / f"{datetime.now().strftime('%H%M%S')}-nbq-m51-te-{device}"
         cmd = [sys.executable, "-u", "lab/m51_baseline.py", "--device", device,
-               "--out", str(out / "probe.json"), "--repeats", str(repeats),
+               "--out", str(out), "--repeats", str(repeats),
                "--prompt-ids", prompt_ids, "--threads", str(threads)]
         to = 900 if device == "cuda" else 2400
         self._run_cli(cmd, timeout=to, kind=f"m51-te-{device}",

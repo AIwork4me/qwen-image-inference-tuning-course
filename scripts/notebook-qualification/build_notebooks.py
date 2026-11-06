@@ -895,16 +895,17 @@ _stamp(HISTORICAL, "frozen cleanroom campaign: PyTorch CPU TE is ~2 orders "
     cpu = session.run_m51_baseline("cpu", repeats=1)
     return gpu, cpu
 
-pilots = gpu_cell(run_te_pilots)
+pilots = gpu_cell(run_te_pilots) if want_own_arms() else None
 own = None
 if pilots is not None:
-    import json as _j
-    gpr = _j.loads((pilots[0] / "probe.json").read_text())
-    cpr = _j.loads((pilots[1] / "probe.json").read_text())
+    gpr = json.loads((pilots[0] / "probe_cuda.json").read_text())
+    cpr = json.loads((pilots[1] / "probe_cpu.json").read_text())
     gp = next(iter(gpr["prompts"].values()))
     cp = next(iter(cpr["prompts"].values()))
-    own = {"gpu_warm_s": gp["warm_samples_s"][0],
-           "cpu_warm_s": cp["warm_samples_s"][0],
+    g_warm = gp["warm_samples_s"] if isinstance(gp, dict) else [r["encode_s"] for r in gp]
+    c_warm = cp["warm_samples_s"] if isinstance(cp, dict) else [r["encode_s"] for r in cp]
+    own = {"gpu_warm_s": g_warm[-1],
+           "cpu_warm_s": c_warm[-1],
            "cpu_rss_mb": cpr.get("rss_peak_mb"),
            "gpu_rss_mb": gpr.get("rss_peak_mb")}
     _stamp(MEASURED_TODAY,
@@ -1359,8 +1360,10 @@ print(json.dumps(report.get("comparison", {}), indent=1)[:600])'''),
 report["reproduce"] = (
     f"python -m lab run --experiment {CAND_EXPERIMENT} --date <your-tag>")
 from datetime import datetime
+import os as _os
 _cap_ts = datetime.now().strftime("%H%M%S")
-out = ns.student_record(report, f"capstone-{_cap_ts}", confirmed=True)
+out = ns.student_record(report, f"capstone-{_cap_ts}-{_os.getpid() % 10000}",
+                        confirmed=True)
 print("capstone report:", out)'''),
         md("## 5 · Your PR draft\n"
            "Copy the template below into your PR description; every bracket "

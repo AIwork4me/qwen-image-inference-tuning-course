@@ -5,3 +5,7 @@ pillow>=10
 numpy>=1.25
 requests>=2.31
 websocket-client>=1.7
+nbclient>=0.10
+nbformat>=5.10
+ipykernel>=6
+ipywidgets>=8
