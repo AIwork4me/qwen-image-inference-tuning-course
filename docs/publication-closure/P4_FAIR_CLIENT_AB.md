@@ -36,9 +36,11 @@ teardown. This experiment completes the 2×2 factorial:
 - Exclusion rule (pre-declared): fatal technical failure only; none occurred —
   **0 excluded batches, 0 in-batch model reloads** (the `primary_all_batches`
   and `warm_resident` views are identical for that reason).
-- Admission: OV BF16 artifact bin byte-verified against its conversion
-  manifest (`sha256sum -c` → OK) before the run; cgroup `1600000/100000`
-  (16 CPUs) / 55 GiB — same budget class as every M5.1 campaign run.
+- Admission: OV artifacts byte-verified against their conversion manifests
+  before the run (streaming SHA256 vs pinned digests — the same check
+  `bash scripts/m51/provision_ov.sh --check-only` performs); cgroup
+  `1600000/100000` (16 CPUs) / 55 GiB — same budget class as every M5.1
+  campaign run.
 - GPU budget: **1,522 s ≈ 25.4 min** of the 60-min ceiling (including both
   blocks' server boots and warmups).
 
@@ -135,18 +137,44 @@ coverage for the persistent monitor path before it serves production).
 
 ## 6. Reproduction
 
+> ⚠ Do **not** feed `conversion_manifest.json` to `sha256sum -c` — it is a
+> structured JSON manifest, not a GNU checksum list (an earlier revision of
+> this section showed that invalid form). The supported workflow is the
+> provisioning script's check mode, which streams every artifact against the
+> manifest's pinned digests, sizes and conversion identity:
+
 ```bash
-# physical W7900-class host with the campaign cgroup budget
-sha256sum -c /opt/m51-artifacts/bf16/conversion_manifest.json  # admission (digest line)
-M51_OV_ARTIFACTS=/opt/m51-artifacts \
+# 1) verified artifact admission (no download, no modification; /opt/m51-artifacts
+#    is an EXAMPLE root — use your own $M51_OV_ARTIFACTS location):
+export M51_OV_ARTIFACTS=/opt/m51-artifacts
+bash scripts/m51/provision_ov.sh --check-only        # -> ARTIFACTS_VERIFIED
+
+# 2) clean-worktree check (the run record carries source provenance):
+git status --porcelain                              # should be empty
+
+# 3) the factorial (physical W7900-class host, campaign cgroup budget):
+M51_OV_ARTIFACTS=$M51_OV_ARTIFACTS \
   .venv-lab/bin/python -m lab.m51_pipeline_fair_ab \
   --run runs/<new-unique-run-id> --port 8213 --pairs 3 --blocks 2
 ```
+
+- Expected output: `<run>/pipeline_profile/pipeline_profile.json` (per-request
+  timelines, per-batch walls, conditioning SHA256, source manifest) plus
+  server logs; raw images stay host-side under `raw/` (hashes in the record).
+- Budget: ~25 min GPU for the full 96-request design; `--pairs 1 --blocks 2`
+  gives a ~15 min bounded regression (2 batches/cell).
+- Verify a rerun against this study by comparing the `analysis.views` cells
+  (see `P6_P4_INDEPENDENT_REDERIVATION.md` for the recomputation script-free
+  method) and the per-prompt `cond_sha256_stable_across_all_C_batches`
+  entries, which must match this study's digests byte-for-byte.
+- Recovery: on admission BLOCK, re-provision per the script's message; on
+  port conflicts, change `--port`; failed batches are retained and marked.
 
 Environment: gfx1100 48 GiB, EPYC 9334 (16-CPU/55 GiB cgroup), ROCm system
 stack, PyTorch 2.9.1+rocm, ComfyUI pinned checkout, OpenVINO 2026.4.1
 (`.venv-ov`). Analysis cells recomputed independently in
 `docs/publication-closure/P1_METRIC_PROVENANCE.json` (population `P4-FAIRAB`).
+Result limits: see §7.
 
 ## 7. Limitations
 
