@@ -8,6 +8,18 @@ the first cell: `REFERENCE` (offline CPU analysis of the frozen campaign),
 the default lab experience), or `GPU_RESEARCH` (this full protocol). See
 [notebooks/README.md](../../notebooks/README.md).
 
+**Measure it on your own W7900 (preferred).** In `GPU_CLASSROOM` with the
+default `RUN_OWN_GPU_ARMS = True`, notebook 06 executes your **own** M5.1
+pipeline end to end on a fresh clone: strict BF16 artifact admission
+(`PASS` / `PASS_WITH_WARNINGS` / `FAIL` / `BLOCKED`, fail-closed), your own
+GPU / CPU PyTorch TE pilots, your own H3 OpenVINO BF16 run, and your own
+physical A/C four-request batch — every number labelled with its provenance
+(`CURRENT_SESSION_PHYSICAL` … `COMMITTED_PHYSICAL_REFERENCE`; see the
+[student provenance contract](../../docs/notebook-gpu-qualification/STUDENT_PROVENANCE_CONTRACT.md)).
+If you opt out of new GPU work, reuse requires **exact run ids** and is
+labelled as reuse — the committed campaign numbers in this lesson are always
+references, never your measurements.
+
 **Learning objectives (you will be able to):**
 1. Design the controlled five-arm encoder A/B (G/C0/C1a/C1b/C2) and name the causal axis each arm isolates (backend, execution precision, quantization);
 2. Judge numerical gates from conditioning alignment data (rel L2 / cosine / token IDs) and scope "331–480×" to positive prompts;

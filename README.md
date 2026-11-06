@@ -18,6 +18,8 @@ reproduce the whole methodology yourself on a free Radeon Cloud GPU.
 
 Each module now has **paired English/Chinese executable notebooks (18 total)** with **three declared modes**: `REFERENCE` (offline CPU analysis of the frozen campaign — the GitHub CI profile), `GPU_CLASSROOM` (your own bounded physical W7900 measurements — the default student experience after Radeon Cloud onboarding), and `GPU_RESEARCH` (full frozen protocol). Set `COURSE_MODE` in the first cell and Restart & Run All; an admission banner shows the admitted GPU or the exact blocker. Physical GPU measurement is the primary practical validation; committed evidence stays the reference and scientific comparison source. Classroom exercises are bounded teaching experiments — a formal speedup claim needs the research protocol.
 
+**Student independence:** a fresh clone contains the instructor's committed physical records, so every number a notebook shows is pinned to a machine-validated origin (`CURRENT_SESSION_PHYSICAL` … `BLOCKED`, [provenance contract](docs/notebook-gpu-qualification/STUDENT_PROVENANCE_CONTRACT.md)) — a committed instructor run can never be presented as your own measurement, reuse requires an exact run id, and M5.1's OpenVINO artifact admission fails closed (`PASS` / `PASS_WITH_WARNINGS` / `FAIL` / `BLOCKED`).
+
 ## The result (real, measured, honestly caveated)
 
 Same prompt, same seed, same GPU — the engineering changed, and so did the

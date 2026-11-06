@@ -1,7 +1,7 @@
 # Student Experiment Provenance Contract
 
 Status: ACTIVE (student-independence closure, PR #4)
-Implementation: `lab/student_provenance.py` (+ `lab/notebook_runtime.Session`)
+Implementation: `lab/student_provenance.py` + the `Session` class in `lab/notebook_runtime.py`
 Tests: `tests/test_student_provenance.py` (41 cases, CPU-only)
 
 ## 1. Why this contract exists

@@ -33,6 +33,49 @@ Guards (enforced by the runtime and by tests): one GPU workload at a time (files
 
 **A classroom exercise is a bounded physical experiment, not a formal performance claim.** Formal claims need the research protocol (repeated prompts/seeds, matched populations, declared ordering) — the notebooks label every comparison `BOUNDED_PHYSICAL_COMPARISON` vs `FORMAL_PROTOCOL_MEASURED` automatically.
 
+## Where does each number come from? (student provenance)
+
+The repository ships real physical W7900 records (the instructor campaigns under
+`runs/`), so a fresh clone already contains physical evidence that is **not
+yours**. Every number a notebook shows is therefore pinned to one of eight
+machine-validated origins ([contract](../docs/notebook-gpu-qualification/STUDENT_PROVENANCE_CONTRACT.md)):
+
+`CURRENT_SESSION_PHYSICAL` (your GPU, this session) · `SAME_STUDENT_PRIOR_PHYSICAL`
+(your earlier session, selected by exact run id) · `SHARED_CAMPAIGN_PHYSICAL` ·
+`COMMITTED_PHYSICAL_REFERENCE` (tracked in Git — instructor evidence, valuable
+but **never** "measured today by you") · `FROZEN_REFERENCE` (`evidence/`) ·
+`SIMULATED` · `NOT_RUN` · `BLOCKED`.
+
+You choose the evidence source in the notebook's first code cell:
+
+```python
+RUN_OWN_GPU_ARMS = True    # run my own bounded arms on THIS GPU (default)
+# or, to reuse earlier runs without spending GPU time (metered instances):
+# RUN_OWN_GPU_ARMS = False
+# REUSE_TE_RUNS = {"cuda": "<exact run id>", "cpu": "<run id>", "h3": "<run id>"}
+# REUSE_PIPELINE_RUN = "<exact run id>"
+```
+
+Selecting a run always requires its **exact run id** (printed next to every
+measurement and stored in your session record under `runs/notebook-sessions/`).
+Nothing is ever picked "because it is the newest file", and a reused run is
+never counted as a second independent measurement — e.g. the Chinese and
+English M5.1 notebooks may share one physical A/C run, labelled as reuse.
+
+**When things go wrong (all recoverable, nothing is overwritten):**
+
+- *Interrupted run / timeout* — re-run the cell: each attempt gets a fresh
+  `run_id`; completed records stay untouched.
+- *Missing OpenVINO artifacts (M5.1 admission `BLOCKED`)* — follow the printed
+  remediation: `bash scripts/m51/provision_ov.sh`, or point
+  `$M51_OV_ARTIFACTS` at the shared provisioned root (e.g. `/opt/m51-artifacts`).
+- *Artifact `FAIL` (digest/identity)* — the artifact is invalid; dependent
+  phases stop. Re-provision; never continue with an unverified artifact.
+- *GPU busy* — another workload holds the device; finish it first (one GPU
+  workload at a time, enforced by lock).
+- *RAM admission `BLOCKED`* — free memory or use a larger instance; the
+  safety headroom is never silently lowered.
+
 ## Learning sequence
 
 | Module | English | 中文 | Physical exercise (GPU modes) |

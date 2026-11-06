@@ -33,6 +33,45 @@ COURSE_MODE = "GPU_CLASSROOM"
 
 **课堂练习是有界物理实验，不是正式性能结论。** 正式结论需要研究协议（多提示词/种子重复、匹配总体、声明顺序）——笔记本会自动为每次对比标注 `BOUNDED_PHYSICAL_COMPARISON` 或 `FORMAL_PROTOCOL_MEASURED`。
 
+## 每个数字从哪里来？（学生实验溯源）
+
+仓库自带真实的 W7900 物理记录（`runs/` 下的教师实验），因此全新克隆里已经存在**
+不属于你**的物理证据。笔记本展示的每个数字都绑定八种机器校验来源之一
+（[溯源契约](../docs/notebook-gpu-qualification/STUDENT_PROVENANCE_CONTRACT.md)）：
+
+`CURRENT_SESSION_PHYSICAL`（你的 GPU、本次会话）· `SAME_STUDENT_PRIOR_PHYSICAL`
+（你更早的会话，按精确 run id 选择）· `SHARED_CAMPAIGN_PHYSICAL` ·
+`COMMITTED_PHYSICAL_REFERENCE`（已提交进 Git——教师证据，有价值但**绝不是
+“你今天实测的”**）· `FROZEN_REFERENCE`（`evidence/`）· `SIMULATED` ·
+`NOT_RUN` · `BLOCKED`。
+
+在笔记本第一个代码单元中选择证据来源：
+
+```python
+RUN_OWN_GPU_ARMS = True    # 在 THIS GPU 上运行我自己的有界实验臂（默认）
+# 或者在计量实例上复用早前的运行以节省 GPU 时间：
+# RUN_OWN_GPU_ARMS = False
+# REUSE_TE_RUNS = {"cuda": "<精确 run id>", "cpu": "<run id>", "h3": "<run id>"}
+# REUSE_PIPELINE_RUN = "<精确 run id>"
+```
+
+选择复用必须给出**精确 run id**（它显示在每个测量旁边，并保存在
+`runs/notebook-sessions/` 下的会话记录里）。绝不存在“取最新文件”式选择；复用的
+运行绝不会被计为第二次独立测量——例如中文与英文 M5.1 笔记本可以共享同一次物理
+A/C 运行，但会被标注为复用。
+
+**出问题时（全部可恢复，且不会覆盖任何数据）：**
+
+- *运行被中断 / 超时*——重新运行该单元：每次尝试都会获得新的 `run_id`；已完成
+  的记录原样保留。
+- *OpenVINO 工件缺失（M5.1 准入 `BLOCKED`）——按打印的补救指令操作：
+  `bash scripts/m51/provision_ov.sh`，或把 `$M51_OV_ARTIFACTS` 指向共享的已布置
+  工件根目录（如 `/opt/m51-artifacts`）。
+- *工件 `FAIL`（摘要/身份不符）——工件无效；依赖阶段立即停止。重新布置；绝不要
+  带着未验证的工件继续。
+- *GPU 忙——另有负载占用设备；先完成它（同一时刻仅一个 GPU 负载，由锁强制）。
+- *RAM 准入 `BLOCKED`——释放内存或换更大实例；安全余量绝不会被静默调低。
+
 ## 9 个实践模块
 
 | 模块 | 中文 Notebook | English | 物理练习（GPU 模式） |

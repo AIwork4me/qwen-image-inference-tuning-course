@@ -19,6 +19,8 @@ PyTorch 2.9.1）上实测并提交的运行记录——而你可以自己在免�
 
 本课程现有**9个实践主题、18本中英文对照的可执行 Notebook**，提供三种声明模式：`REFERENCE`（离线 CPU 分析冻结实验数据——GitHub CI 配置）、`GPU_CLASSROOM`（你自己在 W7900 上的有界实测——Radeon Cloud 入门后的默认实验体验）、`GPU_RESEARCH`（完整冻结协议）。在第一个单元设置 `COURSE_MODE` 后 Restart & Run All；准入横幅会显示已准入的 GPU 或确切阻断原因。物理 GPU 测量是首要的实践验证方式，已提交证据仍是参考与科学对照来源。课堂练习是有界教学实验——正式加速结论需要研究协议。
 
+**学生独立性：** 全新克隆里包含教师已提交的物理记录，因此笔记本展示的每个数字都绑定机器校验的来源（`CURRENT_SESSION_PHYSICAL` … `BLOCKED`，见[溯源契约](docs/notebook-gpu-qualification/STUDENT_PROVENANCE_CONTRACT.md)）——已提交的教师运行绝不可能被当作你自己的测量；复用必须给出精确 run id；M5.1 的 OpenVINO 工件准入严格 fail closed（`PASS` / `PASS_WITH_WARNINGS` / `FAIL` / `BLOCKED`）。
+
 ## 实测结果（真实、已测、如实附带但书）
 
 同提示词、同种子、同 GPU——改变的是工程，同时改变的还有模型变体、采样调度与精度：
