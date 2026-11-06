@@ -62,6 +62,9 @@ def _parse_executed(nb_path: Path) -> dict:
             for line in text.splitlines():
                 if line.startswith("[OK] run_id="):
                     out["gpu_run_ids"].append(line.split("run_id=")[1].split()[0])
+                if line.startswith("[PROVENANCE] CURRENT_SESSION_PHYSICAL | run_id="):
+                    out["gpu_run_ids"].append(
+                        line.split("| run_id=")[1].split()[0])
                 if line.startswith("[CONSUMED PHYSICAL RECORD] run_id="):
                     out["consumed"].append(
                         line.split("run_id=")[1].split()[0].rstrip(")"))
@@ -104,6 +107,7 @@ def main() -> int:
                                                   "kinds": [], "admission": None}
         out = dict(row)
         out["language"] = lang_of(nb)
+        out["session_id"] = (sess or {}).get("session_id")
         out["kernel_identity"] = matrix.get("kernel", {})
         out["gpu_admission"] = parsed["admission"] or (
             (sess or {}).get("admission", {}).get("status") if (sess or {}).get("admission") else None)
