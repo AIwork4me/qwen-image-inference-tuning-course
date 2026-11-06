@@ -75,6 +75,18 @@ def want_own_arms():
     return False
 '''
 
+M51_SELECTORS = '''
+# Evidence selection (M5.1) — edit here, all in one place:
+#   RUN_OWN_GPU_ARMS=True  : execute your own bounded arms on this GPU.
+#   RUN_OWN_GPU_ARMS=False : paste EXACT run ids from an earlier session of
+#                            this workspace to reuse them (they are classified
+#                            SAME_STUDENT_PRIOR_PHYSICAL / SHARED_CAMPAIGN_
+#                            PHYSICAL and never counted as new measurements);
+#                            empty ids fall back to the committed reference.
+REUSE_TE_RUNS = {"cuda": "", "cpu": "", "h3": ""}
+REUSE_PIPELINE_RUN = ""
+'''
+
 # ---------------------------------------------------------------------------
 # markdown blocks shared by all modules
 # ---------------------------------------------------------------------------
@@ -1114,7 +1126,7 @@ def m06() -> list:
            "≠ 图像吞吐收益——永远不要混淆。\n\n"
            "参考讲义：[M5.1 讲义](../course/M05_parallel_heterogeneous/M5_1_OPENVINO_CPU_TE.zh-CN.md) · "
            "[English](./06_openvino_and_fair_ab.ipynb)"),
-        code(header("06") + "\n" + MEASURED_TAG + "\n" + GPU_OR_SKIP),
+         code(header("06") + "\n" + MEASURED_TAG + "\n" + GPU_OR_SKIP + "\n" + M51_SELECTORS),
          md("## 0 · Artifact admission — PASS / PASS_WITH_WARNINGS / FAIL / BLOCKED\n"
             "The OV IRs are verified byte-level against their conversion "
             "manifests (streaming SHA256, source-model digest chain, identity "
@@ -1211,9 +1223,6 @@ def run_own_te_arms():
     return te_gpu, te_cpu, h3_dir
 
 TE = None
-# Explicit reuse selector (used only when RUN_OWN_GPU_ARMS=False): paste the
-# exact run ids from your earlier session(s); empty = committed reference.
-REUSE_TE_RUNS = {"cuda": "", "cpu": "", "h3": ""}
 
 def _load_te_probe(run_id, dev):
     session.note_consumed(run_id, why=f"explicit reuse: TE probe {dev}")
@@ -1308,8 +1317,6 @@ else:
             "诚实的指标是**批次墙钟时间 / 每分钟图像数**；服务延迟、CPU RSS 与 VRAM "
             "单独报告。"),
          code('''PIPE = None
-REUSE_PIPELINE_RUN = ""  # exact run id of an earlier session's A/C pipeline
-                         # (used only when RUN_OWN_GPU_ARMS=False)
 if OV_ADMIT is not None and want_own_arms():
     def run_own_ac():
         return session.run_m51_pipeline(arms="A,C")
