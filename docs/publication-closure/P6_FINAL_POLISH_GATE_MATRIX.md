@@ -29,10 +29,12 @@ Every row names its evidence path or test — no gate is claimed from prose alon
 
 ## Observation — GitHub Actions (gate 17)
 
-Post-push CI was observed as part of this task at the final pre-matrix head;
-the exact run URL and observed test count are recorded here after inspection
-(see the final commit message and the PR #3 closure comment). The matrix-only
-commits that follow are documentation deltas on top of that verified head.
+Observed as part of this task at final head `b4ed3a6`:
+[run 42140170241](https://github.com/AIwork4me/qwen-image-inference-tuning-course/actions/runs/42140170241)
+→ **134 passed** + all five course-quality gates OK (link / bilingual / claims /
+examples / metric-pair), confirmed by reading the run log, not the badge.
+Commits after `b4ed3a6`, if any, are documentation deltas on top of that
+verified head and their CI runs are observed by the same standard.
 
 ## Release verdict
 
