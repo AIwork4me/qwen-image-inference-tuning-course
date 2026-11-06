@@ -29,6 +29,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import secrets
 import statistics
 import subprocess
 import sys
@@ -39,6 +40,7 @@ from pathlib import Path
 from typing import Any
 
 from . import lab_env
+from . import student_provenance as prov
 
 MODES = ("REFERENCE", "GPU_CLASSROOM", "GPU_RESEARCH")
 _MODE_RE = re.compile(r"^[A-Z_]+$")
@@ -429,16 +431,53 @@ def _diagnose(exc: Exception, cmd: list[str], log_hint: str) -> str:
 
 
 class Session:
-    """One notebook's declared session: mode, admission, executions, records."""
+    """One notebook's declared session: mode, admission, executions, records.
+
+    Every session owns a unique ``session_id`` created before any GPU work.
+    Physical runs executed here are bound to it via PROVENANCE.json; runs
+    loaded from disk are classified (CURRENT_SESSION_PHYSICAL / ... /
+    COMMITTED_PHYSICAL_REFERENCE) and can never silently masquerade as the
+    student's own new measurement."""
 
     def __init__(self, mode: str, notebook: str):
         self.mode = mode
         self.notebook = notebook
+        self.session_id = prov.new_session_id()
+        self.source = prov.source_identity()
         self.started_at = datetime.now().astimezone().isoformat(timespec="seconds")
         self.admission: Admission | None = None
         self.executions: list[dict] = []
-        self.consumed: list[str] = []
+        self.consumed: list[dict] = []
+        self.gulock_pid: int | None = None
         self.gpulock_pid: int | None = None
+
+    # -- provenance ---------------------------------------------------------
+    def _fresh_tag(self, suffix: str) -> str:
+        """Minute-resolution default tag, de-conflicted with a short random
+        suffix so a re-run never collides with append-only records."""
+        base = datetime.now().strftime("%H%M%S")
+        tag = f"{base}-nbq"
+        while any((lab_env.STUDENT_RUNS_ROOT / f"{tag}{s}").exists()
+                  for s in ((f"-{suffix}",) if suffix else ("",))):
+            tag = f"{base}-{secrets.token_hex(2)}-nbq"
+        return tag
+
+    def _bind(self, run_id: str, kind: str) -> None:
+        try:
+            prov.write_binding(run_id, self.session_id, kind=kind,
+                               extra={"mode": self.mode, "notebook": self.notebook})
+        except prov.ProvenanceError as exc:  # pragma: no cover - defensive
+            print(f"[PROVENANCE] WARNING: could not bind {run_id}: {exc}")
+
+    def origin_of(self, run_id: str) -> str:
+        """Stamp text for a run this session executed or consumed."""
+        for e in self.executions:
+            if e.get("run_id") == run_id:
+                return prov.stamp_text("CURRENT_SESSION_PHYSICAL")
+        for c in self.consumed:
+            if c.get("run_id") == run_id and c.get("category"):
+                return prov.stamp_text(c["category"])
+        return prov.stamp_text(classify_run(run_id, session_id=self.session_id)["category"])
 
     # -- banner -----------------------------------------------------------
     def banner(self) -> str:
@@ -513,7 +552,7 @@ class Session:
             raise CourseModeError(
                 f"no bounded classroom profile for experiment {experiment!r}; "
                 "use profile='smoke' or 'research'")
-        date = tag or (datetime.now().strftime("%H%M%S") + "-nbq")
+        date = tag or self._fresh_tag(experiment)
         run_id = f"{date}-{experiment}" + (("-smoke") if kind == "smoke" else "")
         cmd = [sys.executable, "-m", "lab", "run", "--experiment", experiment,
                "--date", date, *args]
@@ -533,34 +572,55 @@ class Session:
             fake = subprocess.CalledProcessError(r.returncode, cmd, r.stdout, r.stderr)
             raise AdmissionError(_diagnose(fake, cmd, str(log_path)))
         bundle = load_run(run_id)
+        self._bind(run_id, kind=kind)
         st = bundle.stats()
         print(f"[OK] run_id={run_id} | n_warm={st['n_warm']} | "
               f"median={st['median_s']}s | steps={st['steps']} | "
               f"vram_device_peak={st['vram_device_peak_mb']}MB")
         print(f"     records: {lab_env.REPO / 'runs' / run_id}")
+        print(f"[PROVENANCE] {prov.label(run_id, 'CURRENT_SESSION_PHYSICAL')}")
         self.executions.append({
             "run_id": run_id, "experiment": experiment, "kind": kind,
             "cmd": cmd, "wall_s": round(time.time() - t0, 1),
             "stats": st, "started": datetime.now().astimezone().isoformat(timespec="seconds"),
+            "session_id": self.session_id,
+            "run_origin": "CURRENT_SESSION_PHYSICAL",
+            "source_head": self.source.get("head"),
+            "source_dirty": self.source.get("dirty"),
         })
         return bundle
 
     # -- consuming existing physical evidence --------------------------------
-    def consume(self, run_id: str, *, why: str = "") -> RunBundle:
-        """Load a physical record (e.g. the shared qualification campaign run)
-        instead of executing a new one. Always displayed with provenance."""
+    def consume(self, run_id: str, *, why: str = "",
+                expect: str | tuple[str, ...] | None = None) -> RunBundle:
+        """Load an existing physical record instead of executing a new one.
+
+        The record's provenance category is RESOLVED AND VALIDATED here (fail
+        closed): an unbound, untracked, non-campaign run cannot be consumed,
+        and a committed instructor run is always labelled
+        COMMITTED_PHYSICAL_REFERENCE — never as a new measurement by this
+        student. ``expect`` pins the category explicitly."""
+        if expect is not None:
+            info = prov.require_category(run_id, expect, session_id=self.session_id)
+        else:
+            info = prov.classify_run(run_id, session_id=self.session_id)
         bundle = load_run(run_id)
         st = bundle.stats()
+        cat = info["category"]
         print(f"[CONSUMED PHYSICAL RECORD] run_id={run_id} "
               f"({st['population']}, n_warm={st['n_warm']}) {why}")
+        print(f"[PROVENANCE] {prov.label(run_id, cat)}")
         self.consumed.append({"run_id": run_id, "experiment": st["experiment"],
-                              "why": why, "stats": st})
+                              "why": why, "stats": st, "category": cat})
         return bundle
 
     # -- module-specific bounded physical helpers -----------------------------
     def _run_cli(self, cmd: list[str], *, timeout: float, kind: str,
-                 lock: bool = True) -> subprocess.CompletedProcess:
-        """Shared bounded subprocess runner (GPU lock + diagnosis)."""
+                 lock: bool = True, bind: str | None = None) -> subprocess.CompletedProcess:
+        """Shared bounded subprocess runner (GPU lock + diagnosis).
+
+        ``bind`` names the run directory (under runs/) that this CLI creates;
+        after success it receives a PROVENANCE.json binding to this session."""
         if self.mode == "REFERENCE":
             raise CourseModeError(f"{kind} is physical GPU work; disabled in REFERENCE mode")
         if self.admission is None:
@@ -585,19 +645,29 @@ class Session:
         out = (r.stdout or "")[-4000:]
         if out.strip():
             print(out.strip()[-1500:])
-        self.executions.append({
+        entry = {
             "kind": kind, "cmd": cmd, "wall_s": round(time.time() - t0, 1),
             "started": datetime.now().astimezone().isoformat(timespec="seconds"),
-        })
+            "session_id": self.session_id,
+            "run_origin": "CURRENT_SESSION_PHYSICAL" if bind else None,
+            "source_head": self.source.get("head"),
+            "source_dirty": self.source.get("dirty"),
+        }
+        if bind:
+            self._bind(bind, kind=kind)
+            entry["run_id"] = bind
+            print(f"[PROVENANCE] {prov.label(bind, 'CURRENT_SESSION_PHYSICAL')}")
+        self.executions.append(entry)
         return r
 
     def run_profile(self, *, layers: str = "pipeline", tag: str | None = None) -> Path:
         """`lab profile`. layers='pipeline' is fast (record analysis);
         layers='pipeline,kernel' adds two ~5-min rocprofv3 windows."""
-        date = tag or datetime.now().strftime("%H%M%S") + "-nbq"
+        date = tag or self._fresh_tag("profile")
         timeout = 1500 if layers == "pipeline" else 2400
         self._run_cli([sys.executable, "-m", "lab", "profile", "--layers", layers,
-                       "--date", date], timeout=timeout, kind=f"profile:{layers}")
+                       "--date", date], timeout=timeout, kind=f"profile:{layers}",
+                      bind=f"{date}-profile")
         return lab_env.STUDENT_RUNS_ROOT / f"{date}-profile"
 
     def run_quality(self, experiment: str, *, reference: str | None = None,
@@ -619,39 +689,75 @@ class Session:
         m51_baseline.py takes --out as a DIRECTORY and writes
         probe_<device>.json + cond_<device>/ inside it.
         """
-        out = lab_env.STUDENT_RUNS_ROOT / f"{datetime.now().strftime('%H%M%S')}-nbq-m51-te-{device}"
+        run_id = f"{self._fresh_tag('m51-te-' + device)}-m51-te-{device}"
+        out = lab_env.STUDENT_RUNS_ROOT / run_id
         cmd = [sys.executable, "-u", "lab/m51_baseline.py", "--device", device,
                "--out", str(out), "--repeats", str(repeats),
                "--prompt-ids", prompt_ids, "--threads", str(threads)]
         to = 900 if device == "cuda" else 2400
         self._run_cli(cmd, timeout=to, kind=f"m51-te-{device}",
-                      lock=(device == "cuda"))
+                      lock=(device == "cuda"), bind=run_id)
         return out
+
+    def run_h3(self, experiment: str = "H3_OV_BF16", *,
+               tag: str | None = None) -> Path:
+        """M5.1 Part A: the OpenVINO CPU-TE experiment (H3) on this host.
+
+        Runs the full pinned lab CLI (`python -m lab run --experiment H3_*`),
+        which performs byte-level artifact admission, the conservative RAM
+        gate, and the token/conditioning contract before any measurement.
+        The OV BF16 arm is cheap (load ~seconds, encode sub-second/prompt),
+        so the classroom uses the same protocol as the reference campaign."""
+        if experiment not in ("H3_OV_FP32", "H3_OV_BF16", "H3_OV_INT8"):
+            raise CourseModeError(f"not an H3 OpenVINO experiment: {experiment!r}")
+        date = tag or self._fresh_tag(experiment)
+        run_id = f"{date}-{experiment}"
+        self._run_cli([sys.executable, "-m", "lab", "run", "--experiment", experiment,
+                       "--date", date], timeout=2400, kind=f"h3:{experiment}",
+                      lock=False, bind=run_id)
+        return lab_env.STUDENT_RUNS_ROOT / run_id
 
     def run_m51_pipeline(self, *, arms: str = "A,C", tag: str | None = None) -> Path:
         """M5.1 Part B: four-request heterogeneous pipeline (A=GPU TE seq,
         C=OpenVINO CPU TE overlap). Requires staged OV artifacts."""
-        run = tag or datetime.now().strftime("%H%M%S") + "-nbq-m51pipe"
+        run = tag or (self._fresh_tag("m51pipe") + "-m51pipe")
         self._run_cli([sys.executable, "-u", "lab/m51_pipeline.py", "--run", run,
-                       "--arms", arms], timeout=3600, kind=f"m51-pipeline:{arms}")
+                       "--arms", arms], timeout=3600, kind=f"m51-pipeline:{arms}",
+                      bind=run)
         return lab_env.STUDENT_RUNS_ROOT / run
 
     def run_fairab(self, *, pairs: int = 1, blocks: int = 1,
                    tag: str | None = None) -> Path:
         """M5.1 Part C: fair-client factorial (A/C x original/fast)."""
-        run = tag or datetime.now().strftime("%H%M%S") + "-nbq-fairab"
+        run = tag or (self._fresh_tag("fairab") + "-fairab")
         self._run_cli([sys.executable, "-u", "lab/m51_pipeline_fair_ab.py",
                        "--run", run, "--pairs", str(pairs),
                        "--blocks", str(blocks)], timeout=5400,
-                      kind="m51-fairab")
+                      kind="m51-fairab", bind=run)
         return lab_env.STUDENT_RUNS_ROOT / run
 
-    def note_consumed(self, run_dir_or_id: str, *, why: str = "") -> None:
-        """Register a physical record that was loaded by notebook code outside
+    def note_consumed(self, run_dir_or_id: str, *, why: str = "",
+                      expect: str | tuple[str, ...] | None = None) -> None:
+        """Register a physical record loaded by notebook code outside
         session.run/consume (e.g. module-specific JSON), keeping provenance
-        visible and the session log complete."""
-        self.consumed.append({"run_id": str(run_dir_or_id), "why": why})
+        visible and the session log complete. The category is resolved the
+        same fail-closed way as consume()."""
+        rid = str(run_dir_or_id).rstrip("/").split("/")[-1]
+        if expect is not None:
+            info = prov.require_category(rid, expect, session_id=self.session_id)
+            cat = info["category"]
+        else:
+            try:
+                cat = prov.classify_run(rid, session_id=self.session_id)["category"]
+            except prov.ProvenanceError:
+                # module-specific records (e.g. frozen files) classify by path
+                cat = prov.classify_path(str(run_dir_or_id))["category"]
+                if cat not in prov.PROVENANCE_CATEGORIES:
+                    raise
+        self.consumed.append({"run_id": str(run_dir_or_id), "why": why,
+                              "category": cat})
         print(f"[CONSUMED PHYSICAL RECORD] run_id={run_dir_or_id} {why}")
+        print(f"[PROVENANCE] {prov.label(rid, cat)}")
 
     def latest_campaign_run(self, experiment: str, *, min_formal: bool = True) -> str | None:
         """Newest non-smoke run of `experiment` from the current qualification
@@ -683,6 +789,8 @@ class Session:
             raise FileExistsError(f"session record already exists: {path}")
         payload = {
             "notebook": self.notebook, "mode": self.mode,
+            "session_id": self.session_id,
+            "source": self.source,
             "started_at": self.started_at,
             "finished_at": datetime.now().astimezone().isoformat(timespec="seconds"),
             "admission": {"status": self.admission.status,
