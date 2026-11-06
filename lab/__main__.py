@@ -54,7 +54,9 @@ def cmd_run(args) -> int:
         return 0
     from . import runner
     res = runner.run_experiment(args.experiment, date=args.date, port=args.port,
-                                only_prompt=args.only_prompt, smoke=args.smoke)
+                                only_prompt=args.only_prompt, smoke=args.smoke,
+                                warmup=getattr(args, "warmup", None),
+                                measured=getattr(args, "measured", None))
     print(f"RUN_DONE {res}")
     return 0
 
@@ -213,6 +215,11 @@ def main(argv: list[str] | None = None) -> None:
     p.add_argument("--port", type=int, default=8188)
     p.add_argument("--only-prompt", default=None)
     p.add_argument("--smoke", action="store_true")
+    p.add_argument("--warmup", type=int, default=None,
+                   help="override the manifest's warmup count (bounded "
+                        "classroom exercises; the manifest default otherwise)")
+    p.add_argument("--measured", type=int, default=None,
+                   help="override the manifest's measured count per prompt")
     p.set_defaults(func=cmd_run)
 
     p = sub.add_parser("quality", help="quality gate for one experiment")

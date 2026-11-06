@@ -496,7 +496,9 @@ class Session:
                 "restricted to GPU_RESEARCH mode; classroom runs stay bounded")
         if experiment in CLASSROOM_PROFILES and profile == "classroom":
             prof = CLASSROOM_PROFILES[experiment]
-            args = ["--only-prompt", prof["only_prompt"]]
+            args = ["--only-prompt", prof["only_prompt"],
+                    "--warmup", str(prof["warmup"]),
+                    "--measured", str(prof["measured"])]
             timeout = prof["timeout_s"]
             kind = "classroom-bounded"
         elif profile == "smoke":
@@ -641,6 +643,13 @@ class Session:
                       kind="m51-fairab")
         return lab_env.STUDENT_RUNS_ROOT / run
 
+    def note_consumed(self, run_dir_or_id: str, *, why: str = "") -> None:
+        """Register a physical record that was loaded by notebook code outside
+        session.run/consume (e.g. module-specific JSON), keeping provenance
+        visible and the session log complete."""
+        self.consumed.append({"run_id": str(run_dir_or_id), "why": why})
+        print(f"[CONSUMED PHYSICAL RECORD] run_id={run_dir_or_id} {why}")
+
     def latest_campaign_run(self, experiment: str, *, min_formal: bool = True) -> str | None:
         """Newest non-smoke run of `experiment` from the current qualification
         campaign (declared via QIR_NOTEBOOK_CAMPAIGN), else newest overall."""
@@ -664,7 +673,8 @@ class Session:
     def finish(self, summary: dict) -> Path:
         root = _sessions_root()
         root.mkdir(parents=True, exist_ok=True)
-        name = f"{datetime.now().strftime('%Y%m%d-%H%M%S')}-{self.notebook}-{self.mode}.json"
+        name = (f"{datetime.now().strftime('%Y%m%d-%H%M%S')}-{self.notebook}-"
+                f"{self.mode}-{os.getpid()}.json")
         path = root / name
         if path.exists():
             raise FileExistsError(f"session record already exists: {path}")

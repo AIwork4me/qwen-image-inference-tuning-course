@@ -326,6 +326,7 @@ _stamp(HISTORICAL, "population labels above come from the frozen campaign")'''),
            "2. 在冻结记录里找出某个 warm 样本比另一会话 cold 样本更慢的例子——"
            "为什么“cold 一定最慢”不是不变量？\n"
            "3. 解释为什么 smoke PASS 永远不能证明加速比。"),
+        code(CLOSE_CELL),
         md(acceptance_md("en"), acceptance_md("zh")),
     ]
 
@@ -445,6 +446,7 @@ except Exception as e:
            "1. 重跑一次有界练习并比较两个中位数——运行间波动比参考偏差更大还是"
            "更小？\n"
            "2. 哪一个改动最能降低你的测量不确定性？为什么？"),
+        code(CLOSE_CELL),
         md(acceptance_md("en"), acceptance_md("zh")),
         md(repro_md("en", "B0"), repro_md("zh", "B0")),
     ]
@@ -573,6 +575,7 @@ else:
            "2. M1 的端到端 warm 中位数远大于 GPU 忙碌总时间——列出造成差距的三个"
            "具体因素。\n"
            "3. 你下一个会优化哪一类？若把它完全消除，它对应的 Amdahl 上限是多少？"),
+        code(CLOSE_CELL),
         md(acceptance_md("en"), acceptance_md("zh")),
         md(repro_md("en", "B0"), repro_md("zh", "B0") + "\n\n"
            "```bash\npython -m lab profile --layers pipeline,kernel  # physical rocprofv3 trace\n```"),
@@ -696,6 +699,7 @@ print("your verdict on YOUR images stays PENDING_HUMAN_REVIEW until you review t
            "设计一个受控的步数实验：固定 Turbo BF16 模型与采样器，步数取 "
            "8/16/40，冻结种子与提示词。即便如此，还有什么与 B0 不可比？"
            "（模型容量、蒸馏、CFG=1 调度……）"),
+        code(CLOSE_CELL),
         md(acceptance_md("en"), acceptance_md("zh")),
         md(repro_md("en", "L1"), repro_md("zh", "L1")),
     ]
@@ -826,6 +830,7 @@ _stamp(HISTORICAL, "reference F2 fidelity gate triaged human review; INT8 "
            "1. 解释为什么 ck 注意力可能只在某些 ROCm 架构上有收益。\n"
            "2. 参考主机上 INT8 降低了约 6.6 GB VRAM——这在 48 GB 显卡上能带来什么？\n"
            "3. 设计一个能分离 F2 中*反量化开销*的单臂实验。"),
+        code(CLOSE_CELL),
         md(acceptance_md("en"), acceptance_md("zh")),
         md(repro_md("en", "F1"), repro_md("zh", "F1") + "\n\n"
            "```bash\npython -m lab run --experiment F2 --date <your-tag>   # INT8 arm\n```"),
@@ -919,12 +924,13 @@ if pilots is not None:
         code('''def latest_record(pattern, fname):
     cands = sorted((ROOT / "runs").glob(f"{pattern}/{fname}"))
     if not cands:
-        return None
+        return None, None
     import json as _j
-    return _j.loads(cands[-1].read_text())
+    return _j.loads(cands[-1].read_text()), cands[-1].parent.name
 
-h1 = gpu_cell(lambda: latest_record("*H1-cpu-te", "H1_RESULTS.json"))
+h1, h1_id = gpu_cell(lambda: latest_record("*H1-cpu-te", "H1_RESULTS.json")) or (None, None)
 if h1 is not None and "integrated" in h1:
+    session.note_consumed(h1_id, why="current-campaign H1 record")
     for tag, row in h1["integrated"].items():
         print(f"H1 integrated {tag:9s} total={row.get('total_s')}s "
               f"te={row.get('text_encode_s')}s vram_peak={row.get('vram_peak_mb')}MB")
@@ -932,8 +938,9 @@ if h1 is not None and "integrated" in h1:
 else:
     print("no fresh H1 record on this host; the frozen study is section 1")
 
-h2 = gpu_cell(lambda: latest_record("*H2-*", "H2_RESULTS.json"))
+h2, h2_id = gpu_cell(lambda: latest_record("*H2-*", "H2_RESULTS.json")) or (None, None)
 if h2 is not None:
+    session.note_consumed(h2_id, why="current-campaign H2 record")
     for k, v in h2.items():
         if isinstance(v, (int, float)):
             print(f"H2 {k}: {v}")
@@ -972,6 +979,7 @@ print("naive offload LOSES unless CPU encode overlaps GPU denoise")'''),
            "这是正确的权衡？\n"
            "3. 举一个理由：你这台主机的 CPU/GPU 比值为什么会与冻结实验的两个"
            "数量级不同？"),
+        code(CLOSE_CELL),
         md(acceptance_md("en"), acceptance_md("zh")),
         md(repro_md("en", "H1"), repro_md("zh", "H1") + "\n\n"
            "```bash\npython -m lab run --experiment H2 --date <your-tag>  # pipelined arm\n```"),
@@ -1043,13 +1051,13 @@ _stamp(HISTORICAL, "frozen encoder A/B (cleanroom campaign, 16-thread cgroup quo
 
 def latest_h3():
     cands = sorted((ROOT / "runs").glob("*H3_OV_BF16/H3_RESULTS.json"))
-    cands += sorted((ROOT / "runs").glob("*H3_OV_BF16-smoke/H3_RESULTS.json"))
     if not cands:
-        return None
-    return json.loads(cands[-1].read_text())
+        return None, None
+    return json.loads(cands[-1].read_text()), cands[-1].parent.name
 
-h3 = gpu_cell(latest_h3)
+h3, h3_id = gpu_cell(latest_h3) or (None, None)
 if h3 is not None:
+    session.note_consumed(h3_id, why="current-campaign OV encoder record")
     print("gates:", json.dumps(h3.get("gates", {}), indent=1))
     _stamp(MEASURED_TODAY, f"current-campaign H3_OV_BF16 gates above ({h3.get('mode')})")
     print("release_status:", h3.get("release_status"))
@@ -1134,6 +1142,7 @@ print("never report C_fast vs A_original as a pure architecture effect")'''),
            "2. Part C 中你会给哪个格子加样以收紧架构效应估计？为什么？\n"
            "3. 在 55 GiB cgroup 上跑 PyTorch CPU 完整臂之前，你会做怎样的 RAM "
            "准入检查？"),
+        code(CLOSE_CELL),
         md(acceptance_md("en"), acceptance_md("zh")),
         md(repro_md("en", "H3_OV_BF16"), repro_md("zh", "H3_OV_BF16")),
     ]
@@ -1233,6 +1242,7 @@ _stamp("GATE STATUS", "your verdict on YOUR images is PENDING_HUMAN_REVIEW "
     print(f"B0   {b0s['median_s']:7.2f}s (ref 55.206)  VRAM {b0s['vram_device_peak_mb']:.0f}MB (ref 33153)")
     print(f"BEST {bests['median_s']:7.2f}s (ref 9.023)  VRAM {bests['vram_device_peak_mb']:.0f}MB (ref 26514)")
     print("report the delta per arm, not only the ratio")'''),
+        code(CLOSE_CELL),
         md(acceptance_md("en"), acceptance_md("zh")),
         md(repro_md("en", "BEST"), repro_md("zh", "BEST")),
     ]
@@ -1383,6 +1393,7 @@ print("capstone report:", out)'''),
 {report['reproduce']}
 """
 print(pr_draft)'''),
+        code(CLOSE_CELL),
         md(acceptance_md("en"), acceptance_md("zh")),
     ]
 
@@ -1407,6 +1418,16 @@ MODULES = {
     "08": ("08_capstone_and_pr.ipynb", "08_capstone_and_pr.zh-CN.ipynb",
            "course/M07_student_challenge/CHALLENGES.md", m08),
 }
+
+
+CLOSE_CELL = '''summary = {
+    "mode": session.mode,
+    "notebook": session.notebook,
+    "executions": [e.get("run_id") or e.get("kind") for e in session.executions],
+    "consumed": [c.get("run_id") for c in session.consumed],
+    "note": "append-only session record; physical evidence lives under runs/",
+}
+session.finish(summary)'''
 
 
 def main() -> int:

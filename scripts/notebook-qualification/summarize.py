@@ -50,6 +50,59 @@ def quality_status(exp: str) -> dict:
     return out
 
 
+def _jload(p: Path):
+    try:
+        return json.loads(p.read_text())
+    except (OSError, ValueError):
+        return None
+
+
+def _m51_detail() -> dict:
+    """Key M5 measured values from the current campaign (never pooled with
+    the frozen cleanroom numbers)."""
+    R = ROOT / "runs"
+    out: dict = {}
+    g = _jload(R / "q1-075553-m51-te-cuda/probe.json/probe_cuda.json")
+    c = _jload(R / "q1-075553-m51-te-cpu/probe.json/probe_cpu.json")
+    ov = _jload(R / "q1-075553-H3_OV_BF16/probe_H3_OV_BF16.json")
+    if g and c:
+        def warm(d, pid):
+            row = d["prompts"][pid]
+            vals = [r["encode_s"] for r in row] if isinstance(row, list) else row.get("warm_samples_s", [])
+            return statistics.median(vals) if vals else None
+        for pid in ("p1-zh-scene", "p2-en-scene", "p3-poster-text"):
+            gw, cw = warm(g, pid), warm(c, pid)
+            if gw and cw:
+                out[f"pt_cpu_vs_gpu_{pid}"] = round(cw / gw, 1)
+            if ov and c:
+                rows = ov["prompts"].get(pid, [])
+                ovw = statistics.median([r["encode_s"] for r in rows[1:]]) if len(rows) > 1 else None
+                if ovw and cw:
+                    out[f"ov_vs_ptcpu_{pid}"] = round(cw / ovw, 1)
+    h1 = _jload(R / "q1-075553-H1-cpu-te/H1_RESULTS.json")
+    if h1 and "integrated" in h1:
+        out["h1_integrated_total_s"] = {k: v.get("total_s")
+                                        for k, v in h1["integrated"].items()
+                                        if isinstance(v, dict)}
+    ff = _jload(R / "q1-fairab-campaign/pipeline_profile/pipeline_profile.json")
+    if ff:
+        cells: dict[str, list[float]] = {}
+        for arm in ("A", "C"):
+            for sess in ff["arms"][arm]["sessions"]:
+                for b in sess["batches"]:
+                    mode = "original" if b["mode"] == "poll" else "fast"
+                    cells.setdefault(f"{arm}_{mode}", []).append(float(b["batch_wall_s"]))
+        med = {k: statistics.median(v) for k, v in cells.items()}
+        out["fairab_cells_s"] = {k: [round(x, 2) for x in v] for k, v in cells.items()}
+        out["fairab_architecture_effect_original_clients"] = round(
+            med["A_original"] / med["C_original"], 4)
+        out["fairab_architecture_effect_fast_clients"] = round(
+            med["A_fast"] / med["C_fast"], 4)
+        out["fairab_client_effect_A"] = round(med["A_original"] / med["A_fast"], 4)
+        out["fairab_client_effect_C"] = round(med["C_original"] / med["C_fast"], 4)
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--campaign", required=True)
@@ -97,13 +150,17 @@ def main() -> int:
     prof = sorted((ROOT / "runs").glob("q1-*-profile/STATUS.json"))
     kernel = sorted((ROOT / "runs").glob("q1-*-profile/rocprof-dit/analysis.json"))
     m51 = {
-        "encoder_local": bool(latest_formal("m51-te-cuda") or
-                              (ROOT / "runs").glob("q1-*-m51-te-cuda")),
-        "h3_ov_bf16": bool((ROOT / "runs").glob("q1-*H3_OV_BF16/H3_RESULTS.json")),
-        "pipeline_ac": bool((ROOT / "runs").glob("q1-*-m51pipe*/pipeline_ab.json")),
-        "fairab": bool((ROOT / "runs").glob("q1-*-fairab/pipeline_profile/pipeline_profile.json")),
-        "h1": bool((ROOT / "runs").glob("q1-*H1-cpu-te/H1_RESULTS.json")),
-        "h2": bool((ROOT / "runs").glob("q1-*H2*/H2_RESULTS.json")),
+        "encoder_local_gpu_pt": bool((ROOT / "runs/q1-075553-m51-te-cuda/probe.json/probe_cuda.json").is_file()),
+        "encoder_local_cpu_pt": bool((ROOT / "runs/q1-075553-m51-te-cpu/probe.json/probe_cpu.json").is_file()),
+        "encoder_local_ov_bf16": bool((ROOT / "runs/q1-075553-H3_OV_BF16").is_dir()),
+        "encoder_local_ov_fp32": bool((ROOT / "runs/q1-ovfp32-H3_OV_FP32").is_dir()),
+        "encoder_local_ov_int8": bool((ROOT / "runs/q1-ovint8-H3_OV_INT8").is_dir()),
+        "h3_ov_bf16": bool((ROOT / "runs/q1-075553-H3_OV_BF16/H3_RESULTS.json").is_file()),
+        "e2e_ab": bool((ROOT / "runs/q1-075553-m51full/e2e/e2e_ab.json").is_file()),
+        "pipeline_ac": bool((ROOT / "runs/q1-075553-m51pipe").is_dir()),
+        "fairab": bool((ROOT / "runs/q1-fairab-campaign/pipeline_profile/pipeline_profile.json").is_file()),
+        "h1": bool((ROOT / "runs/q1-075553-H1-cpu-te/H1_RESULTS.json").is_file()),
+        "h2": bool(list((ROOT / "runs").glob("q1-*H2*/H2_RESULTS.json"))),
     }
     out = {
         "generated_at": datetime.now().astimezone().isoformat(timespec="seconds"),
@@ -117,6 +174,7 @@ def main() -> int:
             },
             "M5": m51,
         },
+        "m51_detail": _m51_detail(),
         "provenance": {
             "git_head": subprocess.run(
                 ["git", "-C", str(ROOT), "rev-parse", "HEAD"],
