@@ -32,7 +32,7 @@ if ROOT is None:
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 COURSE_MODE = "REFERENCE"  # <- edit once: REFERENCE | GPU_CLASSROOM | GPU_RESEARCH
-RUN_OWN_GPU_ARMS = True   # <- False in GPU modes: reuse the latest physical run (shown run_id)
+RUN_OWN_GPU_ARMS = True   # <- False in GPU modes: reuse explicitly selected physical runs (ids shown + classified)
 from lab import notebook_runtime as rt
 from lab import notebook_support as ns
 session = rt.begin(COURSE_MODE, notebook="{nbid}")
@@ -67,11 +67,11 @@ GPU_OR_SKIP = '''def gpu_cell(fn):
 
 def want_own_arms():
     """Whether this session executes its own bounded arms (True unless the
-    student opted to reuse the latest physical run to save GPU time)."""
+    student opted to reuse earlier physical runs to save GPU time)."""
     if session.mode == "REFERENCE" or RUN_OWN_GPU_ARMS:
         return True
-    print("RUN_OWN_GPU_ARMS=False: reusing the latest physical campaign run(s) "
-          "instead of launching new ones (metered-GPU mode)")
+    print("RUN_OWN_GPU_ARMS=False: reusing explicitly selected physical run(s) "
+          "instead of launching new ones (metered-GPU mode; provenance shown)")
     return False
 '''
 
@@ -1211,6 +1211,17 @@ def run_own_te_arms():
     return te_gpu, te_cpu, h3_dir
 
 TE = None
+# Explicit reuse selector (used only when RUN_OWN_GPU_ARMS=False): paste the
+# exact run ids from your earlier session(s); empty = committed reference.
+REUSE_TE_RUNS = {"cuda": "", "cpu": "", "h3": ""}
+
+def _load_te_probe(run_id, dev):
+    session.note_consumed(run_id, why=f"explicit reuse: TE probe {dev}")
+    pr = json.loads((ROOT / "runs" / run_id / f"probe_{dev}.json").read_text())
+    p = next(iter(pr["prompts"].values()))
+    w = p["warm_samples_s"] if isinstance(p, dict) else [r["encode_s"] for r in p]
+    return w[-1], pr.get("rss_peak_mb")
+
 if OV_ADMIT is not None and want_own_arms():
     TE = gpu_cell(run_own_te_arms)
 te = {"provenance": "COMMITTED_PHYSICAL_REFERENCE",
@@ -1243,6 +1254,32 @@ if TE is not None:
                f"encoder-only: PyTorch CPU {te['cpu_warm_s']:.1f}s -> OV BF16 "
                f"{te['ov_bf16_s']:.3f}s ({te['cpu_warm_s']/te['ov_bf16_s']:.0f}x) "
                f"on THIS host [run_id={TE[2].name}, mode={te['h3_mode']}]")
+elif OV_ADMIT is not None and REUSE_TE_RUNS.get("h3"):
+    h3 = json.loads((ROOT / "runs" / REUSE_TE_RUNS["h3"] /
+                     "H3_RESULTS.json").read_text())
+    ov = [s for s in h3.get("measurements", {}).get("encode_s", [])[1:]] or \
+         h3.get("measurements", {}).get("encode_s", [])
+    g_val, _ = (_load_te_probe(REUSE_TE_RUNS["cuda"], "cuda")
+                if REUSE_TE_RUNS.get("cuda") else (None, None))
+    c_val, c_rss = (_load_te_probe(REUSE_TE_RUNS["cpu"], "cpu")
+                    if REUSE_TE_RUNS.get("cpu") else (None, None))
+    enc2 = ns.read_json("runs/m51-20261105-cleanroom-01/performance/encoder_ab.json")
+    te.update({"gpu_warm_s": g_val or enc2["arms"]["G_PyTorch_GPU"]["prompts"]["p1-zh-scene"]["warm_median_s"],
+               "cpu_warm_s": c_val or enc2["arms"]["C0_PyTorch_CPU"]["prompts"]["p1-zh-scene"]["warm_median_s"],
+               "ov_bf16_s": statistics.median(ov) if ov else None,
+               "cpu_rss_mb": c_rss,
+               "ov_rss_mb": h3.get("measurements", {}).get("rss_peak_mb"),
+               "h3_status": h3.get("status"), "h3_gates": h3.get("gates", {}),
+               "h3_mode": h3.get("mode"),
+               "human_quality_reference": h3.get("human_quality_reference"),
+               "provenance": "SAME_STUDENT_PRIOR_PHYSICAL",
+               "run_ids": [r for r in REUSE_TE_RUNS.values() if r] or [REUSE_TE_RUNS["h3"]]})
+    session.note_consumed(REUSE_TE_RUNS["h3"],
+                          why="explicit reuse: OV BF16 encoder run")
+    te["provenance"] = session.consumed[-1]["category"]
+    _stamp(_origin_stamp(te["provenance"]),
+           f"encoder numbers reused from your earlier physical runs "
+           f"{te['run_ids']} (explicit ids; NOT new measurements here)")
 else:
     row_g = enc["arms"]["G_PyTorch_GPU"]["prompts"]["p1-zh-scene"]["warm_median_s"]
     row_c = enc["arms"]["C0_PyTorch_CPU"]["prompts"]["p1-zh-scene"]["warm_median_s"]
@@ -1271,6 +1308,8 @@ else:
             "诚实的指标是**批次墙钟时间 / 每分钟图像数**；服务延迟、CPU RSS 与 VRAM "
             "单独报告。"),
          code('''PIPE = None
+REUSE_PIPELINE_RUN = ""  # exact run id of an earlier session's A/C pipeline
+                         # (used only when RUN_OWN_GPU_ARMS=False)
 if OV_ADMIT is not None and want_own_arms():
     def run_own_ac():
         return session.run_m51_pipeline(arms="A,C")
@@ -1282,6 +1321,20 @@ pab_run_id = None
 if PIPE is not None:
     pab = json.loads((PIPE / "pipeline" / "pipeline_ab.json").read_text())
     pab_origin, pab_run_id = "CURRENT_SESSION_PHYSICAL", PIPE.name
+elif OV_ADMIT is not None and REUSE_PIPELINE_RUN:
+    session.note_consumed(REUSE_PIPELINE_RUN,
+                          why="explicit reuse of an earlier session's A/C pipeline")
+    pab = json.loads((ROOT / "runs" / REUSE_PIPELINE_RUN /
+                      "pipeline" / "pipeline_ab.json").read_text())
+    pab_origin = session.consumed[-1]["category"]
+    pab_run_id = REUSE_PIPELINE_RUN
+else:
+    ppath = "runs/m51-20261105-cleanroom-01/pipeline/pipeline_ab.json"
+    pab = ns.read_json(ppath)
+    pc2 = prov.classify_path(ppath)
+    pab_origin, pab_run_id = pc2["category"], "m51-20261105-cleanroom-01"
+
+if pab is not None:
     A, C = pab["arms"]["A"], pab["arms"]["C"]
     print(f"A (GPU-native TE) : batch wall {A['total_s']:.2f}s | "
           f"{A['images_per_min']:.2f} img/min | warmup {A['server_warmup_s']:.1f}s | "
@@ -1292,18 +1345,15 @@ if PIPE is not None:
           f"server_rss {C['server_rss_after_mb']:.0f}MB")
     print(f"C overlap proven: {C['overlap_proven']} "
           f"(total overlap {C['overlap_s_total']:.2f}s of CPU encode under GPU work)")
-    _stamp(MEASURED_TODAY,
-           f"physical A/C pipeline executed in THIS session [run_id={PIPE.name}]")
-else:
-    ppath = "runs/m51-20261105-cleanroom-01/pipeline/pipeline_ab.json"
-    pab = ns.read_json(ppath)
-    pc2 = prov.classify_path(ppath)
-    pab_origin, pab_run_id = pc2["category"], "m51-20261105-cleanroom-01"
-    for arm in pab["arms"]:
-        print("reference", arm, str(pab["arms"][arm])[:160])
     _stamp(_origin_stamp(pab_origin),
-           f"committed cleanroom pipeline A/B (explicit path; no own arms "
-           f"executed here)")'''),
+           f"A/C pipeline evidence [run_id={pab_run_id}]")
+else:
+    pab = ns.read_json("runs/m51-20261105-cleanroom-01/pipeline/pipeline_ab.json")
+    pc2 = prov.classify_path("runs/m51-20261105-cleanroom-01/pipeline/pipeline_ab.json")
+    pab_origin, pab_run_id = pc2["category"], "m51-20261105-cleanroom-01"
+    _stamp(_origin_stamp(pab_origin),
+           "committed cleanroom pipeline A/B (explicit path; no own arms "
+           "executed here)")'''),
          md("## Part E · Evidence-aware reading of the A/C result\n"
             "Workload identity first (matched arms are a precondition, not an "
             "assumption), then the five evidence views — each citing the "
@@ -1455,14 +1505,20 @@ print("never report C_fast vs A_original as a pure architecture effect")'''),
            "5. C worker 消耗了多少 CPU 内存？是哪道准入检查在保护它？\n"
            "6. 在**这套测量协议**下，优化后的架构确实更好吗？范围如何（n、样本"
            "总体）？\n7. 还有哪些不确定性？下一个你会补做什么实验？"),
-        code('''m51_result = {
+        code('''_OWN = PIPE is not None
+_PRIOR = (not _OWN and pab_origin in ("SAME_STUDENT_PRIOR_PHYSICAL",
+                                      "SHARED_CAMPAIGN_PHYSICAL"))
+_PHYS = _OWN or _PRIOR
+m51_result = {
     "experiment_id": "M51",
     "session_id": session.session_id,
     "course_mode": session.mode,
-    "run_ids": ([PIPE.name] if PIPE is not None else list(te.get("run_ids", []))),
-    "provenance": ("CURRENT_SESSION_PHYSICAL" if PIPE is not None
-                   else te.get("provenance", "COMMITTED_PHYSICAL_REFERENCE")),
-    "execution_status": "MEASURED" if PIPE is not None else "REUSED",
+    "run_ids": ([PIPE.name] if _OWN else
+                [pab_run_id] if _PRIOR else list(te.get("run_ids", []))),
+    "provenance": ("CURRENT_SESSION_PHYSICAL" if _OWN else
+                   pab_origin if _PRIOR else
+                   te.get("provenance", "COMMITTED_PHYSICAL_REFERENCE")),
+    "execution_status": ("MEASURED" if _OWN else "REUSED"),
     "gpu": {"arch": (session.admission.detail.get("gfx_arch")
                     if session.admission and session.admission.detail else None),
             "model": (session.admission.detail.get("device_name")
@@ -1482,9 +1538,9 @@ print("never report C_fast vs A_original as a pure architecture effect")'''),
                       if pab else {"note": "reference-only session"}),
     "throughput": ({"numerator": 4, "denominator": pab["arms"]["C"]["total_s"],
                     "unit": "images/s (C arm)"}
-                   if pab and PIPE is not None else None),
+                   if pab and _PHYS else None),
     "speedup": (round(pab["arms"]["A"]["total_s"] / pab["arms"]["C"]["total_s"], 3)
-                if pab and PIPE is not None else None),
+                if pab and _PHYS else None),
     "memory": ({"cpu_worker_rss_mb": pab["arms"]["C"].get("worker_rss_after_mb"),
                 "cpu_server_rss_mb": pab["arms"]["C"].get("server_rss_after_mb"),
                 "gpu_vram_peak_mb": pab["arms"]["A"].get("vram_peak_mb"),
@@ -1493,15 +1549,15 @@ print("never report C_fast vs A_original as a pure architecture effect")'''),
     "numerical_status": (te.get("h3_gates", {}).get("conditioning_alignment")
                          or "NOT_ASSESSED"),
     "human_quality_status": "PENDING_HUMAN_REVIEW",
-    "classification": ("BOUNDED_PHYSICAL_COMPARISON" if PIPE is not None
+    "classification": ("BOUNDED_PHYSICAL_COMPARISON" if _PHYS
                        else "REFERENCE_ONLY"),
-    "ac_pair": ({"a_run_id": PIPE.name, "c_run_id": PIPE.name,
+    "ac_pair": ({"a_run_id": pab_run_id, "c_run_id": pab_run_id,
                  "a_workload": prov.workload_identity(pab),
                  "c_workload": prov.workload_identity(pab)}
-                if PIPE is not None else None),
+                if _PHYS else None),
     "result_status": "PASS",
-    "source_paths": ([f"runs/{PIPE.name}/pipeline/pipeline_ab.json"]
-                     if PIPE is not None else
+    "source_paths": ([f"runs/{pab_run_id}/pipeline/pipeline_ab.json"]
+                     if _PHYS else
                      ["runs/m51-20261105-cleanroom-01/pipeline/pipeline_ab.json"]),
     "reproduce_command": ("python -u lab/m51_pipeline.py --run <fresh-tag> "
                           "--arms A,C"),
@@ -1517,7 +1573,8 @@ summary = {
     "session_id": session.session_id,
     "executions": [e.get("run_id") or e.get("kind") for e in session.executions],
     "consumed": [c.get("run_id") for c in session.consumed],
-    "physical_experiment_status": ("MEASURED" if PIPE is not None else
+    "physical_experiment_status": ("MEASURED" if _OWN else
+                                   "REUSED_PRIOR_PHYSICAL" if _PRIOR else
                                    "REFERENCE_ONLY"),
     "student_result": m51_result,
     "note": "append-only session record; physical evidence lives under runs/",
