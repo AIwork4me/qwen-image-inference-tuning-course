@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0",
+  "policy": "Evidence-only default; opt-in bounded physical smoke; immutable reference data",
+  "modules": [
+    {
+      "id": "00",
+      "title": "M0 · Environment / 实验规范",
+      "lesson": "course/M00_setup_and_discipline/LESSON.md",
+      "english": "00_experimental_discipline.ipynb",
+      "chinese": "00_experimental_discipline.zh-CN.ipynb",
+      "cpu_offline": true,
+      "gpu_smoke_opt_in": false
+    },
+    {
+      "id": "01",
+      "title": "M1 · Baseline / 基准统计",
+      "lesson": "course/M01_baseline/LESSON.md",
+      "english": "01_baseline_and_uncertainty.ipynb",
+      "chinese": "01_baseline_and_uncertainty.zh-CN.ipynb",
+      "cpu_offline": true,
+      "gpu_smoke_opt_in": true
+    },
+    {
+      "id": "02",
+      "title": "M2 · Profiling / 性能剖析",
+      "lesson": "course/M02_profiling/LESSON.md",
+      "english": "02_profile_and_bottlenecks.ipynb",
+      "chinese": "02_profile_and_bottlenecks.zh-CN.ipynb",
+      "cpu_offline": true,
+      "gpu_smoke_opt_in": false
+    },
+    {
+      "id": "03",
+      "title": "M3 · Less compute / 少计算",
+      "lesson": "course/M03_less_computation/LESSON.md",
+      "english": "03_less_computation.ipynb",
+      "chinese": "03_less_computation.zh-CN.ipynb",
+      "cpu_offline": true,
+      "gpu_smoke_opt_in": true
+    },
+    {
+      "id": "04",
+      "title": "M4 · Faster compute / 快计算",
+      "lesson": "course/M04_faster_computation/LESSON.md",
+      "english": "04_faster_computation.ipynb",
+      "chinese": "04_faster_computation.zh-CN.ipynb",
+      "cpu_offline": true,
+      "gpu_smoke_opt_in": true
+    },
+    {
+      "id": "05",
+      "title": "M5.0 · Negative offload / CPU 卸载负结果",
+      "lesson": "course/M05_parallel_heterogeneous/LESSON.md",
+      "english": "05_cpu_offload_negative.ipynb",
+      "chinese": "05_cpu_offload_negative.zh-CN.ipynb",
+      "cpu_offline": true,
+      "gpu_smoke_opt_in": false
+    },
+    {
+      "id": "06",
+      "title": "M5.1 · OpenVINO fair A/B / 公平对照",
+      "lesson": "course/M05_parallel_heterogeneous/M5_1_OPENVINO_CPU_TE.md",
+      "english": "06_openvino_and_fair_ab.ipynb",
+      "chinese": "06_openvino_and_fair_ab.zh-CN.ipynb",
+      "cpu_offline": true,
+      "gpu_smoke_opt_in": false
+    },
+    {
+      "id": "07",
+      "title": "M6 · Combined & quality / 组合与画质",
+      "lesson": "course/M06_combined_quality/LESSON.md",
+      "english": "07_combined_and_quality.ipynb",
+      "chinese": "07_combined_and_quality.zh-CN.ipynb",
+      "cpu_offline": true,
+      "gpu_smoke_opt_in": true
+    },
+    {
+      "id": "08",
+      "title": "M7 · Evidence-backed PR / 开源挑战",
+      "lesson": "course/M07_student_challenge/CHALLENGES.md",
+      "english": "08_capstone_and_pr.ipynb",
+      "chinese": "08_capstone_and_pr.zh-CN.ipynb",
+      "cpu_offline": true,
+      "gpu_smoke_opt_in": false
+    }
+  ]
+}
