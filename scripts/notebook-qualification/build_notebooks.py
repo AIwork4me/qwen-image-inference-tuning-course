@@ -32,6 +32,7 @@ if ROOT is None:
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 COURSE_MODE = "REFERENCE"  # <- edit once: REFERENCE | GPU_CLASSROOM | GPU_RESEARCH
+RUN_OWN_GPU_ARMS = True   # <- False in GPU modes: reuse the latest physical run (shown run_id)
 from lab import notebook_runtime as rt
 from lab import notebook_support as ns
 session = rt.begin(COURSE_MODE, notebook="{nbid}")
@@ -56,6 +57,15 @@ GPU_OR_SKIP = '''def gpu_cell(fn):
         return fn()
     print("skipped physical exercise: COURSE_MODE=REFERENCE (no GPU work launched)")
     return None
+
+def want_own_arms():
+    """Whether this session executes its own bounded arms (True unless the
+    student opted to reuse the latest physical run to save GPU time)."""
+    if session.mode == "REFERENCE" or RUN_OWN_GPU_ARMS:
+        return True
+    print("RUN_OWN_GPU_ARMS=False: reusing the latest physical campaign run(s) "
+          "instead of launching new ones (metered-GPU mode)")
+    return False
 '''
 
 # ---------------------------------------------------------------------------
@@ -370,11 +380,12 @@ _stamp(HISTORICAL, f"B0 reference median {observed:.3f}s "
     bundle = session.run("B0", profile=profile)
     return bundle
 
-b0 = gpu_cell(run_own_b0)
+b0 = gpu_cell(run_own_b0) if want_own_arms() else None
 if b0 is None:
     shared = session.latest_campaign_run("B0")
     if shared:
-        b0 = session.consume(shared, why="qualification-campaign B0 record")'''),
+        b0 = session.consume(shared, why="latest physical B0 record (shared, "
+                                        "not double-counted as a new measurement)")'''),
         md("## 3 · Your numbers, your statistics\n"
            "Median, spread, per-step time, and peak VRAM — computed from the "
            "records of the run above (or, in REFERENCE mode, still from the "
@@ -623,7 +634,7 @@ for k in ("B0", "L1"):
     l1 = session.run("L1", profile=prof)
     return b0, l1
 
-pair = gpu_cell(run_less_pair)
+pair = gpu_cell(run_less_pair) if want_own_arms() else None
 if pair is None:
     b0_id = session.latest_campaign_run("B0")
     l1_id = session.latest_campaign_run("L1")
@@ -731,7 +742,7 @@ def m04() -> list:
     f2 = session.run("F2", profile=prof)
     return b0, f1, f2
 
-arms = gpu_cell(run_faster_arms)
+arms = gpu_cell(run_faster_arms) if want_own_arms() else None
 if arms is None:
     ids = [session.latest_campaign_run(x) for x in ("B0", "F1", "F2")]
     if all(ids):
@@ -1158,7 +1169,7 @@ def m07() -> list:
     best = session.run("BEST", profile=prof)
     return b0, best
 
-m6 = gpu_cell(run_m6_pair)
+m6 = gpu_cell(run_m6_pair) if want_own_arms() else None
 if m6 is None:
     ids = [session.latest_campaign_run("B0"), session.latest_campaign_run("BEST")]
     if all(ids):
