@@ -21,8 +21,8 @@
 | 15 | Run All bounded and classroom-safe | PASS | bounded profiles + timeouts + GPU lock; research gated to GPU_RESEARCH; budgets enforced via --warmup/--measured |
 | 16 | Current GPU measurement limitations stated | PASS | GPU_PERFORMANCE_MATRIX.md §Limitations; notebooks tag estimates/simulations |
 | 17 | Frozen benchmark evidence unchanged | PASS | `git status evidence/` clean at every gate (validate_evidence check) |
-| 18 | All CPU tests + course-quality checks pass | PASS | 157 + 13 tests; 6 course-quality gates green |
-| 19 | CI green at final HEAD | PENDING | verified post-push (GitHub Actions CPU gate) |
+| 18 | All CPU tests + course-quality checks pass | PASS | 216 tests (175 pre-closure + 41 student-provenance/admission); 6 course-quality gates green |
+| 19 | CI green at final HEAD | PASS | run #31 at `03726e8` (student-independence closure): https://github.com/AIwork4me/qwen-image-inference-tuning-course/actions/runs/42242142758 — historical: run #30 at `9e550e8` (175 tests): https://github.com/AIwork4me/qwen-image-inference-tuning-course/actions/runs/42222858351 |
 | 20 | Exact GPU execution commands and artifacts recorded | PASS | `campaign_status.json` (per-step cmd + rc + wall), run records, session/matrix JSONs |
 | 21 | Instructor can reproduce the student workflow | PASS | rehearsal script + STUDENT_USABILITY_AUDIT.md; instructor guides updated |
 
@@ -33,4 +33,4 @@
 - `lab profile`'s pipeline layer pools the repo's committed `acceptance-b0-B0` warm records with the campaign's (same experiment; medians agree <0.2%).
 - Classroom pass-B executed M1-EN with the pre-fix budget (6 generations for one prompt instead of 4); fixed for all subsequent runs; both variants' populations are labelled bounded either way.
 
-**Verdict: READY_FOR_OWNER_REVIEW** (gate 19 to be confirmed by CI at final HEAD; no release-blocking issue open).
+**Verdict: READY_FOR_OWNER_REVIEW** (gate 19 confirmed by CI at the closure HEAD `03726e8`; the student-independence gates are tracked separately in [STUDENT_INDEPENDENCE_FINAL_GATE_MATRIX.md](STUDENT_INDEPENDENCE_FINAL_GATE_MATRIX.md); no release-blocking issue open).
