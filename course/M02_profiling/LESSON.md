@@ -1,5 +1,13 @@
 # M2 — Profiling: Where the Time Actually Goes
 
+## Run it as a notebook (three declared modes)
+
+Every module ships paired EN/zh-CN Jupyter notebooks. Set `COURSE_MODE` in
+the first cell: `REFERENCE` (offline CPU analysis of the frozen campaign),
+`GPU_CLASSROOM` (your own bounded physical W7900 exercise, ~5 min per arm —
+the default lab experience), or `GPU_RESEARCH` (this full protocol). See
+[notebooks/README.md](../../notebooks/README.md).
+
 **Learning objectives (you will be able to):**
 1. Locate the real hotspots of an inference workload with two profiling layers (pipeline timing + kernel tracing), stating what each layer captures and misses;
 2. Compute Amdahl bounds from profiling data and use them as planning predictions, not results;

@@ -12,6 +12,14 @@ reproduce the whole methodology yourself on a free Radeon Cloud GPU.
 
 ---
 
+## Interactive Jupyter labs — learn by doing
+
+**[Start the 9-module Jupyter laboratory](notebooks/README.md)** · [中文实践入口](notebooks/README.zh-CN.md) · [M1 baseline notebook](notebooks/01_baseline_and_uncertainty.ipynb)
+
+Each module now has **paired English/Chinese executable notebooks (18 total)** with **three declared modes**: `REFERENCE` (offline CPU analysis of the frozen campaign — the GitHub CI profile), `GPU_CLASSROOM` (your own bounded physical W7900 measurements — the default student experience after Radeon Cloud onboarding), and `GPU_RESEARCH` (full frozen protocol). Set `COURSE_MODE` in the first cell and Restart & Run All; an admission banner shows the admitted GPU or the exact blocker. Physical GPU measurement is the primary practical validation; committed evidence stays the reference and scientific comparison source. Classroom exercises are bounded teaching experiments — a formal speedup claim needs the research protocol.
+
+**Student independence:** a fresh clone contains the instructor's committed physical records, so every number a notebook shows is pinned to a machine-validated origin (`CURRENT_SESSION_PHYSICAL` … `BLOCKED`, [provenance contract](docs/notebook-gpu-qualification/STUDENT_PROVENANCE_CONTRACT.md)) — a committed instructor run can never be presented as your own measurement, reuse requires an exact run id, and M5.1's OpenVINO artifact admission fails closed (`PASS` / `PASS_WITH_WARNINGS` / `FAIL` / `BLOCKED`).
+
 ## The result (real, measured, honestly caveated)
 
 Same prompt, same seed, same GPU — the engineering changed, and so did the
@@ -155,7 +163,7 @@ minimum SHA256-pinned model set (~25.5 GB, resumable), runs the fail-closed
 doctor, and generates one bounded smoke image whose path it prints.
 [Full quickstart + tested recovery guide →](docs/RADEON_CLOUD_QUICKSTART.md)
 
-**No GPU yet?** Every module has an evidence-only mode: read committed
+**No GPU yet?** Every module has a `REFERENCE` mode: read committed
 measurements, recompute speedups, analyze profiling data — and submit a
 CPU-only improvement PR ([Mode A below](#choose-your-learning-track)).
 
@@ -163,9 +171,9 @@ CPU-only improvement PR ([Mode A below](#choose-your-learning-track)).
 
 | Mode | For | Time | What you do |
 |---|---|---|---|
-| **A — Evidence-only** (no GPU) | everyone | 2–4 h | read committed run records, recompute ratios, judge claims vs evidence, improve docs/tests via PR |
-| **B — Classroom GPU smoke** | students with metered GPU time | +2 h | bounded `--smoke` runs (1–3 min each), bounded outputs under `runs/` |
-| **C — Full research reproduction** | advanced | +6–10 h GPU | strict doctor, pinned models, full protocols, repeated A/B, quality gates, uncertainty, contribution |
+| **A — REFERENCE** (no GPU) | everyone | 2–4 h | read committed run records, recompute ratios, judge claims vs evidence, improve docs/tests via PR |
+| **B — GPU_CLASSROOM** (default on your W7900) | provisioned students | +2–3 h | your own bounded physical measurements per module (≈5 min/arm, 1 prompt), auto-labelled `BOUNDED_PHYSICAL_COMPARISON` |
+| **C — GPU_RESEARCH** (full reproduction) | advanced | +6–10 h GPU | strict doctor, pinned models, full protocols (3 prompts × 3 seeds), repeated A/B, quality gates, uncertainty, contribution |
 
 Details: [docs/CLASSROOM_WORKFLOWS.md](docs/CLASSROOM_WORKFLOWS.md) ·
 中文：[docs/CLASSROOM_WORKFLOWS.zh-CN.md](docs/CLASSROOM_WORKFLOWS.zh-CN.md)

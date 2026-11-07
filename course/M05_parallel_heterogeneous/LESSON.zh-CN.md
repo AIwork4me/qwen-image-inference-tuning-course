@@ -1,5 +1,20 @@
 # M5.0 — PyTorch CPU 文本编码与流水线（单 GPU 上）
 
+## 以 Notebook 方式运行（三种声明模式）
+
+每个模块配有中英文对照 Jupyter Notebook。在第一个单元设置
+`COURSE_MODE`：`REFERENCE`（离线 CPU 分析冻结实验数据）、`GPU_CLASSROOM`
+（你自己的 W7900 有界物理练习，每臂约 5 分钟——默认实验体验）或
+`GPU_RESEARCH`（本文档所述完整协议）。见
+[notebooks/README.zh-CN.md](../../notebooks/README.zh-CN.md)。
+
+**亲自实测这个负结果。** 在 `GPU_CLASSROOM` 下，Notebook 05 会在你的主机上
+运行你自己的 GPU 与 CPU PyTorch TE 试点（这个“慢”本身就是测量结果）。H1/H2
+流水线记录按**精确的已提交 run id** 消费，并标注
+`COMMITTED_PHYSICAL_REFERENCE`——课堂范围内 H2 对比保持 reference-only；
+自跑 H2 属于 `GPU_RESEARCH` 选项。见
+[学生溯源契约](../../docs/notebook-gpu-qualification/STUDENT_PROVENANCE_CONTRACT.md)。
+
 **学习目标（学完本课你能够）：**
 1. 从 H2 实测数据推导流水线盈亏平衡点 t\*（CPU 编码时间低于多少才值得流水线化），并说明参考主机离它多远；
 2. 用逐请求时间戳证明"重叠真实存在"，同时解释为何重叠存在仍然 14× 惨败（最慢级门控 + 争用代价）；

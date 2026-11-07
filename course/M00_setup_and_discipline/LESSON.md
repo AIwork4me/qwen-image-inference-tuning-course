@@ -1,5 +1,13 @@
 # M0 — Setup & the Discipline
 
+## Run it as a notebook (three declared modes)
+
+Every module ships paired EN/zh-CN Jupyter notebooks. Set `COURSE_MODE` in
+the first cell: `REFERENCE` (offline CPU analysis of the frozen campaign),
+`GPU_CLASSROOM` (your own bounded physical W7900 exercise, ~5 min per arm —
+the default lab experience), or `GPU_RESEARCH` (this full protocol). See
+[notebooks/README.md](../../notebooks/README.md).
+
 **Learning objectives (you will be able to):**
 1. Bootstrap the course environment on a Radeon Cloud GPU instance with one command, and explain what it does and does not do;
 2. Name the fail-closed doctor's checks and the accident each one prevents;

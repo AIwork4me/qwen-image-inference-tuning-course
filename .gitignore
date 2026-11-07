@@ -33,3 +33,18 @@ runs/m51-*/ov/fp32
 runs/m51-*/ov/bf16
 runs/m51-*/ov/int8
 runs/**/*.npz
+
+# notebook GPU qualification: executed notebooks (with outputs) and
+# server logs stay on the measurement host; compact records are committed
+runs/notebook-gpu-qualification/**/executed/
+runs/**/server*.log
+runs/**/*stdout*.log
+runs/**/*stderr*.log
+runs/**/e2e_ab.partial.json
+runs/**/_*.py
+runs/**/h1_probe.json.tmp
+
+# local notebook-session logs and test-run capstone drafts (commit real
+# student evidence explicitly with git add -f when intended)
+runs/notebook-sessions/
+runs/notebook-student/

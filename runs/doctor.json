@@ -1,5 +1,5 @@
 {
-  "verdict": "FAIL",
+  "verdict": "PASS",
   "mode": "strict",
   "checks": [
     {
@@ -19,14 +19,24 @@
     },
     {
       "check": "weights_integrity",
-      "status": "FAIL",
-      "detail": "{'per_file': [{'rel': 'diffusion_models/qwen_image_2.1_bf16.safetensors', 'ok': False, 'reason': 'absent', 'required': True, 'verdict': 'FAIL (required, absent)'}, {'rel': 'diffusion_models/qwen_image_2.1_int8_convrot.safetensors', 'ok': False, 'reason': 'absent', 'required': True, 'verdict': 'FAIL (required, absent)'}, {'rel': 'diffusion_models/qwen_image_2.1_turbo_bf16.safetensors', 'ok': True, "
+      "status": "PASS",
+      "detail": "{'per_file': [{'rel': 'diffusion_models/qwen_image_2.1_bf16.safetensors', 'ok': True, 'reason': 'hashed', 'required': True, 'verdict': 'PASS'}, {'rel': 'diffusion_models/qwen_image_2.1_int8_convrot.safetensors', 'ok': True, 'reason': 'hashed', 'required': True, 'verdict': 'PASS'}, {'rel': 'diffusion_models/qwen_image_2.1_turbo_bf16.safetensors', 'ok': True, 'reason': 'stamp-cache-hit', 'required':"
     },
     {
       "check": "prompts_frozen",
       "status": "PASS",
       "detail": "3 prompts x 3 seeds, ids intact"
+    },
+    {
+      "check": "flash_sdpa_probe",
+      "status": "PASS",
+      "detail": "flash attention launches + syncs on gfx1100"
+    },
+    {
+      "check": "rocprofv3",
+      "status": "PASS",
+      "detail": "version: 1.1.0\n        git_revision: e1a6bc5663304b9c586b3254b8920f2981057804\n        library_arch: x86_64-linux-gnu\n         system_name: Linux\n    system_processor: x86_64\n      system_version: 6.8."
     }
   ],
-  "snapshot": "snapshot-20261105-115007.json"
+  "snapshot": "snapshot-20261106-073405.json"
 }

@@ -454,3 +454,155 @@ def honest_status(requested: str, evidence: dict) -> str:
     if requested not in ("PASS", "FAIL", "PENDING"):
         return "NOT_RUN"
     return requested
+
+
+# ---------------------------------------------------------------------------
+# Student-facing BF16 admission (M5.1 notebook Part A; student-independence
+# closure P2). One call, one contract:
+#   PASS                every identity/integrity/resource check satisfied
+#   PASS_WITH_WARNINGS  artifact operational + verified to the documented
+#                       extent, but >=1 historical integrity field unpinned
+#                       (never silently rounded up to PASS)
+#   FAIL                a mandatory check failed on an artifact that IS
+#                       present (digest/size/identity/manifest corruption) —
+#                       dependent inference MUST NOT proceed
+#   BLOCKED             a required artifact or resource is unavailable —
+#                       remediation command is returned
+# A subprocess return code is never a scientific status; this contract is.
+# ---------------------------------------------------------------------------
+
+OV_BF16_REQUIRED_FILES = ("language_model_bf16.xml", "language_model_bf16.bin")
+OV_BF16_IDENTITY = {"storage": "FP16", "runtime_precision": "bf16"}
+OV_BF16_NEED_RAM_BYTES = 34 * 2**30  # same budget the H3_OV_BF16 spec pins
+
+# verify_artifact() BLOCKED reasons reclassified as FAIL (invalid artifact
+# present) rather than BLOCKED (artifact/resource unavailable).
+_FAIL_REASONS = frozenset({
+    "corrupt_manifest", "manifest_has_no_source_digest", "unsafe_path",
+    "size_mismatch", "unreadable_file", "digest_mismatch", "identity_mismatch",
+})
+
+
+def _read_cpu_quota(path: str = "/sys/fs/cgroup/cpu.max") -> dict:
+    try:
+        parts = (Path(path).read_text().strip().split())
+        if len(parts) == 2 and parts[1].isdigit():
+            quota = int(parts[0]) / int(parts[1])
+            return {"cpus": round(quota, 2), "raw": " ".join(parts)}
+    except (OSError, ValueError, ZeroDivisionError):
+        pass
+    return {"cpus": None, "raw": None}
+
+
+def admit_ov_bf16(artifact_root: str | Path | None = None, *,
+                  repo: Path | None = None,
+                  need_ram_bytes: int = OV_BF16_NEED_RAM_BYTES,
+                  concurrent_reserve_bytes: int = 4 * 2**30,
+                  runtime_check: bool = True) -> dict:
+    """Admission contract for the M5.1 OpenVINO BF16 deployment.
+
+    Reuses the single byte-level verifier (verify_artifact) — there is no
+    second, weaker validator. Environment overrides come only from
+    $M51_OV_ARTIFACTS (documented provisioning variable), never from
+    notebook-editable metadata."""
+    from . import lab_env
+    repo = repo or lab_env.REPO
+    resolved_from = "argument"
+    if artifact_root is None:
+        env = os.environ.get("M51_OV_ARTIFACTS")
+        if env:
+            artifact_root, resolved_from = env, "env:M51_OV_ARTIFACTS"
+        else:
+            artifact_root, resolved_from = repo / "runs" / "m51-ov-artifacts", "default"
+    root = Path(artifact_root) / "bf16"
+    checks: list[dict] = []
+
+    def _remedy_missing() -> str:
+        return ("stage verified OpenVINO artifacts: `bash scripts/m51/provision_ov.sh`, "
+                "or point $M51_OV_ARTIFACTS at the shared provisioned root "
+                "(e.g. /opt/m51-artifacts) and re-run this cell")
+
+    verification = verify_artifact(root, list(OV_BF16_REQUIRED_FILES),
+                                   expected_identity=dict(OV_BF16_IDENTITY))
+    vstat = verification.get("status")
+    if vstat in ("PASS", "PASS_WITH_WARNINGS"):
+        checks.append({"name": "artifact_integrity", "status": vstat,
+                       "detail": {"root": str(root),
+                                  "warnings": verification.get("warnings", [])}})
+    else:
+        reason = verification.get("reason", "unknown")
+        if reason in _FAIL_REASONS:
+            checks.append({"name": "artifact_integrity", "status": "FAIL",
+                           "detail": verification})
+            return {"contract": "m51-ov-admission/v1", "status": "FAIL",
+                    "artifact_root": str(root), "resolved_from": resolved_from,
+                    "checks": checks, "verification": verification,
+                    "identity_expected": dict(OV_BF16_IDENTITY),
+                    "ram_gate": None, "cpu_quota": _read_cpu_quota(),
+                    "remediation": ("artifact present but INVALID "
+                                    f"({reason}): re-provision with "
+                                    "`bash scripts/m51/provision_ov.sh`; do NOT "
+                                    "continue dependent inference with it")}
+        checks.append({"name": "artifact_availability", "status": "BLOCKED",
+                       "detail": verification})
+        return {"contract": "m51-ov-admission/v1", "status": "BLOCKED",
+                "artifact_root": str(root), "resolved_from": resolved_from,
+                "checks": checks, "verification": verification,
+                "identity_expected": dict(OV_BF16_IDENTITY),
+                "ram_gate": None, "cpu_quota": _read_cpu_quota(),
+                "remediation": _remedy_missing()}
+
+    warnings = list(verification.get("warnings", []))
+
+    # OpenVINO runtime availability (the OV workers run in the repo venv)
+    if runtime_check:
+        ov_py = repo / ".venv-ov" / "bin" / "python"
+        if not ov_py.is_file():
+            return {"contract": "m51-ov-admission/v1", "status": "BLOCKED",
+                    "artifact_root": str(root), "resolved_from": resolved_from,
+                    "checks": checks + [{"name": "openvino_runtime",
+                                         "status": "BLOCKED",
+                                         "detail": {"missing": str(ov_py)}}],
+                    "verification": verification,
+                    "identity_expected": dict(OV_BF16_IDENTITY),
+                    "ram_gate": None, "cpu_quota": _read_cpu_quota(),
+                    "remediation": ("create the pinned OpenVINO venv: "
+                                    "python3 -m venv .venv-ov && "
+                                    ".venv-ov/bin/pip install openvino==2026.4.1 "
+                                    "(see scripts/m51/provision_ov.sh)")}
+
+    # Conservative RAM admission (same policy as the H3 runner; the pipeline
+    # C arm additionally keeps a ComfyUI server resident -> reserve).
+    ram = conservative_ram_gate(read_cgroup_mem(), host_mem_available_bytes(),
+                                need_ram_bytes,
+                                concurrent_reserve_bytes=concurrent_reserve_bytes)
+    checks.append({"name": "ram_admission",
+                   "status": ram.get("status", "BLOCKED"), "detail": ram})
+    if ram.get("status") != "PASS":
+        return {"contract": "m51-ov-admission/v1", "status": "BLOCKED",
+                "artifact_root": str(root), "resolved_from": resolved_from,
+                "checks": checks, "verification": verification,
+                "identity_expected": dict(OV_BF16_IDENTITY),
+                "ram_gate": ram, "cpu_quota": _read_cpu_quota(),
+                "remediation": (f"insufficient RAM headroom for the BF16 CPU TE "
+                                f"(needs {need_ram_bytes/2**30:.0f} GiB usable; "
+                                f"basis {ram.get('basis')}, usable "
+                                f"{ram.get('usable_bytes', 0)/2**30:.1f} GiB). "
+                                "Free memory, lower concurrency, or use a larger "
+                                "instance; do not lower the safety headroom")}
+
+    quota = _read_cpu_quota()
+    if quota.get("cpus") is not None and quota["cpus"] < 8:
+        warnings.append(f"CPU quota {quota['cpus']} cores is below the 16-thread "
+                        "reference; OV encoder numbers will differ from the campaign")
+
+    status = "PASS_WITH_WARNINGS" if warnings else "PASS"
+    return {"contract": "m51-ov-admission/v1", "status": status,
+            "artifact_root": str(root), "resolved_from": resolved_from,
+            "checks": checks, "verification": verification,
+            "identity_expected": dict(OV_BF16_IDENTITY),
+            "identity_manifest": {k: (verification.get("manifest") or {}).get(k)
+                                  for k in OV_BF16_IDENTITY},
+            "ram_gate": ram, "cpu_quota": quota,
+            "warnings": warnings,
+            "remediation": None}

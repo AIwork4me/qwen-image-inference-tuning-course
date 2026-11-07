@@ -113,7 +113,16 @@ def _blocked(out: Path, arm: str, reason: str, detail: dict, gates: dict | None 
     return 2
 
 
-def run_h3(experiment: str, smoke: bool = False, date: str | None = None, port: int = 8188, threads: int = 16) -> int:
+def run_h3(experiment: str, smoke: bool = False, date: str | None = None, port: int = 8188, threads: int = 16,
+           apply_owner_verdict: bool = False) -> int:
+    """Run one H3 OpenVINO TE experiment.
+
+    apply_owner_verdict=False (default): a NEW physical run never inherits the
+    committed C1b owner human-quality acceptance — that verdict covers the
+    historically evaluated deployment only. New runs keep human_quality
+    PENDING and cite the historical verdict as reference. The frozen campaign
+    records already carry their own scoped verdicts and are never rewritten.
+    """
     spec = SPECS[experiment]
     date = date or time.strftime("%Y%m%d-%H%M%S")
     out = REPO / "runs" / f"{date}-{experiment}{'-smoke' if smoke else ''}"
@@ -229,8 +238,14 @@ def run_h3(experiment: str, smoke: bool = False, date: str | None = None, port: 
     gates["e2e_gpu"] = "NOT_RUN"  # scope: separate E2E experiment, never implied here
     measured = [row["encode_s"] for rows in d["prompts"].values() for row in rows]
     gates["performance"] = "PASS" if measured else "NOT_RUN"
-    owner_verdict = load_owner_verdict(experiment)
-    settle_human_quality(gates, owner_verdict)  # PASS only from the committed owner record, scope-matched
+    owner_verdict = load_owner_verdict(experiment) if apply_owner_verdict else None
+    settle_human_quality(gates, owner_verdict)  # PASS only from an explicit, scope-matched owner record
+    historical = None if apply_owner_verdict else load_owner_verdict(experiment)
+    if historical is not None:
+        gates["human_quality"] = "PENDING"  # a new run needs its own human review
+        historical = dict(historical)
+        historical["note"] = ("historical C1b owner acceptance is REFERENCE ONLY "
+                              "for new physical runs; it does not approve this deployment")
     rel = release_status(gates)
 
     exec_status = "PASS" if finite else "FAIL"
@@ -245,7 +260,8 @@ def run_h3(experiment: str, smoke: bool = False, date: str | None = None, port: 
            "measurements": {"encode_s": measured, "load_s": d.get("load_s"), "rss_peak_mb": d.get("rss_peak_mb"),
                             "shape": [row["shape"] for rows in d["prompts"].values() for row in rows],
                             "n_tokens_full": [row["n_tokens_full"] for rows in d["prompts"].values() for row in rows]},
-           "token_contract_detail": token_detail, "conditioning_alignment_detail": cond_detail,
+            "token_contract_detail": token_detail, "conditioning_alignment_detail": cond_detail,
+            "human_quality_reference": historical,
            "evidence_paths": [str(pf), str(out/"stdout.log"), str(out/"stderr.log")],
            "mode": "smoke" if smoke else "formal", "runtime_s": round(time.time()-t0,2)}
     errs = validate_result_schema(rec)

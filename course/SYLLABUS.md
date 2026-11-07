@@ -45,6 +45,10 @@ Plus: [LECTURE_DEMO.md](LECTURE_DEMO.md) — the 100-minute classroom package
 (8 slides + 4 interactive Q&As + bounded teacher demo and student exercise,
 all backed by the case-study data).
 
+## Accompanying Jupyter practice
+
+All nine teaching units (M0–M7 including M5.1) have [English](../notebooks/README.md) and [中文](../notebooks/README.zh-CN.md) notebooks with three declared modes: `REFERENCE` (offline CPU analysis — CI default), `GPU_CLASSROOM` (your own bounded W7900 measurements, ~5 min/arm — the default lab experience once the quickstart is done), and `GPU_RESEARCH` (full frozen protocol). Students are expected to hold W7900 access before class; physical GPU measurement is the primary practical validation, while committed evidence remains the reference and comparison source. Classroom runs are bounded teaching experiments, not formal benchmarks. Use [instructor guidance](../notebooks/INSTRUCTOR_GUIDE.md) for pacing and grading.
+
 ## Grading rubric (suggested)
 
 | Component | Weight | Pass bar |

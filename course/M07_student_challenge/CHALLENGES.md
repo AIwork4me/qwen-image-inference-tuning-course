@@ -1,5 +1,13 @@
 # M7 — Student Challenge: Radeon AI Inference Speed Challenge
 
+## Run it as a notebook (three declared modes)
+
+Every module ships paired EN/zh-CN Jupyter notebooks. Set `COURSE_MODE` in
+the first cell: `REFERENCE` (offline CPU analysis of the frozen campaign),
+`GPU_CLASSROOM` (your own bounded physical W7900 exercise, ~5 min per arm —
+the default lab experience), or `GPU_RESEARCH` (this full protocol). See
+[notebooks/README.md](../../notebooks/README.md).
+
 **Learning objectives (you will be able to):**
 1. Pick a real repository gap matched to your resources (CPU-only / GPU / advanced) and submit it through the Fork → Edit → Test → PR workflow;
 2. Attach verifiable evidence to every submission (before/after outputs, run records, tables) so claims stay ≤ evidence;

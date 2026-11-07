@@ -1,0 +1,85 @@
+{
+  "mode": "GPU_CLASSROOM",
+  "campaign": "/workspace/rehearsal/campaign",
+  "kernel": {
+    "python": "3.12.3",
+    "ipykernel": "7.2.0",
+    "jupyter_client": "8.8.0",
+    "executable": "/workspace/rehearsal/qwen-image-inference-tuning-course/.venv-lab/bin/python"
+  },
+  "finished_at": "2026-11-06T12:46:12+00:00",
+  "rows": [
+    {
+      "notebook": "00_experimental_discipline.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T12:19:51+00:00",
+      "status": "PASSED",
+      "wall_s": 2.9,
+      "finished": "2026-11-06T12:19:54+00:00",
+      "executed_artifact": "/workspace/rehearsal/campaign/executed/GPU_CLASSROOM/00_experimental_discipline.ipynb"
+    },
+    {
+      "notebook": "00_experimental_discipline.zh-CN.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T12:19:55+00:00",
+      "status": "PASSED",
+      "wall_s": 2.8,
+      "finished": "2026-11-06T12:19:57+00:00",
+      "executed_artifact": "/workspace/rehearsal/campaign/executed/GPU_CLASSROOM/00_experimental_discipline.zh-CN.ipynb"
+    },
+    {
+      "notebook": "01_baseline_and_uncertainty.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T12:19:57+00:00",
+      "status": "PASSED",
+      "wall_s": 321.4,
+      "finished": "2026-11-06T12:25:19+00:00",
+      "executed_artifact": "/workspace/rehearsal/campaign/executed/GPU_CLASSROOM/01_baseline_and_uncertainty.ipynb"
+    },
+    {
+      "notebook": "01_baseline_and_uncertainty.zh-CN.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T12:25:19+00:00",
+      "status": "PASSED",
+      "wall_s": 339.7,
+      "finished": "2026-11-06T12:30:59+00:00",
+      "executed_artifact": "/workspace/rehearsal/campaign/executed/GPU_CLASSROOM/01_baseline_and_uncertainty.zh-CN.ipynb"
+    },
+    {
+      "notebook": "03_less_computation.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T12:30:59+00:00",
+      "status": "PASSED",
+      "wall_s": 461.9,
+      "finished": "2026-11-06T12:38:41+00:00",
+      "executed_artifact": "/workspace/rehearsal/campaign/executed/GPU_CLASSROOM/03_less_computation.ipynb"
+    },
+    {
+      "notebook": "03_less_computation.zh-CN.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T12:38:41+00:00",
+      "status": "PASSED",
+      "wall_s": 445.7,
+      "finished": "2026-11-06T12:46:07+00:00",
+      "executed_artifact": "/workspace/rehearsal/campaign/executed/GPU_CLASSROOM/03_less_computation.zh-CN.ipynb"
+    },
+    {
+      "notebook": "08_capstone_and_pr.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T12:46:07+00:00",
+      "status": "PASSED",
+      "wall_s": 2.7,
+      "finished": "2026-11-06T12:46:09+00:00",
+      "executed_artifact": "/workspace/rehearsal/campaign/executed/GPU_CLASSROOM/08_capstone_and_pr.ipynb"
+    },
+    {
+      "notebook": "08_capstone_and_pr.zh-CN.ipynb",
+      "mode": "GPU_CLASSROOM",
+      "started": "2026-11-06T12:46:10+00:00",
+      "status": "PASSED",
+      "wall_s": 2.3,
+      "finished": "2026-11-06T12:46:12+00:00",
+      "executed_artifact": "/workspace/rehearsal/campaign/executed/GPU_CLASSROOM/08_capstone_and_pr.zh-CN.ipynb"
+    }
+  ]
+}

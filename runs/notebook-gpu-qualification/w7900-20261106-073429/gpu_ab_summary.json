@@ -1,0 +1,407 @@
+{
+  "generated_at": "2026-11-06T10:48:32+00:00",
+  "gpu": "AMD Radeon PRO W7900 (gfx1100, 48GB) - Radeon Cloud instance",
+  "comparisons": [
+    {
+      "label": "M3-less-computation",
+      "baseline_experiment": "B0",
+      "candidate_experiment": "L1",
+      "baseline_run_id": "q1-075553-B0",
+      "candidate_run_id": "q1-075553-L1",
+      "classification": "FORMAL_PROTOCOL_MEASURED",
+      "baseline": {
+        "n_warm": 9,
+        "median_s": 55.096,
+        "min_s": 55.09,
+        "max_s": 55.105,
+        "steps": 40,
+        "precision": "bf16",
+        "attention_backend": "pytorch-sdpa-default",
+        "vram_device_peak_mb": 38898.2,
+        "warm_totals": [
+          55.097,
+          55.091,
+          55.105,
+          55.09,
+          55.093,
+          55.094,
+          55.096,
+          55.097,
+          55.098
+        ]
+      },
+      "candidate": {
+        "n_warm": 9,
+        "median_s": 12.029,
+        "min_s": 12.027,
+        "max_s": 14.033,
+        "steps": 8,
+        "precision": "bf16",
+        "attention_backend": "pytorch-sdpa-default",
+        "vram_device_peak_mb": 38898.7,
+        "warm_totals": [
+          14.033,
+          13.027,
+          12.027,
+          12.098,
+          12.029,
+          12.045,
+          12.028,
+          12.028,
+          12.027
+        ]
+      },
+      "speedup_median": 4.58,
+      "spread_baseline_s": 0.015,
+      "spread_candidate_s": 2.006,
+      "vram_delta_mb": 0.5,
+      "paired_per_prompt": [
+        {
+          "prompt_id": "p1-zh-scene",
+          "base_median_s": 55.097,
+          "cand_median_s": 13.027,
+          "paired_ratio": 4.229
+        },
+        {
+          "prompt_id": "p2-en-scene",
+          "base_median_s": 55.093,
+          "cand_median_s": 12.045,
+          "paired_ratio": 4.574
+        },
+        {
+          "prompt_id": "p3-poster-text",
+          "base_median_s": 55.097,
+          "cand_median_s": 12.028,
+          "paired_ratio": 4.581
+        }
+      ],
+      "quality": {
+        "status": "PRODUCED",
+        "artifacts": [
+          "quality.md",
+          "quality_crops_poster.png",
+          "quality_grid.png"
+        ],
+        "human_verdict": "PENDING_HUMAN_REVIEW"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "label": "M4-attention-ck",
+      "baseline_experiment": "B0",
+      "candidate_experiment": "F1",
+      "baseline_run_id": "q1-075553-B0",
+      "candidate_run_id": "q1-075553-F1",
+      "classification": "FORMAL_PROTOCOL_MEASURED",
+      "baseline": {
+        "n_warm": 9,
+        "median_s": 55.096,
+        "min_s": 55.09,
+        "max_s": 55.105,
+        "steps": 40,
+        "precision": "bf16",
+        "attention_backend": "pytorch-sdpa-default",
+        "vram_device_peak_mb": 38898.2,
+        "warm_totals": [
+          55.097,
+          55.091,
+          55.105,
+          55.09,
+          55.093,
+          55.094,
+          55.096,
+          55.097,
+          55.098
+        ]
+      },
+      "candidate": {
+        "n_warm": 9,
+        "median_s": 43.247,
+        "min_s": 43.199,
+        "max_s": 44.083,
+        "steps": 40,
+        "precision": "bf16",
+        "attention_backend": "ck",
+        "vram_device_peak_mb": 38900.9,
+        "warm_totals": [
+          43.289,
+          43.246,
+          43.251,
+          43.247,
+          43.207,
+          43.199,
+          43.332,
+          43.237,
+          44.083
+        ]
+      },
+      "speedup_median": 1.274,
+      "spread_baseline_s": 0.015,
+      "spread_candidate_s": 0.884,
+      "vram_delta_mb": 2.7,
+      "paired_per_prompt": [
+        {
+          "prompt_id": "p1-zh-scene",
+          "base_median_s": 55.097,
+          "cand_median_s": 43.251,
+          "paired_ratio": 1.274
+        },
+        {
+          "prompt_id": "p2-en-scene",
+          "base_median_s": 55.093,
+          "cand_median_s": 43.207,
+          "paired_ratio": 1.275
+        },
+        {
+          "prompt_id": "p3-poster-text",
+          "base_median_s": 55.097,
+          "cand_median_s": 43.332,
+          "paired_ratio": 1.272
+        }
+      ],
+      "quality": {
+        "status": "PRODUCED",
+        "artifacts": [
+          "quality.md",
+          "quality_crops_poster.png",
+          "quality_grid.png"
+        ],
+        "human_verdict": "PENDING_HUMAN_REVIEW"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "label": "M4-int8-weights",
+      "baseline_experiment": "B0",
+      "candidate_experiment": "F2",
+      "baseline_run_id": "q1-075553-B0",
+      "candidate_run_id": "q1-075553-F2",
+      "classification": "FORMAL_PROTOCOL_MEASURED",
+      "baseline": {
+        "n_warm": 9,
+        "median_s": 55.096,
+        "min_s": 55.09,
+        "max_s": 55.105,
+        "steps": 40,
+        "precision": "bf16",
+        "attention_backend": "pytorch-sdpa-default",
+        "vram_device_peak_mb": 38898.2,
+        "warm_totals": [
+          55.097,
+          55.091,
+          55.105,
+          55.09,
+          55.093,
+          55.094,
+          55.096,
+          55.097,
+          55.098
+        ]
+      },
+      "candidate": {
+        "n_warm": 9,
+        "median_s": 50.104,
+        "min_s": 50.086,
+        "max_s": 51.093,
+        "steps": 40,
+        "precision": "int8-convrot",
+        "attention_backend": "pytorch-sdpa-default",
+        "vram_device_peak_mb": 32236.5,
+        "warm_totals": [
+          50.397,
+          50.104,
+          50.147,
+          50.1,
+          50.086,
+          50.092,
+          51.093,
+          50.136,
+          50.089
+        ]
+      },
+      "speedup_median": 1.1,
+      "spread_baseline_s": 0.015,
+      "spread_candidate_s": 1.007,
+      "vram_delta_mb": -6661.7,
+      "paired_per_prompt": [
+        {
+          "prompt_id": "p1-zh-scene",
+          "base_median_s": 55.097,
+          "cand_median_s": 50.147,
+          "paired_ratio": 1.099
+        },
+        {
+          "prompt_id": "p2-en-scene",
+          "base_median_s": 55.093,
+          "cand_median_s": 50.092,
+          "paired_ratio": 1.1
+        },
+        {
+          "prompt_id": "p3-poster-text",
+          "base_median_s": 55.097,
+          "cand_median_s": 50.136,
+          "paired_ratio": 1.099
+        }
+      ],
+      "quality": {
+        "status": "PRODUCED",
+        "artifacts": [
+          "quality.md",
+          "quality_crops_poster.png",
+          "quality_grid.png"
+        ],
+        "human_verdict": "PENDING_HUMAN_REVIEW"
+      },
+      "verdict": "PASS"
+    },
+    {
+      "label": "M6-combined-best",
+      "baseline_experiment": "B0",
+      "candidate_experiment": "BEST",
+      "baseline_run_id": "q1-075553-B0",
+      "candidate_run_id": "q1-075553-BEST",
+      "classification": "FORMAL_PROTOCOL_MEASURED",
+      "baseline": {
+        "n_warm": 9,
+        "median_s": 55.096,
+        "min_s": 55.09,
+        "max_s": 55.105,
+        "steps": 40,
+        "precision": "bf16",
+        "attention_backend": "pytorch-sdpa-default",
+        "vram_device_peak_mb": 38898.2,
+        "warm_totals": [
+          55.097,
+          55.091,
+          55.105,
+          55.09,
+          55.093,
+          55.094,
+          55.096,
+          55.097,
+          55.098
+        ]
+      },
+      "candidate": {
+        "n_warm": 9,
+        "median_s": 9.022,
+        "min_s": 9.02,
+        "max_s": 9.026,
+        "steps": 8,
+        "precision": "int8-convrot",
+        "attention_backend": "pytorch-sdpa-default",
+        "vram_device_peak_mb": 32241.0,
+        "warm_totals": [
+          9.02,
+          9.024,
+          9.026,
+          9.023,
+          9.025,
+          9.021,
+          9.02,
+          9.02,
+          9.022
+        ]
+      },
+      "speedup_median": 6.107,
+      "spread_baseline_s": 0.015,
+      "spread_candidate_s": 0.006,
+      "vram_delta_mb": -6657.2,
+      "paired_per_prompt": [
+        {
+          "prompt_id": "p1-zh-scene",
+          "base_median_s": 55.097,
+          "cand_median_s": 9.024,
+          "paired_ratio": 6.106
+        },
+        {
+          "prompt_id": "p2-en-scene",
+          "base_median_s": 55.093,
+          "cand_median_s": 9.023,
+          "paired_ratio": 6.106
+        },
+        {
+          "prompt_id": "p3-poster-text",
+          "base_median_s": 55.097,
+          "cand_median_s": 9.02,
+          "paired_ratio": 6.108
+        }
+      ],
+      "quality": {
+        "status": "PRODUCED",
+        "artifacts": [
+          "quality.md",
+          "quality_crops_poster.png",
+          "quality_grid.png"
+        ],
+        "human_verdict": "PENDING_HUMAN_REVIEW"
+      },
+      "verdict": "PASS"
+    }
+  ],
+  "modules": {
+    "M2-profile": {
+      "pipeline_status": {
+        "pipeline": "PASS",
+        "kernel-dit": "PASS",
+        "kernel-te": "PASS"
+      },
+      "kernel_trace": "/workspace/pr4/runs/q1-075553-profile/rocprof-dit/analysis.json"
+    },
+    "M5": {
+      "encoder_local_gpu_pt": true,
+      "encoder_local_cpu_pt": true,
+      "encoder_local_ov_bf16": true,
+      "encoder_local_ov_fp32": true,
+      "encoder_local_ov_int8": true,
+      "h3_ov_bf16": true,
+      "e2e_ab": true,
+      "pipeline_ac": true,
+      "fairab": true,
+      "h1": true,
+      "h2": true
+    }
+  },
+  "m51_detail": {
+    "pt_cpu_vs_gpu_p1-zh-scene": 217.3,
+    "ov_vs_ptcpu_p1-zh-scene": 340.3,
+    "pt_cpu_vs_gpu_p2-en-scene": 434.8,
+    "ov_vs_ptcpu_p2-en-scene": 486.1,
+    "pt_cpu_vs_gpu_p3-poster-text": 349.9,
+    "ov_vs_ptcpu_p3-poster-text": 370.3,
+    "h1_integrated_total_s": {
+      "clip_gpu": 45.225,
+      "clip_cpu": 266.499
+    },
+    "fairab_cells_s": {
+      "A_original": [
+        54.37,
+        53.77
+      ],
+      "A_fast": [
+        50.86,
+        50.69
+      ],
+      "C_original": [
+        52.58,
+        53.24
+      ],
+      "C_fast": [
+        49.92,
+        50.42
+      ]
+    },
+    "fairab_architecture_effect_original_clients": 1.0219,
+    "fairab_architecture_effect_fast_clients": 1.012,
+    "fairab_client_effect_A": 1.0648,
+    "fairab_client_effect_C": 1.0545
+  },
+  "provenance": {
+    "git_head": "b63940e0df8ad30e72f96058eca735ed170c0b4d"
+  },
+  "limitations": [
+    "single physical host, single W7900, single session per arm",
+    "speedups are ratios of the declared populations only",
+    "quality verdicts stay PENDING_HUMAN_REVIEW (human decision boundary)"
+  ]
+}

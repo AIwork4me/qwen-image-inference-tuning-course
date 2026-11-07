@@ -1,0 +1,15 @@
+{
+  "start_head": "cef55be57a6b77800b70982a452a47be82fc7fea",
+  "final_head": "1b5d0543cfe991977866b1a89cf53fafdd99dd0b",
+  "final_branch": "feat/bilingual-jupyter-optimization-labs",
+  "commits": [
+    "1b5d054 fix(notebooks): unique capstone tags across language kernels; m51 pilot output paths",
+    "ea67626 feat(notebooks): execute W7900 baseline, profiling and optimization A/B campaign",
+    "1294f19 fix(notebooks): enforce classroom budgets via --warmup/--measured; session finish records; visible consumption provenance",
+    "b63940e docs(course): point lessons at the three notebook modes; fix fair_ab script invocation",
+    "2e89f80 feat(notebooks): RUN_OWN_GPU_ARMS reuse flag for metered-GPU students",
+    "1d535e5 feat(notebooks): add GPU-first classroom runtime and physical admission"
+  ],
+  "evidence_dir_modified": false,
+  "note": "per-experiment module SHA256 snapshots are captured inside each run record's env/source fields and fairab source_snapshot/"
+}

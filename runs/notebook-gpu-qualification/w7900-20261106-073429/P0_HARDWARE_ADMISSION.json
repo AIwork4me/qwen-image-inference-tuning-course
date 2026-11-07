@@ -1,0 +1,115 @@
+{
+  "run_id": "w7900-20261106-073429",
+  "created_at": "2026-11-06T07:34:30+00:00",
+  "verdict": "PASS",
+  "os": {
+    "uname": "Linux j-ehmevrqkfms3nugfondqxn7dw2 6.8.0-79-generic #79-Ubuntu SMP PREEMPT_DYNAMIC Tue Aug 12 14:42:46 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux",
+    "os_release": [
+      "PRETTY_NAME=\"Ubuntu 24.04.4 LTS\"",
+      "NAME=\"Ubuntu\""
+    ]
+  },
+  "kernel_python": {
+    "lab_venv": "Python 3.12.3",
+    "ov_venv": "Python 3.12.3"
+  },
+  "jupyter": {
+    "nbclient": "0.10.4",
+    "nbformat": "5.10.4",
+    "ipykernel": "7.2.0"
+  },
+  "gpu": {
+    "rocm_smi_id": "============================ ROCm System Management Interface ============================\n=========================================== ID ===========================================\nGPU[0]\t\t: Device Name: \t\tAMD Radeon Graphics\nGPU[0]\t\t: Device ID: \t\t0x744b\nGPU[0]\t\t: Device Rev: \t\t0x00\nGPU[0]\t\t: Subsystem ID: \t0x0e0c\nGPU[0]\t\t: GUID: \t\t13037\n==========================================================================================\n================================== End of ROCm SMI Log ===================================",
+    "device_name": "AMD Radeon Graphics",
+    "gfx_arch": "gfx1100",
+    "vram_total_gib": 47.98,
+    "torch": "2.9.1+gitff65f5b",
+    "hip": "7.2.53211-e1a6bc5663",
+    "cuda_available": true,
+    "device_count": 1,
+    "rocprofv3": "version: 1.1.0",
+    "vram_used_gib_now": 47.98
+  },
+  "gpu_smoke_tensor": {
+    "shape": "2048x2048 bf16 matmul",
+    "ok": true,
+    "synced_wall_s": 0.264009,
+    "note": "smoke PASS proves execution only; no perf claim"
+  },
+  "cpu": {
+    "model": "model name\t: AMD EPYC 9334 32-Core Processor",
+    "nproc_host": "128",
+    "cgroup_cpu_max": "1600000 100000",
+    "cpuset": "0-127"
+  },
+  "memory": {
+    "meminfo_total_kb": null,
+    "cgroup_memory_max": "59055800320",
+    "cgroup_memory_current": "58886615040",
+    "memtotal": "528023932 kB",
+    "memavailable": "464894128 kB"
+  },
+  "disk": {
+    "workspace_avail": "/dev/loop4       98G   67G   26G  73% /workspace"
+  },
+  "models": [
+    {
+      "rel": "diffusion_models/qwen_image_2.1_bf16.safetensors",
+      "path": "/workspace/pr4/weights/comfyui-split/diffusion_models/qwen_image_2.1_bf16.safetensors",
+      "expected_bytes": 14230280616,
+      "state": "present",
+      "revision": "aacf31a6d48e707f352ecba714cee0680da3479b"
+    },
+    {
+      "rel": "diffusion_models/qwen_image_2.1_int8_convrot.safetensors",
+      "path": "/workspace/pr4/weights/comfyui-split/diffusion_models/qwen_image_2.1_int8_convrot.safetensors",
+      "expected_bytes": 7256783064,
+      "state": "present",
+      "revision": "aacf31a6d48e707f352ecba714cee0680da3479b"
+    },
+    {
+      "rel": "diffusion_models/qwen_image_2.1_turbo_bf16.safetensors",
+      "path": "/workspace/pr4/weights/comfyui-split/diffusion_models/qwen_image_2.1_turbo_bf16.safetensors",
+      "expected_bytes": 14230280616,
+      "state": "present",
+      "revision": "aacf31a6d48e707f352ecba714cee0680da3479b"
+    },
+    {
+      "rel": "diffusion_models/qwen_image_2.1_turbo_int8_convrot.safetensors",
+      "path": "/workspace/pr4/weights/comfyui-split/diffusion_models/qwen_image_2.1_turbo_int8_convrot.safetensors",
+      "expected_bytes": 7256787829,
+      "state": "present",
+      "revision": "aacf31a6d48e707f352ecba714cee0680da3479b"
+    },
+    {
+      "rel": "text_encoders/qwen3vl_8b_bf16.safetensors",
+      "path": "/workspace/pr4/weights/comfyui-split/text_encoders/qwen3vl_8b_bf16.safetensors",
+      "expected_bytes": 17534334616,
+      "state": "present",
+      "revision": "aacf31a6d48e707f352ecba714cee0680da3479b"
+    },
+    {
+      "rel": "vae/qwen_image_2.1_vae_bf16.safetensors",
+      "path": "/workspace/pr4/weights/comfyui-split/vae/qwen_image_2.1_vae_bf16.safetensors",
+      "expected_bytes": 675509688,
+      "state": "present",
+      "revision": "aacf31a6d48e707f352ecba714cee0680da3479b"
+    }
+  ],
+  "openvino": {
+    "venv_ov": "2026.4.1-22982-e213a147257-releases/2026/4",
+    "ov_artifacts": "absent"
+  },
+  "comfyui": {
+    "pinned_commit": "b5a432157de6b8884f81104cd02926adf4d597e4",
+    "marker_ok": true
+  },
+  "git": {
+    "head": "cef55be57a6b77800b70982a452a47be82fc7fea",
+    "branch": "feat/bilingual-jupyter-optimization-labs",
+    "dirty": "M runs/doctor.json",
+    "pr": "AIwork4me/qwen-image-inference-tuning-course#4"
+  },
+  "blocking_reasons": [],
+  "doctor_strict": "PASS (runs/doctor.json, full 6-weight digest verify, flash SDPA probe, rocprofv3 1.1.0)"
+}

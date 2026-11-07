@@ -112,8 +112,14 @@ def test_all_models_low_disk_blocks_incrementally(tmp_path):
     plan = plan_stage.plan_model_staging(
         weights_root=tmp_path, all_models=True, free_bytes=10 * GiB)
     assert plan["verdict"] == "BLOCKED"
-    # the message must not ask for the full 61 GB when 25.5 are already there
-    assert "61" not in plan["message"]
+    # Assert incremental staging semantics, not a substring in a temporary
+    # directory name (which may happen to contain the digits "61").
+    rest = [rel for rel in FULL if rel not in STAGE1]
+    remaining_gib = sum(_pinned_sizes(rest).values()) / GiB
+    assert sorted(plan["downloads"]) == sorted(rest)
+    assert sorted(plan["present"]) == sorted(STAGE1)
+    assert plan["need_gib"] == pytest.approx(remaining_gib, abs=0.05)
+    assert "Already-present pinned files were NOT counted" in plan["message"]
 
 
 def test_smoke_only_never_disk_blocked(tmp_path):

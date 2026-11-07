@@ -1,5 +1,13 @@
 # M1 — 先测量：冻结基线
 
+## 以 Notebook 方式运行（三种声明模式）
+
+每个模块配有中英文对照 Jupyter Notebook。在第一个单元设置
+`COURSE_MODE`：`REFERENCE`（离线 CPU 分析冻结实验数据）、`GPU_CLASSROOM`
+（你自己的 W7900 有界物理练习，每臂约 5 分钟——默认实验体验）或
+`GPU_RESEARCH`（本文档所述完整协议）。见
+[notebooks/README.zh-CN.md](../../notebooks/README.zh-CN.md)。
+
 **学习目标（学完本课你能够）：**
 1. 设计并运行一个可复现的基线协议，解释 cold/warmup/measured/fresh 四段结构各自的用途；
 2. 用自己的记录计算热态中位数与离散度，并与参考战役对比；

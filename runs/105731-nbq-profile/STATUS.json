@@ -1,0 +1,7 @@
+{
+  "statuses": {
+    "pipeline": "PASS"
+  },
+  "output": "/workspace/pr4/runs/105731-nbq-profile",
+  "verdict": "PASS"
+}

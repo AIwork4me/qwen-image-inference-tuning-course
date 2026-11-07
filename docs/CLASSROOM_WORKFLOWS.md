@@ -1,4 +1,4 @@
-# Classroom Workflows — smoke vs formal, concretely
+# Classroom Workflows — GPU_CLASSROOM notebooks, smoke vs formal, concretely
 
 中文版：[CLASSROOM_WORKFLOWS.zh-CN.md](CLASSROOM_WORKFLOWS.zh-CN.md) · English version: this file
 
@@ -7,6 +7,10 @@ interrupt) and what to run for quotable results (full protocol, budgeted).
 Everything here matches the CLI exactly (`python -m lab <cmd> --help`).*
 
 ---
+
+## First: the GPU_CLASSROOM notebooks (preferred student path)
+
+After `bash scripts/cloud/start.sh`, open the [English practice index](../notebooks/README.md) ([中文](../notebooks/README.zh-CN.md)) from the repository root, set `COURSE_MODE = "GPU_CLASSROOM"` in the first cell, and Restart & Run All. Each module then executes its own **bounded physical W7900 exercise** (≈5 min per arm: fresh server, cold, warmup, 2 measured runs of one prompt) and computes your stats beside the frozen reference numbers. The runtime enforces: hardware admission, a one-GPU-workload-at-a-time lock, per-experiment timeouts, append-only records under `runs/`, and automatic `BOUNDED_PHYSICAL_COMPARISON` labelling — a classroom run is a teaching experiment, never a formal benchmark claim. `COURSE_MODE = "REFERENCE"` gives the identical notebooks as offline CPU analysis (the CI profile).
 
 ## The classroom-safe smoke workflow (bounded by design)
 

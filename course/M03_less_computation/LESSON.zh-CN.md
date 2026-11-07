@@ -1,5 +1,13 @@
 # M3 — 减少计算量
 
+## 以 Notebook 方式运行（三种声明模式）
+
+每个模块配有中英文对照 Jupyter Notebook。在第一个单元设置
+`COURSE_MODE`：`REFERENCE`（离线 CPU 分析冻结实验数据）、`GPU_CLASSROOM`
+（你自己的 W7900 有界物理练习，每臂约 5 分钟——默认实验体验）或
+`GPU_RESEARCH`（本文档所述完整协议）。见
+[notebooks/README.zh-CN.md](../../notebooks/README.zh-CN.md)。
+
 **学习目标（学完本课你能够）：**
 1. 用"每步成本是否不变"这一判据，把"少算"（M3）与"算得快"（M4）严格区分开；
 2. 在读测量结果之前，先从 DiT 占比推导 40→8 步的 Amdahl 上界（≈4.6×），并解释为何实测 4.55× 不是 5×；

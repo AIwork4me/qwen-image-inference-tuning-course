@@ -1,0 +1,155 @@
+{
+  "n_kernels": 99445,
+  "trace_span_s": 67.053,
+  "gpu_busy_s": 54.754,
+  "gpu_idle_s": 12.299,
+  "gpu_busy_pct": 81.7,
+  "by_class": {
+    "gemm": {
+      "count": 8672,
+      "total_s": 33.6562,
+      "share_of_busy_pct": 61.5
+    },
+    "attention": {
+      "count": 1348,
+      "total_s": 17.61,
+      "share_of_busy_pct": 32.2
+    },
+    "elementwise/activation": {
+      "count": 84848,
+      "total_s": 2.5936,
+      "share_of_busy_pct": 4.7
+    },
+    "norm": {
+      "count": 2913,
+      "total_s": 0.7462,
+      "share_of_busy_pct": 1.4
+    },
+    "other": {
+      "count": 540,
+      "total_s": 0.1436,
+      "share_of_busy_pct": 0.3
+    },
+    "copy": {
+      "count": 1124,
+      "total_s": 0.0043,
+      "share_of_busy_pct": 0.0
+    }
+  },
+  "top_kernels": {
+    "Cijk_Alik_Bljk_BBS_BH_Bias_HA_S_SAV_UserArgs_MT96x96x32_MI16x16x1_SN_LDSB0_AFC1_AFEM1_AFEM1_ASEM1_CLR1_CADS0_DTLA0_DTLB0_DTVA0_DTVB0_EPS0_FDSI0_GRPM1_GRVWA8_GRV": {
+      "count": 8113,
+      "total_ms": 32875.1,
+      "mean_us": 4052.2,
+      "class": "gemm"
+    },
+    "attn_fwd": {
+      "count": 1348,
+      "total_ms": 17610.0,
+      "mean_us": 13063.8,
+      "class": "attention"
+    },
+    "void comfy::hip_backend::adaln_kernel<std::bfloat16_t, true>(void const*, void const*, void const*, std::bfloat16_t*, int, int, int, float, int, int, int)": {
+      "count": 2728,
+      "total_ms": 745.2,
+      "mean_us": 273.2,
+      "class": "norm"
+    },
+    "void at::native::elementwise_kernel_manual_unroll<128, 8, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat": {
+      "count": 1624,
+      "total_ms": 609.3,
+      "mean_us": 375.2,
+      "class": "elementwise/activation"
+    },
+    "Cijk_Alik_Bljk_S_B_Bias_HA_S_SAV_UserArgs_MT8x8x16_SN_LDSB0_AFC1_AFEM1_AFEM1_ASEM1_CLR0_CADS0_DTLA0_DTLB0_DTVA0_DTVB0_EPS1_FDSI0_GRPM1_GRVWA1_GRVWB1_GSUAMB_GLS0": {
+      "count": 252,
+      "total_ms": 499.3,
+      "mean_us": 1981.3,
+      "class": "gemm"
+    },
+    "void at::native::elementwise_kernel_manual_unroll<128, 8, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lamb": {
+      "count": 68972,
+      "total_ms": 443.3,
+      "mean_us": 6.4,
+      "class": "elementwise/activation"
+    },
+    "void at::native::elementwise_kernel_manual_unroll<128, 8, at::native::gpu_kernel_impl_nocast<at::native::(anonymous namespace)::silu_kernel(at::TensorIteratorBa": {
+      "count": 1312,
+      "total_ms": 381.2,
+      "mean_us": 290.5,
+      "class": "elementwise/activation"
+    },
+    "void comfy::hip_backend::rms_rope_wave32_128_kernel<std::bfloat16_t, 8, true>(void const*, void const*, void const*, void const*, void const*, std::bfloat16_t*,": {
+      "count": 1312,
+      "total_ms": 380.1,
+      "mean_us": 289.7,
+      "class": "elementwise/activation"
+    },
+    "void at::native::(anonymous namespace)::CatArrayBatchedCopy_contig<at::native::(anonymous namespace)::OpaqueType<2u>, unsigned int, 4, 128, 1>(at::native::(anon": {
+      "count": 2592,
+      "total_ms": 360.9,
+      "mean_us": 139.2,
+      "class": "elementwise/activation"
+    },
+    "void at::native::elementwise_kernel_manual_unroll<128, 8, at::native::gpu_kernel_impl_nocast<at::native::addcmul_cuda_kernel(at::TensorIteratorBase&, c10::Scala": {
+      "count": 2624,
+      "total_ms": 313.0,
+      "mean_us": 119.3,
+      "class": "elementwise/activation"
+    },
+    "Cijk_Ailk_Bljk_BBS_BH_Bias_HA_S_SAV_UserArgs_MT96x96x32_MI16x16x1_SN_LDSB0_AFC1_AFEM1_AFEM1_ASEM1_CLR1_CADS0_DTLA0_DTLB0_DTVA0_DTVB0_EPS0_FDSI0_GRPM1_GRVWA8_GRV": {
+      "count": 224,
+      "total_ms": 272.0,
+      "mean_us": 1214.3,
+      "class": "gemm"
+    },
+    "void at::native::vol2col_kernel<c10::BFloat16>(long, c10::BFloat16 const*, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, ": {
+      "count": 189,
+      "total_ms": 111.4,
+      "mean_us": 589.6,
+      "class": "other"
+    },
+    "void at::native::vectorized_elementwise_kernel<4, at::native::bfloat16tofloat32_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda(c10::BFloat16)#1}, std::array": {
+      "count": 598,
+      "total_ms": 44.0,
+      "mean_us": 73.6,
+      "class": "elementwise/activation"
+    },
+    "void at::native::im2col_kernel<c10::BFloat16>(long, c10::BFloat16 const*, long, long, long, long, long, long, long, long, long, long, long, long, c10::BFloat16*": {
+      "count": 34,
+      "total_ms": 21.9,
+      "mean_us": 643.0,
+      "class": "other"
+    },
+    "void at::native::reduce_kernel<128, 4, at::native::ReduceOp<c10::BFloat16, at::native::NormTwoOps<c10::BFloat16, float, c10::BFloat16>, unsigned int, c10::BFloa": {
+      "count": 156,
+      "total_ms": 8.7,
+      "mean_us": 56.0,
+      "class": "other"
+    }
+  },
+  "hip_api": {
+    "top": {
+      "hipGetDevice": 449954,
+      "hipSetDevice": 226148,
+      "hipGetLastError": 158881,
+      "hipLaunchKernel": 88221,
+      "hipGetDevicePropertiesR0600": 26016,
+      "hipExtModuleLaunchKernel": 8672,
+      "hipStreamGetDevice": 5392,
+      "hipStreamGetCaptureInfo": 1676,
+      "hipMemcpyWithStream": 1676,
+      "hipModuleLaunchKernel": 1348,
+      "hipDeviceSynchronize": 954,
+      "hipDevicePrimaryCtxGetState": 231
+    },
+    "memcpy": {
+      "H2D": 0,
+      "D2H": 0,
+      "other": 1898
+    },
+    "sync_calls": 954
+  },
+  "mode": "te",
+  "note": "traced run \u2014 interception overhead included; composition only, never a performance claim"
+}

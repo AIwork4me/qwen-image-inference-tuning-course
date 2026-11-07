@@ -1,5 +1,13 @@
 # M1 — Measure First: The Frozen Baseline
 
+## Run it as a notebook (three declared modes)
+
+Every module ships paired EN/zh-CN Jupyter notebooks. Set `COURSE_MODE` in
+the first cell: `REFERENCE` (offline CPU analysis of the frozen campaign),
+`GPU_CLASSROOM` (your own bounded physical W7900 exercise, ~5 min per arm —
+the default lab experience), or `GPU_RESEARCH` (this full protocol). See
+[notebooks/README.md](../../notebooks/README.md).
+
 **Learning objectives (you will be able to):**
 1. Design and run a reproducible baseline protocol and explain the purpose of each of its four phases (cold / warmup / measured / fresh);
 2. Compute your own warm median and spread from your records and compare them against the reference campaign;

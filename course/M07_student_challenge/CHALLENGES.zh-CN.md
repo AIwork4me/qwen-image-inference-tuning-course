@@ -1,5 +1,13 @@
 # M7 — 学生挑战：Radeon AI 推理加速挑战
 
+## 以 Notebook 方式运行（三种声明模式）
+
+每个模块配有中英文对照 Jupyter Notebook。在第一个单元设置
+`COURSE_MODE`：`REFERENCE`（离线 CPU 分析冻结实验数据）、`GPU_CLASSROOM`
+（你自己的 W7900 有界物理练习，每臂约 5 分钟——默认实验体验）或
+`GPU_RESEARCH`（本文档所述完整协议）。见
+[notebooks/README.zh-CN.md](../../notebooks/README.zh-CN.md)。
+
 **学习目标（学完本课你能够）：**
 1. 选择一个与自身资源匹配的真实缺口（纯 CPU / 需要 GPU / 高级），并按 Fork → 编辑 → 测试 → PR 的流程提交；
 2. 为每个提交附上可检验的证据（前后输出、运行记录、表格），使主张 ≤ 证据；

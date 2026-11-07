@@ -1,5 +1,21 @@
 # M5.0 — PyTorch CPU Text Encoding & Pipelining (on ONE GPU)
 
+## Run it as a notebook (three declared modes)
+
+Every module ships paired EN/zh-CN Jupyter notebooks. Set `COURSE_MODE` in
+the first cell: `REFERENCE` (offline CPU analysis of the frozen campaign),
+`GPU_CLASSROOM` (your own bounded physical W7900 exercise, ~5 min per arm —
+the default lab experience), or `GPU_RESEARCH` (this full protocol). See
+[notebooks/README.md](../../notebooks/README.md).
+
+**Measure the negative result yourself.** In `GPU_CLASSROOM`, notebook 05
+runs your own GPU and CPU PyTorch TE pilots on your host (the slowness *is*
+the measurement). The H1/H2 pipeline records are consumed by **exact
+committed run ids** and labelled `COMMITTED_PHYSICAL_REFERENCE` — the
+classroom keeps the H2 comparison reference-only; running your own H2 is a
+`GPU_RESEARCH` option. See the
+[student provenance contract](../../docs/notebook-gpu-qualification/STUDENT_PROVENANCE_CONTRACT.md).
+
 **Learning objectives (you will be able to):**
 1. Derive the pipelining break-even CPU-encode time t\* from the H2 measurements and state how far the reference host is from it;
 2. Prove overlap exists from per-request timestamps while explaining why the pipeline still loses 14× (slowest-stage gating + contention cost);

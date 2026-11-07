@@ -1,0 +1,175 @@
+{
+  "mode": "REFERENCE",
+  "campaign": "runs/notebook-gpu-qualification/w7900-20261106-073429",
+  "kernel": {
+    "python": "3.12.3",
+    "ipykernel": "7.2.0",
+    "jupyter_client": "8.8.0",
+    "executable": "/workspace/pr4/.venv-lab/bin/python"
+  },
+  "finished_at": "2026-11-06T12:48:48+00:00",
+  "rows": [
+    {
+      "notebook": "00_experimental_discipline.ipynb",
+      "mode": "REFERENCE",
+      "started": "2026-11-06T12:48:30+00:00",
+      "status": "PASSED",
+      "wall_s": 1.0,
+      "finished": "2026-11-06T12:48:31+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/REFERENCE/00_experimental_discipline.ipynb"
+    },
+    {
+      "notebook": "00_experimental_discipline.zh-CN.ipynb",
+      "mode": "REFERENCE",
+      "started": "2026-11-06T12:48:31+00:00",
+      "status": "PASSED",
+      "wall_s": 0.8,
+      "finished": "2026-11-06T12:48:32+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/REFERENCE/00_experimental_discipline.zh-CN.ipynb"
+    },
+    {
+      "notebook": "01_baseline_and_uncertainty.ipynb",
+      "mode": "REFERENCE",
+      "started": "2026-11-06T12:48:32+00:00",
+      "status": "PASSED",
+      "wall_s": 1.3,
+      "finished": "2026-11-06T12:48:33+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/REFERENCE/01_baseline_and_uncertainty.ipynb"
+    },
+    {
+      "notebook": "01_baseline_and_uncertainty.zh-CN.ipynb",
+      "mode": "REFERENCE",
+      "started": "2026-11-06T12:48:33+00:00",
+      "status": "PASSED",
+      "wall_s": 1.4,
+      "finished": "2026-11-06T12:48:34+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/REFERENCE/01_baseline_and_uncertainty.zh-CN.ipynb"
+    },
+    {
+      "notebook": "02_profile_and_bottlenecks.ipynb",
+      "mode": "REFERENCE",
+      "started": "2026-11-06T12:48:35+00:00",
+      "status": "PASSED",
+      "wall_s": 0.7,
+      "finished": "2026-11-06T12:48:35+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/REFERENCE/02_profile_and_bottlenecks.ipynb"
+    },
+    {
+      "notebook": "02_profile_and_bottlenecks.zh-CN.ipynb",
+      "mode": "REFERENCE",
+      "started": "2026-11-06T12:48:35+00:00",
+      "status": "PASSED",
+      "wall_s": 0.7,
+      "finished": "2026-11-06T12:48:36+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/REFERENCE/02_profile_and_bottlenecks.zh-CN.ipynb"
+    },
+    {
+      "notebook": "03_less_computation.ipynb",
+      "mode": "REFERENCE",
+      "started": "2026-11-06T12:48:36+00:00",
+      "status": "PASSED",
+      "wall_s": 0.8,
+      "finished": "2026-11-06T12:48:37+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/REFERENCE/03_less_computation.ipynb"
+    },
+    {
+      "notebook": "03_less_computation.zh-CN.ipynb",
+      "mode": "REFERENCE",
+      "started": "2026-11-06T12:48:37+00:00",
+      "status": "PASSED",
+      "wall_s": 0.7,
+      "finished": "2026-11-06T12:48:38+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/REFERENCE/03_less_computation.zh-CN.ipynb"
+    },
+    {
+      "notebook": "04_faster_computation.ipynb",
+      "mode": "REFERENCE",
+      "started": "2026-11-06T12:48:38+00:00",
+      "status": "PASSED",
+      "wall_s": 0.9,
+      "finished": "2026-11-06T12:48:39+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/REFERENCE/04_faster_computation.ipynb"
+    },
+    {
+      "notebook": "04_faster_computation.zh-CN.ipynb",
+      "mode": "REFERENCE",
+      "started": "2026-11-06T12:48:39+00:00",
+      "status": "PASSED",
+      "wall_s": 0.8,
+      "finished": "2026-11-06T12:48:40+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/REFERENCE/04_faster_computation.zh-CN.ipynb"
+    },
+    {
+      "notebook": "05_cpu_offload_negative.ipynb",
+      "mode": "REFERENCE",
+      "started": "2026-11-06T12:48:40+00:00",
+      "status": "PASSED",
+      "wall_s": 0.7,
+      "finished": "2026-11-06T12:48:41+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/REFERENCE/05_cpu_offload_negative.ipynb"
+    },
+    {
+      "notebook": "05_cpu_offload_negative.zh-CN.ipynb",
+      "mode": "REFERENCE",
+      "started": "2026-11-06T12:48:41+00:00",
+      "status": "PASSED",
+      "wall_s": 0.7,
+      "finished": "2026-11-06T12:48:41+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/REFERENCE/05_cpu_offload_negative.zh-CN.ipynb"
+    },
+    {
+      "notebook": "06_openvino_and_fair_ab.ipynb",
+      "mode": "REFERENCE",
+      "started": "2026-11-06T12:48:41+00:00",
+      "status": "PASSED",
+      "wall_s": 0.7,
+      "finished": "2026-11-06T12:48:42+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/REFERENCE/06_openvino_and_fair_ab.ipynb"
+    },
+    {
+      "notebook": "06_openvino_and_fair_ab.zh-CN.ipynb",
+      "mode": "REFERENCE",
+      "started": "2026-11-06T12:48:42+00:00",
+      "status": "PASSED",
+      "wall_s": 0.7,
+      "finished": "2026-11-06T12:48:43+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/REFERENCE/06_openvino_and_fair_ab.zh-CN.ipynb"
+    },
+    {
+      "notebook": "07_combined_and_quality.ipynb",
+      "mode": "REFERENCE",
+      "started": "2026-11-06T12:48:43+00:00",
+      "status": "PASSED",
+      "wall_s": 1.3,
+      "finished": "2026-11-06T12:48:44+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/REFERENCE/07_combined_and_quality.ipynb"
+    },
+    {
+      "notebook": "07_combined_and_quality.zh-CN.ipynb",
+      "mode": "REFERENCE",
+      "started": "2026-11-06T12:48:45+00:00",
+      "status": "PASSED",
+      "wall_s": 1.4,
+      "finished": "2026-11-06T12:48:46+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/REFERENCE/07_combined_and_quality.zh-CN.ipynb"
+    },
+    {
+      "notebook": "08_capstone_and_pr.ipynb",
+      "mode": "REFERENCE",
+      "started": "2026-11-06T12:48:46+00:00",
+      "status": "PASSED",
+      "wall_s": 0.8,
+      "finished": "2026-11-06T12:48:47+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/REFERENCE/08_capstone_and_pr.ipynb"
+    },
+    {
+      "notebook": "08_capstone_and_pr.zh-CN.ipynb",
+      "mode": "REFERENCE",
+      "started": "2026-11-06T12:48:47+00:00",
+      "status": "PASSED",
+      "wall_s": 0.8,
+      "finished": "2026-11-06T12:48:48+00:00",
+      "executed_artifact": "runs/notebook-gpu-qualification/w7900-20261106-073429/executed/REFERENCE/08_capstone_and_pr.zh-CN.ipynb"
+    }
+  ]
+}

@@ -1,5 +1,13 @@
 # M4 — Faster Computation
 
+## Run it as a notebook (three declared modes)
+
+Every module ships paired EN/zh-CN Jupyter notebooks. Set `COURSE_MODE` in
+the first cell: `REFERENCE` (offline CPU analysis of the frozen campaign),
+`GPU_CLASSROOM` (your own bounded physical W7900 exercise, ~5 min per arm —
+the default lab experience), or `GPU_RESEARCH` (this full protocol). See
+[notebooks/README.md](../../notebooks/README.md).
+
 **Learning objectives (you will be able to):**
 1. Run clean A/Bs for an attention-kernel swap and an INT8 weight quantization against the same baseline, proving the active backend from server logs;
 2. Explain measured / measured / derived-estimate provenance using the F1×M2 cross-check table;

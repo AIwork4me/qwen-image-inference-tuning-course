@@ -1,5 +1,23 @@
 # M5.1 — 用 OpenVINO 让 CPU 文本编码变快
 
+## 以 Notebook 方式运行（三种声明模式）
+
+每个模块配有中英文对照 Jupyter Notebook。在第一个单元设置
+`COURSE_MODE`：`REFERENCE`（离线 CPU 分析冻结实验数据）、`GPU_CLASSROOM`
+（你自己的 W7900 有界物理练习，每臂约 5 分钟——默认实验体验）或
+`GPU_RESEARCH`（本文档所述完整协议）。见
+[notebooks/README.zh-CN.md](../../notebooks/README.zh-CN.md)。
+
+**在你自己的 W7900 上实测（首选）。** 在 `GPU_CLASSROOM` 且默认
+`RUN_OWN_GPU_ARMS = True` 时，Notebook 06 会在全新克隆上执行**你自己的**完整
+M5.1 流程：严格的 BF16 工件准入（`PASS` / `PASS_WITH_WARNINGS` / `FAIL` /
+`BLOCKED`，fail closed）、你自己的 GPU / CPU PyTorch TE 试点、你自己的 H3
+OpenVINO BF16 运行，以及你自己的物理 A/C 四请求批次——每个数字都标注来源
+（`CURRENT_SESSION_PHYSICAL` … `COMMITTED_PHYSICAL_REFERENCE`，见
+[学生溯源契约](../../docs/notebook-gpu-qualification/STUDENT_PROVENANCE_CONTRACT.md)）。
+如果你选择不消耗新的 GPU 时间，复用必须给出**精确 run id** 并标注为复用——
+本讲引用的已提交实验数字永远是参考值，绝不是你的测量。
+
 **学习目标（学完本课你能够）：**
 1. 设计一个受控的编码器 A/B（G/C0/C1a/C1b/C2 五臂），说明每臂控制的因果轴（后端、执行精度、量化）；
 2. 用条件张量对齐数据（rel L2 / cosine / token IDs）判定数值门，并解释"331–480×"必须限定在正提示词范围；

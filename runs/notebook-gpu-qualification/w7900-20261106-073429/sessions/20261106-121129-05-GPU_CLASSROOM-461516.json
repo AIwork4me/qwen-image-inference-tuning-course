@@ -1,0 +1,85 @@
+{
+  "notebook": "05",
+  "mode": "GPU_CLASSROOM",
+  "started_at": "2026-11-06T12:07:52+00:00",
+  "finished_at": "2026-11-06T12:11:29+00:00",
+  "admission": {
+    "status": "PASS",
+    "detail": {
+      "device_name": "AMD Radeon Graphics",
+      "gfx_arch": "gfx1100",
+      "vram_total_mib": 49136,
+      "vram_used_mib": 1578,
+      "torch": "2.9.1+gitff65f5b",
+      "hip": "7.2.53211-e1a6bc5663",
+      "device_count": 1
+    },
+    "warnings": []
+  },
+  "executions": [
+    {
+      "kind": "m51-te-cuda",
+      "cmd": [
+        "/workspace/pr4/.venv-lab/bin/python",
+        "-u",
+        "lab/m51_baseline.py",
+        "--device",
+        "cuda",
+        "--out",
+        "/workspace/pr4/runs/120754-nbq-m51-te-cuda",
+        "--repeats",
+        "1",
+        "--prompt-ids",
+        "p1-zh-scene",
+        "--threads",
+        "8"
+      ],
+      "wall_s": 22.0,
+      "started": "2026-11-06T12:08:16+00:00"
+    },
+    {
+      "kind": "m51-te-cpu",
+      "cmd": [
+        "/workspace/pr4/.venv-lab/bin/python",
+        "-u",
+        "lab/m51_baseline.py",
+        "--device",
+        "cpu",
+        "--out",
+        "/workspace/pr4/runs/120816-nbq-m51-te-cpu",
+        "--repeats",
+        "1",
+        "--prompt-ids",
+        "p1-zh-scene",
+        "--threads",
+        "8"
+      ],
+      "wall_s": 192.8,
+      "started": "2026-11-06T12:11:29+00:00"
+    }
+  ],
+  "consumed": [
+    {
+      "run_id": "q1-075553-H1-cpu-te",
+      "why": "current-campaign H1 record"
+    },
+    {
+      "run_id": "q1-075553-H2-pipeline",
+      "why": "current-campaign H2 record"
+    }
+  ],
+  "summary": {
+    "mode": "GPU_CLASSROOM",
+    "notebook": "05",
+    "executions": [
+      "m51-te-cuda",
+      "m51-te-cpu"
+    ],
+    "consumed": [
+      "q1-075553-H1-cpu-te",
+      "q1-075553-H2-pipeline"
+    ],
+    "note": "append-only session record; physical evidence lives under runs/"
+  },
+  "kernel": "/workspace/pr4/.venv-lab/bin/python"
+}

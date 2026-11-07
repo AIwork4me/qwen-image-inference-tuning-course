@@ -1,0 +1,149 @@
+{
+  "notebook": "07",
+  "mode": "GPU_CLASSROOM",
+  "started_at": "2026-11-06T11:53:08+00:00",
+  "finished_at": "2026-11-06T12:00:27+00:00",
+  "admission": {
+    "status": "PASS",
+    "detail": {
+      "device_name": "AMD Radeon Graphics",
+      "gfx_arch": "gfx1100",
+      "vram_total_mib": 49136,
+      "vram_used_mib": 1578,
+      "torch": "2.9.1+gitff65f5b",
+      "hip": "7.2.53211-e1a6bc5663",
+      "device_count": 1
+    },
+    "warnings": []
+  },
+  "executions": [
+    {
+      "run_id": "115309-nbq-B0",
+      "experiment": "B0",
+      "kind": "classroom-bounded",
+      "cmd": [
+        "/workspace/pr4/.venv-lab/bin/python",
+        "-m",
+        "lab",
+        "run",
+        "--experiment",
+        "B0",
+        "--date",
+        "115309-nbq",
+        "--only-prompt",
+        "p1-zh-scene",
+        "--warmup",
+        "1",
+        "--measured",
+        "2"
+      ],
+      "wall_s": 345.0,
+      "stats": {
+        "run_id": "115309-nbq-B0",
+        "experiment": "B0",
+        "population": "classroom-bounded (single-prompt, n=2)",
+        "n_warm": 2,
+        "median_s": 55.088,
+        "mean_s": 55.088,
+        "min_s": 55.086,
+        "max_s": 55.09,
+        "range_s": 0.004,
+        "steps": 40,
+        "precision": "bf16",
+        "attention_backend": "pytorch-sdpa-default",
+        "unet": "qwen_image_2.1_bf16.safetensors",
+        "vram_peak_mb": 33987.2,
+        "vram_device_peak_mb": 35730.6,
+        "per_prompt": {
+          "p1-zh-scene": [
+            55.086,
+            55.09
+          ]
+        },
+        "warm_totals": [
+          55.086,
+          55.09
+        ]
+      },
+      "started": "2026-11-06T11:58:54+00:00"
+    },
+    {
+      "run_id": "115854-nbq-BEST",
+      "experiment": "BEST",
+      "kind": "classroom-bounded",
+      "cmd": [
+        "/workspace/pr4/.venv-lab/bin/python",
+        "-m",
+        "lab",
+        "run",
+        "--experiment",
+        "BEST",
+        "--date",
+        "115854-nbq",
+        "--only-prompt",
+        "p1-zh-scene",
+        "--warmup",
+        "1",
+        "--measured",
+        "2"
+      ],
+      "wall_s": 82.6,
+      "stats": {
+        "run_id": "115854-nbq-BEST",
+        "experiment": "BEST",
+        "population": "classroom-bounded (single-prompt, n=2)",
+        "n_warm": 2,
+        "median_s": 9.019,
+        "mean_s": 9.019,
+        "min_s": 9.019,
+        "max_s": 9.019,
+        "range_s": 0.0,
+        "steps": 8,
+        "precision": "int8-convrot",
+        "attention_backend": "pytorch-sdpa-default",
+        "unet": "qwen_image_2.1_turbo_int8_convrot.safetensors",
+        "vram_peak_mb": 28000.7,
+        "vram_device_peak_mb": 32110.4,
+        "per_prompt": {
+          "p1-zh-scene": [
+            9.019,
+            9.019
+          ]
+        },
+        "warm_totals": [
+          9.019,
+          9.019
+        ]
+      },
+      "started": "2026-11-06T12:00:17+00:00"
+    },
+    {
+      "kind": "quality:BEST",
+      "cmd": [
+        "/workspace/pr4/.venv-lab/bin/python",
+        "-m",
+        "lab",
+        "quality",
+        "--experiment",
+        "BEST",
+        "--reference",
+        "B0"
+      ],
+      "wall_s": 9.7,
+      "started": "2026-11-06T12:00:27+00:00"
+    }
+  ],
+  "consumed": [],
+  "summary": {
+    "mode": "GPU_CLASSROOM",
+    "notebook": "07",
+    "executions": [
+      "115309-nbq-B0",
+      "115854-nbq-BEST",
+      "quality:BEST"
+    ],
+    "consumed": [],
+    "note": "append-only session record; physical evidence lives under runs/"
+  },
+  "kernel": "/workspace/pr4/.venv-lab/bin/python"
+}

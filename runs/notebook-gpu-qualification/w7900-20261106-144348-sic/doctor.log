@@ -1,0 +1,17 @@
+PASS gpu_amd_single_working: AMD Radeon Graphics / gfx1100 / 49136MB
+PASS torch_rocm: torch 2.9.1+gitff65f5b hip 7.2.53211-e1a6bc5663
+PASS comfyui_pinned: v0.43.0 @ b5a432157de6
+PASS weights_stage1_integrity: {'per_file': [{'rel': 'diffusion_models/qwen_image_2.1_bf16.safetensors', 'ok': True, 'reason': 'stamp-cache-hit', 'required': False, 'verdict': 'PASS'}, {'rel': 'diffusion_models/qwen_image_2.1_int8_convrot.safetensors', 'ok': True, 'reason': 'stamp-cache-hit', 'required': False, 'verdict': 'PASS'}, {'rel': 'diffusion_models/qwen_image_2.1_turbo_bf16.safetensors', 'ok': True, 'reason': 'stamp-cac
+PASS prompts_frozen: 3 prompts x 3 seeds, ids intact
+PASS flash_sdpa_probe: flash attention launches + syncs on gfx1100
+PASS rocprofv3: version: 1.1.0
+        git_revision: e1a6bc5663304b9c586b3254b8920f2981057804
+        library_arch: x86_64-linux-gnu
+         system_name: Linux
+    system_processor: x86_64
+      system_version: 6.8.
+
+verdict: PASS  evidence: /workspace/rehearsal/qwen-image-inference-tuning-course/runs/doctor.json
+
+cloud-staged doctor: enough to generate the FIRST image (turbo-int8 smoke).
+formal benchmarking still requires the strict doctor: `python -m lab doctor`
