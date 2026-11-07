@@ -448,7 +448,6 @@ class Session:
         self.admission: Admission | None = None
         self.executions: list[dict] = []
         self.consumed: list[dict] = []
-        self.gulock_pid: int | None = None
         self.gpulock_pid: int | None = None
 
     # -- provenance ---------------------------------------------------------
@@ -463,11 +462,20 @@ class Session:
         return tag
 
     def _bind(self, run_id: str, kind: str) -> None:
+        """Fail closed: completed GPU work without a binding is NOT student evidence.
+
+        Callers must not stamp CURRENT_SESSION_PHYSICAL or append a successful
+        execution when the authoritative provenance binding cannot be recorded.
+        """
         try:
             prov.write_binding(run_id, self.session_id, kind=kind,
                                extra={"mode": self.mode, "notebook": self.notebook})
-        except prov.ProvenanceError as exc:  # pragma: no cover - defensive
-            print(f"[PROVENANCE] WARNING: could not bind {run_id}: {exc}")
+        except prov.ProvenanceError as exc:
+            raise AdmissionError(
+                f"Physical run {run_id!r} finished but provenance binding FAILED: "
+                f"{exc}. Do not report its performance as current-session "
+                "evidence; inspect the run directory and re-run with a fresh id."
+            ) from exc
 
     def origin_of(self, run_id: str) -> str:
         """Stamp text for a run this session executed or consumed."""

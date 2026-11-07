@@ -2,7 +2,8 @@
 
 Campaign: `runs/notebook-gpu-qualification/w7900-20261106-144348-sic` (physical W7900, gfx1100, 48 GB)
 Source HEAD at qualification: `03726e8af0a6350ca6016c77fb759ceebf61e34e` (branch `feat/bilingual-jupyter-optimization-labs`)
-CI at that HEAD: https://github.com/AIwork4me/qwen-image-inference-tuning-course/actions/runs/42242142758 (CPU gate SUCCESS, run #31, 216 tests)
+CI for that physical qualification HEAD: https://github.com/AIwork4me/qwen-image-inference-tuning-course/actions/runs/42242142758 (CPU gate SUCCESS, 216 tests).
+**Later publication checkpoint (2026-11-07):** PR HEAD `33ada62b1d420c444538c5bfab2eafbdabcff7b7` passed [Actions #42316216029](https://github.com/AIwork4me/qwen-image-inference-tuning-course/actions/runs/42316216029): 216 CPU tests and six course-quality gates. The two commits after `03726e8` update documentation/qualification artifacts, not the physical algorithm implementation. Any subsequent publication or fail-closed regression fix must pass its own exact-head CI before merge; it does not retroactively complete the GPU_CLASSROOM 18/18 rerun.
 Fresh-clone acceptance: isolated clone under `/workspace/student-acceptance` (zh own arms 485 s · EN explicit reuse 12 s · EN negative fail-closed 2.5 s)
 
 Statuses: `PASS | PASS_WITH_LIMITATIONS | FAIL | BLOCKED | NOT_RUN`.
@@ -33,8 +34,8 @@ Provenance and artifact-admission gate failures are release-blocking.
 | 21 | Negative test coverage | PASS | 41 new CPU negatives + live fail-closed rehearsals (missing artifacts; GPU busy; first-attempt m51pipe path bug caught and fixed by the physical rehearsal itself) |
 | 22 | Bilingual documentation | PASS | README×2, notebooks/README×2, INSTRUCTOR_GUIDE×2, M5 lessons×4, STUDENT_PROVENANCE_CONTRACT.md; all six course-quality gates green |
 | 23 | Updated PR description | PASS | PR #4 body rewritten via API (GPU-first deliverable + independence closure + disclosed limitations) |
-| 24 | Final GitHub CI | PASS | run #31 (42242142758) SUCCESS at 03726e8: 216 CPU tests incl. 18-notebook REFERENCE execution in real kernels |
-| 25 | Owner merge readiness | PASS_WITH_LIMITATIONS | owner review pending by design; gate 20 limitation disclosed above; no release-blocking provenance/admission issue |
+| 24 | Verified release-candidate CI, plus exact merge-head check | PASS | [run #42316216029](https://github.com/AIwork4me/qwen-image-inference-tuning-course/actions/runs/42316216029) SUCCESS at `33ada62`: 216 CPU tests, six quality gates, including 18-notebook REFERENCE execution in real kernels. Earlier physical-code HEAD `03726e8`: [run #42242142758](https://github.com/AIwork4me/qwen-image-inference-tuning-course/actions/runs/42242142758). The reviewer must also verify the CI for the exact later merge head. |
+| 25 | Owner merge readiness | PASS_WITH_LIMITATIONS | Independent source inspection and owner merge decision required; gate 20 full new-head 18/18 GPU_CLASSROOM remains BLOCKED by an external tenant, not PASS. Critical provenance/admission paths have targeted physical evidence, but merge-head CPU CI must also pass. |
 
 ## Fresh-clone acceptance measurements (Radeon Cloud W7900, gfx1100, this closure)
 

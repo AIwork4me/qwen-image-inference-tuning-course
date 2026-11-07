@@ -529,3 +529,44 @@ def test_workload_identity_distinguishes_prompts():
     assert prov.workload_identity(a) == prov.workload_identity(b)
     assert prov.workload_identity(a) != prov.workload_identity(c)
     assert prov.workload_identity(a) != prov.workload_identity(d)
+
+
+def test_binding_failure_propagates_instead_of_stamping_measured(tmp_path, monkeypatch, capsys):
+    """A successful GPU CLI cannot be labelled CURRENT_SESSION_PHYSICAL if
+    its PROVENANCE.json binding fails. No GPU is used in this regression.
+    """
+    import lab.lab_env as lab_env
+    from lab import notebook_runtime as rt
+    repo = make_repo(tmp_path)
+    monkeypatch.setattr(prov, "REPO", repo)
+    monkeypatch.setattr(lab_env, "REPO", repo)
+    monkeypatch.setattr(lab_env, "STUDENT_RUNS_ROOT", repo / "runs")
+    s = rt.Session("GPU_CLASSROOM", "06")
+    s.admission = rt.Admission("PASS", "GPU_CLASSROOM", {}, [])
+
+    def refuse_binding(*args, **kwargs):
+        raise prov.ProvenanceError("simulated binding conflict")
+
+    monkeypatch.setattr(prov, "write_binding", refuse_binding)
+    monkeypatch.setattr(rt.subprocess, "run", lambda *args, **kwargs:
+                        subprocess.CompletedProcess(args[0], 0, "synthetic success", ""))
+    with pytest.raises(rt.AdmissionError, match="provenance binding FAILED"):
+        s._run_cli(["synthetic-gpu-cli"], timeout=1.0, kind="m51-pipeline",
+                   lock=False, bind="student-m51")
+    assert s.executions == []
+    assert "CURRENT_SESSION_PHYSICAL" not in capsys.readouterr().out
+
+
+def test_binding_failure_does_not_mutate_executions(tmp_path, monkeypatch):
+    import lab.lab_env as lab_env
+    from lab import notebook_runtime as rt
+    repo = make_repo(tmp_path)
+    monkeypatch.setattr(prov, "REPO", repo)
+    monkeypatch.setattr(lab_env, "REPO", repo)
+    monkeypatch.setattr(lab_env, "STUDENT_RUNS_ROOT", repo / "runs")
+    s = rt.Session("GPU_CLASSROOM", "06")
+    monkeypatch.setattr(prov, "write_binding", lambda *a, **k: (_ for _ in ()).throw(
+        prov.ProvenanceError("a prior session already owns this run")))
+    with pytest.raises(rt.AdmissionError, match="prior session"):
+        s._bind("student-m51", kind="m51-pipeline")
+    assert not s.executions

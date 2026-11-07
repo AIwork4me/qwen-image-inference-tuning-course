@@ -22,7 +22,7 @@
 | 16 | Current GPU measurement limitations stated | PASS | GPU_PERFORMANCE_MATRIX.md §Limitations; notebooks tag estimates/simulations |
 | 17 | Frozen benchmark evidence unchanged | PASS | `git status evidence/` clean at every gate (validate_evidence check) |
 | 18 | All CPU tests + course-quality checks pass | PASS | 216 tests (175 pre-closure + 41 student-provenance/admission); 6 course-quality gates green |
-| 19 | CI green at final HEAD | PASS | run #31 at `03726e8` (student-independence closure): https://github.com/AIwork4me/qwen-image-inference-tuning-course/actions/runs/42242142758 — historical: run #30 at `9e550e8` (175 tests): https://github.com/AIwork4me/qwen-image-inference-tuning-course/actions/runs/42222858351 |
+| 19 | Verified release-candidate CI; final merge-head check mandatory | PASS | At reviewed source baseline `33ada62`: [Actions #42316216029](https://github.com/AIwork4me/qwen-image-inference-tuning-course/actions/runs/42316216029) — 216 CPU tests plus six quality gates SUCCESS. Earlier physical-code HEAD `03726e8`: [Actions #42242142758](https://github.com/AIwork4me/qwen-image-inference-tuning-course/actions/runs/42242142758). Any later publication fix must pass its own PR-head CI before merge; historical CI is not a proxy for new code. |
 | 20 | Exact GPU execution commands and artifacts recorded | PASS | `campaign_status.json` (per-step cmd + rc + wall), run records, session/matrix JSONs |
 | 21 | Instructor can reproduce the student workflow | PASS | rehearsal script + STUDENT_USABILITY_AUDIT.md; instructor guides updated |
 
@@ -33,4 +33,4 @@
 - `lab profile`'s pipeline layer pools the repo's committed `acceptance-b0-B0` warm records with the campaign's (same experiment; medians agree <0.2%).
 - Classroom pass-B executed M1-EN with the pre-fix budget (6 generations for one prompt instead of 4); fixed for all subsequent runs; both variants' populations are labelled bounded either way.
 
-**Verdict: READY_FOR_OWNER_REVIEW** (gate 19 confirmed by CI at the closure HEAD `03726e8`; the student-independence gates are tracked separately in [STUDENT_INDEPENDENCE_FINAL_GATE_MATRIX.md](STUDENT_INDEPENDENCE_FINAL_GATE_MATRIX.md); no release-blocking issue open).
+**Verdict: READY_FOR_OWNER_REVIEW_WITH_LIMITATIONS** (216 CPU tests and six quality gates verified at source baseline `33ada62`; the exact final merge head requires an independent green check before merge). Full GPU_CLASSROOM 18/18 passed at earlier physical qualification HEAD `9e550e8`; the student-independence implementation was physically revalidated on affected paths at `03726e8`, while a complete new GPU_CLASSROOM 18/18 was blocked by an external GPU tenant. See [STUDENT_INDEPENDENCE_FINAL_GATE_MATRIX.md](STUDENT_INDEPENDENCE_FINAL_GATE_MATRIX.md), gate 20. Do not represent the new-head full GPU regression as completed.
