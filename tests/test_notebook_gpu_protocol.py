@@ -90,14 +90,23 @@ def test_research_profile_denied_in_classroom_mode(monkeypatch):
         s.run("B0", profile="research")
 
 
-def test_classroom_profile_is_bounded(monkeypatch):
+def test_classroom_profile_is_bounded(tmp_path, monkeypatch):
     """The classroom invocation must carry only_prompt + bounded warmup/
     measured counts — never the full protocol."""
     _install_fake_torch(monkeypatch)
+    # A simulated CLI success must also create the physical run directory,
+    # so the real fail-closed provenance binder can verify it. Never fake
+    # successful provenance or write test artifacts into the repository.
+    monkeypatch.setattr(rt.lab_env, "REPO", tmp_path)
+    monkeypatch.setattr(rt.lab_env, "STUDENT_RUNS_ROOT", tmp_path / "runs")
+    monkeypatch.setattr(rt.prov, "REPO", tmp_path)
+    monkeypatch.setattr(rt.prov, "source_identity",
+                        lambda repo=None: {"head": "test-only-commit", "dirty": False})
     captured = {}
 
     def fake_run(cmd, **kw):
         captured["cmd"] = cmd
+        (tmp_path / "runs" / "unit-bounded-B0").mkdir(parents=True, exist_ok=True)
         class R:
             returncode = 0
             stdout = ""
@@ -122,6 +131,11 @@ def test_classroom_profile_is_bounded(monkeypatch):
     assert "--only-prompt" in cmd and "p1-zh-scene" in cmd
     assert "--smoke" not in cmd
     assert bundle.stats()["population"].startswith("classroom-bounded")
+    # The production provenance contract is exercised, not bypassed.
+    binding = json.loads((tmp_path / "runs" / "unit-bounded-B0" /
+                          "PROVENANCE.json").read_text(encoding="utf-8"))
+    assert binding["session_id"] == s.session_id
+    assert binding["run_origin"] == "CURRENT_SESSION_PHYSICAL"
 
 
 def test_smoke_population_never_counted_as_formal(tmp_path):
