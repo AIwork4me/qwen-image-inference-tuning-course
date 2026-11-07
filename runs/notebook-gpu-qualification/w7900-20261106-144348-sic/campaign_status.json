@@ -1,0 +1,19 @@
+{
+ "run_id": "w7900-20261106-144348-sic",
+ "purpose": "student-independence closure qualification (P7): 18-notebook REFERENCE + GPU_CLASSROOM regression after the provenance/admission/M5.1 changes",
+ "source_head": "03726e8af0a6350ca6016c77fb759ceebf61e34e",
+ "pass_A_reference": "18/18 PASSED (notebook_execution_matrix.json / matrix_REFERENCE_final.json)",
+ "pass_B_gpu_classroom": {
+  "status": "BLOCKED",
+  "reason": "external GPU tenant (host PIDs 3906994/2439485, outside this container's PID namespace) held ~31-32 GiB VRAM continuously from before 14:47 until the 4-hour wait window expired at 18:52 (240 polls, 60 s interval); a second window 23:30-03:30 was opened",
+  "evidence": "GPU admission refused correctly with the student-readable 'GPU already holds' blocker (nb00 en/zh PASSED; nb01+ FAILED at admission - the fail-closed path working as designed)",
+  "targeted_revalidation_at_this_head": [
+   "nb05 EN own GPU arms PASSED (218.8 s, dev worktree, post-fix HEAD)",
+   "nb06 zh full own arms PASSED on the fresh clone (485.2 s): admission + 2 TE pilots + H3 + A/C pipeline",
+   "nb06 EN explicit-reuse PASSED (12.1 s)",
+   "nb06 EN negative (missing artifact root) correctly FAILED/BLOCKED (2.5 s)"
+  ],
+  "frozen_full_pass": "18/18 GPU_CLASSROOM at 9e550e8: runs/notebook-gpu-qualification/w7900-20261106-073429 (unchanged execution paths)"
+ },
+ "recorded_at": "2026-11-07T00:03:15+00:00"
+}

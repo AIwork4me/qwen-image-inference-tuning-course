@@ -1,0 +1,30 @@
+{
+ "run_id": "w7900-20261106-144348-sic",
+ "created_at": "2026-11-06T14:43:54+00:00",
+ "verdict": "PASS",
+ "purpose": "student-independence closure qualification (P7): full 18-notebook REFERENCE + GPU_CLASSROOM regression on the physical W7900 after the provenance/admission/M5.1 changes",
+ "kernel_python": {
+  "lab_venv": "3.12.3 7.2.0 0.10.4 2.9.1+gitff65f5b 7.2.53211-e1a6bc5663"
+ },
+ "gpu_rocm_smi_json": {
+  "card0": {
+   "VRAM Total Memory (B)": "51522830336",
+   "VRAM Total Used Memory (B)": "1298841600",
+   "Card Series": "AMD Radeon Graphics",
+   "Card Model": "0x744b",
+   "Card Vendor": "Advanced Micro Devices, Inc. [AMD/ATI]",
+   "Card SKU": "D7070910",
+   "Subsystem ID": "0x0e0c",
+   "Device Rev": "0x00",
+   "Node ID": "5",
+   "GUID": "13037",
+   "GFX Version": "gfx1100"
+  }
+ },
+ "source_head": "6f1b67852a1fcc62fcd4fe4ba1af1281269d31e4",
+ "openvino_artifacts_root": "/opt/m51-artifacts (env M51_OV_ARTIFACTS; shared provisioned)",
+ "cgroup": {
+  "memory_max_bytes": 59055800320,
+  "cpu_max": "1600000 100000"
+ }
+}
